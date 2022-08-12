@@ -17,6 +17,6 @@ type Chapter struct {
 
 // TableName Chapter 表名
 func (Chapter) TableName() string {
-  return "chapter"
+  return "bas_chapter"
 }
 
