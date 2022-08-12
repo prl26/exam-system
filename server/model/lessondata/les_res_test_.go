@@ -19,6 +19,6 @@ type ResourcesTest struct {
 
 // TableName ResourcesTest 表名
 func (ResourcesTest) TableName() string {
-  return "resources_test"
+  return "les_resources_test"
 }
 
