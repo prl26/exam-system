@@ -16,6 +16,6 @@ type Resandknow struct {
 
 // TableName Resandknow 表名
 func (Resandknow) TableName() string {
-  return "res_and_know"
+  return "bas_res_and_know"
 }
 
