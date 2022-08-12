@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: D:\区块链智能驾驶\考试系统\gin-vue-admin-main
+  root: D:\work\exam-system
   server: /server
   server-api: /api/v1/%s
   server-plug: /plugin/%s
