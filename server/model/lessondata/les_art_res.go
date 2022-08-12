@@ -19,6 +19,6 @@ type ArticleResources struct {
 
 // TableName ArticleResources 表名
 func (ArticleResources) TableName() string {
-  return "article_resources"
+  return "les_article_resources"
 }
 
