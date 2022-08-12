@@ -15,6 +15,6 @@ type Lesson struct {
 
 // TableName Lesson 表名
 func (Lesson) TableName() string {
-  return "lesson"
+  return "bas_lesson"
 }
 
