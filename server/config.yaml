@@ -93,7 +93,7 @@ mysql:
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
   username: root
-  password: slxwan1314
+  password: 
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
