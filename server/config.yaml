@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: D:\区块链智能驾驶\考试系统\gin-vue-admin-main
+  root: D:\work\exam-system
   server: /server
   server-api: /api/v1/%s
   server-plug: /plugin/%s
@@ -88,12 +88,12 @@ local:
   path: uploads/file
   store-path: uploads/file
 mysql:
-  path: 139.9.249.149
+  path: localhost
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
   username: root
-  password: cuit@123456
+  password: slxwan1314
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
