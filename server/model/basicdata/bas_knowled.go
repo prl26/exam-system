@@ -16,6 +16,6 @@ type Knowledge struct {
 
 // TableName Knowledge 表名
 func (Knowledge) TableName() string {
-  return "knowledge"
+	return "bas_knowledge"
 }
 
