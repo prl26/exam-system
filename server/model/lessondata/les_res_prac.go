@@ -18,6 +18,6 @@ type ResourcePractice struct {
 
 // TableName ResourcePractice 表名
 func (ResourcePractice) TableName() string {
-  return "resources_practice"
+  return "les_resources_practice"
 }
 
