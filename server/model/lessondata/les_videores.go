@@ -15,6 +15,6 @@ type VideoResources struct {
 
 // TableName VideoResources 表名
 func (VideoResources) TableName() string {
-  return "video_resources"
+  return "les_video_resources"
 }
 
