@@ -2,7 +2,6 @@ package basicdata
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-<<<<<<< HEAD
 	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
 	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -10,15 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-=======
-    "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
->>>>>>> 32710530ea6d8ea2188de74ad06a8e5a55421c2e
+
 )
 
 type ResandknowApi struct {
