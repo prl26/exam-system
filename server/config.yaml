@@ -80,7 +80,7 @@ hua-wei-obs:
   access-key: you-access-key
   secret-key: you-secret-key
 jwt:
-  signing-key: 766eb082-145b-417b-8136-36c1d0083736
+  signing-key: c45af3bc-fac8-4fb3-8e66-3876859c8b84
   expires-time: 604800
   buffer-time: 86400
   issuer: qmPlus
@@ -88,12 +88,12 @@ local:
   path: uploads/file
   store-path: uploads/file
 mysql:
-  path: localhost
+  path: 127.0.0.1
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
   username: root
-  password: slxwan1314
+  password: 475806688ykx
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
