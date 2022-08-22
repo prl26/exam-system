@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/service/Test"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/basicdata"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/examManage"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/lesson"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/lessondata"
@@ -18,7 +19,7 @@ type ServiceGroup struct {
 	BasicdataApiGroup      basicdata.ServiceGroup
 	LessondataServiceGroup lessondata.ServiceGroup
 	TeachplanServiceGroup  teachplan.ServiceGroup
-
+	ExammanageServiceGroup examManage.ServiceGroup
 }
 
 var ServiceGroupApp = new(ServiceGroup)

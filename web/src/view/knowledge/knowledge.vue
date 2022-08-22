@@ -2,8 +2,11 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="章节id">
-          <el-input v-model="searchInfo.chapter_id" placeholder="搜索条件" />
+        <el-form-item label="课程id">
+          <el-input v-model="searchInfo.course_id" placeholder="搜索条件" />
+        </el-form-item>
+        <el-form-item label="知识点名称">
+          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
@@ -37,7 +40,7 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="章节id" prop="chapter_id" width="120" />
+        <el-table-column align="left" label="课程id" prop="course_id" width="120" />
         <el-table-column align="left" label="知识点名称" prop="name" width="120" />
         <el-table-column align="left" label="按钮组">
             <template #default="scope">
@@ -60,8 +63,8 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="章节id:"  prop="chapter_id" >
-          <el-input v-model.number="formData.chapter_id" :clearable="true" placeholder="请输入" />
+        <el-form-item label="课程id:"  prop="course_id" >
+          <el-input v-model.number="formData.course_id" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="知识点名称:"  prop="name" >
           <el-input v-model="formData.name" :clearable="true"  placeholder="请输入" />
@@ -100,7 +103,7 @@ import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
-        chapter_id: 0,
+        course_id: 0,
         name: '',
         })
 
@@ -257,7 +260,7 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-        chapter_id: 0,
+        course_id: 0,
         name: '',
         }
 }

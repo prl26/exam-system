@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/router/basicdata"
+	"github.com/flipped-aurora/gin-vue-admin/server/router/examManage"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/lessondata"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/system"
@@ -14,6 +15,7 @@ type RouterGroup struct {
 	Basicdata  basicdata.RouterGroup
 	Lessondata lessondata.RouterGroup
 	Teachplan  teachplan.RouterGroup
+	Exammanage examManage.RouterGroup
 }
 
 var RouterGroupApp = new(RouterGroup)
