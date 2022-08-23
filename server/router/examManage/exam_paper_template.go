@@ -13,15 +13,15 @@ type ExamPaperTemplateRouter struct {
 func (s *ExamPaperTemplateRouter) InitExamPaperTemplateRouter(Router *gin.RouterGroup) {
 	examPaperTemplateRouter := Router.Group("examPaperTemplate").Use(middleware.OperationRecord())
 	examPaperTemplateRouterWithoutRecord := Router.Group("examPaperTemplate")
-	var examPaperTemplateApi = v1.ApiGroupApp.ExammanageApiGroup.ExamPaperTemplateApi
+	var examPaperTemplateApi = v1.ApiGroupApp.ExammanageApiGroup.PaperTemplateApi
 	{
-		examPaperTemplateRouter.POST("createExamPaperTemplate", examPaperTemplateApi.CreateExamPaperTemplate)             // 新建ExamPaperTemplate
-		examPaperTemplateRouter.DELETE("deleteExamPaperTemplate", examPaperTemplateApi.DeleteExamPaperTemplate)           // 删除ExamPaperTemplate
-		examPaperTemplateRouter.DELETE("deleteExamPaperTemplateByIds", examPaperTemplateApi.DeleteExamPaperTemplateByIds) // 批量删除ExamPaperTemplate
-		examPaperTemplateRouter.PUT("updateExamPaperTemplate", examPaperTemplateApi.UpdateExamPaperTemplate)              // 更新ExamPaperTemplate
+		examPaperTemplateRouter.POST("createExamPaperTemplate", examPaperTemplateApi.CreatePaperTemplate)             // 新建ExamPaperTemplate
+		examPaperTemplateRouter.DELETE("deleteExamPaperTemplate", examPaperTemplateApi.DeletePaperTemplate)           // 删除ExamPaperTemplate
+		examPaperTemplateRouter.DELETE("deleteExamPaperTemplateByIds", examPaperTemplateApi.DeletePaperTemplateByIds) // 批量删除ExamPaperTemplate
+		examPaperTemplateRouter.PUT("updateExamPaperTemplate", examPaperTemplateApi.UpdatePaperTemplate)              // 更新ExamPaperTemplate
 	}
 	{
-		examPaperTemplateRouterWithoutRecord.GET("findExamPaperTemplate", examPaperTemplateApi.FindExamPaperTemplate)       // 根据ID获取ExamPaperTemplate
-		examPaperTemplateRouterWithoutRecord.GET("getExamPaperTemplateList", examPaperTemplateApi.GetExamPaperTemplateList) // 获取ExamPaperTemplate列表
+		examPaperTemplateRouterWithoutRecord.GET("findExamPaperTemplate", examPaperTemplateApi.FindPaperTemplate)       // 根据ID获取ExamPaperTemplate
+		examPaperTemplateRouterWithoutRecord.GET("getExamPaperTemplateList", examPaperTemplateApi.GetPaperTemplateList) // 获取ExamPaperTemplate列表
 	}
 }
