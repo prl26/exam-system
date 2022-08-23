@@ -28,15 +28,46 @@ var PapertemplateService = service.ServiceGroupApp.ExammanageServiceGroup.PaperT
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /Papertemplate/createPaperTemplate [post]
 func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
-	uid := utils.GetUserID(c)
+	uid := int(utils.GetUserID(c))
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	Papertemplate.UserId = int(uid)
+	Papertemplate.UserId = &uid
 	if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		//for i:=0; i<len(Papertemplate.PaperTemplateItems);i++{
+		//	b := &Papertemplate.PaperTemplateItems[i]
+		//	valueofb := reflect.ValueOf(b).Elem()
+		//	PaperTemplateItem := examManage.PaperTemplateItem{
+		//		GVA_MODEL:   global.GVA_MODEL{},
+		//		Chapter:     valueofb.FieldByName("Chapter").String(),
+		//		ProblemType: int(reflect.ValueOf(b.ProblemType).Int()),
+		//		Difficulty:  nil,
+		//		Num:         nil,
+		//		Score:       nil,
+		//		TemplateId:  nil,
+		//	}
+		//
+		//}
+		for i:=0; i<len(Papertemplate.PaperTemplateItems);i++{
+			b := Papertemplate.PaperTemplateItems[i]
+			paperTemplateItem := examManage.PaperTemplateItem{
+				GVA_MODEL:   global.GVA_MODEL{},
+				Chapter:     b.Chapter,
+				ProblemType: b.ProblemType,
+				Difficulty:  b.Difficulty,
+				Num:         b.Num,
+				Score:       b.Score,
+				TemplateId:  Papertemplate.UserId,
+			}
+			if err := paperTemplateItemService.CreatePaperTemplateItem(paperTemplateItem); err != nil {
+				global.GVA_LOG.Error("创建失败!", zap.Error(err))
+				response.FailWithMessage("创建失败", c)
+			} else {
+				response.OkWithMessage("创建成功", c)
+			}
+		}
 	}
 }
 

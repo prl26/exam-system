@@ -2,13 +2,13 @@ package examManage
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/examManage"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    examManageReq "github.com/flipped-aurora/gin-vue-admin/server/model/examManage/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/examManage"
+	examManageReq "github.com/flipped-aurora/gin-vue-admin/server/model/examManage/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type PaperTemplateItemApi struct {

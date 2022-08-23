@@ -96,6 +96,7 @@ func Routers() *gin.Engine {
 		lessondataRouter.InitQuestionBankMultipleChoiceRouter(PrivateGroup)
 		lessondataRouter.InitQuestionBankOptionsRouter(PrivateGroup)
 		lessondataRouter.InitQuestionBankSupplyBlankRouter(PrivateGroup)
+		lessondataRouter.InitKnowledgeRouter(PrivateGroup)
 
 		teachplanRouter.InitTeachAttendanceRouter(PrivateGroup)
 		teachplanRouter.InitTeachAttendanceRecordRouter(PrivateGroup)

@@ -2,8 +2,10 @@ package main
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
+	_ "github.com/flipped-aurora/gin-vue-admin/server/docs"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+
 	"go.uber.org/zap"
 )
 
@@ -12,13 +14,22 @@ import (
 //go:generate go mod tidy
 //go:generate go mod download
 
-// @title Swagger Example API
-// @version 0.0.1
-// @description This is a sample Server pets
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name x-token
-// @BasePath /
+// @title           Swagger Example API
+// @version         1.0
+// @description     This is a sample server celler server.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host      localhost:8080
+// @BasePath  /api/v1
+
+// @securityDefinitions.basic  BasicAuth
 func main() {
 	global.GVA_VP = core.Viper() // 初始化Viper
 	global.GVA_LOG = core.Zap()  // 初始化zap日志库

@@ -60,18 +60,18 @@ definitions:
         description: 更新时间
         type: string
     type: object
-  basicdata.Knowledge:
+  basicdata.LearnResourcesChapterMerge:
     properties:
-      chapterId:
-        type: string
+      chapter_id:
+        type: integer
       createdAt:
         description: 创建时间
         type: string
       id:
         description: 主键ID
         type: integer
-      name:
-        type: string
+      learn_resources_id:
+        type: integer
       updatedAt:
         description: 更新时间
         type: string
@@ -102,22 +102,6 @@ definitions:
         type: integer
       name:
         type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  basicdata.Resandknow:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      knowledgeId:
-        type: integer
-      resourceId:
-        type: integer
       updatedAt:
         description: 更新时间
         type: string
@@ -683,6 +667,88 @@ definitions:
         description: 栈名
         type: string
     type: object
+  examManage.ExamPaper:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      planId:
+        type: integer
+      templateId:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  examManage.PaperQuestionMerge:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      paperId:
+        type: integer
+      questionId:
+        type: integer
+      questionType:
+        type: integer
+      score:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  examManage.PaperTemplate:
+    properties:
+      courseId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      memo:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      userId:
+        type: integer
+    type: object
+  examManage.PaperTemplateItem:
+    properties:
+      chapter:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      difficulty:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      num:
+        type: integer
+      problemType:
+        type: integer
+      score:
+        type: integer
+      templateId:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   example.ExaCustomer:
     properties:
       createdAt:
@@ -812,7 +878,7 @@ definitions:
     type: object
   lessondata.Knowledge:
     properties:
-      chapter_id:
+      course_id:
         type: integer
       createdAt:
         description: 创建时间
@@ -1887,10 +1953,193 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is a sample Server pets
-  title: Swagger Example API
-  version: 0.0.1
 paths:
+  /Papertemplate/createPaperTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建PaperTemplate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建PaperTemplate
+      tags:
+      - PaperTemplate
+  /Papertemplate/deletePaperTemplate:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除PaperTemplate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除PaperTemplate
+      tags:
+      - PaperTemplate
+  /Papertemplate/deletePaperTemplateByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除PaperTemplate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除PaperTemplate
+      tags:
+      - PaperTemplate
+  /Papertemplate/findPaperTemplate:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: courseId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: memo
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: userId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询PaperTemplate
+      tags:
+      - PaperTemplate
+  /Papertemplate/getPaperTemplateList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: courseId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: memo
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: userId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取PaperTemplate列表
+      tags:
+      - PaperTemplate
+  /Papertemplate/updatePaperTemplate:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新PaperTemplate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新PaperTemplate
+      tags:
+      - PaperTemplate
   /api/createApi:
     post:
       consumes:
@@ -3724,6 +3973,186 @@ paths:
       summary: 发送邮件
       tags:
       - System
+  /examPaper/createExamPaper:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ExamPaper
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.ExamPaper'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ExamPaper
+      tags:
+      - ExamPaper
+  /examPaper/deleteExamPaper:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ExamPaper
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.ExamPaper'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ExamPaper
+      tags:
+      - ExamPaper
+  /examPaper/deleteExamPaperByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ExamPaper
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ExamPaper
+      tags:
+      - ExamPaper
+  /examPaper/findExamPaper:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: planId
+        type: integer
+      - in: query
+        name: templateId
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ExamPaper
+      tags:
+      - ExamPaper
+  /examPaper/getExamPaperList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: planId
+        type: integer
+      - in: query
+        name: templateId
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ExamPaper列表
+      tags:
+      - ExamPaper
+  /examPaper/updateExamPaper:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ExamPaper
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.ExamPaper'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ExamPaper
+      tags:
+      - ExamPaper
   /examPlan/createExamPlan:
     post:
       consumes:
@@ -4355,7 +4784,7 @@ paths:
       - application/json
       parameters:
       - in: query
-        name: chapter_id
+        name: course_id
         type: integer
       - description: 创建时间
         in: query
@@ -4390,7 +4819,7 @@ paths:
       - application/json
       parameters:
       - in: query
-        name: chapter_id
+        name: course_id
         type: integer
       - description: 创建时间
         in: query
@@ -4454,6 +4883,180 @@ paths:
       summary: 更新Knowledge
       tags:
       - Knowledge
+  /learnResourcesChapterMerge/createLearnResourcesChapterMerge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建LearnResourcesChapterMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.LearnResourcesChapterMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建LearnResourcesChapterMerge
+      tags:
+      - LearnResourcesChapterMerge
+  /learnResourcesChapterMerge/deleteLearnResourcesChapterMerge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除LearnResourcesChapterMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.LearnResourcesChapterMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除LearnResourcesChapterMerge
+      tags:
+      - LearnResourcesChapterMerge
+  /learnResourcesChapterMerge/deleteLearnResourcesChapterMergeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除LearnResourcesChapterMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除LearnResourcesChapterMerge
+      tags:
+      - LearnResourcesChapterMerge
+  /learnResourcesChapterMerge/findLearnResourcesChapterMerge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: learn_resources_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询LearnResourcesChapterMerge
+      tags:
+      - LearnResourcesChapterMerge
+  /learnResourcesChapterMerge/getLearnResourcesChapterMergeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: learn_resources_id
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取LearnResourcesChapterMerge列表
+      tags:
+      - LearnResourcesChapterMerge
+  /learnResourcesChapterMerge/updateLearnResourcesChapterMerge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新LearnResourcesChapterMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.LearnResourcesChapterMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新LearnResourcesChapterMerge
+      tags:
+      - LearnResourcesChapterMerge
   /lesson/createLesson:
     post:
       consumes:
@@ -4881,6 +5484,390 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /paperQuestionMerge/createPaperQuestionMerge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建PaperQuestionMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperQuestionMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建PaperQuestionMerge
+      tags:
+      - PaperQuestionMerge
+  /paperQuestionMerge/deletePaperQuestionMerge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除PaperQuestionMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperQuestionMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除PaperQuestionMerge
+      tags:
+      - PaperQuestionMerge
+  /paperQuestionMerge/deletePaperQuestionMergeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除PaperQuestionMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除PaperQuestionMerge
+      tags:
+      - PaperQuestionMerge
+  /paperQuestionMerge/findPaperQuestionMerge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: paperId
+        type: integer
+      - in: query
+        name: questionId
+        type: integer
+      - in: query
+        name: questionType
+        type: integer
+      - in: query
+        name: score
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询PaperQuestionMerge
+      tags:
+      - PaperQuestionMerge
+  /paperQuestionMerge/getPaperQuestionMergeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: paperId
+        type: integer
+      - in: query
+        name: questionId
+        type: integer
+      - in: query
+        name: questionType
+        type: integer
+      - in: query
+        name: score
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取PaperQuestionMerge列表
+      tags:
+      - PaperQuestionMerge
+  /paperQuestionMerge/updatePaperQuestionMerge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新PaperQuestionMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperQuestionMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新PaperQuestionMerge
+      tags:
+      - PaperQuestionMerge
+  /paperTemplateItem/createPaperTemplateItem:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建PaperTemplateItem
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplateItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建PaperTemplateItem
+      tags:
+      - PaperTemplateItem
+  /paperTemplateItem/deletePaperTemplateItem:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除PaperTemplateItem
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplateItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除PaperTemplateItem
+      tags:
+      - PaperTemplateItem
+  /paperTemplateItem/deletePaperTemplateItemByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除PaperTemplateItem
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除PaperTemplateItem
+      tags:
+      - PaperTemplateItem
+  /paperTemplateItem/findPaperTemplateItem:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: difficulty
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: num
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: score
+        type: integer
+      - in: query
+        name: templateId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询PaperTemplateItem
+      tags:
+      - PaperTemplateItem
+  /paperTemplateItem/getPaperTemplateItemList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: difficulty
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: num
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: score
+        type: integer
+      - in: query
+        name: templateId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取PaperTemplateItem列表
+      tags:
+      - PaperTemplateItem
+  /paperTemplateItem/updatePaperTemplateItem:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新PaperTemplateItem
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/examManage.PaperTemplateItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新PaperTemplateItem
+      tags:
+      - PaperTemplateItem
   /professional/createProfessional:
     post:
       consumes:
@@ -5961,180 +6948,6 @@ paths:
       summary: 更新QuestionBankKnowledgeMerge
       tags:
       - QuestionBankKnowledgeMerge
-  /resandknow/createResandknow:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建Resandknow
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.Resandknow'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建Resandknow
-      tags:
-      - Resandknow
-  /resandknow/deleteResandknow:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除Resandknow
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.Resandknow'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除Resandknow
-      tags:
-      - Resandknow
-  /resandknow/deleteResandknowByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除Resandknow
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除Resandknow
-      tags:
-      - Resandknow
-  /resandknow/findResandknow:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - in: query
-        name: knowledgeId
-        type: integer
-      - in: query
-        name: resourceId
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询Resandknow
-      tags:
-      - Resandknow
-  /resandknow/getResandknowList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - in: query
-        name: knowledgeId
-        type: integer
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: resourceId
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取Resandknow列表
-      tags:
-      - Resandknow
-  /resandknow/updateResandknow:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新Resandknow
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.Resandknow'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 更新Resandknow
-      tags:
-      - Resandknow
   /resource/createResource:
     post:
       consumes:
@@ -9269,9 +10082,4 @@ paths:
       summary: 更新VideoResources
       tags:
       - VideoResources
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: x-token
-    type: apiKey
 swagger: "2.0"

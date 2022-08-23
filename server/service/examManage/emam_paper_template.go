@@ -54,10 +54,10 @@ func (PapertemplateService *PaperTemplateService)GetPaperTemplateInfoList(info e
 	db := global.GVA_DB.Model(&examManage.PaperTemplate{})
     var Papertemplates []examManage.PaperTemplate
     // 如果有条件搜索 下方会自动创建搜索语句
-    if info.CourseId != 0 {
+    if info.CourseId != nil {
         db = db.Where("course_id = ?",info.CourseId)
     }
-    if info.UserId != 0 {
+    if info.UserId != nil {
         db = db.Where("user_id = ?",info.UserId)
     }
     if info.Name != "" {
