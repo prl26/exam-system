@@ -7,10 +7,10 @@ import service from '@/utils/request'
 // @Produce application/json
 // @Param data body model.PaperQuestionMerge true "创建PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /试卷题目表/createPaperQuestionMerge [post]
+// @Router /paperQuestionMerge/createPaperQuestionMerge [post]
 export const createPaperQuestionMerge = (data) => {
   return service({
-    url: '/试卷题目表/createPaperQuestionMerge',
+    url: '/paperQuestionMerge/createPaperQuestionMerge',
     method: 'post',
     data
   })
@@ -23,10 +23,10 @@ export const createPaperQuestionMerge = (data) => {
 // @Produce application/json
 // @Param data body model.PaperQuestionMerge true "删除PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /试卷题目表/deletePaperQuestionMerge [delete]
+// @Router /paperQuestionMerge/deletePaperQuestionMerge [delete]
 export const deletePaperQuestionMerge = (data) => {
   return service({
-    url: '/试卷题目表/deletePaperQuestionMerge',
+    url: '/paperQuestionMerge/deletePaperQuestionMerge',
     method: 'delete',
     data
   })
@@ -39,10 +39,10 @@ export const deletePaperQuestionMerge = (data) => {
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /试卷题目表/deletePaperQuestionMerge [delete]
+// @Router /paperQuestionMerge/deletePaperQuestionMerge [delete]
 export const deletePaperQuestionMergeByIds = (data) => {
   return service({
-    url: '/试卷题目表/deletePaperQuestionMergeByIds',
+    url: '/paperQuestionMerge/deletePaperQuestionMergeByIds',
     method: 'delete',
     data
   })
@@ -55,10 +55,10 @@ export const deletePaperQuestionMergeByIds = (data) => {
 // @Produce application/json
 // @Param data body model.PaperQuestionMerge true "更新PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /试卷题目表/updatePaperQuestionMerge [put]
+// @Router /paperQuestionMerge/updatePaperQuestionMerge [put]
 export const updatePaperQuestionMerge = (data) => {
   return service({
-    url: '/试卷题目表/updatePaperQuestionMerge',
+    url: '/paperQuestionMerge/updatePaperQuestionMerge',
     method: 'put',
     data
   })
@@ -71,10 +71,10 @@ export const updatePaperQuestionMerge = (data) => {
 // @Produce application/json
 // @Param data query model.PaperQuestionMerge true "用id查询PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /试卷题目表/findPaperQuestionMerge [get]
+// @Router /paperQuestionMerge/findPaperQuestionMerge [get]
 export const findPaperQuestionMerge = (params) => {
   return service({
-    url: '/试卷题目表/findPaperQuestionMerge',
+    url: '/paperQuestionMerge/findPaperQuestionMerge',
     method: 'get',
     params
   })
@@ -87,10 +87,10 @@ export const findPaperQuestionMerge = (params) => {
 // @Produce application/json
 // @Param data query request.PageInfo true "分页获取PaperQuestionMerge列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /试卷题目表/getPaperQuestionMergeList [get]
+// @Router /paperQuestionMerge/getPaperQuestionMergeList [get]
 export const getPaperQuestionMergeList = (params) => {
   return service({
-    url: '/试卷题目表/getPaperQuestionMergeList',
+    url: '/paperQuestionMerge/getPaperQuestionMergeList',
     method: 'get',
     params
   })

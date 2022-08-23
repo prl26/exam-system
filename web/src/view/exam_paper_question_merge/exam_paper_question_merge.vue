@@ -252,7 +252,7 @@ const updatePaperQuestionMergeFunc = async(row) => {
     const res = await findPaperQuestionMerge({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.re试卷题目表
+        formData.value = res.data.repaperQuestionMerge
         dialogFormVisible.value = true
     }
 }
