@@ -2,8 +2,8 @@
   <div>
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
-        <el-form-item label="章节id:" prop="chapter_id">
-          <el-input v-model.number="formData.chapter_id" :clearable="true" placeholder="请输入" />
+        <el-form-item label="课程id:" prop="course_id">
+          <el-input v-model.number="formData.course_id" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="知识点名称:" prop="name">
           <el-input v-model="formData.name" :clearable="true" placeholder="请输入" />
@@ -40,7 +40,7 @@ const router = useRouter()
 
 const type = ref('')
 const formData = ref({
-            chapter_id: 0,
+            course_id: 0,
             name: '',
         })
 // 验证规则

@@ -1,9 +1,68 @@
-basePath: /
 definitions:
-  autocode.AutoCodeExample:
+  Test.Class:
     properties:
-      autoCodeExampleField:
-        description: 展示值
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Chapter:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      lessonId:
+        type: string
+      name:
+        type: string
+      order:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Class:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      professional_id:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.College:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Knowledge:
+    properties:
+      chapterId:
         type: string
       createdAt:
         description: 创建时间
@@ -11,21 +70,177 @@ definitions:
       id:
         description: 主键ID
         type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Lesson:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Professional:
+    properties:
+      college_id:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Resandknow:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      knowledgeId:
+        type: integer
+      resourceId:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Resource:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      detailId:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Student:
+    properties:
+      class_id:
+        type: integer
+      class_name:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      id_card:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      sex:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.TeachClass:
+    properties:
+      attendance_proportion:
+        type: number
+      belong_class_id:
+        type: integer
+      course_id:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      final_exam_proportion:
+        type: number
+      has_more:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      learn_resource_proportion:
+        type: number
+      name:
+        type: string
+      procedure_exam_proportion:
+        type: number
+      teacher_id:
+        type: integer
+      term_id:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.TeachClassStudent:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      student_id:
+        type: integer
+      teach_class_id:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  basicdata.Term:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      end_time:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      start_time:
+        type: string
       updatedAt:
         description: 更新时间
         type: string
     type: object
   config.AliyunOSS:
     properties:
-      accessKeyId:
+      access-key-id:
         type: string
-      accessKeySecret:
+      access-key-secret:
         type: string
-      basePath:
+      base-path:
         type: string
-      bucketName:
+      bucket-name:
         type: string
-      bucketUrl:
+      bucket-url:
         type: string
       endpoint:
         type: string
@@ -36,42 +251,50 @@ definitions:
         type: string
       server:
         type: string
-      serverApi:
+      server-api:
         type: string
-      serverInitialize:
+      server-initialize:
         type: string
-      serverModel:
+      server-model:
         type: string
-      serverRequest:
+      server-plug:
         type: string
-      serverRouter:
+      server-request:
         type: string
-      serverService:
+      server-router:
         type: string
-      transferRestart:
+      server-service:
+        type: string
+      transfer-restart:
         type: boolean
       web:
         type: string
-      webApi:
+      web-api:
         type: string
-      webForm:
+      web-form:
         type: string
-      webTable:
+      web-table:
         type: string
     type: object
   config.AwsS3:
     properties:
-      baseURL:
+      base-url:
         type: string
       bucket:
         type: string
-      pathPrefix:
+      disable-ssl:
+        type: boolean
+      endpoint:
+        type: string
+      path-prefix:
         type: string
       region:
         type: string
-      secretID:
+      s3-force-path-style:
+        type: boolean
+      secret-id:
         type: string
-      secretKey:
+      secret-key:
         type: string
     type: object
   config.CORS:
@@ -98,59 +321,15 @@ definitions:
     type: object
   config.Captcha:
     properties:
-      imgHeight:
+      img-height:
         description: 验证码高度
         type: integer
-      imgWidth:
+      img-width:
         description: 验证码宽度
         type: integer
-      keyLong:
+      key-long:
         description: 验证码长度
         type: integer
-    type: object
-  config.Casbin:
-    properties:
-      modelPath:
-        description: 存放casbin模型的相对路径
-        type: string
-    type: object
-  config.DB:
-    properties:
-      alias-name:
-        type: string
-      config:
-        description: 高级配置
-        type: string
-      dbname:
-        description: 数据库名
-        type: string
-      disable:
-        type: boolean
-      logMode:
-        description: 是否开启Gorm全局日志
-        type: string
-      logZap:
-        type: boolean
-      maxIdleConns:
-        description: 空闲中的最大连接数
-        type: integer
-      maxOpenConns:
-        description: 打开到数据库的最大连接数
-        type: integer
-      password:
-        description: 数据库密码
-        type: string
-      path:
-        description: 服务器地址:端口
-        type: string
-      port:
-        description: :端口
-        type: string
-      type:
-        type: string
-      username:
-        description: 数据库用户名
-        type: string
     type: object
   config.Detail:
     properties:
@@ -172,7 +351,7 @@ definitions:
       host:
         description: 服务器地址
         type: string
-      isSSL:
+      is-ssl:
         description: 是否SSL
         type: boolean
       nickname:
@@ -195,7 +374,7 @@ definitions:
     type: object
   config.HuaWeiObs:
     properties:
-      accessKey:
+      access-key:
         type: string
       bucket:
         type: string
@@ -203,28 +382,31 @@ definitions:
         type: string
       path:
         type: string
-      secretKey:
+      secret-key:
         type: string
     type: object
   config.JWT:
     properties:
-      bufferTime:
+      buffer-time:
         description: 缓冲时间
         type: integer
-      expiresTime:
+      expires-time:
         description: 过期时间
         type: integer
       issuer:
         description: 签发者
         type: string
-      signingKey:
+      signing-key:
         description: jwt签名
         type: string
     type: object
   config.Local:
     properties:
       path:
-        description: 本地文件路径
+        description: 本地文件访问路径
+        type: string
+      store-path:
+        description: 本地文件存储路径
         type: string
     type: object
   config.Mysql:
@@ -232,29 +414,29 @@ definitions:
       config:
         description: 高级配置
         type: string
-      dbname:
+      db-name:
         description: 数据库名
         type: string
-      logMode:
+      log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      logZap:
+      log-zap:
         description: 是否通过zap写入日志文件
         type: boolean
-      maxIdleConns:
+      max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
-      maxOpenConns:
+      max-open-conns:
         description: 打开到数据库的最大连接数
         type: integer
       password:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址
+        description: 服务器地址:端口
         type: string
       port:
-        description: 端口
+        description: :端口
         type: string
       username:
         description: 数据库用户名
@@ -265,19 +447,19 @@ definitions:
       config:
         description: 高级配置
         type: string
-      dbname:
+      db-name:
         description: 数据库名
         type: string
-      logMode:
+      log-mode:
         description: 是否开启Gorm全局日志
         type: string
-      logZap:
+      log-zap:
         description: 是否通过zap写入日志文件
         type: boolean
-      maxIdleConns:
+      max-idle-conns:
         description: 空闲中的最大连接数
         type: integer
-      maxOpenConns:
+      max-open-conns:
         description: 打开到数据库的最大连接数
         type: integer
       password:
@@ -295,22 +477,22 @@ definitions:
     type: object
   config.Qiniu:
     properties:
-      accessKey:
+      access-key:
         description: 秘钥AK
         type: string
       bucket:
         description: 空间名称
         type: string
-      imgPath:
+      img-path:
         description: CDN加速域名
         type: string
-      secretKey:
+      secret-key:
         description: 秘钥SK
         type: string
-      useCdnDomains:
+      use-cdn-domains:
         description: 上传是否使用CDN上传加速
         type: boolean
-      useHttps:
+      use-https:
         description: 是否使用https
         type: boolean
       zone:
@@ -331,29 +513,27 @@ definitions:
     type: object
   config.Server:
     properties:
-      aliyunOSS:
+      aliyun-oss:
         $ref: '#/definitions/config.AliyunOSS'
-      autoCode:
+      autocode:
         $ref: '#/definitions/config.Autocode'
         description: auto
-      awsS3:
+      aws-s3:
         $ref: '#/definitions/config.AwsS3'
       captcha:
         $ref: '#/definitions/config.Captcha'
-      casbin:
-        $ref: '#/definitions/config.Casbin'
       cors:
         $ref: '#/definitions/config.CORS'
         description: 跨域配置
       db-list:
         items:
-          $ref: '#/definitions/config.DB'
+          $ref: '#/definitions/config.SpecializedDB'
         type: array
       email:
         $ref: '#/definitions/config.Email'
       excel:
         $ref: '#/definitions/config.Excel'
-      huaWeiObs:
+      hua-wei-obs:
         $ref: '#/definitions/config.HuaWeiObs'
       jwt:
         $ref: '#/definitions/config.JWT'
@@ -371,51 +551,90 @@ definitions:
         $ref: '#/definitions/config.Redis'
       system:
         $ref: '#/definitions/config.System'
-      tencentCOS:
+      tencent-cos:
         $ref: '#/definitions/config.TencentCOS'
       timer:
         $ref: '#/definitions/config.Timer'
       zap:
         $ref: '#/definitions/config.Zap'
     type: object
+  config.SpecializedDB:
+    properties:
+      alias-name:
+        type: string
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      disable:
+        type: boolean
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      type:
+        type: string
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
   config.System:
     properties:
       addr:
         description: 端口值
         type: integer
-      dbType:
+      db-type:
         description: 数据库类型:mysql(默认)|sqlite|sqlserver|postgresql
         type: string
       env:
         description: 环境值
         type: string
-      iplimitCount:
+      iplimit-count:
         type: integer
-      iplimitTime:
+      iplimit-time:
         type: integer
-      ossType:
+      oss-type:
         description: Oss类型
         type: string
-      useMultipoint:
+      use-multipoint:
         description: 多点登录拦截
         type: boolean
-      useRedis:
+      use-redis:
         description: 使用redis
         type: boolean
     type: object
   config.TencentCOS:
     properties:
-      baseURL:
+      base-url:
         type: string
       bucket:
         type: string
-      pathPrefix:
+      path-prefix:
         type: string
       region:
         type: string
-      secretID:
+      secret-id:
         type: string
-      secretKey:
+      secret-key:
         type: string
     type: object
   config.Timer:
@@ -430,13 +649,16 @@ definitions:
       start:
         description: 是否启用
         type: boolean
+      with_seconds:
+        description: 是否精确到秒
+        type: boolean
     type: object
   config.Zap:
     properties:
       director:
         description: 日志文件夹
         type: string
-      encodeLevel:
+      encode-level:
         description: 编码级
         type: string
       format:
@@ -445,16 +667,19 @@ definitions:
       level:
         description: 级别
         type: string
-      logInConsole:
+      log-in-console:
         description: 输出控制台
         type: boolean
+      max-age:
+        description: 日志留存时间
+        type: integer
       prefix:
         description: 日志前缀
         type: string
-      showLine:
+      show-line:
         description: 显示行
         type: boolean
-      stacktraceKey:
+      stacktrace-key:
         description: 栈名
         type: string
     type: object
@@ -477,7 +702,7 @@ definitions:
         description: 管理详情
       sysUserAuthorityID:
         description: 管理角色ID
-        type: string
+        type: integer
       sysUserId:
         description: 管理ID
         type: integer
@@ -563,11 +788,197 @@ definitions:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
     type: object
+  lessondata.ArticleResources:
+    properties:
+      author:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      data:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      isReference:
+        type: integer
+      referenceUrl:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.Knowledge:
+    properties:
+      chapter_id:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.QuestionBankJudge:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      describe:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      is_right:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.QuestionBankKnowledgeMerge:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      difficulty:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      knowledge_id:
+        type: integer
+      question_id:
+        type: integer
+      question_type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.QuestionBankMultipleChoice:
+    properties:
+      answer:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      describe:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      most_options:
+        type: integer
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.QuestionBankOptions:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      describe:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      is_right:
+        type: integer
+      multiple_choice_id:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.QuestionBankSupplyBlank:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      describe:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      is_order:
+        type: integer
+      num:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.ResourcePractice:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      orders:
+        type: integer
+      qutionId:
+        type: integer
+      resourcesId:
+        type: integer
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  lessondata.ResourcesTest:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      ordes:
+        type: integer
+      questionId:
+        type: integer
+      resourcesId:
+        type: integer
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      weight:
+        type: number
+    type: object
+  lessondata.VideoResources:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      url:
+        type: string
+    type: object
   request.AddMenuAuthorityInfo:
     properties:
       authorityId:
         description: 角色ID
-        type: string
+        type: integer
       menus:
         items:
           $ref: '#/definitions/system.SysBaseMenu'
@@ -577,7 +988,7 @@ definitions:
     properties:
       authorityId:
         description: 权限id
-        type: string
+        type: integer
       casbinInfos:
         items:
           $ref: '#/definitions/request.CasbinInfo'
@@ -592,16 +1003,13 @@ definitions:
         description: 路径
         type: string
     type: object
-  request.ChangePasswordStruct:
+  request.ChangePasswordReq:
     properties:
       newPassword:
         description: 新密码
         type: string
       password:
         description: 密码
-        type: string
-      username:
-        description: 用户名
         type: string
     type: object
   request.Empty:
@@ -610,13 +1018,13 @@ definitions:
     properties:
       authorityId:
         description: 角色ID
-        type: string
+        type: integer
     type: object
   request.GetById:
     properties:
       id:
         description: 主键ID
-        type: number
+        type: integer
     type: object
   request.IdsReq:
     properties:
@@ -666,6 +1074,9 @@ definitions:
     type: object
   request.PageInfo:
     properties:
+      keyword:
+        description: 关键字
+        type: string
       page:
         description: 页码
         type: integer
@@ -676,19 +1087,23 @@ definitions:
   request.Register:
     properties:
       authorityId:
-        type: string
-      authorityIds:
-        items:
-          type: string
-        type: array
-      headerImg:
-        type: string
+        description: HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
+        type: integer
       nickName:
         type: string
       passWord:
         type: string
       userName:
         type: string
+    type: object
+  request.RollBack:
+    properties:
+      deleteTable:
+        description: 是否删除表
+        type: boolean
+      id:
+        description: 主键ID
+        type: integer
     type: object
   request.SearchApiParams:
     properties:
@@ -707,6 +1122,9 @@ definitions:
       id:
         description: 主键ID
         type: integer
+      keyword:
+        description: 关键字
+        type: string
       method:
         description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
         type: string
@@ -730,14 +1148,14 @@ definitions:
     properties:
       authorityId:
         description: 角色ID
-        type: string
+        type: integer
     type: object
   request.SetUserAuthorities:
     properties:
       authorityIds:
         description: 角色ID
         items:
-          type: string
+          type: integer
         type: array
       id:
         type: integer
@@ -745,7 +1163,7 @@ definitions:
   request.SysAuthorityBtnReq:
     properties:
       authorityId:
-        type: string
+        type: integer
       menuID:
         type: integer
       selected:
@@ -755,6 +1173,9 @@ definitions:
     type: object
   request.SysAutoHistory:
     properties:
+      keyword:
+        description: 关键字
+        type: string
       page:
         description: 页码
         type: integer
@@ -805,8 +1226,7 @@ definitions:
     type: object
   response.PageResult:
     properties:
-      list:
-        type: object
+      list: {}
       page:
         type: integer
       pageSize:
@@ -825,8 +1245,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       msg:
         type: string
     type: object
@@ -855,7 +1274,7 @@ definitions:
         $ref: '#/definitions/system.SysAuthority'
       oldAuthorityId:
         description: 旧角色ID
-        type: string
+        type: integer
     type: object
   response.SysAuthorityResponse:
     properties:
@@ -918,8 +1337,12 @@ definitions:
         items:
           $ref: '#/definitions/system.Field'
         type: array
+      hasTimer:
+        type: boolean
       humpPackageName:
         description: go文件名称
+        type: string
+      package:
         type: string
       packageName:
         description: 文件名称
@@ -933,6 +1356,9 @@ definitions:
     type: object
   system.Field:
     properties:
+      clearable:
+        description: 是否可清空
+        type: boolean
       columnName:
         description: 数据库字段
         type: string
@@ -944,6 +1370,9 @@ definitions:
         type: string
       dictType:
         description: 字典
+        type: string
+      errorText:
+        description: 校验失败文字
         type: string
       fieldDesc:
         description: 中文名
@@ -960,6 +1389,9 @@ definitions:
       fieldType:
         description: Field数据类型
         type: string
+      require:
+        description: 是否必填
+        type: boolean
     type: object
   system.SysApi:
     properties:
@@ -989,7 +1421,7 @@ definitions:
     properties:
       authorityId:
         description: 角色ID
-        type: string
+        type: integer
       authorityName:
         description: 角色名
         type: string
@@ -1001,6 +1433,8 @@ definitions:
         description: 创建时间
         type: string
       dataAuthorityId:
+        description: ParentId        uint            `json:"parentId" gorm:"comment:父角色ID"`                                       //
+          父角色ID
         items:
           $ref: '#/definitions/system.SysAuthority'
         type: array
@@ -1013,8 +1447,23 @@ definitions:
         items:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
-      parentId:
-        description: 父角色ID
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysAutoCode:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      desc:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      label:
+        type: string
+      packageName:
         type: string
       updatedAt:
         description: 更新时间
@@ -1185,7 +1634,7 @@ definitions:
         type: array
       btns:
         additionalProperties:
-          type: string
+          type: integer
         type: object
       children:
         items:
@@ -1290,29 +1739,14 @@ definitions:
     type: object
   system.SysUser:
     properties:
-      activeColor:
-        description: 活跃颜色
-        type: string
       authorities:
         items:
           $ref: '#/definitions/system.SysAuthority'
         type: array
       authority:
         $ref: '#/definitions/system.SysAuthority'
-      authorityId:
-        description: 用户角色ID
-        type: string
-      baseColor:
-        description: 基础颜色
-        type: string
       createdAt:
         description: 创建时间
-        type: string
-      email:
-        description: 用户邮箱
-        type: string
-      headerImg:
-        description: 用户头像
         type: string
       id:
         description: 主键ID
@@ -1320,12 +1754,8 @@ definitions:
       nickName:
         description: 用户昵称
         type: string
-      phone:
-        description: 用户角色ID
-        type: string
-      sideMode:
-        description: 用户侧边主题
-        type: string
+      role_id:
+        type: integer
       updatedAt:
         description: 更新时间
         type: string
@@ -1340,6 +1770,120 @@ definitions:
     properties:
       config:
         $ref: '#/definitions/config.Server'
+    type: object
+  teachplan.ExamPlan:
+    properties:
+      audit:
+        type: integer
+      courseId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      endTime:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      passScore:
+        type: number
+      startTime:
+        type: string
+      state:
+        type: integer
+      teachClassId:
+        type: integer
+      templateId:
+        type: integer
+      time:
+        type: string
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      weight:
+        type: number
+    type: object
+  teachplan.Score:
+    properties:
+      attendanceProportion:
+        type: number
+      attendanceScore:
+        type: number
+      courseId:
+        type: integer
+      courseName:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      examProporation:
+        type: number
+      examScrore:
+        type: number
+      id:
+        description: 主键ID
+        type: integer
+      learnResourcesProportion:
+        type: number
+      learnResourcesScore:
+        type: number
+      procedureProportion:
+        type: number
+      procedureScore:
+        type: number
+      studentId:
+        type: integer
+      teachClassId:
+        type: integer
+      teachClassName:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  teachplan.TeachAttendance:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      expiration:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      latitude:
+        type: number
+      longitude:
+        type: number
+      teachId:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  teachplan.TeachAttendanceRecord:
+    properties:
+      attendanceId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      latitude:
+        type: number
+      longitute:
+        type: number
+      studentId:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
 info:
   contact: {}
@@ -1540,6 +2084,198 @@ paths:
       summary: 修改基础api
       tags:
       - SysApi
+  /articleResources/createArticleResources:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ArticleResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ArticleResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ArticleResources
+      tags:
+      - ArticleResources
+  /articleResources/deleteArticleResources:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ArticleResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ArticleResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ArticleResources
+      tags:
+      - ArticleResources
+  /articleResources/deleteArticleResourcesByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ArticleResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ArticleResources
+      tags:
+      - ArticleResources
+  /articleResources/findArticleResources:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: author
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: data
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: isReference
+        type: integer
+      - in: query
+        name: referenceUrl
+        type: string
+      - in: query
+        name: title
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ArticleResources
+      tags:
+      - ArticleResources
+  /articleResources/getArticleResourcesList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: author
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: data
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: isReference
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: referenceUrl
+        type: string
+      - in: query
+        name: title
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ArticleResources列表
+      tags:
+      - ArticleResources
+  /articleResources/updateArticleResources:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ArticleResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ArticleResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ArticleResources
+      tags:
+      - ArticleResources
   /authority/copyAuthority:
     post:
       consumes:
@@ -1757,6 +2493,36 @@ paths:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
+                data:
+                  $ref: '#/definitions/response.SysAuthorityBtnRes'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取权限按钮
+      tags:
+      - AuthorityBtn
+  /authorityBtn/setAuthorityBtn:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 菜单id, 角色id, 选中的按钮id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAuthorityBtnReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回列表成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
                 msg:
                   type: string
               type: object
@@ -1765,6 +2531,68 @@ paths:
       summary: 设置权限按钮
       tags:
       - AuthorityBtn
+  /autoCode/createPackage:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建package
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建package成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建package
+      tags:
+      - AutoCode
+  /autoCode/createPlug:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建插件模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建插件模板成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建插件模板
+      tags:
+      - AutoCode
   /autoCode/createTemp:
     post:
       consumes:
@@ -1786,6 +2614,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 自动代码模板
+      tags:
+      - AutoCode
+  /autoCode/delPackage:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建package
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除package成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除package
       tags:
       - AutoCode
   /autoCode/delSysHistory:
@@ -1895,6 +2754,30 @@ paths:
       summary: 获取meta信息
       tags:
       - AutoCode
+  /autoCode/getPackage:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建package成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取package
+      tags:
+      - AutoCode
   /autoCode/getSysHistory:
     post:
       consumes:
@@ -1990,7 +2873,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.GetById'
+          $ref: '#/definitions/request.RollBack'
       produces:
       - application/json
       responses:
@@ -2008,179 +2891,6 @@ paths:
       summary: 回滚自动生成代码
       tags:
       - AutoCode
-  /autoCodeExample/createAutoCodeExample:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: AutoCodeExample模型
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/autocode.AutoCodeExample'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 创建AutoCodeExample
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 创建AutoCodeExample
-      tags:
-      - AutoCodeExample
-  /autoCodeExample/deleteAutoCodeExample:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: AutoCodeExample模型
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/autocode.AutoCodeExample'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除AutoCodeExample
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除AutoCodeExample
-      tags:
-      - AutoCodeExample
-  /autoCodeExample/findAutoCodeExample:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 展示值
-        in: query
-        name: autoCodeExampleField
-        type: string
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 用id查询AutoCodeExample
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  additionalProperties: true
-                  type: object
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询AutoCodeExample
-      tags:
-      - AutoCodeExample
-  /autoCodeExample/getAutoCodeExampleList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 展示值
-        in: query
-        name: autoCodeExampleField
-        type: string
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 分页获取AutoCodeExample列表,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取AutoCodeExample列表
-      tags:
-      - AutoCodeExample
-  /autoCodeExample/updateAutoCodeExample:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新AutoCodeExample
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/autocode.AutoCodeExample'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 更新AutoCodeExample
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 更新AutoCodeExample
-      tags:
-      - AutoCodeExample
   /base/captcha:
     post:
       consumes:
@@ -2288,6 +2998,528 @@ paths:
       summary: 获取权限列表
       tags:
       - Casbin
+  /chapter/createChapter:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Chapter
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Chapter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Chapter
+      tags:
+      - Chapter
+  /chapter/deleteChapter:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Chapter
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Chapter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Chapter
+      tags:
+      - Chapter
+  /chapter/deleteChapterByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Chapter
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Chapter
+      tags:
+      - Chapter
+  /chapter/findChapter:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: lessonId
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: order
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Chapter
+      tags:
+      - Chapter
+  /chapter/getChapterList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: lessonId
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: order
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Chapter列表
+      tags:
+      - Chapter
+  /chapter/updateChapter:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Chapter
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Chapter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Chapter
+      tags:
+      - Chapter
+  /class/createClass:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Class
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Class
+      tags:
+      - Class
+  /class/deleteClass:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Class
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Class
+      tags:
+      - Class
+  /class/deleteClassByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Class
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Class
+      tags:
+      - Class
+  /class/findClass:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: professional_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Class
+      tags:
+      - Class
+  /class/getClassList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: professional_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Class列表
+      tags:
+      - Class
+  /class/updateClass:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Class
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Class'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Class
+      tags:
+      - Class
+  /college/createCollege:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建College
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.College'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建College
+      tags:
+      - College
+  /college/deleteCollege:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除College
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.College'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除College
+      tags:
+      - College
+  /college/deleteCollegeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除College
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除College
+      tags:
+      - College
+  /college/findCollege:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询College
+      tags:
+      - College
+  /college/getCollegeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取College列表
+      tags:
+      - College
+  /college/updateCollege:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新College
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.College'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新College
+      tags:
+      - College
   /customer/customer:
     delete:
       consumes:
@@ -2339,7 +3571,7 @@ paths:
       - description: 管理角色ID
         in: query
         name: sysUserAuthorityID
-        type: string
+        type: integer
       - description: 管理ID
         in: query
         name: sysUserId
@@ -2426,6 +3658,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
       - description: 页码
         in: query
         name: page
@@ -2488,6 +3724,240 @@ paths:
       summary: 发送邮件
       tags:
       - System
+  /examPlan/createExamPlan:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ExamPlan
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.ExamPlan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ExamPlan
+      tags:
+      - ExamPlan
+  /examPlan/deleteExamPlan:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ExamPlan
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.ExamPlan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ExamPlan
+      tags:
+      - ExamPlan
+  /examPlan/deleteExamPlanByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ExamPlan
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ExamPlan
+      tags:
+      - ExamPlan
+  /examPlan/findExamPlan:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: audit
+        type: integer
+      - in: query
+        name: courseId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: endTime
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: passScore
+        type: number
+      - in: query
+        name: startTime
+        type: string
+      - in: query
+        name: state
+        type: integer
+      - in: query
+        name: teachClassId
+        type: integer
+      - in: query
+        name: templateId
+        type: integer
+      - in: query
+        name: time
+        type: string
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: weight
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ExamPlan
+      tags:
+      - ExamPlan
+  /examPlan/getExamPlanList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: audit
+        type: integer
+      - in: query
+        name: courseId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: endTime
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: passScore
+        type: number
+      - in: query
+        name: startTime
+        type: string
+      - in: query
+        name: state
+        type: integer
+      - in: query
+        name: teachClassId
+        type: integer
+      - in: query
+        name: templateId
+        type: integer
+      - in: query
+        name: time
+        type: string
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: weight
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ExamPlan列表
+      tags:
+      - ExamPlan
+  /examPlan/updateExamPlan:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ExamPlan
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.ExamPlan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ExamPlan
+      tags:
+      - ExamPlan
   /excel/downloadTemplate:
     get:
       consumes:
@@ -2502,7 +3972,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -2523,7 +3993,7 @@ paths:
       - application/octet-stream
       responses:
         "200":
-          description: ""
+          description: OK
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -2810,6 +4280,348 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
+  /knowledge/createKnowledge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Knowledge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.Knowledge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Knowledge
+      tags:
+      - Knowledge
+  /knowledge/deleteKnowledge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Knowledge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.Knowledge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Knowledge
+      tags:
+      - Knowledge
+  /knowledge/deleteKnowledgeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Knowledge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Knowledge
+      tags:
+      - Knowledge
+  /knowledge/findKnowledge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Knowledge
+      tags:
+      - Knowledge
+  /knowledge/getKnowledgeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: chapter_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Knowledge列表
+      tags:
+      - Knowledge
+  /knowledge/updateKnowledge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Knowledge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.Knowledge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Knowledge
+      tags:
+      - Knowledge
+  /lesson/createLesson:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Lesson
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Lesson'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Lesson
+      tags:
+      - Lesson
+  /lesson/deleteLesson:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Lesson
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Lesson'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Lesson
+      tags:
+      - Lesson
+  /lesson/deleteLessonByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Lesson
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Lesson
+      tags:
+      - Lesson
+  /lesson/findLesson:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Lesson
+      tags:
+      - Lesson
+  /lesson/getLessonList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Lesson列表
+      tags:
+      - Lesson
+  /lesson/updateLesson:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Lesson
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Lesson'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Lesson
+      tags:
+      - Lesson
   /menu/addBaseMenu:
     post:
       consumes:
@@ -3069,6 +4881,2256 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /professional/createProfessional:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Professional
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Professional'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Professional
+      tags:
+      - Professional
+  /professional/deleteProfessional:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Professional
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Professional'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Professional
+      tags:
+      - Professional
+  /professional/deleteProfessionalByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Professional
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Professional
+      tags:
+      - Professional
+  /professional/findProfessional:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: college_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Professional
+      tags:
+      - Professional
+  /professional/getProfessionalList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: college_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Professional列表
+      tags:
+      - Professional
+  /professional/updateProfessional:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Professional
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Professional'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Professional
+      tags:
+      - Professional
+  /questionBank_judge/createQuestionBankJudge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankJudge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankJudge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankJudge
+      tags:
+      - QuestionBankJudge
+  /questionBank_judge/deleteQuestionBankJudge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankJudge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankJudge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankJudge
+      tags:
+      - QuestionBankJudge
+  /questionBank_judge/deleteQuestionBankJudgeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankJudge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankJudge
+      tags:
+      - QuestionBankJudge
+  /questionBank_judge/findQuestionBankJudge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_right
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankJudge
+      tags:
+      - QuestionBankJudge
+  /questionBank_judge/getQuestionBankJudgeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_right
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankJudge列表
+      tags:
+      - QuestionBankJudge
+  /questionBank_judge/updateQuestionBankJudge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankJudge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankJudge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankJudge
+      tags:
+      - QuestionBankJudge
+  /questionBank_multiple_choice/createQuestionBankMultipleChoice:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankMultipleChoice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankMultipleChoice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankMultipleChoice
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_multiple_choice/deleteQuestionBankMultipleChoice:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankMultipleChoice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankMultipleChoice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankMultipleChoice
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_multiple_choice/deleteQuestionBankMultipleChoiceByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankMultipleChoice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankMultipleChoice
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_multiple_choice/findQuestionBankMultipleChoice:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: answer
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: most_options
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankMultipleChoice
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_multiple_choice/getQuestionBankMultipleChoiceList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: answer
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: most_options
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankMultipleChoice列表
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_multiple_choice/updateQuestionBankMultipleChoice:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankMultipleChoice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankMultipleChoice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankMultipleChoice
+      tags:
+      - QuestionBankMultipleChoice
+  /questionBank_options/createQuestionBankOptions:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankOptions
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankOptions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankOptions
+      tags:
+      - QuestionBankOptions
+  /questionBank_options/deleteQuestionBankOptions:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankOptions
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankOptions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankOptions
+      tags:
+      - QuestionBankOptions
+  /questionBank_options/deleteQuestionBankOptionsByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankOptions
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankOptions
+      tags:
+      - QuestionBankOptions
+  /questionBank_options/findQuestionBankOptions:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_right
+        type: integer
+      - in: query
+        name: multiple_choice_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankOptions
+      tags:
+      - QuestionBankOptions
+  /questionBank_options/getQuestionBankOptionsList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_right
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: multiple_choice_id
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankOptions列表
+      tags:
+      - QuestionBankOptions
+  /questionBank_options/updateQuestionBankOptions:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankOptions
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankOptions'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankOptions
+      tags:
+      - QuestionBankOptions
+  /questionBank_supply_blank/createQuestionBankSupplyBlank:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankSupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBank_supply_blank/deleteQuestionBankSupplyBlank:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankSupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBank_supply_blank/deleteQuestionBankSupplyBlankByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBank_supply_blank/findQuestionBankSupplyBlank:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_order
+        type: integer
+      - in: query
+        name: num
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBank_supply_blank/getQuestionBankSupplyBlankList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: is_order
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: num
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankSupplyBlank列表
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBank_supply_blank/updateQuestionBankSupplyBlank:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankSupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankKnowledgeMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankKnowledgeMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankKnowledgeMerge
+      tags:
+      - QuestionBankKnowledgeMerge
+  /questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMerge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankKnowledgeMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankKnowledgeMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankKnowledgeMerge
+      tags:
+      - QuestionBankKnowledgeMerge
+  /questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMergeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankKnowledgeMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankKnowledgeMerge
+      tags:
+      - QuestionBankKnowledgeMerge
+  /questionBankKnowledgeMerge/findQuestionBankKnowledgeMerge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: difficulty
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: knowledge_id
+        type: integer
+      - in: query
+        name: question_id
+        type: integer
+      - in: query
+        name: question_type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankKnowledgeMerge
+      tags:
+      - QuestionBankKnowledgeMerge
+  /questionBankKnowledgeMerge/getQuestionBankKnowledgeMergeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: difficulty
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: knowledge_id
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: question_id
+        type: integer
+      - in: query
+        name: question_type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankKnowledgeMerge列表
+      tags:
+      - QuestionBankKnowledgeMerge
+  /questionBankKnowledgeMerge/updateQuestionBankKnowledgeMerge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankKnowledgeMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.QuestionBankKnowledgeMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankKnowledgeMerge
+      tags:
+      - QuestionBankKnowledgeMerge
+  /resandknow/createResandknow:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Resandknow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resandknow'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Resandknow
+      tags:
+      - Resandknow
+  /resandknow/deleteResandknow:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Resandknow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resandknow'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Resandknow
+      tags:
+      - Resandknow
+  /resandknow/deleteResandknowByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Resandknow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Resandknow
+      tags:
+      - Resandknow
+  /resandknow/findResandknow:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: knowledgeId
+        type: integer
+      - in: query
+        name: resourceId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Resandknow
+      tags:
+      - Resandknow
+  /resandknow/getResandknowList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: knowledgeId
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: resourceId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Resandknow列表
+      tags:
+      - Resandknow
+  /resandknow/updateResandknow:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Resandknow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resandknow'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Resandknow
+      tags:
+      - Resandknow
+  /resource/createResource:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Resource
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resource'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Resource
+      tags:
+      - Resource
+  /resource/deleteResource:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Resource
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resource'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Resource
+      tags:
+      - Resource
+  /resource/deleteResourceByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Resource
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Resource
+      tags:
+      - Resource
+  /resource/findResource:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: detailId
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Resource
+      tags:
+      - Resource
+  /resource/getResourceList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: detailId
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Resource列表
+      tags:
+      - Resource
+  /resource/updateResource:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Resource
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Resource'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Resource
+      tags:
+      - Resource
+  /resourcesPractice/createResourcePractice:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ResourcePractice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcePractice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ResourcePractice
+      tags:
+      - ResourcePractice
+  /resourcesPractice/deleteResourcePractice:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ResourcePractice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcePractice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ResourcePractice
+      tags:
+      - ResourcePractice
+  /resourcesPractice/deleteResourcePracticeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ResourcePractice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ResourcePractice
+      tags:
+      - ResourcePractice
+  /resourcesPractice/findResourcePractice:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: orders
+        type: integer
+      - in: query
+        name: qutionId
+        type: integer
+      - in: query
+        name: resourcesId
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ResourcePractice
+      tags:
+      - ResourcePractice
+  /resourcesPractice/getResourcePracticeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: orders
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: qutionId
+        type: integer
+      - in: query
+        name: resourcesId
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ResourcePractice列表
+      tags:
+      - ResourcePractice
+  /resourcesPractice/updateResourcePractice:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ResourcePractice
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcePractice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ResourcePractice
+      tags:
+      - ResourcePractice
+  /resourcesTest/createResourcesTest:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ResourcesTest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcesTest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ResourcesTest
+      tags:
+      - ResourcesTest
+  /resourcesTest/deleteResourcesTest:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ResourcesTest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcesTest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ResourcesTest
+      tags:
+      - ResourcesTest
+  /resourcesTest/deleteResourcesTestByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ResourcesTest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ResourcesTest
+      tags:
+      - ResourcesTest
+  /resourcesTest/findResourcesTest:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: ordes
+        type: integer
+      - in: query
+        name: questionId
+        type: integer
+      - in: query
+        name: resourcesId
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: weight
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ResourcesTest
+      tags:
+      - ResourcesTest
+  /resourcesTest/getResourcesTestList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: ordes
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: questionId
+        type: integer
+      - in: query
+        name: resourcesId
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: weight
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ResourcesTest列表
+      tags:
+      - ResourcesTest
+  /resourcesTest/updateResourcesTest:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ResourcesTest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.ResourcesTest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ResourcesTest
+      tags:
+      - ResourcesTest
+  /score/createScore:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Score
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.Score'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Score
+      tags:
+      - Score
+  /score/deleteScore:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Score
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.Score'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Score
+      tags:
+      - Score
+  /score/deleteScoreByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Score
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Score
+      tags:
+      - Score
+  /score/findScore:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendanceProportion
+        type: number
+      - in: query
+        name: attendanceScore
+        type: number
+      - in: query
+        name: courseId
+        type: integer
+      - in: query
+        name: courseName
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: examProporation
+        type: number
+      - in: query
+        name: examScrore
+        type: number
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: learnResourcesProportion
+        type: number
+      - in: query
+        name: learnResourcesScore
+        type: number
+      - in: query
+        name: procedureProportion
+        type: number
+      - in: query
+        name: procedureScore
+        type: number
+      - in: query
+        name: studentId
+        type: integer
+      - in: query
+        name: teachClassId
+        type: integer
+      - in: query
+        name: teachClassName
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Score
+      tags:
+      - Score
+  /score/getScoreList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendanceProportion
+        type: number
+      - in: query
+        name: attendanceScore
+        type: number
+      - in: query
+        name: courseId
+        type: integer
+      - in: query
+        name: courseName
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: examProporation
+        type: number
+      - in: query
+        name: examScrore
+        type: number
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: learnResourcesProportion
+        type: number
+      - in: query
+        name: learnResourcesScore
+        type: number
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: procedureProportion
+        type: number
+      - in: query
+        name: procedureScore
+        type: number
+      - in: query
+        name: studentId
+        type: integer
+      - in: query
+        name: teachClassId
+        type: integer
+      - in: query
+        name: teachClassName
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Score列表
+      tags:
+      - Score
+  /score/updateScore:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Score
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.Score'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Score
+      tags:
+      - Score
+  /student/createStudent:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Student
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Student
+      tags:
+      - Student
+  /student/deleteStudent:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Student
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Student
+      tags:
+      - Student
+  /student/deleteStudentByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Student
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Student
+      tags:
+      - Student
+  /student/findStudent:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: class_id
+        type: integer
+      - in: query
+        name: class_name
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: id_card
+        type: string
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: sex
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Student
+      tags:
+      - Student
+  /student/getStudentList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: class_id
+        type: integer
+      - in: query
+        name: class_name
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: id_card
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: password
+        type: string
+      - in: query
+        name: sex
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Student列表
+      tags:
+      - Student
+  /student/updateStudent:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Student
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Student
+      tags:
+      - Student
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -3195,6 +7257,10 @@ paths:
         in: query
         name: id
         type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
       - description: 字典名（中）
         in: query
         name: name
@@ -3392,6 +7458,10 @@ paths:
         in: query
         name: id
         type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
       - description: 展示值
         in: query
         name: label
@@ -3661,6 +7731,10 @@ paths:
         in: query
         name: ip
         type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
       - description: 延迟
         in: query
         name: latency
@@ -3804,6 +7878,954 @@ paths:
       summary: 设置配置文件内容
       tags:
       - System
+  /teachAttendance/createTeachAttendance:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeachAttendance
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeachAttendance
+      tags:
+      - TeachAttendance
+  /teachAttendance/deleteTeachAttendance:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeachAttendance
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeachAttendance
+      tags:
+      - TeachAttendance
+  /teachAttendance/deleteTeachAttendanceByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeachAttendance
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeachAttendance
+      tags:
+      - TeachAttendance
+  /teachAttendance/findTeachAttendance:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: expiration
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: latitude
+        type: number
+      - in: query
+        name: longitude
+        type: number
+      - in: query
+        name: teachId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeachAttendance
+      tags:
+      - TeachAttendance
+  /teachAttendance/getTeachAttendanceList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: expiration
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: latitude
+        type: number
+      - in: query
+        name: longitude
+        type: number
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: teachId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeachAttendance列表
+      tags:
+      - TeachAttendance
+  /teachAttendance/updateTeachAttendance:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeachAttendance
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeachAttendance
+      tags:
+      - TeachAttendance
+  /teachAttendanceRecord/createTeachAttendanceRecord:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeachAttendanceRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendanceRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeachAttendanceRecord
+      tags:
+      - TeachAttendanceRecord
+  /teachAttendanceRecord/deleteTeachAttendanceRecord:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeachAttendanceRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendanceRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeachAttendanceRecord
+      tags:
+      - TeachAttendanceRecord
+  /teachAttendanceRecord/deleteTeachAttendanceRecordByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeachAttendanceRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeachAttendanceRecord
+      tags:
+      - TeachAttendanceRecord
+  /teachAttendanceRecord/findTeachAttendanceRecord:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendanceId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: latitude
+        type: number
+      - in: query
+        name: longitute
+        type: number
+      - in: query
+        name: studentId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeachAttendanceRecord
+      tags:
+      - TeachAttendanceRecord
+  /teachAttendanceRecord/getTeachAttendanceRecordList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendanceId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: latitude
+        type: number
+      - in: query
+        name: longitute
+        type: number
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: studentId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeachAttendanceRecord列表
+      tags:
+      - TeachAttendanceRecord
+  /teachAttendanceRecord/updateTeachAttendanceRecord:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeachAttendanceRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/teachplan.TeachAttendanceRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeachAttendanceRecord
+      tags:
+      - TeachAttendanceRecord
+  /teachClass/createTeachClass:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeachClass
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeachClass
+      tags:
+      - TeachClass
+  /teachClass/deleteTeachClass:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeachClass
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeachClass
+      tags:
+      - TeachClass
+  /teachClass/deleteTeachClassByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeachClass
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeachClass
+      tags:
+      - TeachClass
+  /teachClass/findTeachClass:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendance_proportion
+        type: number
+      - in: query
+        name: belong_class_id
+        type: integer
+      - in: query
+        name: course_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: final_exam_proportion
+        type: number
+      - in: query
+        name: has_more
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: learn_resource_proportion
+        type: number
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: procedure_exam_proportion
+        type: number
+      - in: query
+        name: teacher_id
+        type: integer
+      - in: query
+        name: term_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeachClass
+      tags:
+      - TeachClass
+  /teachClass/getTeachClassList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: attendance_proportion
+        type: number
+      - in: query
+        name: belong_class_id
+        type: integer
+      - in: query
+        name: course_id
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: final_exam_proportion
+        type: number
+      - in: query
+        name: has_more
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: learn_resource_proportion
+        type: number
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: procedure_exam_proportion
+        type: number
+      - in: query
+        name: teacher_id
+        type: integer
+      - in: query
+        name: term_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeachClass列表
+      tags:
+      - TeachClass
+  /teachClass/updateTeachClass:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeachClass
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeachClass
+      tags:
+      - TeachClass
+  /teachClassStudent/createTeachClassStudent:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClassStudent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeachClassStudent
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/deleteTeachClassStudent:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClassStudent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeachClassStudent
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/deleteTeachClassStudentByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeachClassStudent
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/findTeachClassStudent:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: student_id
+        type: integer
+      - in: query
+        name: teach_class_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeachClassStudent
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/getTeachClassStudentList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: student_id
+        type: integer
+      - in: query
+        name: teach_class_id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeachClassStudent列表
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/updateTeachClassStudent:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.TeachClassStudent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeachClassStudent
+      tags:
+      - TeachClassStudent
+  /term/createTerm:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Term
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Term'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Term
+      tags:
+      - Term
+  /term/deleteTerm:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Term
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Term'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Term
+      tags:
+      - Term
+  /term/deleteTermByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Term
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Term
+      tags:
+      - Term
+  /term/findTerm:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: end_time
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: start_time
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Term
+      tags:
+      - Term
+  /term/getTermList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: end_time
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: start_time
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Term列表
+      tags:
+      - Term
+  /term/updateTerm:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Term
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/basicdata.Term'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Term
+      tags:
+      - Term
   /user/SetSelfInfo:
     put:
       consumes:
@@ -3835,6 +8857,32 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /user/admin_register:
+    post:
+      parameters:
+      - description: 用户名, 昵称, 密码, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户注册账号,返回包括用户信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysUserResponse'
+                msg:
+                  type: string
+              type: object
+      summary: 用户注册账号
+      tags:
+      - SysUser
   /user/changePassword:
     post:
       parameters:
@@ -3843,7 +8891,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.ChangePasswordStruct'
+          $ref: '#/definitions/request.ChangePasswordReq'
       produces:
       - application/json
       responses:
@@ -3941,32 +8989,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 分页获取用户列表
-      tags:
-      - SysUser
-  /user/register:
-    post:
-      parameters:
-      - description: 用户名, 昵称, 密码, 角色ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.Register'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 用户注册账号,返回包括用户信息
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.SysUserResponse'
-                msg:
-                  type: string
-              type: object
-      summary: 用户注册账号
       tags:
       - SysUser
   /user/resetPassword:
@@ -4082,6 +9104,171 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /videoResources/createVideoResources:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建VideoResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.VideoResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建VideoResources
+      tags:
+      - VideoResources
+  /videoResources/deleteVideoResources:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除VideoResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.VideoResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除VideoResources
+      tags:
+      - VideoResources
+  /videoResources/deleteVideoResourcesByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除VideoResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除VideoResources
+      tags:
+      - VideoResources
+  /videoResources/findVideoResources:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: url
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+  /videoResources/getVideoResourcesList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: url
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取VideoResources列表
+      tags:
+      - VideoResources
+  /videoResources/updateVideoResources:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新VideoResources
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/lessondata.VideoResources'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新VideoResources
+      tags:
+      - VideoResources
 securityDefinitions:
   ApiKeyAuth:
     in: header
