@@ -7,40 +7,48 @@
 package basicdata
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-type MultiTableServiceApi struct {
+type MultiTableApi struct {
 }
-
-//var student basicdata.Student
-//_ = c.ShouldBindJSON(&student)
-//if err := studentService.CreateStudent(student); err != nil {
-//global.GVA_LOG.Error("创建失败!", zap.Error(err))
-//response.FailWithMessage("创建失败", c)
-//} else {
-//response.OkWithMessage("创建成功", c)
-//}
 
 var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
 
-// 更新学生教学班关联表
-func (multiTableServiceApi *MultiTableServiceApi) UpdateTeachClassStudent(c *gin.Context) {
+// CreateTeachClass 创建TeachClass
+// @Tags TeachClass
+// @Summary 创建TeachClass
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body basicdata.TeachClass true "创建TeachClass"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /teachClass/createTeachClass [post]
 
-	// 接收 教学班id 和要与之关联的学生id的 数组
+// InitTeachClassStudent 关联 学生与教学班
+// @Tags TeachClassStudent
+// @Summary 初始化关联 学生与教学班
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.StuTeachClass true "创建TeachClassStudent"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /teachClassStudent/initTeachClassStudent [post]
+func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context) {
 	var stuClassReq request.StuTeachClass
 
-	err := c.ShouldBindJSON(&stuClassReq)
-	if err != nil {
-		c.Writer.Write([]byte("绑定参数出错"))
-		return
-	}
-
+	_ = c.ShouldBindJSON(&stuClassReq)
 	err := multiTableService.UpdateTeachClassStudents(stuClassReq)
 	if err != nil {
-		return
+		global.GVA_LOG.Error("更新学生教学班关联表失败", zap.Error(err))
+		response.FailWithMessage("更新学生教学班关联表失败", c)
+	} else {
+		response.OkWithMessage("更新学生教学班关联表成功", c)
 	}
 
 }
