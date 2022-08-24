@@ -36,39 +36,8 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		//for i:=0; i<len(Papertemplate.PaperTemplateItems);i++{
-		//	b := &Papertemplate.PaperTemplateItems[i]
-		//	valueofb := reflect.ValueOf(b).Elem()
-		//	PaperTemplateItem := examManage.PaperTemplateItem{
-		//		GVA_MODEL:   global.GVA_MODEL{},
-		//		Chapter:     valueofb.FieldByName("Chapter").String(),
-		//		ProblemType: int(reflect.ValueOf(b.ProblemType).Int()),
-		//		Difficulty:  nil,
-		//		Num:         nil,
-		//		Score:       nil,
-		//		TemplateId:  nil,
-		//	}
-		//
-		//}
-		for i:=0; i<len(Papertemplate.PaperTemplateItems);i++{
-			b := Papertemplate.PaperTemplateItems[i]
-			paperTemplateItem := examManage.PaperTemplateItem{
-				GVA_MODEL:   global.GVA_MODEL{},
-				Chapter:     b.Chapter,
-				ProblemType: b.ProblemType,
-				Difficulty:  b.Difficulty,
-				Num:         b.Num,
-				Score:       b.Score,
-				TemplateId:  Papertemplate.UserId,
-			}
-			if err := paperTemplateItemService.CreatePaperTemplateItem(paperTemplateItem); err != nil {
-				global.GVA_LOG.Error("创建失败!", zap.Error(err))
-				response.FailWithMessage("创建失败", c)
-			} else {
 				response.OkWithMessage("创建成功", c)
 			}
-		}
-	}
 }
 
 // DeletePaperTemplate 删除PaperTemplate
