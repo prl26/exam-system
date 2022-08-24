@@ -17,7 +17,6 @@ type TeachClassApi struct {
 
 var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
 
-
 // CreateTeachClass 创建TeachClass
 // @Tags TeachClass
 // @Summary 创建TeachClass
@@ -30,19 +29,19 @@ var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassServ
 func (teachClassApi *TeachClassApi) CreateTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindJSON(&teachClass)
-    verify := utils.Rules{
-        "Course_id":{utils.NotEmpty()},
-        "Term_id":{utils.NotEmpty()},
-        "Belong_class_id":{utils.NotEmpty()},
-        "Name":{utils.NotEmpty()},
-        "Attendance_proportion":{utils.NotEmpty()},
-    }
+	verify := utils.Rules{
+		"CourseId":              {utils.NotEmpty()},
+		"TermId":                {utils.NotEmpty()},
+		"Belong_class_id":       {utils.NotEmpty()},
+		"Name":                  {utils.NotEmpty()},
+		"Attendance_proportion": {utils.NotEmpty()},
+	}
 	if err := utils.Verify(teachClass, verify); err != nil {
-    		response.FailWithMessage(err.Error(), c)
-    		return
-    	}
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := teachClassService.CreateTeachClass(teachClass); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -62,7 +61,7 @@ func (teachClassApi *TeachClassApi) DeleteTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindJSON(&teachClass)
 	if err := teachClassService.DeleteTeachClass(teachClass); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -80,9 +79,9 @@ func (teachClassApi *TeachClassApi) DeleteTeachClass(c *gin.Context) {
 // @Router /teachClass/deleteTeachClassByIds [delete]
 func (teachClassApi *TeachClassApi) DeleteTeachClassByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := teachClassService.DeleteTeachClassByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -101,19 +100,19 @@ func (teachClassApi *TeachClassApi) DeleteTeachClassByIds(c *gin.Context) {
 func (teachClassApi *TeachClassApi) UpdateTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindJSON(&teachClass)
-      verify := utils.Rules{
-          "Course_id":{utils.NotEmpty()},
-          "Term_id":{utils.NotEmpty()},
-          "Belong_class_id":{utils.NotEmpty()},
-          "Name":{utils.NotEmpty()},
-          "Attendance_proportion":{utils.NotEmpty()},
-      }
-    if err := utils.Verify(teachClass, verify); err != nil {
-      	response.FailWithMessage(err.Error(), c)
-      	return
-     }
+	verify := utils.Rules{
+		"CourseId":              {utils.NotEmpty()},
+		"TermId":                {utils.NotEmpty()},
+		"Belong_class_id":       {utils.NotEmpty()},
+		"Name":                  {utils.NotEmpty()},
+		"Attendance_proportion": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(teachClass, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := teachClassService.UpdateTeachClass(teachClass); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -133,7 +132,7 @@ func (teachClassApi *TeachClassApi) FindTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindQuery(&teachClass)
 	if reteachClass, err := teachClassService.GetTeachClass(teachClass.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reteachClass": reteachClass}, c)
@@ -153,14 +152,14 @@ func (teachClassApi *TeachClassApi) GetTeachClassList(c *gin.Context) {
 	var pageInfo basicdataReq.TeachClassSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := teachClassService.GetTeachClassInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

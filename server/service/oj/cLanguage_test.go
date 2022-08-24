@@ -1,6 +1,8 @@
 package oj
 
 import (
+	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
 	"github.com/flipped-aurora/gin-vue-admin/server/pb"
 	"google.golang.org/grpc"
 	"log"
@@ -73,6 +75,68 @@ func TestCompile(t *testing.T) {
 				}
 			}()
 		})
+	}
+}
+
+func TestCLanguageService_Judge(t *testing.T) {
+	score := 12
+	cases := []struct {
+		name    string
+		code    string
+		cases   []*questionBank.ProgrammCase
+		success bool
+	}{
+		{
+			name: "代码成功案例",
+			code: `
+					#include<stdio.h>
+					int main(){
+						printf("hello,world!\n");
+						return 0;
+					}`,
+			cases: []*questionBank.ProgrammCase{
+				{
+					Name:   "你好世界!",
+					Score:  &score,
+					Output: "hello,world!\n",
+				},
+			},
+			success: true,
+		}, {
+			name: "非0返回",
+			code: `
+					#include<stdio.h>
+					int main(){
+						printf("hello,world!\n");
+						return 1;
+					}`,
+			cases: []*questionBank.ProgrammCase{
+				{
+					Name:   "你好世界!",
+					Score:  &score,
+					Output: "hello,world!\n",
+				},
+			},
+			success: false,
+		},
+	}
+	for _, s := range cases {
+		t.Run(s.name, func(t *testing.T) {
+			fileId, _ := obj.Compile(s.code)
+			defer func() {
+				err := obj.Delete(fileId)
+				if err != nil {
+					log.Printf("无法删除ID为%q的文件\n", fileId)
+					return
+				}
+			}()
+			judge, err := obj.Judge(fileId, s.cases)
+			if err != nil {
+				return
+			}
+			fmt.Println(judge)
+		})
+
 	}
 }
 

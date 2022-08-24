@@ -54,8 +54,8 @@ func (learnResourcesChapterMergeService *LearnResourcesChapterMergeService) GetL
 	db := global.GVA_DB.Model(&basicdata.LearnResourcesChapterMerge{})
 	var learnResourcesChapterMerges []basicdata.LearnResourcesChapterMerge
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Learn_resources_id != nil {
-		db = db.Where("learn_resources_id = ?", info.Learn_resources_id)
+	if info.LearnResourcesId != nil {
+		db = db.Where("learn_resources_id = ?", info.LearnResourcesId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

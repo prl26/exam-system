@@ -54,14 +54,14 @@ func (questionBankKnowledgeMergeService *KnowledgeMergeService) GetQuestionBankK
 	db := global.GVA_DB.Model(&questionBank.KnowledgeMerge{})
 	var questionBankKnowledgeMerges []questionBank.KnowledgeMerge
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Knowledge_id != nil {
-		db = db.Where("knowledge_id = ?", info.Knowledge_id)
+	if info.KnowledgeId != nil {
+		db = db.Where("knowledge_id = ?", info.KnowledgeId)
 	}
-	if info.Question_id != nil {
-		db = db.Where("question_id = ?", info.Question_id)
+	if info.QuestionId != nil {
+		db = db.Where("question_id = ?", info.QuestionId)
 	}
-	if info.Question_type != nil {
-		db = db.Where("question_type = ?", info.Question_type)
+	if info.QuestionType != nil {
+		db = db.Where("question_type = ?", info.QuestionType)
 	}
 	if info.Difficulty != nil {
 		db = db.Where("difficulty = ?", info.Difficulty)
