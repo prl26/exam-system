@@ -13,7 +13,7 @@ type ProgrammLanguageMergeRouter struct {
 func (s *ProgrammLanguageMergeRouter) InitProgrammLanguageMergeRouter(Router *gin.RouterGroup) {
 	programmLanguageMergeRouter := Router.Group("programmLanguageMerge").Use(middleware.OperationRecord())
 	programmLanguageMergeRouterWithoutRecord := Router.Group("programmLanguageMerge")
-	var programmLanguageMergeApi = v1.ApiGroupApp.QuestionbankApiGroup.ProgrammLanguageMergeApi
+	var programmLanguageMergeApi = v1.ApiGroupApp.QuestionBankApiGroup.ProgrammLanguageMergeApi
 	{
 		programmLanguageMergeRouter.POST("createProgrammLanguageMerge", programmLanguageMergeApi.CreateProgrammLanguageMerge)             // 新建ProgrammLanguageMerge
 		programmLanguageMergeRouter.DELETE("deleteProgrammLanguageMerge", programmLanguageMergeApi.DeleteProgrammLanguageMerge)           // 删除ProgrammLanguageMerge

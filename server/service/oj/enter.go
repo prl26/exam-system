@@ -1,5 +1,10 @@
 package oj
 
+import (
+	"github.com/flipped-aurora/gin-vue-admin/server/service/oj/cLanguage"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/oj/common"
+)
+
 /**
 
  * @Author: AloneAtWar
@@ -11,5 +16,6 @@ package oj
  **/
 
 type ServiceGroup struct {
-	CLanguageService
+	cLanguage.Service
+	common.Service
 }

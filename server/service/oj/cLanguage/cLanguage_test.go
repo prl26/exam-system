@@ -1,4 +1,4 @@
-package oj
+package cLanguage
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ import (
  * @Note:
 
  **/
-var obj *CLanguageService
+var obj *Service
 
 var errorCode = `
 	#include<stdio.h>
@@ -60,12 +60,12 @@ func TestCompile(t *testing.T) {
 	}
 	for _, s := range cases {
 		t.Run(s.name, func(t *testing.T) {
-			fileId, err := obj.Compile(s.code)
+			fileId, err := obj.compile(s.code)
 			if s.success && err != nil {
-				log.Fatalf("Compile(%q) err: %v", s.code, err)
+				log.Fatalf("compile(%q) err: %v", s.code, err)
 			}
 			if !s.success && err == nil {
-				log.Fatalf("Compile(%q) return true, can not get want false", s.code)
+				log.Fatalf("compile(%q) return true, can not get want false", s.code)
 			}
 			defer func() {
 				err := obj.Delete(fileId)
@@ -122,7 +122,7 @@ func TestCLanguageService_Judge(t *testing.T) {
 	}
 	for _, s := range cases {
 		t.Run(s.name, func(t *testing.T) {
-			fileId, _ := obj.Compile(s.code)
+			fileId, _ := obj.compile(s.code)
 			defer func() {
 				err := obj.Delete(fileId)
 				if err != nil {
@@ -139,16 +139,53 @@ func TestCLanguageService_Judge(t *testing.T) {
 
 	}
 }
-
-func TestMain(m *testing.M) {
+func NewClient() pb.ExecutorClient {
 	rpcClient, err := grpc.Dial("localhost:5051", grpc.WithInsecure())
 	if err != nil {
 		//panic(err)
 		panic(err)
-		return
+		return nil
 	}
 	client := pb.NewExecutorClient(rpcClient)
-	obj = &CLanguageService{client}
+	return client
+}
+func TestMain(m *testing.M) {
+	client := NewClient()
+	obj = &Service{client}
+	//var s *pb.FileID
+	//s, err := client.FileAdd(context.Background(), &pb.FileContent{
+	//	Name:    "a.c",
+	//	Content: []byte("我是aaa"),
+	//})
+	//if err != nil {
+	//	panic(err)
+	//	return
+	//}
+	//s, err = client.FileAdd(context.Background(),&pb.FileContent{
+	//	Name:    "a.c",
+	//	Content: []byte("我是bb"),
+	//})
+	//if err != nil {
+	//	panic(err)
+	//	panic(s)
+	//	return
+	//}
+	//
+	//client.FileAdd(context.Background(),&pb.FileContent{
+	//	Name:    "a.c",
+	//	Content: []byte("我是ExecutorClient"),
+	//})
+	//if err != nil {
+	//	panic(err)
+	//	return
+	//}
+	//list, err := client.FileList(context.Background(),&emptypb.Empty{})
+	//
+	//if err != nil {
+	//	panic(err)
+	//	return
+	//}
+	//log.Println(list)
 	m.Run()
 
 }
