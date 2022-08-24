@@ -22,7 +22,7 @@ type ProgrammCase struct {
 	Input_type        *int   `json:"input_type" form:"input_type" gorm:"column:input_type;comment:;"`
 	Input             string `json:"input" form:"input" gorm:"column:input;comment:;"`
 	Out_type          *int   `json:"out_type" form:"out_type" gorm:"column:out_type;comment:;"`
-	Output            *int   `json:"output" form:"output" gorm:"column:output;comment:;"`
+	Output            string `json:"output" form:"output" gorm:"column:output;comment:;"`
 }
 
 // TableName QuestionBankProgrammCase 表名
