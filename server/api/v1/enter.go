@@ -19,6 +19,7 @@ type ApiGroup struct {
 	LessondataApiGroup lessondata.ApiGroup
 	TeachplanApiGroup  teachplan.ApiGroup
 	ExammanageApiGroup examManage.ApiGroup
+	LessondataApiGroup lessondata.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)
