@@ -7522,7 +7522,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "创建QuestionBankMultipleChoice",
                 "parameters": [
@@ -7532,7 +7532,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/lessondata.MultipleChoice"
                         }
                     }
                 ],
@@ -7560,7 +7560,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "删除QuestionBankMultipleChoice",
                 "parameters": [
@@ -7570,7 +7570,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/lessondata.MultipleChoice"
                         }
                     }
                 ],
@@ -7598,7 +7598,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "批量删除QuestionBankMultipleChoice",
                 "parameters": [
@@ -7636,7 +7636,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "用id查询QuestionBankMultipleChoice",
                 "parameters": [
@@ -7703,7 +7703,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "分页获取QuestionBankMultipleChoice列表",
                 "parameters": [
@@ -7788,7 +7788,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "更新QuestionBankMultipleChoice",
                 "parameters": [
@@ -7798,7 +7798,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/lessondata.MultipleChoice"
                         }
                     }
                 ],
@@ -7826,7 +7826,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "创建QuestionBankOptions",
                 "parameters": [
@@ -7836,7 +7836,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/lessondata.Options"
                         }
                     }
                 ],
@@ -7864,7 +7864,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "删除QuestionBankOptions",
                 "parameters": [
@@ -7874,7 +7874,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/lessondata.Options"
                         }
                     }
                 ],
@@ -7902,7 +7902,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "批量删除QuestionBankOptions",
                 "parameters": [
@@ -7940,7 +7940,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "用id查询QuestionBankOptions",
                 "parameters": [
@@ -8002,7 +8002,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "分页获取QuestionBankOptions列表",
                 "parameters": [
@@ -8082,7 +8082,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "更新QuestionBankOptions",
                 "parameters": [
@@ -8092,7 +8092,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/lessondata.Options"
                         }
                     }
                 ],
@@ -14950,7 +14950,7 @@ const docTemplate = `{
                 }
             }
         },
-        "lessondata.QuestionBankMultipleChoice": {
+        "lessondata.MultipleChoice": {
             "type": "object",
             "properties": {
                 "answer": {
@@ -14979,7 +14979,7 @@ const docTemplate = `{
                 }
             }
         },
-        "lessondata.QuestionBankOptions": {
+        "lessondata.Options": {
             "type": "object",
             "properties": {
                 "createdAt": {
