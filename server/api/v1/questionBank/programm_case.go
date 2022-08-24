@@ -23,7 +23,7 @@ var questionBankProgrammCaseService = service.ServiceGroupApp.QuestionBankServic
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankProgrammCase true "创建QuestionBankProgrammCase"
+// @Param data body questionBank.ProgrammCase true "创建QuestionBankProgrammCase"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankProgrammCase/createQuestionBankProgrammCase [post]
 func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) CreateQuestionBankProgrammCase(c *gin.Context) {
@@ -54,7 +54,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) CreateQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankProgrammCase true "删除QuestionBankProgrammCase"
+// @Param data body questionBank.ProgrammCase true "删除QuestionBankProgrammCase"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /questionBankProgrammCase/deleteQuestionBankProgrammCase [delete]
 func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) DeleteQuestionBankProgrammCase(c *gin.Context) {
@@ -94,7 +94,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) DeleteQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankProgrammCase true "更新QuestionBankProgrammCase"
+// @Param data body questionBank.ProgrammCase true "更新QuestionBankProgrammCase"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /questionBankProgrammCase/updateQuestionBankProgrammCase [put]
 func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) UpdateQuestionBankProgrammCase(c *gin.Context) {
@@ -125,7 +125,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) UpdateQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBank.QuestionBankProgrammCase true "用id查询QuestionBankProgrammCase"
+// @Param data query questionBank.ProgrammCase true "用id查询QuestionBankProgrammCase"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /questionBankProgrammCase/findQuestionBankProgrammCase [get]
 func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) FindQuestionBankProgrammCase(c *gin.Context) {
@@ -145,7 +145,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) FindQuestionBank
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBankReq.QuestionBankProgrammCaseSearch true "分页获取QuestionBankProgrammCase列表"
+// @Param data query request.QuestionBankProgrammCaseSearch true "分页获取QuestionBankProgrammCase列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankProgrammCase/getQuestionBankProgrammCaseList [get]
 func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) GetQuestionBankProgrammCaseList(c *gin.Context) {

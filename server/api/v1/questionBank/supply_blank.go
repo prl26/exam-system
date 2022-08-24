@@ -23,7 +23,7 @@ var questionBank_supply_blankService = service.ServiceGroupApp.QuestionBankServi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankSupplyBlank true "创建QuestionBankSupplyBlank"
+// @Param data body questionBank.SupplyBlank true "创建QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBank_supply_blank/createQuestionBankSupplyBlank [post]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) CreateQuestionBankSupplyBlank(c *gin.Context) {
@@ -51,7 +51,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) CreateQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankSupplyBlank true "删除QuestionBankSupplyBlank"
+// @Param data body questionBank.SupplyBlank true "删除QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /questionBank_supply_blank/deleteQuestionBankSupplyBlank [delete]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBankSupplyBlank(c *gin.Context) {
@@ -91,7 +91,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankSupplyBlank true "更新QuestionBankSupplyBlank"
+// @Param data body questionBank.SupplyBlank true "更新QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /questionBank_supply_blank/updateQuestionBankSupplyBlank [put]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) UpdateQuestionBankSupplyBlank(c *gin.Context) {
@@ -119,7 +119,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) UpdateQuestionBa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBank.QuestionBankSupplyBlank true "用id查询QuestionBankSupplyBlank"
+// @Param data query questionBank.SupplyBlank true "用id查询QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /questionBank_supply_blank/findQuestionBankSupplyBlank [get]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) FindQuestionBankSupplyBlank(c *gin.Context) {
@@ -139,7 +139,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) FindQuestionBank
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBankReq.QuestionBankSupplyBlankSearch true "分页获取QuestionBankSupplyBlank列表"
+// @Param data query request.QuestionBankSupplyBlankSearch true "分页获取QuestionBankSupplyBlank列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBank_supply_blank/getQuestionBankSupplyBlankList [get]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) GetQuestionBankSupplyBlankList(c *gin.Context) {
