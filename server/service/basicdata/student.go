@@ -57,17 +57,17 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 	if info.Name != "" {
 		db = db.Where("name = ?", info.Name)
 	}
-	if info.Id_card != "" {
-		db = db.Where("id_card = ?", info.Id_card)
+	if info.IdCard != "" {
+		db = db.Where("id_card = ?", info.IdCard)
 	}
-	if info.College_id != nil {
-		db = db.Where("college_id = ?", info.College_id)
+	if info.CollegeId != nil {
+		db = db.Where("college_id = ?", info.CollegeId)
 	}
-	if info.Professional_id != nil {
-		db = db.Where("professional_id = ?", info.Professional_id)
+	if info.ProfessionalId != nil {
+		db = db.Where("professional_id = ?", info.ProfessionalId)
 	}
-	if info.Class_id != nil {
-		db = db.Where("class_id = ?", info.Class_id)
+	if info.ClassId != nil {
+		db = db.Where("class_id = ?", info.ClassId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

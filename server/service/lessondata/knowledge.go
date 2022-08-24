@@ -54,8 +54,8 @@ func (knowledgeService *KnowledgeService) GetKnowledgeInfoList(info lessondataRe
 	db := global.GVA_DB.Model(&lessondata.Knowledge{})
 	var knowledges []lessondata.Knowledge
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Course_id != nil {
-		db = db.Where("course_id = ?", info.Course_id)
+	if info.CourseId != nil {
+		db = db.Where("course_id = ?", info.CourseId)
 	}
 	if info.Name != "" {
 		db = db.Where("name = ?", info.Name)

@@ -8,8 +8,8 @@ import (
 // LearnResourcesChapterMerge 结构体
 type LearnResourcesChapterMerge struct {
 	global.GVA_MODEL
-	Learn_resources_id *int `json:"learn_resources_id" form:"learn_resources_id" gorm:"column:learn_resources_id;comment:课程资源id;"`
-	Chapter_id         *int `json:"chapter_id" form:"chapter_id" gorm:"column:chapter_id;comment:章节id;"`
+	LearnResourcesId *int `json:"learnResourcesId" form:"learn_resources_id" gorm:"column:learn_resources_id;comment:课程资源id;"`
+	ChapterId        *int `json:"chapterId" form:"chapter_id" gorm:"column:chapter_id;comment:章节id;"`
 }
 
 // TableName LearnResourcesChapterMerge 表名

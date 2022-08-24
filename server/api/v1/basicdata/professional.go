@@ -17,7 +17,6 @@ type ProfessionalApi struct {
 
 var professionalService = service.ServiceGroupApp.BasicdataApiGroup.ProfessionalService
 
-
 // CreateProfessional 创建Professional
 // @Tags Professional
 // @Summary 创建Professional
@@ -30,16 +29,16 @@ var professionalService = service.ServiceGroupApp.BasicdataApiGroup.Professional
 func (professionalApi *ProfessionalApi) CreateProfessional(c *gin.Context) {
 	var professional basicdata.Professional
 	_ = c.ShouldBindJSON(&professional)
-    verify := utils.Rules{
-        "Name":{utils.NotEmpty()},
-        "College_id":{utils.NotEmpty()},
-    }
+	verify := utils.Rules{
+		"Name":      {utils.NotEmpty()},
+		"CollegeId": {utils.NotEmpty()},
+	}
 	if err := utils.Verify(professional, verify); err != nil {
-    		response.FailWithMessage(err.Error(), c)
-    		return
-    	}
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := professionalService.CreateProfessional(professional); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -59,7 +58,7 @@ func (professionalApi *ProfessionalApi) DeleteProfessional(c *gin.Context) {
 	var professional basicdata.Professional
 	_ = c.ShouldBindJSON(&professional)
 	if err := professionalService.DeleteProfessional(professional); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -77,9 +76,9 @@ func (professionalApi *ProfessionalApi) DeleteProfessional(c *gin.Context) {
 // @Router /professional/deleteProfessionalByIds [delete]
 func (professionalApi *ProfessionalApi) DeleteProfessionalByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := professionalService.DeleteProfessionalByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -98,16 +97,16 @@ func (professionalApi *ProfessionalApi) DeleteProfessionalByIds(c *gin.Context) 
 func (professionalApi *ProfessionalApi) UpdateProfessional(c *gin.Context) {
 	var professional basicdata.Professional
 	_ = c.ShouldBindJSON(&professional)
-      verify := utils.Rules{
-          "Name":{utils.NotEmpty()},
-          "College_id":{utils.NotEmpty()},
-      }
-    if err := utils.Verify(professional, verify); err != nil {
-      	response.FailWithMessage(err.Error(), c)
-      	return
-     }
+	verify := utils.Rules{
+		"Name":      {utils.NotEmpty()},
+		"CollegeId": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(professional, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := professionalService.UpdateProfessional(professional); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -127,7 +126,7 @@ func (professionalApi *ProfessionalApi) FindProfessional(c *gin.Context) {
 	var professional basicdata.Professional
 	_ = c.ShouldBindQuery(&professional)
 	if reprofessional, err := professionalService.GetProfessional(professional.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reprofessional": reprofessional}, c)
@@ -147,14 +146,14 @@ func (professionalApi *ProfessionalApi) GetProfessionalList(c *gin.Context) {
 	var pageInfo basicdataReq.ProfessionalSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := professionalService.GetProfessionalInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

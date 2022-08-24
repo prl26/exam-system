@@ -57,8 +57,8 @@ func (questionBank_judgeService *JudgeService) GetQuestionBankJudgeInfoList(info
 	if info.Describe != "" {
 		db = db.Where("describe LIKE ?", "%"+info.Describe+"%")
 	}
-	if info.Is_right != nil {
-		db = db.Where("is_right = ?", info.Is_right)
+	if info.IsRight != nil {
+		db = db.Where("is_right = ?", info.IsRight)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
