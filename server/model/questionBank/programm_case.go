@@ -8,7 +8,7 @@ import (
 // QuestionBankProgrammCase 结构体
 type ProgrammCase struct {
 	global.GVA_MODEL
-	ProgrammId        string `json:"programm_id" form:"programm_id" gorm:"column:programm_id;comment:;"`
+	ProgrammId        string `json:"programmId" form:"programmId" gorm:"column:programm_id;comment:;"`
 	Name              string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Score             *int   `json:"score" form:"score" gorm:"column:score;comment:;"`
 	LanguageId        *int   `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
@@ -19,13 +19,13 @@ type ProgrammCase struct {
 	CpuRateLimit      *int   `json:"cpuRateLimit" form:"cpuRateLimit" gorm:"column:cpu_rate_limit;comment:;"`
 	CpuSetLimit       *int   `json:"cpuSetLimit" form:"cpuSetLimit" gorm:"column:cpu_set_limit;comment:;"`
 	StrictMemoryLimit *int   `json:"strictMemoryLimit" form:"strictMemoryLimit" gorm:"column:strict_memory_limit;comment:;"`
-	Input_type        *int   `json:"input_type" form:"input_type" gorm:"column:input_type;comment:;"`
+	InputType         *int   `json:"inputType" form:"inputType" gorm:"column:input_type;comment:;"`
 	Input             string `json:"input" form:"input" gorm:"column:input;comment:;"`
-	Out_type          *int   `json:"out_type" form:"out_type" gorm:"column:out_type;comment:;"`
+	OutType           *int   `json:"outType" form:"outType" gorm:"column:out_type;comment:;"`
 	Output            string `json:"output" form:"output" gorm:"column:output;comment:;"`
 }
 
 // TableName QuestionBankProgrammCase 表名
 func (ProgrammCase) TableName() string {
-	return "ProgrammCase"
+	return "les_questionBank_programm_case"
 }

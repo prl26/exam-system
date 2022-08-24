@@ -33,7 +33,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) CreateQuestionBa
 		"ProgrammId": {utils.NotEmpty()},
 		"Score":      {utils.NotEmpty()},
 		"LanguageId": {utils.NotEmpty()},
-		"Out_type":   {utils.NotEmpty()},
+		"OutType":    {utils.NotEmpty()},
 		"Output":     {utils.NotEmpty()},
 	}
 	if err := utils.Verify(questionBankProgrammCase, verify); err != nil {
@@ -104,7 +104,7 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) UpdateQuestionBa
 		"ProgrammId": {utils.NotEmpty()},
 		"Score":      {utils.NotEmpty()},
 		"LanguageId": {utils.NotEmpty()},
-		"Out_type":   {utils.NotEmpty()},
+		"OutType":    {utils.NotEmpty()},
 		"Output":     {utils.NotEmpty()},
 	}
 	if err := utils.Verify(questionBankProgrammCase, verify); err != nil {
