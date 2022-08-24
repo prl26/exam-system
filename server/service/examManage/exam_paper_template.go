@@ -54,11 +54,11 @@ func (examPaperTemplateService *ExamPaperTemplateService) GetExamPaperTemplateIn
 	db := global.GVA_DB.Model(&examManage.ExamPaperTemplate{})
 	var examPaperTemplates []examManage.ExamPaperTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Course_id != nil {
-		db = db.Where("course_id = ?", info.Course_id)
+	if info.CourseId != nil {
+		db = db.Where("course_id = ?", info.CourseId)
 	}
-	if info.User_id != nil {
-		db = db.Where("user_id = ?", info.User_id)
+	if info.UserId != nil {
+		db = db.Where("user_id = ?", info.UserId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

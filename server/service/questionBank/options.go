@@ -57,8 +57,8 @@ func (questionBank_optionsService *OptionsService) GetQuestionBankOptionsInfoLis
 	if info.Describe != "" {
 		db = db.Where("describe LIKE ?", "%"+info.Describe+"%")
 	}
-	if info.Multiple_choice_id != nil {
-		db = db.Where("multiple_choice_id = ?", info.Multiple_choice_id)
+	if info.MultipleChoiceId != nil {
+		db = db.Where("multiple_choice_id = ?", info.MultipleChoiceId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

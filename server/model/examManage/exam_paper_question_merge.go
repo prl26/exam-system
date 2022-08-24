@@ -8,10 +8,10 @@ import (
 // PaperQuestionMerge 结构体
 type PaperQuestionMerge struct {
 	global.GVA_MODEL
-	PaperId      *int `json:"paper_id" form:"paper_id" gorm:"column:paper_id;comment:试卷id;size:32;"`
-	QuestionId   *int `json:"question_id" form:"paper_id" gorm:"column:question_id;comment:题目id;size:32;"`
+	PaperId      *int `json:"paperId" form:"paperId" gorm:"column:paper_id;comment:试卷id;size:32;"`
+	QuestionId   *int `json:"questionId" form:"paperId" gorm:"column:question_id;comment:题目id;size:32;"`
 	Score        *int `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
-	QuestionType *int `json:"question_type" form:"paper_id" gorm:"column:question_type;comment:题目类型;size:8;"`
+	QuestionType *int `json:"question_type" form:"paperId" gorm:"column:question_type;comment:题目类型;size:8;"`
 }
 
 // TableName PaperQuestionMerge 表名
