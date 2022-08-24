@@ -20,16 +20,6 @@ type MultiTableApi struct {
 
 var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
 
-// CreateTeachClass 创建TeachClass
-// @Tags TeachClass
-// @Summary 创建TeachClass
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body basicdata.TeachClass true "创建TeachClass"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /teachClass/createTeachClass [post]
-
 // InitTeachClassStudent 关联 学生与教学班
 // @Tags TeachClassStudent
 // @Summary 初始化关联 学生与教学班
