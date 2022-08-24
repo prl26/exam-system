@@ -6,9 +6,9 @@ import (
 )
 
 // QuestionBankKnowledgeMerge 结构体
-type KnowledgeMerge struct {
+type ChapterMerge struct {
 	global.GVA_MODEL
-	KnowledgeId  *int `json:"knowledgeId" form:"knowledgeId" gorm:"column:knowledge_id;comment:知识点id;"`
+	ChapterId    *int `json:"chapterId" form:"chapterId" gorm:"column:chapter_id;comment:章节ID;"`
 	QuestionId   *int `json:"questionId" form:"questionId" gorm:"column:question_id;comment:题目id;"`
 	QuestionType *int `json:"questionType" form:"questionType" gorm:"column:question_type;comment:题目类型;"`
 	Difficulty   *int `json:"difficulty" form:"difficulty" gorm:"column:difficulty;comment:难度;"`
@@ -16,7 +16,7 @@ type KnowledgeMerge struct {
 	CanExam      *int `json:"CanExam" form:"canExam" gorm:"column:can_exam;comment:是否为考试题目"`
 }
 
-// TableName QuestionBankKnowledgeMerge 表名
-func (KnowledgeMerge) TableName() string {
-	return "les_questionBank_knowledge_merge"
+// TableName QuestionBankChapterMerge 表名
+func (ChapterMerge) TableName() string {
+	return "les_questionBank_chapter_merge"
 }

@@ -60,9 +60,6 @@ func (questionBank_multiple_choiceService *MultipleChoiceService) GetQuestionBan
 	if info.Answer != "" {
 		db = db.Where("answer = ?", info.Answer)
 	}
-	if info.Type != nil {
-		db = db.Where("type = ?", info.Type)
-	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

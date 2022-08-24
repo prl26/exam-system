@@ -22,7 +22,7 @@ import (
 
  **/
 
-type Service struct {
+type CService struct {
 	ExecutorClient pb.ExecutorClient
 }
 
@@ -41,13 +41,13 @@ const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 //
 // Compile
 //  @Description:  虚假的编译接口，给上层进行使用的，会在默认的文件过期时间过后删除文件
-//  @receiver c*Service
+//  @receiver c*CService
 //  @param code
 //  @return string
 //  @return *time.Time
 //  @return error
 //
-func (c *Service) Compile(code string) (string, *time.Time, error) {
+func (c *CService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return "", nil, err
@@ -73,7 +73,7 @@ func (c *Service) Compile(code string) (string, *time.Time, error) {
 //  @return string
 //  @return error
 //
-func (c *Service) compile(code string) (string, error) {
+func (c *CService) compile(code string) (string, error) {
 	input := &pb.Request_File{
 		File: &pb.Request_File_Memory{
 			Memory: &pb.Request_MemoryFile{
@@ -150,7 +150,7 @@ func (c *Service) compile(code string) (string, error) {
 //  @param id
 //  @return error
 //
-func (c *Service) Delete(id string) error {
+func (c *CService) Delete(id string) error {
 	_, err := c.ExecutorClient.FileDelete(context.Background(), &pb.FileID{FileID: id})
 	if err != nil {
 		return err
@@ -167,7 +167,7 @@ func (c *Service) Delete(id string) error {
 //  @return []*ojResp.Submit
 //  @return error
 //
-func (c *Service) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *CService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
@@ -207,7 +207,7 @@ func (c *Service) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*o
 //  @return *oj.ExecuteSituation
 //  @return error
 //
-func (c *Service) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
+func (c *CService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{

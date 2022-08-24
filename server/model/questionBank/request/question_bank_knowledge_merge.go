@@ -6,6 +6,6 @@ import (
 )
 
 type QuestionBankKnowledgeMergeSearch struct {
-	questionBank.KnowledgeMerge
+	questionBank.ChapterMerge
 	request.PageInfo
 }

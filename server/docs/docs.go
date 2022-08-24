@@ -6953,7 +6953,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.ChapterMerge"
                         }
                     }
                 ],
@@ -6991,7 +6991,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.ChapterMerge"
                         }
                     }
                 ],
@@ -7229,7 +7229,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.ChapterMerge"
                         }
                     }
                 ],
@@ -15744,7 +15744,7 @@ const docTemplate = `{
                 }
             }
         },
-        "questionBank.KnowledgeMerge": {
+        "questionBank.ChapterMerge": {
             "type": "object",
             "properties": {
                 "canPractice": {
