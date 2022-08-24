@@ -10,7 +10,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -150,7 +159,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "courseId",
+                        "name": "course_id",
                         "in": "query"
                     },
                     {
@@ -183,7 +192,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "userId",
+                        "name": "user_id",
                         "in": "query"
                     }
                 ],
@@ -217,7 +226,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "courseId",
+                        "name": "course_id",
                         "in": "query"
                     },
                     {
@@ -268,7 +277,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "userId",
+                        "name": "user_id",
                         "in": "query"
                     }
                 ],
@@ -2701,7 +2710,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "professional_id",
+                        "name": "professionalId",
                         "in": "query"
                     },
                     {
@@ -2776,7 +2785,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "professional_id",
+                        "name": "professionalId",
                         "in": "query"
                     },
                     {
@@ -4840,7 +4849,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -4897,7 +4906,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -5124,7 +5133,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "chapter_id",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -5141,7 +5150,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "learn_resources_id",
+                        "name": "learnResourcesId",
                         "in": "query"
                     },
                     {
@@ -5181,7 +5190,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "chapter_id",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -5204,7 +5213,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "learn_resources_id",
+                        "name": "learnResourcesId",
                         "in": "query"
                     },
                     {
@@ -6164,7 +6173,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "questionType",
+                        "name": "question_type",
                         "in": "query"
                     },
                     {
@@ -6249,7 +6258,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "questionType",
+                        "name": "question_type",
                         "in": "query"
                     },
                     {
@@ -6770,7 +6779,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "college_id",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -6827,7 +6836,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "college_id",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -6944,7 +6953,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
                         }
                     }
                 ],
@@ -6982,7 +6991,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
                         }
                     }
                 ],
@@ -7053,6 +7062,11 @@ const docTemplate = `{
                 "summary": "用id查询QuestionBankKnowledgeMerge",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7071,17 +7085,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "knowledge_id",
+                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_id",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7120,6 +7134,11 @@ const docTemplate = `{
                 "summary": "分页获取QuestionBankKnowledgeMerge列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7144,7 +7163,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "knowledge_id",
+                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
@@ -7161,12 +7180,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "question_id",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7210,7 +7229,705 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/createQuestionBankProgramm": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "创建QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "创建QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/deleteQuestionBankProgramm": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "删除QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "删除QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/deleteQuestionBankProgrammByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "批量删除QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "批量删除QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/findQuestionBankProgramm": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "用id查询QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/getQuestionBankProgrammList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "分页获取QuestionBankProgramm列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/updateQuestionBankProgramm": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "更新QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "更新QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/createQuestionBankProgrammCase": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "创建QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "创建QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/deleteQuestionBankProgrammCase": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "删除QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "删除QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/deleteQuestionBankProgrammCaseByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "批量删除QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "批量删除QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/findQuestionBankProgrammCase": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "用id查询QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "clockLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuRateLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuSetLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "input",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "input_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "out_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "output",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "procLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "programm_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "stackLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "strictMemoryLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/getQuestionBankProgrammCaseList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "分页获取QuestionBankProgrammCase列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "clockLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuRateLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuSetLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "input",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "input_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "out_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "output",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "procLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "programm_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "stackLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "strictMemoryLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/updateQuestionBankProgrammCase": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "更新QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "更新QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
                         }
                     }
                 ],
@@ -7248,7 +7965,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7286,7 +8003,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7375,7 +8092,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -7432,7 +8149,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -7494,7 +8211,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7532,7 +8249,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.MultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7570,7 +8287,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.MultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7664,7 +8381,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "most_options",
+                        "name": "mostOptions",
                         "in": "query"
                     },
                     {
@@ -7737,7 +8454,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "most_options",
+                        "name": "mostOptions",
                         "in": "query"
                     },
                     {
@@ -7798,7 +8515,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.MultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7836,7 +8553,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.Options"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -7874,7 +8591,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.Options"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -7963,12 +8680,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "multiple_choice_id",
+                        "name": "multipleChoiceId",
                         "in": "query"
                     },
                     {
@@ -8025,7 +8742,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -8036,7 +8753,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "multiple_choice_id",
+                        "name": "multipleChoiceId",
                         "in": "query"
                     },
                     {
@@ -8092,7 +8809,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.Options"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -8130,7 +8847,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8168,7 +8885,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8257,7 +8974,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_order",
+                        "name": "isOrder",
                         "in": "query"
                     },
                     {
@@ -8319,7 +9036,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "is_order",
+                        "name": "isOrder",
                         "in": "query"
                     },
                     {
@@ -8386,7 +9103,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8845,7 +9562,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "qutionId",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
@@ -8930,7 +9647,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "qutionId",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
@@ -9144,7 +9861,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "ordes",
+                        "name": "orders",
                         "in": "query"
                     },
                     {
@@ -9222,7 +9939,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "ordes",
+                        "name": "orders",
                         "in": "query"
                     },
                     {
@@ -9840,12 +10557,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "class_id",
+                        "name": "classId",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "name": "class_name",
+                        "type": "integer",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -9877,6 +10594,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "name": "professionalId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "sex",
                         "in": "query"
                     },
@@ -9917,12 +10639,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "class_id",
+                        "name": "classId",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "name": "class_name",
+                        "type": "integer",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -9972,6 +10694,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "name": "professionalId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "sex",
                         "in": "query"
                     },
@@ -12040,18 +12767,13 @@ const docTemplate = `{
                 "summary": "用id查询TeachClass",
                 "parameters": [
                     {
-                        "type": "number",
-                        "name": "attendance_proportion",
+                        "type": "integer",
+                        "name": "attendanceProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "belong_class_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -12061,13 +12783,13 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "final_exam_proportion",
+                        "type": "integer",
+                        "name": "finalExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "has_more",
+                        "name": "homeworkProportion",
                         "in": "query"
                     },
                     {
@@ -12077,8 +12799,8 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "learn_resource_proportion",
+                        "type": "integer",
+                        "name": "learnResourcesProportion",
                         "in": "query"
                     },
                     {
@@ -12087,18 +12809,18 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "procedure_exam_proportion",
+                        "type": "integer",
+                        "name": "procedureExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teacher_id",
+                        "name": "teacherId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "term_id",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -12137,18 +12859,13 @@ const docTemplate = `{
                 "summary": "分页获取TeachClass列表",
                 "parameters": [
                     {
-                        "type": "number",
-                        "name": "attendance_proportion",
+                        "type": "integer",
+                        "name": "attendanceProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "belong_class_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -12158,13 +12875,13 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "final_exam_proportion",
+                        "type": "integer",
+                        "name": "finalExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "has_more",
+                        "name": "homeworkProportion",
                         "in": "query"
                     },
                     {
@@ -12180,8 +12897,8 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "learn_resource_proportion",
+                        "type": "integer",
+                        "name": "learnResourcesProportion",
                         "in": "query"
                     },
                     {
@@ -12202,18 +12919,18 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "procedure_exam_proportion",
+                        "type": "integer",
+                        "name": "procedureExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teacher_id",
+                        "name": "teacherId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "term_id",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -12417,12 +13134,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "student_id",
+                        "name": "studentId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teach_class_id",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -12492,12 +13209,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "student_id",
+                        "name": "studentId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teach_class_id",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -12505,6 +13222,44 @@ const docTemplate = `{
                         "description": "更新时间",
                         "name": "updatedAt",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/teachClassStudent/initTeachClassStudent": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TeachClassStudent"
+                ],
+                "summary": "初始化关联 学生与教学班",
+                "parameters": [
+                    {
+                        "description": "创建TeachClassStudent",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.StuTeachClass"
+                        }
                     }
                 ],
                 "responses": {
@@ -12695,7 +13450,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "end_time",
+                        "name": "endTime",
                         "in": "query"
                     },
                     {
@@ -12711,7 +13466,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "start_time",
+                        "name": "startTime",
                         "in": "query"
                     },
                     {
@@ -12757,7 +13512,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "end_time",
+                        "name": "endTime",
                         "in": "query"
                     },
                     {
@@ -12791,7 +13546,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "start_time",
+                        "name": "startTime",
                         "in": "query"
                     },
                     {
@@ -13614,25 +14369,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "Test.Class": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
         "basicdata.Chapter": {
             "type": "object",
             "properties": {
@@ -13673,7 +14409,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "professional_id": {
+                "professionalId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13705,7 +14441,7 @@ const docTemplate = `{
         "basicdata.LearnResourcesChapterMerge": {
             "type": "object",
             "properties": {
-                "chapter_id": {
+                "chapterId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -13716,7 +14452,7 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "learn_resources_id": {
+                "learnResourcesId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13748,7 +14484,7 @@ const docTemplate = `{
         "basicdata.Professional": {
             "type": "object",
             "properties": {
-                "college_id": {
+                "collegeId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -13797,11 +14533,11 @@ const docTemplate = `{
         "basicdata.Student": {
             "type": "object",
             "properties": {
-                "class_id": {
+                "classId": {
                     "type": "integer"
                 },
-                "class_name": {
-                    "type": "string"
+                "collegeId": {
+                    "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
@@ -13820,8 +14556,11 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "sex": {
+                "professionalId": {
                     "type": "integer"
+                },
+                "sex": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -13832,42 +14571,39 @@ const docTemplate = `{
         "basicdata.TeachClass": {
             "type": "object",
             "properties": {
-                "attendance_proportion": {
-                    "type": "number"
-                },
-                "belong_class_id": {
+                "attendanceProportion": {
                     "type": "integer"
                 },
-                "course_id": {
+                "courseId": {
                     "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
                 },
-                "final_exam_proportion": {
-                    "type": "number"
+                "finalExamProportion": {
+                    "type": "integer"
                 },
-                "has_more": {
+                "homeworkProportion": {
                     "type": "integer"
                 },
                 "id": {
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "learn_resource_proportion": {
-                    "type": "number"
+                "learnResourcesProportion": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
-                "procedure_exam_proportion": {
-                    "type": "number"
-                },
-                "teacher_id": {
+                "procedureExamProportion": {
                     "type": "integer"
                 },
-                "term_id": {
+                "teacherId": {
+                    "type": "integer"
+                },
+                "termId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13887,10 +14623,10 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "student_id": {
+                "studentId": {
                     "type": "integer"
                 },
-                "teach_class_id": {
+                "teachClassId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13906,7 +14642,7 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
-                "end_time": {
+                "endTime": {
                     "type": "string"
                 },
                 "id": {
@@ -13916,7 +14652,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "start_time": {
+                "startTime": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -14618,7 +15354,7 @@ const docTemplate = `{
                 "questionId": {
                     "type": "integer"
                 },
-                "questionType": {
+                "question_type": {
                     "type": "integer"
                 },
                 "score": {
@@ -14633,7 +15369,7 @@ const docTemplate = `{
         "examManage.PaperTemplate": {
             "type": "object",
             "properties": {
-                "courseId": {
+                "course_id": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -14650,11 +15386,17 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
+                "paper_template_items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/examManage.PaperTemplateItem"
+                    }
+                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
                 },
-                "userId": {
+                "user_id": {
                     "type": "integer"
                 }
             }
@@ -14878,7 +15620,7 @@ const docTemplate = `{
         "lessondata.Knowledge": {
             "type": "object",
             "properties": {
-                "course_id": {
+                "courseId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -14891,139 +15633,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankJudge": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_right": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankKnowledgeMerge": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "difficulty": {
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "knowledge_id": {
-                    "type": "integer"
-                },
-                "question_id": {
-                    "type": "integer"
-                },
-                "question_type": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.MultipleChoice": {
-            "type": "object",
-            "properties": {
-                "answer": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "most_options": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.Options": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_right": {
-                    "type": "integer"
-                },
-                "multiple_choice_id": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankSupplyBlank": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_order": {
-                    "type": "integer"
-                },
-                "num": {
-                    "type": "integer"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -15045,7 +15654,7 @@ const docTemplate = `{
                 "orders": {
                     "type": "integer"
                 },
-                "qutionId": {
+                "questionId": {
                     "type": "integer"
                 },
                 "resourcesId": {
@@ -15071,7 +15680,7 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "ordes": {
+                "orders": {
                     "type": "integer"
                 },
                 "questionId": {
@@ -15108,6 +15717,227 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Judge": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isRight": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.KnowledgeMerge": {
+            "type": "object",
+            "properties": {
+                "canPractice": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "knowledgeId": {
+                    "type": "integer"
+                },
+                "questionId": {
+                    "type": "integer"
+                },
+                "questionType": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.MultipleChoice": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "mostOptions": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Options": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isRight": {
+                    "type": "integer"
+                },
+                "multipleChoiceId": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Programm": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.ProgrammCase": {
+            "type": "object",
+            "properties": {
+                "clockLimit": {
+                    "type": "integer"
+                },
+                "cpuLimit": {
+                    "type": "integer"
+                },
+                "cpuRateLimit": {
+                    "type": "integer"
+                },
+                "cpuSetLimit": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "input_type": {
+                    "type": "integer"
+                },
+                "languageId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "out_type": {
+                    "type": "integer"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "procLimit": {
+                    "type": "integer"
+                },
+                "programm_id": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "stackLimit": {
+                    "type": "integer"
+                },
+                "strictMemoryLimit": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.SupplyBlank": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isOrder": {
+                    "type": "integer"
+                },
+                "num": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -15375,6 +16205,20 @@ const docTemplate = `{
                     }
                 },
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.StuTeachClass": {
+            "type": "object",
+            "properties": {
+                "student_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "teach_class_id": {
                     "type": "integer"
                 }
             }
@@ -16421,17 +17265,22 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:8080",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Swagger Example API",
+	Description:      "This is a sample server celler server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

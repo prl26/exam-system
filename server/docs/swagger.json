@@ -1,8 +1,22 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is a sample server celler server.",
+        "title": "Swagger Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
     "paths": {
         "/Papertemplate/createPaperTemplate": {
             "post": {
@@ -138,7 +152,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "courseId",
+                        "name": "course_id",
                         "in": "query"
                     },
                     {
@@ -171,7 +185,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "userId",
+                        "name": "user_id",
                         "in": "query"
                     }
                 ],
@@ -205,7 +219,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "courseId",
+                        "name": "course_id",
                         "in": "query"
                     },
                     {
@@ -256,7 +270,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "userId",
+                        "name": "user_id",
                         "in": "query"
                     }
                 ],
@@ -2689,7 +2703,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "professional_id",
+                        "name": "professionalId",
                         "in": "query"
                     },
                     {
@@ -2764,7 +2778,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "professional_id",
+                        "name": "professionalId",
                         "in": "query"
                     },
                     {
@@ -4828,7 +4842,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -4885,7 +4899,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -5112,7 +5126,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "chapter_id",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -5129,7 +5143,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "learn_resources_id",
+                        "name": "learnResourcesId",
                         "in": "query"
                     },
                     {
@@ -5169,7 +5183,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "chapter_id",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -5192,7 +5206,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "learn_resources_id",
+                        "name": "learnResourcesId",
                         "in": "query"
                     },
                     {
@@ -6152,7 +6166,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "questionType",
+                        "name": "question_type",
                         "in": "query"
                     },
                     {
@@ -6237,7 +6251,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "questionType",
+                        "name": "question_type",
                         "in": "query"
                     },
                     {
@@ -6758,7 +6772,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "college_id",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -6815,7 +6829,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "college_id",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -6932,7 +6946,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
                         }
                     }
                 ],
@@ -6970,7 +6984,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
                         }
                     }
                 ],
@@ -7041,6 +7055,11 @@
                 "summary": "用id查询QuestionBankKnowledgeMerge",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7059,17 +7078,17 @@
                     },
                     {
                         "type": "integer",
-                        "name": "knowledge_id",
+                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_id",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7108,6 +7127,11 @@
                 "summary": "分页获取QuestionBankKnowledgeMerge列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7132,7 +7156,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "knowledge_id",
+                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
@@ -7149,12 +7173,12 @@
                     },
                     {
                         "type": "integer",
-                        "name": "question_id",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7198,7 +7222,705 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankKnowledgeMerge"
+                            "$ref": "#/definitions/questionBank.KnowledgeMerge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/createQuestionBankProgramm": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "创建QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "创建QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/deleteQuestionBankProgramm": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "删除QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "删除QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/deleteQuestionBankProgrammByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "批量删除QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "批量删除QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/findQuestionBankProgramm": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "用id查询QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/getQuestionBankProgrammList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "分页获取QuestionBankProgramm列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "describe",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgramm/updateQuestionBankProgramm": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Programm"
+                ],
+                "summary": "更新QuestionBankProgramm",
+                "parameters": [
+                    {
+                        "description": "更新QuestionBankProgramm",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.Programm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/createQuestionBankProgrammCase": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "创建QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "创建QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/deleteQuestionBankProgrammCase": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "删除QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "删除QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/deleteQuestionBankProgrammCaseByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "批量删除QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "批量删除QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/findQuestionBankProgrammCase": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "用id查询QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "clockLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuRateLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuSetLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "input",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "input_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "out_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "output",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "procLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "programm_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "stackLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "strictMemoryLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/getQuestionBankProgrammCaseList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "分页获取QuestionBankProgrammCase列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "clockLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuRateLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "cpuSetLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "input",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "input_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "out_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "output",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "procLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "programm_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "score",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "stackLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "strictMemoryLimit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBankProgrammCase/updateQuestionBankProgrammCase": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBankProgrammCase"
+                ],
+                "summary": "更新QuestionBankProgrammCase",
+                "parameters": [
+                    {
+                        "description": "更新QuestionBankProgrammCase",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammCase"
                         }
                     }
                 ],
@@ -7236,7 +7958,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7274,7 +7996,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7363,7 +8085,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -7420,7 +8142,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -7482,7 +8204,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankJudge"
+                            "$ref": "#/definitions/questionBank.Judge"
                         }
                     }
                 ],
@@ -7510,7 +8232,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "创建QuestionBankMultipleChoice",
                 "parameters": [
@@ -7520,7 +8242,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7548,7 +8270,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "删除QuestionBankMultipleChoice",
                 "parameters": [
@@ -7558,7 +8280,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7586,7 +8308,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "批量删除QuestionBankMultipleChoice",
                 "parameters": [
@@ -7624,7 +8346,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "用id查询QuestionBankMultipleChoice",
                 "parameters": [
@@ -7652,7 +8374,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "most_options",
+                        "name": "mostOptions",
                         "in": "query"
                     },
                     {
@@ -7691,7 +8413,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "分页获取QuestionBankMultipleChoice列表",
                 "parameters": [
@@ -7725,7 +8447,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "most_options",
+                        "name": "mostOptions",
                         "in": "query"
                     },
                     {
@@ -7776,7 +8498,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankMultipleChoice"
+                    "MultipleChoice"
                 ],
                 "summary": "更新QuestionBankMultipleChoice",
                 "parameters": [
@@ -7786,7 +8508,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankMultipleChoice"
+                            "$ref": "#/definitions/questionBank.MultipleChoice"
                         }
                     }
                 ],
@@ -7814,7 +8536,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "创建QuestionBankOptions",
                 "parameters": [
@@ -7824,7 +8546,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -7852,7 +8574,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "删除QuestionBankOptions",
                 "parameters": [
@@ -7862,7 +8584,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -7890,7 +8612,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "批量删除QuestionBankOptions",
                 "parameters": [
@@ -7928,7 +8650,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "用id查询QuestionBankOptions",
                 "parameters": [
@@ -7951,12 +8673,12 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "multiple_choice_id",
+                        "name": "multipleChoiceId",
                         "in": "query"
                     },
                     {
@@ -7990,7 +8712,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "分页获取QuestionBankOptions列表",
                 "parameters": [
@@ -8013,7 +8735,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_right",
+                        "name": "isRight",
                         "in": "query"
                     },
                     {
@@ -8024,7 +8746,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "multiple_choice_id",
+                        "name": "multipleChoiceId",
                         "in": "query"
                     },
                     {
@@ -8070,7 +8792,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "QuestionBankOptions"
+                    "Options"
                 ],
                 "summary": "更新QuestionBankOptions",
                 "parameters": [
@@ -8080,7 +8802,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankOptions"
+                            "$ref": "#/definitions/questionBank.Options"
                         }
                     }
                 ],
@@ -8118,7 +8840,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8156,7 +8878,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8245,7 +8967,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_order",
+                        "name": "isOrder",
                         "in": "query"
                     },
                     {
@@ -8307,7 +9029,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "is_order",
+                        "name": "isOrder",
                         "in": "query"
                     },
                     {
@@ -8374,7 +9096,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/lessondata.QuestionBankSupplyBlank"
+                            "$ref": "#/definitions/questionBank.SupplyBlank"
                         }
                     }
                 ],
@@ -8833,7 +9555,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "qutionId",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
@@ -8918,7 +9640,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "qutionId",
+                        "name": "questionId",
                         "in": "query"
                     },
                     {
@@ -9132,7 +9854,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "ordes",
+                        "name": "orders",
                         "in": "query"
                     },
                     {
@@ -9210,7 +9932,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "ordes",
+                        "name": "orders",
                         "in": "query"
                     },
                     {
@@ -9828,12 +10550,12 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "class_id",
+                        "name": "classId",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "name": "class_name",
+                        "type": "integer",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -9865,6 +10587,11 @@
                     },
                     {
                         "type": "integer",
+                        "name": "professionalId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "sex",
                         "in": "query"
                     },
@@ -9905,12 +10632,12 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "class_id",
+                        "name": "classId",
                         "in": "query"
                     },
                     {
-                        "type": "string",
-                        "name": "class_name",
+                        "type": "integer",
+                        "name": "collegeId",
                         "in": "query"
                     },
                     {
@@ -9960,6 +10687,11 @@
                     },
                     {
                         "type": "integer",
+                        "name": "professionalId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "name": "sex",
                         "in": "query"
                     },
@@ -12028,18 +12760,13 @@
                 "summary": "用id查询TeachClass",
                 "parameters": [
                     {
-                        "type": "number",
-                        "name": "attendance_proportion",
+                        "type": "integer",
+                        "name": "attendanceProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "belong_class_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -12049,13 +12776,13 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "final_exam_proportion",
+                        "type": "integer",
+                        "name": "finalExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "has_more",
+                        "name": "homeworkProportion",
                         "in": "query"
                     },
                     {
@@ -12065,8 +12792,8 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "learn_resource_proportion",
+                        "type": "integer",
+                        "name": "learnResourcesProportion",
                         "in": "query"
                     },
                     {
@@ -12075,18 +12802,18 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "procedure_exam_proportion",
+                        "type": "integer",
+                        "name": "procedureExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teacher_id",
+                        "name": "teacherId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "term_id",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -12125,18 +12852,13 @@
                 "summary": "分页获取TeachClass列表",
                 "parameters": [
                     {
-                        "type": "number",
-                        "name": "attendance_proportion",
+                        "type": "integer",
+                        "name": "attendanceProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "belong_class_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "course_id",
+                        "name": "courseId",
                         "in": "query"
                     },
                     {
@@ -12146,13 +12868,13 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "final_exam_proportion",
+                        "type": "integer",
+                        "name": "finalExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "has_more",
+                        "name": "homeworkProportion",
                         "in": "query"
                     },
                     {
@@ -12168,8 +12890,8 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "learn_resource_proportion",
+                        "type": "integer",
+                        "name": "learnResourcesProportion",
                         "in": "query"
                     },
                     {
@@ -12190,18 +12912,18 @@
                         "in": "query"
                     },
                     {
-                        "type": "number",
-                        "name": "procedure_exam_proportion",
+                        "type": "integer",
+                        "name": "procedureExamProportion",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teacher_id",
+                        "name": "teacherId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "term_id",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -12405,12 +13127,12 @@
                     },
                     {
                         "type": "integer",
-                        "name": "student_id",
+                        "name": "studentId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teach_class_id",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -12480,12 +13202,12 @@
                     },
                     {
                         "type": "integer",
-                        "name": "student_id",
+                        "name": "studentId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "teach_class_id",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -12493,6 +13215,44 @@
                         "description": "更新时间",
                         "name": "updatedAt",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/teachClassStudent/initTeachClassStudent": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TeachClassStudent"
+                ],
+                "summary": "初始化关联 学生与教学班",
+                "parameters": [
+                    {
+                        "description": "创建TeachClassStudent",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.StuTeachClass"
+                        }
                     }
                 ],
                 "responses": {
@@ -12683,7 +13443,7 @@
                     },
                     {
                         "type": "string",
-                        "name": "end_time",
+                        "name": "endTime",
                         "in": "query"
                     },
                     {
@@ -12699,7 +13459,7 @@
                     },
                     {
                         "type": "string",
-                        "name": "start_time",
+                        "name": "startTime",
                         "in": "query"
                     },
                     {
@@ -12745,7 +13505,7 @@
                     },
                     {
                         "type": "string",
-                        "name": "end_time",
+                        "name": "endTime",
                         "in": "query"
                     },
                     {
@@ -12779,7 +13539,7 @@
                     },
                     {
                         "type": "string",
-                        "name": "start_time",
+                        "name": "startTime",
                         "in": "query"
                     },
                     {
@@ -13602,25 +14362,6 @@
         }
     },
     "definitions": {
-        "Test.Class": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
         "basicdata.Chapter": {
             "type": "object",
             "properties": {
@@ -13661,7 +14402,7 @@
                 "name": {
                     "type": "string"
                 },
-                "professional_id": {
+                "professionalId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13693,7 +14434,7 @@
         "basicdata.LearnResourcesChapterMerge": {
             "type": "object",
             "properties": {
-                "chapter_id": {
+                "chapterId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -13704,7 +14445,7 @@
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "learn_resources_id": {
+                "learnResourcesId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13736,7 +14477,7 @@
         "basicdata.Professional": {
             "type": "object",
             "properties": {
-                "college_id": {
+                "collegeId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -13785,11 +14526,11 @@
         "basicdata.Student": {
             "type": "object",
             "properties": {
-                "class_id": {
+                "classId": {
                     "type": "integer"
                 },
-                "class_name": {
-                    "type": "string"
+                "collegeId": {
+                    "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
@@ -13808,8 +14549,11 @@
                 "password": {
                     "type": "string"
                 },
-                "sex": {
+                "professionalId": {
                     "type": "integer"
+                },
+                "sex": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -13820,42 +14564,39 @@
         "basicdata.TeachClass": {
             "type": "object",
             "properties": {
-                "attendance_proportion": {
-                    "type": "number"
-                },
-                "belong_class_id": {
+                "attendanceProportion": {
                     "type": "integer"
                 },
-                "course_id": {
+                "courseId": {
                     "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
                 },
-                "final_exam_proportion": {
-                    "type": "number"
+                "finalExamProportion": {
+                    "type": "integer"
                 },
-                "has_more": {
+                "homeworkProportion": {
                     "type": "integer"
                 },
                 "id": {
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "learn_resource_proportion": {
-                    "type": "number"
+                "learnResourcesProportion": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
                 },
-                "procedure_exam_proportion": {
-                    "type": "number"
-                },
-                "teacher_id": {
+                "procedureExamProportion": {
                     "type": "integer"
                 },
-                "term_id": {
+                "teacherId": {
+                    "type": "integer"
+                },
+                "termId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13875,10 +14616,10 @@
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "student_id": {
+                "studentId": {
                     "type": "integer"
                 },
-                "teach_class_id": {
+                "teachClassId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -13894,7 +14635,7 @@
                     "description": "创建时间",
                     "type": "string"
                 },
-                "end_time": {
+                "endTime": {
                     "type": "string"
                 },
                 "id": {
@@ -13904,7 +14645,7 @@
                 "name": {
                     "type": "string"
                 },
-                "start_time": {
+                "startTime": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -14606,7 +15347,7 @@
                 "questionId": {
                     "type": "integer"
                 },
-                "questionType": {
+                "question_type": {
                     "type": "integer"
                 },
                 "score": {
@@ -14621,7 +15362,7 @@
         "examManage.PaperTemplate": {
             "type": "object",
             "properties": {
-                "courseId": {
+                "course_id": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -14638,11 +15379,17 @@
                 "name": {
                     "type": "string"
                 },
+                "paper_template_items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/examManage.PaperTemplateItem"
+                    }
+                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
                 },
-                "userId": {
+                "user_id": {
                     "type": "integer"
                 }
             }
@@ -14866,7 +15613,7 @@
         "lessondata.Knowledge": {
             "type": "object",
             "properties": {
-                "course_id": {
+                "courseId": {
                     "type": "integer"
                 },
                 "createdAt": {
@@ -14879,139 +15626,6 @@
                 },
                 "name": {
                     "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankJudge": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_right": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankKnowledgeMerge": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "difficulty": {
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "knowledge_id": {
-                    "type": "integer"
-                },
-                "question_id": {
-                    "type": "integer"
-                },
-                "question_type": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankMultipleChoice": {
-            "type": "object",
-            "properties": {
-                "answer": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "most_options": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankOptions": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_right": {
-                    "type": "integer"
-                },
-                "multiple_choice_id": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "lessondata.QuestionBankSupplyBlank": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "describe": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "is_order": {
-                    "type": "integer"
-                },
-                "num": {
-                    "type": "integer"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -15033,7 +15647,7 @@
                 "orders": {
                     "type": "integer"
                 },
-                "qutionId": {
+                "questionId": {
                     "type": "integer"
                 },
                 "resourcesId": {
@@ -15059,7 +15673,7 @@
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "ordes": {
+                "orders": {
                     "type": "integer"
                 },
                 "questionId": {
@@ -15096,6 +15710,227 @@
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Judge": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isRight": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.KnowledgeMerge": {
+            "type": "object",
+            "properties": {
+                "canPractice": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "knowledgeId": {
+                    "type": "integer"
+                },
+                "questionId": {
+                    "type": "integer"
+                },
+                "questionType": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.MultipleChoice": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "mostOptions": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Options": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isRight": {
+                    "type": "integer"
+                },
+                "multipleChoiceId": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.Programm": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.ProgrammCase": {
+            "type": "object",
+            "properties": {
+                "clockLimit": {
+                    "type": "integer"
+                },
+                "cpuLimit": {
+                    "type": "integer"
+                },
+                "cpuRateLimit": {
+                    "type": "integer"
+                },
+                "cpuSetLimit": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "input": {
+                    "type": "string"
+                },
+                "input_type": {
+                    "type": "integer"
+                },
+                "languageId": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "out_type": {
+                    "type": "integer"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "procLimit": {
+                    "type": "integer"
+                },
+                "programm_id": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "integer"
+                },
+                "stackLimit": {
+                    "type": "integer"
+                },
+                "strictMemoryLimit": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.SupplyBlank": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "describe": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "isOrder": {
+                    "type": "integer"
+                },
+                "num": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -15363,6 +16198,20 @@
                     }
                 },
                 "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.StuTeachClass": {
+            "type": "object",
+            "properties": {
+                "student_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "teach_class_id": {
                     "type": "integer"
                 }
             }
@@ -16408,6 +17257,11 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
         }
     }
 }

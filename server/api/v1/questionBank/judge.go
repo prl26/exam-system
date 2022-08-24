@@ -23,7 +23,7 @@ var questionBank_judgeService = service.ServiceGroupApp.QuestionBankServiceGroup
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body lessondata.QuestionBankJudge true "创建QuestionBankJudge"
+// @Param data body questionBank.Judge true "创建QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBank_judge/createQuestionBankJudge [post]
 func (questionBank_judgeApi *QuestionBankJudgeApi) CreateQuestionBankJudge(c *gin.Context) {
@@ -51,7 +51,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) CreateQuestionBankJudge(c *gi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankJudge true "删除QuestionBankJudge"
+// @Param data body questionBank.Judge true "删除QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /questionBank_judge/deleteQuestionBankJudge [delete]
 func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudge(c *gin.Context) {
@@ -91,7 +91,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudgeByIds(
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankJudge true "更新QuestionBankJudge"
+// @Param data body questionBank.Judge true "更新QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /questionBank_judge/updateQuestionBankJudge [put]
 func (questionBank_judgeApi *QuestionBankJudgeApi) UpdateQuestionBankJudge(c *gin.Context) {
@@ -119,7 +119,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) UpdateQuestionBankJudge(c *gi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBank.QuestionBankJudge true "用id查询QuestionBankJudge"
+// @Param data query questionBank.Judge true "用id查询QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /questionBank_judge/findQuestionBankJudge [get]
 func (questionBank_judgeApi *QuestionBankJudgeApi) FindQuestionBankJudge(c *gin.Context) {

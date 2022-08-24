@@ -22,7 +22,7 @@ var questionBankKnowledgeMergeService = service.ServiceGroupApp.QuestionBankServ
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank..QuestionBankKnowledgeMerge true "创建QuestionBankKnowledgeMerge"
+// @Param data body questionBank.KnowledgeMerge true "创建QuestionBankKnowledgeMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge [post]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) CreateQuestionBankKnowledgeMerge(c *gin.Context) {
@@ -42,7 +42,7 @@ func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) CreateQuesti
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankKnowledgeMerge true "删除QuestionBankKnowledgeMerge"
+// @Param data body questionBank.KnowledgeMerge true "删除QuestionBankKnowledgeMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMerge [delete]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) DeleteQuestionBankKnowledgeMerge(c *gin.Context) {
@@ -82,7 +82,7 @@ func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) DeleteQuesti
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.QuestionBankKnowledgeMerge true "更新QuestionBankKnowledgeMerge"
+// @Param data body questionBank.KnowledgeMerge true "更新QuestionBankKnowledgeMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /questionBankKnowledgeMerge/updateQuestionBankKnowledgeMerge [put]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) UpdateQuestionBankKnowledgeMerge(c *gin.Context) {
@@ -102,7 +102,7 @@ func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) UpdateQuesti
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBank.QuestionBankKnowledgeMerge true "用id查询QuestionBankKnowledgeMerge"
+// @Param data query questionBank.KnowledgeMerge true "用id查询QuestionBankKnowledgeMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /questionBankKnowledgeMerge/findQuestionBankKnowledgeMerge [get]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) FindQuestionBankKnowledgeMerge(c *gin.Context) {
@@ -122,7 +122,7 @@ func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) FindQuestion
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query questionBankReq.QuestionBankKnowledgeMergeSearch true "分页获取QuestionBankKnowledgeMerge列表"
+// @Param data query request.QuestionBankKnowledgeMergeSearch true "分页获取QuestionBankKnowledgeMerge列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankKnowledgeMerge/getQuestionBankKnowledgeMergeList [get]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) GetQuestionBankKnowledgeMergeList(c *gin.Context) {
