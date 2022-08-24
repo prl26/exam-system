@@ -2,17 +2,20 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="学生姓名">
+        <el-form-item label="姓名">
           <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="身份证号">
           <el-input v-model="searchInfo.id_card" placeholder="搜索条件" />
         </el-form-item>
+        <el-form-item label="学院id">
+          <el-input v-model="searchInfo.college_id" placeholder="搜索条件" />
+        </el-form-item>
+        <el-form-item label="专业id">
+          <el-input v-model="searchInfo.professional_id" placeholder="搜索条件" />
+        </el-form-item>
         <el-form-item label="班级id">
           <el-input v-model="searchInfo.class_id" placeholder="搜索条件" />
-        </el-form-item>
-        <el-form-item label="班级名称">
-          <el-input v-model="searchInfo.class_name" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
@@ -46,16 +49,13 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="学生姓名" prop="name" width="120" />
-        <el-table-column align="left" label="性别" prop="sex" width="120">
-            <template #default="scope">
-            {{ filterDict(scope.row.sex,genderOptions) }}
-            </template>
-        </el-table-column>
+        <el-table-column align="left" label="姓名" prop="name" width="120" />
+        <el-table-column align="left" label="性别" prop="sex" width="120" />
         <el-table-column align="left" label="身份证号" prop="id_card" width="120" />
-        <el-table-column align="left" label="班级id" prop="class_id" width="120" />
         <el-table-column align="left" label="密码" prop="password" width="120" />
-        <el-table-column align="left" label="班级名称" prop="class_name" width="120" />
+        <el-table-column align="left" label="学院id" prop="college_id" width="120" />
+        <el-table-column align="left" label="专业id" prop="professional_id" width="120" />
+        <el-table-column align="left" label="班级id" prop="class_id" width="120" />
         <el-table-column align="left" label="按钮组">
             <template #default="scope">
             <el-button type="primary" link icon="edit" size="small" class="table-button" @click="updateStudentFunc(scope.row)">变更</el-button>
@@ -77,25 +77,26 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="学生姓名:"  prop="name" >
+        <el-form-item label="姓名:"  prop="name" >
           <el-input v-model="formData.name" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <el-form-item label="性别:"  prop="sex" >
-          <el-select v-model="formData.sex" placeholder="请选择" style="width:100%" :clearable="true" >
-            <el-option v-for="(item,key) in genderOptions" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
+          <el-input v-model="formData.sex" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <el-form-item label="身份证号:"  prop="id_card" >
           <el-input v-model="formData.id_card" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="班级id:"  prop="class_id" >
-          <el-input v-model.number="formData.class_id" :clearable="true" placeholder="请输入" />
-        </el-form-item>
         <el-form-item label="密码:"  prop="password" >
           <el-input v-model="formData.password" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="班级名称:"  prop="class_name" >
-          <el-input v-model="formData.class_name" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="学院id:"  prop="college_id" >
+          <el-input v-model.number="formData.college_id" :clearable="true" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="专业id:"  prop="professional_id" >
+          <el-input v-model.number="formData.professional_id" :clearable="true" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="班级id:"  prop="class_id" >
+          <el-input v-model.number="formData.class_id" :clearable="true" placeholder="请输入" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -130,48 +131,18 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
-const genderOptions = ref([])
 const formData = ref({
         name: '',
-        sex: undefined,
+        sex: '',
         id_card: '',
-        class_id: 0,
         password: '',
-        class_name: '',
+        college_id: 0,
+        professional_id: 0,
+        class_id: 0,
         })
 
 // 验证规则
 const rule = reactive({
-               name : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               sex : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               id_card : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               class_id : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               password : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               class_name : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
 })
 
 const elFormRef = ref()
@@ -225,7 +196,6 @@ getTableData()
 
 // 获取需要的字典 可能为空 按需保留
 const setOptions = async () =>{
-    genderOptions.value = await getDictFunc('gender')
 }
 
 // 获取需要的字典 可能为空 按需保留
@@ -325,11 +295,12 @@ const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
         name: '',
-        sex: undefined,
+        sex: '',
         id_card: '',
-        class_id: 0,
         password: '',
-        class_name: '',
+        college_id: 0,
+        professional_id: 0,
+        class_id: 0,
         }
 }
 // 弹窗确定

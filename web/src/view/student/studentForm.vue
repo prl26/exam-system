@@ -2,25 +2,26 @@
   <div>
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
-        <el-form-item label="学生姓名:" prop="name">
+        <el-form-item label="姓名:" prop="name">
           <el-input v-model="formData.name" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="性别:" prop="sex">
-          <el-select v-model="formData.sex" placeholder="请选择" :clearable="true">
-            <el-option v-for="(item,key) in genderOptions" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
+          <el-input v-model="formData.sex" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="身份证号:" prop="id_card">
           <el-input v-model="formData.id_card" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="班级id:" prop="class_id">
-          <el-input v-model.number="formData.class_id" :clearable="true" placeholder="请输入" />
-        </el-form-item>
         <el-form-item label="密码:" prop="password">
           <el-input v-model="formData.password" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="班级名称:" prop="class_name">
-          <el-input v-model="formData.class_name" :clearable="true" placeholder="请输入" />
+        <el-form-item label="学院id:" prop="college_id">
+          <el-input v-model.number="formData.college_id" :clearable="true" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="专业id:" prop="professional_id">
+          <el-input v-model.number="formData.professional_id" :clearable="true" placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="班级id:" prop="class_id">
+          <el-input v-model.number="formData.class_id" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" @click="save">保存</el-button>
@@ -53,47 +54,17 @@ const route = useRoute()
 const router = useRouter()
 
 const type = ref('')
-const genderOptions = ref([])
 const formData = ref({
             name: '',
-            sex: undefined,
+            sex: '',
             id_card: '',
-            class_id: 0,
             password: '',
-            class_name: '',
+            college_id: 0,
+            professional_id: 0,
+            class_id: 0,
         })
 // 验证规则
 const rule = reactive({
-               name : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               sex : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               id_card : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               class_id : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               password : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
-               class_name : [{
-                   required: true,
-                   message: '',
-                   trigger: ['input','blur'],
-               }],
 })
 
 const elFormRef = ref()
@@ -110,7 +81,6 @@ const init = async () => {
     } else {
       type.value = 'create'
     }
-    genderOptions.value = await getDictFunc('gender')
 }
 
 init()
