@@ -15,13 +15,13 @@ func (s *StudentRouter) InitStudentRouter(Router *gin.RouterGroup) {
 	studentRouterWithoutRecord := Router.Group("student")
 	var studentApi = v1.ApiGroupApp.BasicdataApiGroup.StudentApi
 	{
-		studentRouter.POST("createStudent", studentApi.CreateStudent)   // 新建Student
-		studentRouter.DELETE("deleteStudent", studentApi.DeleteStudent) // 删除Student
+		studentRouter.POST("createStudent", studentApi.CreateStudent)             // 新建Student
+		studentRouter.DELETE("deleteStudent", studentApi.DeleteStudent)           // 删除Student
 		studentRouter.DELETE("deleteStudentByIds", studentApi.DeleteStudentByIds) // 批量删除Student
-		studentRouter.PUT("updateStudent", studentApi.UpdateStudent)    // 更新Student
+		studentRouter.PUT("updateStudent", studentApi.UpdateStudent)              // 更新Student
 	}
 	{
-		studentRouterWithoutRecord.GET("findStudent", studentApi.FindStudent)        // 根据ID获取Student
-		studentRouterWithoutRecord.GET("getStudentList", studentApi.GetStudentList)  // 获取Student列表
+		studentRouterWithoutRecord.GET("findStudent", studentApi.FindStudent)       // 根据ID获取Student
+		studentRouterWithoutRecord.GET("getStudentList", studentApi.GetStudentList) // 获取Student列表
 	}
 }

@@ -54,11 +54,17 @@ func (teachClassService *TeachClassService) GetTeachClassInfoList(info basicdata
 	db := global.GVA_DB.Model(&basicdata.TeachClass{})
 	var teachClasss []basicdata.TeachClass
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.CourseId != nil {
-		db = db.Where("course_id = ?", info.CourseId)
+	if info.Course_id != nil {
+		db = db.Where("course_id = ?", info.Course_id)
 	}
-	if info.TermId != nil {
-		db = db.Where("term_id = ?", info.TermId)
+	if info.Term_id != nil {
+		db = db.Where("term_id = ?", info.Term_id)
+	}
+	if info.Name != "" {
+		db = db.Where("name = ?", info.Name)
+	}
+	if info.Teacher_id != nil {
+		db = db.Where("teacher_id = ?", info.Teacher_id)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

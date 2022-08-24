@@ -15,13 +15,13 @@ func (s *TeachClassRouter) InitTeachClassRouter(Router *gin.RouterGroup) {
 	teachClassRouterWithoutRecord := Router.Group("teachClass")
 	var teachClassApi = v1.ApiGroupApp.BasicdataApiGroup.TeachClassApi
 	{
-		teachClassRouter.POST("createTeachClass", teachClassApi.CreateTeachClass)   // 新建TeachClass
-		teachClassRouter.DELETE("deleteTeachClass", teachClassApi.DeleteTeachClass) // 删除TeachClass
+		teachClassRouter.POST("createTeachClass", teachClassApi.CreateTeachClass)             // 新建TeachClass
+		teachClassRouter.DELETE("deleteTeachClass", teachClassApi.DeleteTeachClass)           // 删除TeachClass
 		teachClassRouter.DELETE("deleteTeachClassByIds", teachClassApi.DeleteTeachClassByIds) // 批量删除TeachClass
-		teachClassRouter.PUT("updateTeachClass", teachClassApi.UpdateTeachClass)    // 更新TeachClass
+		teachClassRouter.PUT("updateTeachClass", teachClassApi.UpdateTeachClass)              // 更新TeachClass
 	}
 	{
-		teachClassRouterWithoutRecord.GET("findTeachClass", teachClassApi.FindTeachClass)        // 根据ID获取TeachClass
-		teachClassRouterWithoutRecord.GET("getTeachClassList", teachClassApi.GetTeachClassList)  // 获取TeachClass列表
+		teachClassRouterWithoutRecord.GET("findTeachClass", teachClassApi.FindTeachClass)       // 根据ID获取TeachClass
+		teachClassRouterWithoutRecord.GET("getTeachClassList", teachClassApi.GetTeachClassList) // 获取TeachClass列表
 	}
 }

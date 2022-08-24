@@ -7,7 +7,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -29,17 +28,6 @@ var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassServ
 func (teachClassApi *TeachClassApi) CreateTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindJSON(&teachClass)
-	verify := utils.Rules{
-		"CourseId":              {utils.NotEmpty()},
-		"TermId":                {utils.NotEmpty()},
-		"Belong_class_id":       {utils.NotEmpty()},
-		"Name":                  {utils.NotEmpty()},
-		"Attendance_proportion": {utils.NotEmpty()},
-	}
-	if err := utils.Verify(teachClass, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
 	if err := teachClassService.CreateTeachClass(teachClass); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -100,17 +88,6 @@ func (teachClassApi *TeachClassApi) DeleteTeachClassByIds(c *gin.Context) {
 func (teachClassApi *TeachClassApi) UpdateTeachClass(c *gin.Context) {
 	var teachClass basicdata.TeachClass
 	_ = c.ShouldBindJSON(&teachClass)
-	verify := utils.Rules{
-		"CourseId":              {utils.NotEmpty()},
-		"TermId":                {utils.NotEmpty()},
-		"Belong_class_id":       {utils.NotEmpty()},
-		"Name":                  {utils.NotEmpty()},
-		"Attendance_proportion": {utils.NotEmpty()},
-	}
-	if err := utils.Verify(teachClass, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
 	if err := teachClassService.UpdateTeachClass(teachClass); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
