@@ -7,6 +7,7 @@
 package basicdata
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
 )
 
@@ -24,6 +25,14 @@ func (operation *MultiTableService) UpdateTeachClassStudents(info request.StuTea
 	//		Teach_class_id: ,
 	//	})
 	//}
+	n := len(info.Student_ids)
+	list := make([]*basicdata.TeachClassStudent, n)
+	for i := 0; i < n; i++ {
+		list[i] = &basicdata.TeachClassStudent{
+			Student_id:     &info.Student_ids[i],
+			Teach_class_id: &info.Teach_class_id,
+		}
+	}
 
 	return nil
 }
