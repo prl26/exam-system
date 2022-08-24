@@ -24,6 +24,7 @@ import (
 // @Param file formData file true "an example for breakpoint resume, 断点续传示例"
 // @Success 200 {object} response.Response{msg=string} "断点续传到服务器"
 // @Router /fileUploadAndDownload/breakpointContinue [post]
+
 func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 	fileMd5 := c.Request.FormValue("fileMd5")
 	fileName := c.Request.FormValue("fileName")

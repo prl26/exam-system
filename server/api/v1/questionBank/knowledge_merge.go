@@ -22,7 +22,7 @@ var questionBankKnowledgeMergeService = service.ServiceGroupApp.QuestionBankServ
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body lessondata.QuestionBankKnowledgeMerge true "创建QuestionBankKnowledgeMerge"
+// @Param data body questionBank..QuestionBankKnowledgeMerge true "创建QuestionBankKnowledgeMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge [post]
 func (questionBankKnowledgeMergeApi *QuestionBankKnowledgeMergeApi) CreateQuestionBankKnowledgeMerge(c *gin.Context) {

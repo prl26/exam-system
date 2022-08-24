@@ -12,7 +12,8 @@ type KnowledgeMerge struct {
 	QuestionId   *int `json:"questionId" form:"questionId" gorm:"column:question_id;comment:题目id;"`
 	QuestionType *int `json:"questionType" form:"questionType" gorm:"column:question_type;comment:题目类型;"`
 	Difficulty   *int `json:"difficulty" form:"difficulty" gorm:"column:difficulty;comment:难度;"`
-	CanPractice  *int `json:"canPractice" form:"canPractice"`
+	CanPractice  *int `json:"canPractice" form:"canPractice" gorm:"column:can_practice;comment:是否为训练题目;"`
+	CanExam      *int `json:"CanExam" form:"canExam" gorm:"column:can_exam;comment:是否为考试题目"`
 }
 
 // TableName QuestionBankKnowledgeMerge 表名
