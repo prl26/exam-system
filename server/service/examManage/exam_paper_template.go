@@ -57,8 +57,8 @@ func (examPaperTemplateService *ExamPaperTemplateService) GetExamPaperTemplateIn
 	if info.CourseId != nil {
 		db = db.Where("course_id = ?", info.CourseId)
 	}
-	if info.UserId != nil {
-		db = db.Where("user_id = ?", info.UserId)
+	if info.CreatorId != nil {
+		db = db.Where("user_id = ?", info.CreatorId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
