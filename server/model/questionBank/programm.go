@@ -8,9 +8,8 @@ import (
 // Programm 结构体
 type Programm struct {
 	global.GVA_MODEL
-	Describe     string `json:"describe" form:"describe" gorm:"column:describe;comment:;"`
-	Title        string `json:"title" form:"title" gorm:"column:title;comment:;"`
-	QuestionType *int   `json:"questionType" form:"paperId" gorm:"column:question_type;comment:题目类型;size:8;"`
+	Describe string `json:"describe" form:"describe" gorm:"column:describe;comment:;"`
+	Title    string `json:"title" form:"title" gorm:"column:title;comment:;"`
 }
 
 // TableName Programm 表名
