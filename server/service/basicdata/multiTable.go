@@ -16,7 +16,7 @@ type MultiTableService struct {
 }
 
 // 根据传入 教学班id和全部学生id 关联教学班，即更新bas_teach_class_student
-func (operation *MultiTableService) UpdateTeachClassStudents(info request.StuTeachClass) error {
+func (multiTableService *MultiTableService) UpdateTeachClassStudents(info request.StuTeachClass) error {
 
 	// 将数据整合到 表的结构体中方便
 	n := len(info.StudentIds)

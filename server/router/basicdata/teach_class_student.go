@@ -13,19 +13,19 @@ type TeachClassStudentRouter struct {
 func (s *TeachClassStudentRouter) InitTeachClassStudentRouter(Router *gin.RouterGroup) {
 	teachClassStudentRouter := Router.Group("teachClassStudent").Use(middleware.OperationRecord())
 	teachClassStudentRouterWithoutRecord := Router.Group("teachClassStudent")
-	var teachClassStudentApi = v1.ApiGroupApp.BasicdataApiGroup.TeachClassStudentApi
+	//var teachClassStudentApi = v1.ApiGroupApp.BasicdataApiGroup.TeachClassStudentApi
 	var multiTableApi = v1.ApiGroupApp.BasicdataApiGroup.MultiTableApi
 	{
 
 		teachClassStudentRouter.POST("initTeachClassStudent", multiTableApi.InitTeachClassStudent) // 初始化关联 教学班和学生
 
-		teachClassStudentRouter.POST("createTeachClassStudent", teachClassStudentApi.CreateTeachClassStudent)             // 新建TeachClassStudent
-		teachClassStudentRouter.DELETE("deleteTeachClassStudent", teachClassStudentApi.DeleteTeachClassStudent)           // 删除TeachClassStudent
-		teachClassStudentRouter.DELETE("deleteTeachClassStudentByIds", teachClassStudentApi.DeleteTeachClassStudentByIds) // 批量删除TeachClassStudent
-		teachClassStudentRouter.PUT("updateTeachClassStudent", teachClassStudentApi.UpdateTeachClassStudent)              // 更新TeachClassStudent
+		//teachClassStudentRouter.POST("createTeachClassStudent", teachClassStudentApi.CreateTeachClassStudent)             // 新建TeachClassStudent
+		//teachClassStudentRouter.DELETE("deleteTeachClassStudent", teachClassStudentApi.DeleteTeachClassStudent)           // 删除TeachClassStudent
+		//teachClassStudentRouter.DELETE("deleteTeachClassStudentByIds", teachClassStudentApi.DeleteTeachClassStudentByIds) // 批量删除TeachClassStudent
+		//teachClassStudentRouter.PUT("updateTeachClassStudent", teachClassStudentApi.UpdateTeachClassStudent)              // 更新TeachClassStudent
 	}
 	{
-		teachClassStudentRouterWithoutRecord.GET("findTeachClassStudent", teachClassStudentApi.FindTeachClassStudent)       // 根据ID获取TeachClassStudent
-		teachClassStudentRouterWithoutRecord.GET("getTeachClassStudentList", teachClassStudentApi.GetTeachClassStudentList) // 获取TeachClassStudent列表
+		//teachClassStudentRouterWithoutRecord.GET("findTeachClassStudent", teachClassStudentApi.FindTeachClassStudent)       // 根据ID获取TeachClassStudent
+		teachClassStudentRouterWithoutRecord.GET("getTeachClassStudentList") // 获取TeachClassStudent列表
 	}
 }
