@@ -15,21 +15,70 @@ import (
 type MultiTableService struct {
 }
 
-// 根据传入 教学班id和全部学生id 关联教学班，即更新bas_teach_class_student
-func (multiTableService *MultiTableService) UpdateTeachClassStudents(info request.StuTeachClass) error {
+// 向教学班中 加入学生的关联
+func (multiTableService *MultiTableService) InitTeachClassStudents(info request.StuTeachClass) error {
 
-	// 将数据整合到 表的结构体中方便
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
 	n := len(info.StudentIds)
+	students := make([]basicdata.Student, n)
 
-	list := make([]*basicdata.TeachClassStudent, n)
 	for i := 0; i < n; i++ {
-		list[i] = &basicdata.TeachClassStudent{
-			StudentId:    &info.StudentIds[i],
-			TeachClassId: &info.TeachClassId,
-		}
+		students[i].ID = info.StudentIds[i]
 	}
 
-	err := global.GVA_DB.Create(&list).Error
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(students)
 
 	return err
+}
+
+// 在教学班中 移除学生
+func (multiTableService *MultiTableService) DeleteTeachClassStudents(info request.StuTeachClass) error {
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
+	n := len(info.StudentIds)
+
+	students := make([]basicdata.Student, n)
+	for i := 0; i < n; i++ {
+		students[i].ID = info.StudentIds[i]
+	}
+
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Delete(students)
+
+	return err
+}
+
+// 获取教学班的学生
+func (multiTableService *MultiTableService) GetTeachClassStudentInfo(info request.TeachClassStudent) (list []basicdata.Student, total int64, err error) {
+
+	var limit, offset int
+
+	if info.PageSize <= 0 {
+		limit = 10
+	} else {
+		limit = info.PageSize
+	}
+
+	if info.Page <= 0 {
+		offset = 0
+	} else {
+		offset = info.PageSize * (info.Page - 1)
+	}
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
+	var students []basicdata.Student
+
+	db := global.GVA_DB
+
+	//err = db.Model(&teachClass).Association("Student").Find(&students) 高端写法但是无法分页
+	db.Limit(limit).Offset(offset).Where("id in (?)", db.Table("bas_student_teach_classes").
+		Select("student_id").Where("teach_class_id = ?", teachClass.ID)).Find(&students).Count(&total)
+
+	return students, total, err
+
 }

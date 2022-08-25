@@ -7,6 +7,7 @@
 package basicdata
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -20,49 +21,72 @@ type MultiTableApi struct {
 
 var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
 
-// InitTeachClassStudent 关联 学生与教学班
+// InitTeachClassStudent 教学班中 添加学生
 // @Tags TeachClassStudent
-// @Summary 初始化关联 学生与教学班
+// @Summary 教学班中 添加学生
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.StuTeachClass true "创建TeachClassStudent"
+// @Param data body request.StuTeachClass true "添加TeachClassStudent"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /teachClassStudent/initTeachClassStudent [post]
 func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context) {
 	var stuClassReq basicdataReq.StuTeachClass
 	_ = c.ShouldBindJSON(&stuClassReq)
-	err := multiTableService.UpdateTeachClassStudents(stuClassReq)
+	err := multiTableService.InitTeachClassStudents(stuClassReq)
 	if err != nil {
-		global.GVA_LOG.Error("更新学生教学班关联表失败", zap.Error(err))
-		response.FailWithMessage("更新学生教学班关联表失败", c)
+		global.GVA_LOG.Error("教学班中添加学生失败", zap.Error(err))
+		response.FailWithMessage("教学班中添加学生失败", c)
 	} else {
-		response.OkWithMessage("更新学生教学班关联表成功", c)
+		response.OkWithMessage("教学班中添加学生成功", c)
 	}
-
 }
 
-// GetTeachClassStudentList 获取一个教学班的学生
+// DeleteTeachClassStudent 教学班 中移除学生
 // @Tags TeachClassStudent
-// @Summary 获取一个 教学班的学生
+// @Summary 教学班 中移除学生
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.StuTeachClass true "获取一个教学班的学生"
+// @Param data body request.StuTeachClass true "移除TeachClassStudent"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /teachClassStudent/deleteTeachClassStudent [post]
+func (multiTableServiceApi *MultiTableApi) DeleteTeachClassStudent(c *gin.Context) {
+	var stuClassReq basicdataReq.StuTeachClass
+	_ = c.ShouldBindJSON(&stuClassReq)
+	err := multiTableService.DeleteTeachClassStudents(stuClassReq)
+	if err != nil {
+		global.GVA_LOG.Error("教学班中移除学生失败", zap.Error(err))
+		response.FailWithMessage("教学班中移除学生失败", c)
+	} else {
+		response.OkWithMessage("教学班中移除学生成功", c)
+	}
+}
+
+// GetTeachClassStudentList 获取教学班中 学生列表
+// @Tags TeachClassStudent
+// @Summary 获取教学班中 学生列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query request.TeachClassStudent true "获取TeachClassStudent"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /teachClassStudent/getTeachClassStudentList [get]
-//func (multiTableServiceApi *MultiTableApi) GetTeachClassStudentList(c *gin.Context) {
-//	var pageInfo basicdataReq.TeachClassIdSearch
-//	_ = c.ShouldBindQuery(&pageInfo)
-//	if list, total, err := multiTableService.GetStudentInfo(); err != nil {
-//		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-//		response.FailWithMessage("获取失败", c)
-//	} else {
-//		response.OkWithDetailed(response.PageResult{
-//			List:     list,
-//			Total:    total,
-//			Page:     pageInfo.Page,
-//			PageSize: pageInfo.PageSize,
-//		}, "获取成功", c)
-//	}
-//}
+func (multiTableServiceApi *MultiTableApi) GetTeachClassStudentList(c *gin.Context) {
+	var pageInfo basicdataReq.TeachClassStudent
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if list, total, err := multiTableService.GetTeachClassStudentInfo(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}

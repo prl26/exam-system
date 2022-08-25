@@ -9,6 +9,7 @@ package oj
  * @Note:
 
  **/
+
 type ExecuteSituation struct {
 	ResultStatus string `json:"resultStatus"` // 结果状态
 	ExitStatus   int    `json:"exitStatus"`   // 程序返回值

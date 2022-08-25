@@ -7,18 +7,21 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 )
 
 // 接收 教学班id 和学生id 的结构体
 type StuTeachClass struct {
-	TeachClassId int   `json:"teachClassId"`
-	StudentIds   []int `json:"studentIds"`
+	TeachClassId uint   `json:"teachClassId" from:"teachClassId"`
+	StudentIds   []uint `json:"studentIds"`
 }
 
-type TeachClassIdSearch struct {
-	TeachClassId int `json:"teachClassId"`
-	basicdata.Student
+type TeachClassStudent struct {
+	TeachClassId uint `json:"teachClassId" form:"teachClassId"`
 	request.PageInfo
+}
+
+type Association struct {
+	teachClassID uint `gorm:"column:teach_class_id"`
+	studentId    uint `gorm:"column:student_id"`
 }

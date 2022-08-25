@@ -10,7 +10,6 @@ type ApiGroup struct {
 	ProfessionalApi
 	ClassApi
 	TermApi
-	TeachClassStudentApi
 	TeachClassApi
 	LearnResourcesChapterMergeApi
 	StudentApi
