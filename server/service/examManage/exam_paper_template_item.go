@@ -89,11 +89,12 @@ func (paperTemplateItemService *PaperTemplateItemService) GetPaperId(info examMa
 
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperChoiceQuestion(info []examManage.PaperTemplateItem) (err error) {
 	var list []questionBank.MultipleChoice
+	//fmt.Println(len())
 	paperId := paperTemplateItemService.GetPaperId(info[0])
 	for i := 0; i < len(info); i++ {
 		num := info[i].Num
 		uuid := utils.GetUuid()
-		err = global.GVA_DB.Where("question_type = ? and problem_type = ? ", 0, info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
 		if err != nil {
 			return
 		} else {
@@ -121,7 +122,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperCJudgeQuestion
 	for i := 0; i < len(info); i++ {
 		num := info[i].Num
 		uuid := utils.GetUuid()
-		err = global.GVA_DB.Where("question_type = ? and problem_type = ? ", 1, info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
 		if err != nil {
 			return
 		} else {
@@ -149,7 +150,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperOptionsQuestio
 	for i := 0; i < len(info); i++ {
 		num := info[i].Num
 		uuid := utils.GetUuid()
-		err = global.GVA_DB.Where("question_type = ? and problem_type = ? ", 2, info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
 		if err != nil {
 			return
 		} else {
@@ -177,7 +178,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgrammQuesti
 	for i := 0; i < len(info); i++ {
 		num := info[i].Num
 		uuid := utils.GetUuid()
-		err = global.GVA_DB.Where("question_type = ? and problem_type = ? ", 4, info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		err = global.GVA_DB.Where("question_type = ?", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
 		if err != nil {
 			return
 		} else {

@@ -12,7 +12,6 @@ type MultipleChoice struct {
 	Describe     string `json:"describe" form:"describe" gorm:"column:describe;comment:选择题描述;"`
 	MostOptions  *int   `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
 	Answer       string `json:"answer" form:"answer" gorm:"column:answer;comment:"`
-	ProblemType  *int   `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:难度;size:8;"`
 	QuestionType *int   `json:"questionType" form:"paperId" gorm:"column:question_type;comment:题目类型;size:8;"`
 }
 

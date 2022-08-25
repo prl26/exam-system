@@ -60,7 +60,7 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
-	if info.TemplateId != "" {
+	if info.TemplateId != nil {
 		db = db.Where("template_id = ?", info.TemplateId)
 	}
 	err = db.Count(&total).Error
