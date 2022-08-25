@@ -1,13 +1,13 @@
 package service
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/service/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/examManage"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/lesson"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/lessondata"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/questionBank"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/teachplan"
+	"exam-system/service/basicdata"
+	"exam-system/service/examManage"
+	"exam-system/service/lesson"
+	"exam-system/service/lessondata"
+	"exam-system/service/questionBank"
+	"exam-system/service/system"
+	"exam-system/service/teachplan"
 )
 
 type ServiceGroup struct {

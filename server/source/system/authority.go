@@ -2,8 +2,8 @@ package system
 
 import (
 	"context"
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	sysModel "exam-system/model/system"
+	"exam-system/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -45,7 +45,7 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 	entities := []sysModel.SysAuthority{
 		{AuthorityId: 888, AuthorityName: "普通用户", DefaultRouter: "dashboard"},
 		{AuthorityId: 9528, AuthorityName: "测试角色", DefaultRouter: "dashboard"},
-		{AuthorityId: 8881, AuthorityName: "普通用户子角色",DefaultRouter: "dashboard"},
+		{AuthorityId: 8881, AuthorityName: "普通用户子角色", DefaultRouter: "dashboard"},
 	}
 
 	if err := db.Create(&entities).Error; err != nil {

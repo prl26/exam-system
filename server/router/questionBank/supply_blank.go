@@ -1,8 +1,8 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,8 +11,8 @@ type QuestionBankSupplyBlankRouter struct {
 
 // InitQuestionBankSupplyBlankRouter 初始化 QuestionBankSupplyBlank 路由信息
 func (s *QuestionBankSupplyBlankRouter) InitQuestionBankSupplyBlankRouter(Router *gin.RouterGroup) {
-	questionBank_supply_blankRouter := Router.Group("questionBank_supply_blank").Use(middleware.OperationRecord())
-	questionBank_supply_blankRouterWithoutRecord := Router.Group("questionBank_supply_blank")
+	questionBank_supply_blankRouter := Router.Group("questionBankSupplyBlank").Use(middleware.OperationRecord())
+	questionBank_supply_blankRouterWithoutRecord := Router.Group("questionBankSupplyBlank")
 	var questionBank_supply_blankApi = v1.ApiGroupApp.QuestionBankApiGroup.QuestionBankSupplyBlankApi
 	{
 		questionBank_supply_blankRouter.POST("createQuestionBankSupplyBlank", questionBank_supply_blankApi.CreateQuestionBankSupplyBlank)             // 新建QuestionBankSupplyBlank

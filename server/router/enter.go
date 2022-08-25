@@ -1,12 +1,12 @@
 package router
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/router/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/examManage"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/lessondata"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/questionBank"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/teachplan"
+	"exam-system/router/basicdata"
+	"exam-system/router/examManage"
+	"exam-system/router/lessondata"
+	"exam-system/router/questionBank"
+	"exam-system/router/system"
+	"exam-system/router/teachplan"
 )
 
 type RouterGroup struct {

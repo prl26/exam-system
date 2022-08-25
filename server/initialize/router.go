@@ -3,10 +3,10 @@ package initialize
 import (
 	"net/http"
 
-	_ "github.com/flipped-aurora/gin-vue-admin/server/docs"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
-	"github.com/flipped-aurora/gin-vue-admin/server/router"
+	_ "exam-system/docs"
+	"exam-system/global"
+	"exam-system/middleware"
+	"exam-system/router"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"

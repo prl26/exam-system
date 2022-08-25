@@ -1,10 +1,10 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
 )
 
 type ProgrammCaseService struct {
@@ -54,7 +54,7 @@ func (questionBankProgrammCaseService *ProgrammCaseService) GetQuestionBankProgr
 	db := global.GVA_DB.Model(&questionBank.ProgrammCase{})
 	var questionBankProgrammCases []questionBank.ProgrammCase
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.ProgrammId != "" {
+	if info.ProgrammId != nil {
 		db = db.Where("programm_id = ?", info.ProgrammId)
 	}
 	err = db.Count(&total).Error

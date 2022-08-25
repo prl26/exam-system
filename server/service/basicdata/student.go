@@ -1,10 +1,10 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
 )
 
 type StudentService struct {
@@ -55,10 +55,10 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 	var students []basicdata.Student
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Name != "" {
-		db = db.Where("name = ?", info.Name)
+		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
 	if info.IdCard != "" {
-		db = db.Where("id_card = ?", info.IdCard)
+		db = db.Where("id_card LIKE ?", "%d"+info.IdCard+"%d")
 	}
 	if info.CollegeId != nil {
 		db = db.Where("college_id = ?", info.CollegeId)

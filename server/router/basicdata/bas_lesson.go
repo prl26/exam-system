@@ -1,8 +1,8 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *LessonRouter) InitLessonRouter(Router *gin.RouterGroup) {
 	lessonRouterWithoutRecord := Router.Group("lesson")
 	var lessonApi = v1.ApiGroupApp.BasicdataApiGroup.LessonApi
 	{
-		lessonRouter.POST("createLesson", lessonApi.CreateLesson)   // 新建Lesson
-		lessonRouter.DELETE("deleteLesson", lessonApi.DeleteLesson) // 删除Lesson
+		lessonRouter.POST("createLesson", lessonApi.CreateLesson)             // 新建Lesson
+		lessonRouter.DELETE("deleteLesson", lessonApi.DeleteLesson)           // 删除Lesson
 		lessonRouter.DELETE("deleteLessonByIds", lessonApi.DeleteLessonByIds) // 批量删除Lesson
-		lessonRouter.PUT("updateLesson", lessonApi.UpdateLesson)    // 更新Lesson
+		lessonRouter.PUT("updateLesson", lessonApi.UpdateLesson)              // 更新Lesson
 	}
 	{
-		lessonRouterWithoutRecord.GET("findLesson", lessonApi.FindLesson)        // 根据ID获取Lesson
-		lessonRouterWithoutRecord.GET("getLessonList", lessonApi.GetLessonList)  // 获取Lesson列表
+		lessonRouterWithoutRecord.GET("findLesson", lessonApi.FindLesson)       // 根据ID获取Lesson
+		lessonRouterWithoutRecord.GET("getLessonList", lessonApi.GetLessonList) // 获取Lesson列表
 	}
 }

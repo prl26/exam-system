@@ -1,12 +1,12 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -24,7 +24,7 @@ var questionBank_multiple_choiceService = service.ServiceGroupApp.QuestionBankSe
 // @Produce application/json
 // @Param data body questionBank.MultipleChoice true "创建QuestionBankMultipleChoice"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_multiple_choice/createQuestionBankMultipleChoice [post]
+// @Router /questionBankMultipleChoice/createQuestionBankMultipleChoice [post]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) CreateQuestionBankMultipleChoice(c *gin.Context) {
 	var questionBank_multiple_choice questionBank.MultipleChoice
 	_ = c.ShouldBindJSON(&questionBank_multiple_choice)
@@ -44,7 +44,7 @@ func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) CreateQues
 // @Produce application/json
 // @Param data body questionBank.MultipleChoice true "删除QuestionBankMultipleChoice"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /questionBank_multiple_choice/deleteQuestionBankMultipleChoice [delete]
+// @Router /questionBankMultipleChoice/deleteQuestionBankMultipleChoice [delete]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) DeleteQuestionBankMultipleChoice(c *gin.Context) {
 	var questionBank_multiple_choice questionBank.MultipleChoice
 	_ = c.ShouldBindJSON(&questionBank_multiple_choice)
@@ -64,7 +64,7 @@ func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) DeleteQues
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除QuestionBankMultipleChoice"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /questionBank_multiple_choice/deleteQuestionBankMultipleChoiceByIds [delete]
+// @Router /questionBankMultipleChoice/deleteQuestionBankMultipleChoiceByIds [delete]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) DeleteQuestionBankMultipleChoiceByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
@@ -84,7 +84,7 @@ func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) DeleteQues
 // @Produce application/json
 // @Param data body questionBank.MultipleChoice true "更新QuestionBankMultipleChoice"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /questionBank_multiple_choice/updateQuestionBankMultipleChoice [put]
+// @Router /questionBankMultipleChoice/updateQuestionBankMultipleChoice [put]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) UpdateQuestionBankMultipleChoice(c *gin.Context) {
 	var questionBank_multiple_choice questionBank.MultipleChoice
 	_ = c.ShouldBindJSON(&questionBank_multiple_choice)
@@ -104,7 +104,7 @@ func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) UpdateQues
 // @Produce application/json
 // @Param data query questionBank.MultipleChoice true "用id查询QuestionBankMultipleChoice"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /questionBank_multiple_choice/findQuestionBankMultipleChoice [get]
+// @Router /questionBankMultipleChoice/findQuestionBankMultipleChoice [get]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) FindQuestionBankMultipleChoice(c *gin.Context) {
 	var questionBank_multiple_choice questionBank.MultipleChoice
 	_ = c.ShouldBindQuery(&questionBank_multiple_choice)
@@ -124,7 +124,7 @@ func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) FindQuesti
 // @Produce application/json
 // @Param data query questionBankReq.QuestionBankMultipleChoiceSearch true "分页获取QuestionBankMultipleChoice列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_multiple_choice/getQuestionBankMultipleChoiceList [get]
+// @Router /questionBankMultipleChoice/getQuestionBankMultipleChoiceList [get]
 func (questionBank_multiple_choiceApi *QuestionBankMultipleChoiceApi) GetQuestionBankMultipleChoiceList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankMultipleChoiceSearch
 	_ = c.ShouldBindQuery(&pageInfo)

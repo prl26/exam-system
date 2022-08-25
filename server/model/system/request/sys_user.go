@@ -1,14 +1,14 @@
 package request
 
-import model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+import model "exam-system/model/system"
 
 // User register structure
 type Register struct {
-	Username     string `json:"userName"`
-	Password     string `json:"passWord"`
-	NickName     string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	Username string `json:"userName"`
+	Password string `json:"passWord"`
+	NickName string `json:"nickName" gorm:"default:'QMPlusUser'"`
 	//HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
-	AuthorityId  uint   `json:"authorityId" gorm:"default:888"`
+	AuthorityId uint `json:"authorityId" gorm:"default:888"`
 	//Enable       int    `json:"enable"`
 	//AuthorityIds []uint `json:"authorityIds"`
 }

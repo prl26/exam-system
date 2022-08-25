@@ -2,14 +2,14 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // QuestionBankProgrammCase 结构体
 type ProgrammCase struct {
 	global.GVA_MODEL
 	ProgrammLimit
-	ProgrammId string `json:"programmId" form:"programmId" gorm:"column:programm_id;comment:;"`
+	ProgrammId *int   `json:"programmId" form:"programmId" gorm:"column:programm_id;comment:;"`
 	Name       string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Score      *int   `json:"score" form:"score" gorm:"column:score;comment:;"`
 	LanguageId *int   `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`

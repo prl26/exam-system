@@ -2,7 +2,7 @@ package system
 
 import (
 	"errors"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 	"go/token"
 	"strings"
 )

@@ -1,8 +1,8 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ResourcesTestRouter) InitResourcesTestRouter(Router *gin.RouterGroup) {
 	resourcesTestRouterWithoutRecord := Router.Group("resourcesTest")
 	var resourcesTestApi = v1.ApiGroupApp.LessondataApiGroup.ResourcesTestApi
 	{
-		resourcesTestRouter.POST("createResourcesTest", resourcesTestApi.CreateResourcesTest)   // 新建ResourcesTest
-		resourcesTestRouter.DELETE("deleteResourcesTest", resourcesTestApi.DeleteResourcesTest) // 删除ResourcesTest
+		resourcesTestRouter.POST("createResourcesTest", resourcesTestApi.CreateResourcesTest)             // 新建ResourcesTest
+		resourcesTestRouter.DELETE("deleteResourcesTest", resourcesTestApi.DeleteResourcesTest)           // 删除ResourcesTest
 		resourcesTestRouter.DELETE("deleteResourcesTestByIds", resourcesTestApi.DeleteResourcesTestByIds) // 批量删除ResourcesTest
-		resourcesTestRouter.PUT("updateResourcesTest", resourcesTestApi.UpdateResourcesTest)    // 更新ResourcesTest
+		resourcesTestRouter.PUT("updateResourcesTest", resourcesTestApi.UpdateResourcesTest)              // 更新ResourcesTest
 	}
 	{
-		resourcesTestRouterWithoutRecord.GET("findResourcesTest", resourcesTestApi.FindResourcesTest)        // 根据ID获取ResourcesTest
-		resourcesTestRouterWithoutRecord.GET("getResourcesTestList", resourcesTestApi.GetResourcesTestList)  // 获取ResourcesTest列表
+		resourcesTestRouterWithoutRecord.GET("findResourcesTest", resourcesTestApi.FindResourcesTest)       // 根据ID获取ResourcesTest
+		resourcesTestRouterWithoutRecord.GET("getResourcesTestList", resourcesTestApi.GetResourcesTestList) // 获取ResourcesTest列表
 	}
 }

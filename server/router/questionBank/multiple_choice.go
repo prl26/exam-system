@@ -1,8 +1,8 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,8 +11,8 @@ type QuestionBankMultipleChoiceRouter struct {
 
 // InitQuestionBankMultipleChoiceRouter 初始化 MultipleChoice 路由信息
 func (s *QuestionBankMultipleChoiceRouter) InitQuestionBankMultipleChoiceRouter(Router *gin.RouterGroup) {
-	questionBank_multiple_choiceRouter := Router.Group("questionBank_multiple_choice").Use(middleware.OperationRecord())
-	questionBank_multiple_choiceRouterWithoutRecord := Router.Group("questionBank_multiple_choice")
+	questionBank_multiple_choiceRouter := Router.Group("questionBankMultipleChoice").Use(middleware.OperationRecord())
+	questionBank_multiple_choiceRouterWithoutRecord := Router.Group("questionBankMultipleChoice")
 	var questionBank_multiple_choiceApi = v1.ApiGroupApp.QuestionBankApiGroup.QuestionBankMultipleChoiceApi
 	{
 		questionBank_multiple_choiceRouter.POST("createQuestionBankMultipleChoice", questionBank_multiple_choiceApi.CreateQuestionBankMultipleChoice)             // 新建QuestionBankMultipleChoice

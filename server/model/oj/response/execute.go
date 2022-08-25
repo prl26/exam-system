@@ -1,6 +1,6 @@
 package response
 
-import "github.com/flipped-aurora/gin-vue-admin/server/model/oj"
+import "exam-system/model/oj"
 
 /**
 

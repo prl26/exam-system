@@ -1,8 +1,8 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ChapterRouter) InitChapterRouter(Router *gin.RouterGroup) {
 	chapterRouterWithoutRecord := Router.Group("chapter")
 	var chapterApi = v1.ApiGroupApp.BasicdataApiGroup.ChapterApi
 	{
-		chapterRouter.POST("createChapter", chapterApi.CreateChapter)   // 新建Chapter
-		chapterRouter.DELETE("deleteChapter", chapterApi.DeleteChapter) // 删除Chapter
+		chapterRouter.POST("createChapter", chapterApi.CreateChapter)             // 新建Chapter
+		chapterRouter.DELETE("deleteChapter", chapterApi.DeleteChapter)           // 删除Chapter
 		chapterRouter.DELETE("deleteChapterByIds", chapterApi.DeleteChapterByIds) // 批量删除Chapter
-		chapterRouter.PUT("updateChapter", chapterApi.UpdateChapter)    // 更新Chapter
+		chapterRouter.PUT("updateChapter", chapterApi.UpdateChapter)              // 更新Chapter
 	}
 	{
-		chapterRouterWithoutRecord.GET("findChapter", chapterApi.FindChapter)        // 根据ID获取Chapter
-		chapterRouterWithoutRecord.GET("getChapterList", chapterApi.GetChapterList)  // 获取Chapter列表
+		chapterRouterWithoutRecord.GET("findChapter", chapterApi.FindChapter)       // 根据ID获取Chapter
+		chapterRouterWithoutRecord.GET("getChapterList", chapterApi.GetChapterList) // 获取Chapter列表
 	}
 }

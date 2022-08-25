@@ -1,10 +1,10 @@
 package multipleChoice
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
+	"exam-system/core"
+	"exam-system/global"
+	"exam-system/initialize"
+	"exam-system/model/questionBank"
 	"log"
 	"testing"
 )

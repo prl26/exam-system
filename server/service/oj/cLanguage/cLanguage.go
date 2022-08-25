@@ -2,12 +2,12 @@ package cLanguage
 
 import (
 	"context"
+	"exam-system/global"
+	"exam-system/model/oj"
+	ojResp "exam-system/model/oj/response"
+	"exam-system/model/questionBank"
+	"exam-system/pb"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/oj"
-	ojResp "github.com/flipped-aurora/gin-vue-admin/server/model/oj/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	"github.com/flipped-aurora/gin-vue-admin/server/pb"
 	"strconv"
 	"time"
 )

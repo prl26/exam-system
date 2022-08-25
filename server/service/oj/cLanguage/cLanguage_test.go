@@ -1,9 +1,9 @@
 package cLanguage
 
 import (
+	"exam-system/model/questionBank"
+	"exam-system/pb"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	"github.com/flipped-aurora/gin-vue-admin/server/pb"
 	"google.golang.org/grpc"
 	"log"
 	"testing"

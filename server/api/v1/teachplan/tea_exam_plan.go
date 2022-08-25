@@ -1,21 +1,20 @@
 package teachplan
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/teachplan"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    teachplanReq "github.com/flipped-aurora/gin-vue-admin/server/model/teachplan/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/teachplan"
+	teachplanReq "exam-system/model/teachplan/request"
+	"exam-system/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type ExamPlanApi struct {
 }
 
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
-
 
 // CreateExamPlan 创建ExamPlan
 // @Tags ExamPlan
@@ -30,7 +29,7 @@ func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplan.ExamPlan
 	_ = c.ShouldBindJSON(&examPlan)
 	if err := examPlanService.CreateExamPlan(examPlan); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (examPlanApi *ExamPlanApi) DeleteExamPlan(c *gin.Context) {
 	var examPlan teachplan.ExamPlan
 	_ = c.ShouldBindJSON(&examPlan)
 	if err := examPlanService.DeleteExamPlan(examPlan); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (examPlanApi *ExamPlanApi) DeleteExamPlan(c *gin.Context) {
 // @Router /examPlan/deleteExamPlanByIds [delete]
 func (examPlanApi *ExamPlanApi) DeleteExamPlanByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := examPlanService.DeleteExamPlanByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (examPlanApi *ExamPlanApi) UpdateExamPlan(c *gin.Context) {
 	var examPlan teachplan.ExamPlan
 	_ = c.ShouldBindJSON(&examPlan)
 	if err := examPlanService.UpdateExamPlan(examPlan); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (examPlanApi *ExamPlanApi) FindExamPlan(c *gin.Context) {
 	var examPlan teachplan.ExamPlan
 	_ = c.ShouldBindQuery(&examPlan)
 	if reexamPlan, err := examPlanService.GetExamPlan(examPlan.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reexamPlan": reexamPlan}, c)
@@ -130,14 +129,14 @@ func (examPlanApi *ExamPlanApi) GetExamPlanList(c *gin.Context) {
 	var pageInfo teachplanReq.ExamPlanSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

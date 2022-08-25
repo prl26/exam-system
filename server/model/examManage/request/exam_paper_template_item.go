@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/examManage"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/common/request"
+	"exam-system/model/examManage"
 )
 
-type PaperTemplateItemSearch struct{
-    examManage.PaperTemplateItem
-    request.PageInfo
+type PaperTemplateItemSearch struct {
+	examManage.PaperTemplateItem
+	request.PageInfo
 }

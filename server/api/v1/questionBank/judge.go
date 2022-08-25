@@ -1,13 +1,13 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,7 +25,7 @@ var questionBank_judgeService = service.ServiceGroupApp.QuestionBankServiceGroup
 // @Produce application/json
 // @Param data body questionBank.Judge true "创建QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_judge/createQuestionBankJudge [post]
+// @Router /questionBankJudge/createQuestionBankJudge [post]
 func (questionBank_judgeApi *QuestionBankJudgeApi) CreateQuestionBankJudge(c *gin.Context) {
 	var questionBank_judge questionBank.Judge
 	_ = c.ShouldBindJSON(&questionBank_judge)
@@ -53,7 +53,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) CreateQuestionBankJudge(c *gi
 // @Produce application/json
 // @Param data body questionBank.Judge true "删除QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /questionBank_judge/deleteQuestionBankJudge [delete]
+// @Router /questionBankJudge/deleteQuestionBankJudge [delete]
 func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudge(c *gin.Context) {
 	var questionBank_judge questionBank.Judge
 	_ = c.ShouldBindJSON(&questionBank_judge)
@@ -73,7 +73,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudge(c *gi
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /questionBank_judge/deleteQuestionBankJudgeByIds [delete]
+// @Router /questionBankJudge/deleteQuestionBankJudgeByIds [delete]
 func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudgeByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
@@ -93,7 +93,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) DeleteQuestionBankJudgeByIds(
 // @Produce application/json
 // @Param data body questionBank.Judge true "更新QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /questionBank_judge/updateQuestionBankJudge [put]
+// @Router /questionBankJudge/updateQuestionBankJudge [put]
 func (questionBank_judgeApi *QuestionBankJudgeApi) UpdateQuestionBankJudge(c *gin.Context) {
 	var questionBank_judge questionBank.Judge
 	_ = c.ShouldBindJSON(&questionBank_judge)
@@ -121,7 +121,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) UpdateQuestionBankJudge(c *gi
 // @Produce application/json
 // @Param data query questionBank.Judge true "用id查询QuestionBankJudge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /questionBank_judge/findQuestionBankJudge [get]
+// @Router /questionBankJudge/findQuestionBankJudge [get]
 func (questionBank_judgeApi *QuestionBankJudgeApi) FindQuestionBankJudge(c *gin.Context) {
 	var questionBank_judge questionBank.Judge
 	_ = c.ShouldBindQuery(&questionBank_judge)
@@ -141,7 +141,7 @@ func (questionBank_judgeApi *QuestionBankJudgeApi) FindQuestionBankJudge(c *gin.
 // @Produce application/json
 // @Param data query questionBankReq.QuestionBankJudgeSearch true "分页获取QuestionBankJudge列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_judge/getQuestionBankJudgeList [get]
+// @Router /questionBankJudge/getQuestionBankJudgeList [get]
 func (questionBank_judgeApi *QuestionBankJudgeApi) GetQuestionBankJudgeList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankJudgeSearch
 	_ = c.ShouldBindQuery(&pageInfo)

@@ -1,8 +1,8 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *TermRouter) InitTermRouter(Router *gin.RouterGroup) {
 	termRouterWithoutRecord := Router.Group("term")
 	var termApi = v1.ApiGroupApp.BasicdataApiGroup.TermApi
 	{
-		termRouter.POST("createTerm", termApi.CreateTerm)   // 新建Term
-		termRouter.DELETE("deleteTerm", termApi.DeleteTerm) // 删除Term
+		termRouter.POST("createTerm", termApi.CreateTerm)             // 新建Term
+		termRouter.DELETE("deleteTerm", termApi.DeleteTerm)           // 删除Term
 		termRouter.DELETE("deleteTermByIds", termApi.DeleteTermByIds) // 批量删除Term
-		termRouter.PUT("updateTerm", termApi.UpdateTerm)    // 更新Term
+		termRouter.PUT("updateTerm", termApi.UpdateTerm)              // 更新Term
 	}
 	{
-		termRouterWithoutRecord.GET("findTerm", termApi.FindTerm)        // 根据ID获取Term
-		termRouterWithoutRecord.GET("getTermList", termApi.GetTermList)  // 获取Term列表
+		termRouterWithoutRecord.GET("findTerm", termApi.FindTerm)       // 根据ID获取Term
+		termRouterWithoutRecord.GET("getTermList", termApi.GetTermList) // 获取Term列表
 	}
 }

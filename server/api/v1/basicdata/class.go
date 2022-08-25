@@ -1,13 +1,13 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -16,7 +16,6 @@ type ClassApi struct {
 }
 
 var classService = service.ServiceGroupApp.BasicdataApiGroup.ClassService
-
 
 // CreateClass 创建Class
 // @Tags Class
@@ -30,16 +29,16 @@ var classService = service.ServiceGroupApp.BasicdataApiGroup.ClassService
 func (classApi *ClassApi) CreateClass(c *gin.Context) {
 	var class basicdata.Class
 	_ = c.ShouldBindJSON(&class)
-    verify := utils.Rules{
-        "Name":{utils.NotEmpty()},
-        "Professional_id":{utils.NotEmpty()},
-    }
+	verify := utils.Rules{
+		"Name":            {utils.NotEmpty()},
+		"Professional_id": {utils.NotEmpty()},
+	}
 	if err := utils.Verify(class, verify); err != nil {
-    		response.FailWithMessage(err.Error(), c)
-    		return
-    	}
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := classService.CreateClass(class); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -59,7 +58,7 @@ func (classApi *ClassApi) DeleteClass(c *gin.Context) {
 	var class basicdata.Class
 	_ = c.ShouldBindJSON(&class)
 	if err := classService.DeleteClass(class); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -77,9 +76,9 @@ func (classApi *ClassApi) DeleteClass(c *gin.Context) {
 // @Router /class/deleteClassByIds [delete]
 func (classApi *ClassApi) DeleteClassByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := classService.DeleteClassByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -98,16 +97,16 @@ func (classApi *ClassApi) DeleteClassByIds(c *gin.Context) {
 func (classApi *ClassApi) UpdateClass(c *gin.Context) {
 	var class basicdata.Class
 	_ = c.ShouldBindJSON(&class)
-      verify := utils.Rules{
-          "Name":{utils.NotEmpty()},
-          "Professional_id":{utils.NotEmpty()},
-      }
-    if err := utils.Verify(class, verify); err != nil {
-      	response.FailWithMessage(err.Error(), c)
-      	return
-     }
+	verify := utils.Rules{
+		"Name":            {utils.NotEmpty()},
+		"Professional_id": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(class, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := classService.UpdateClass(class); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -127,7 +126,7 @@ func (classApi *ClassApi) FindClass(c *gin.Context) {
 	var class basicdata.Class
 	_ = c.ShouldBindQuery(&class)
 	if reclass, err := classService.GetClass(class.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reclass": reclass}, c)
@@ -147,14 +146,14 @@ func (classApi *ClassApi) GetClassList(c *gin.Context) {
 	var pageInfo basicdataReq.ClassSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := classService.GetClassInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

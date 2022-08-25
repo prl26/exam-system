@@ -7,9 +7,9 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	"exam-system/model/basicdata/request"
 )
 
 type MultiTableService struct {

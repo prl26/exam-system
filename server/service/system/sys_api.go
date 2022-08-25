@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/system"
 
 	"gorm.io/gorm"
 )

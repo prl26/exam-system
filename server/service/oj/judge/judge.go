@@ -1,9 +1,9 @@
 package judge
 
 import (
+	"exam-system/global"
+	"exam-system/model/questionBank"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
 )
 
 /**

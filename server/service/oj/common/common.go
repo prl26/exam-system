@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
+	"exam-system/global"
+	"exam-system/model/questionBank"
 )
 
 /**

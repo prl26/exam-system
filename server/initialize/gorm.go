@@ -1,15 +1,15 @@
 package initialize
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"exam-system/global"
+	"exam-system/model/questionBank"
+	"exam-system/model/system"
 	"os"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/examManage"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/lessondata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/teachplan"
+	"exam-system/model/basicdata"
+	"exam-system/model/examManage"
+	"exam-system/model/lessondata"
+	"exam-system/model/teachplan"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

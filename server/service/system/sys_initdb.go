@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"exam-system/global"
+	"exam-system/model/system/request"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"gorm.io/gorm"
 	"sort"
 )

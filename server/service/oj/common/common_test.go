@@ -1,10 +1,10 @@
 package common
 
 import (
+	"exam-system/core"
+	"exam-system/global"
+	"exam-system/initialize"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"log"
 	"testing"
 )

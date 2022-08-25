@@ -1,8 +1,8 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ResourceRouter) InitResourceRouter(Router *gin.RouterGroup) {
 	resourceRouterWithoutRecord := Router.Group("resource")
 	var resourceApi = v1.ApiGroupApp.BasicdataApiGroup.ResourceApi
 	{
-		resourceRouter.POST("createResource", resourceApi.CreateResource)   // 新建Resource
-		resourceRouter.DELETE("deleteResource", resourceApi.DeleteResource) // 删除Resource
+		resourceRouter.POST("createResource", resourceApi.CreateResource)             // 新建Resource
+		resourceRouter.DELETE("deleteResource", resourceApi.DeleteResource)           // 删除Resource
 		resourceRouter.DELETE("deleteResourceByIds", resourceApi.DeleteResourceByIds) // 批量删除Resource
-		resourceRouter.PUT("updateResource", resourceApi.UpdateResource)    // 更新Resource
+		resourceRouter.PUT("updateResource", resourceApi.UpdateResource)              // 更新Resource
 	}
 	{
-		resourceRouterWithoutRecord.GET("findResource", resourceApi.FindResource)        // 根据ID获取Resource
-		resourceRouterWithoutRecord.GET("getResourceList", resourceApi.GetResourceList)  // 获取Resource列表
+		resourceRouterWithoutRecord.GET("findResource", resourceApi.FindResource)       // 根据ID获取Resource
+		resourceRouterWithoutRecord.GET("getResourceList", resourceApi.GetResourceList) // 获取Resource列表
 	}
 }

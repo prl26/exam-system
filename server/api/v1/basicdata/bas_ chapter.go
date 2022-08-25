@@ -1,21 +1,20 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type ChapterApi struct {
 }
 
 var chapterService = service.ServiceGroupApp.BasicdataApiGroup.ChapterService
-
 
 // CreateChapter 创建Chapter
 // @Tags Chapter
@@ -30,7 +29,7 @@ func (chapterApi *ChapterApi) CreateChapter(c *gin.Context) {
 	var chapter basicdata.Chapter
 	_ = c.ShouldBindJSON(&chapter)
 	if err := chapterService.CreateChapter(chapter); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (chapterApi *ChapterApi) DeleteChapter(c *gin.Context) {
 	var chapter basicdata.Chapter
 	_ = c.ShouldBindJSON(&chapter)
 	if err := chapterService.DeleteChapter(chapter); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (chapterApi *ChapterApi) DeleteChapter(c *gin.Context) {
 // @Router /chapter/deleteChapterByIds [delete]
 func (chapterApi *ChapterApi) DeleteChapterByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := chapterService.DeleteChapterByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (chapterApi *ChapterApi) UpdateChapter(c *gin.Context) {
 	var chapter basicdata.Chapter
 	_ = c.ShouldBindJSON(&chapter)
 	if err := chapterService.UpdateChapter(chapter); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (chapterApi *ChapterApi) FindChapter(c *gin.Context) {
 	var chapter basicdata.Chapter
 	_ = c.ShouldBindQuery(&chapter)
 	if rechapter, err := chapterService.GetChapter(chapter.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"rechapter": rechapter}, c)
@@ -130,14 +129,14 @@ func (chapterApi *ChapterApi) GetChapterList(c *gin.Context) {
 	var pageInfo basicdataReq.ChapterSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := chapterService.GetChapterInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

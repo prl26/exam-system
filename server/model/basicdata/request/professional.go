@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/basicdata"
+	"exam-system/model/common/request"
 )
 
-type ProfessionalSearch struct{
-    basicdata.Professional
-    request.PageInfo
+type ProfessionalSearch struct {
+	basicdata.Professional
+	request.PageInfo
 }

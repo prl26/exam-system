@@ -1,16 +1,15 @@
 package global
 
 import (
+	"github.com/songzhibin97/gkit/cache/singleflight"
 	"sync"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
+	"exam-system/utils/timer"
 	"github.com/songzhibin97/gkit/cache/local_cache"
-
-	"golang.org/x/sync/singleflight"
 
 	"go.uber.org/zap"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
+	"exam-system/config"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"

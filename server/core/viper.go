@@ -1,9 +1,9 @@
 package core
 
 import (
+	"exam-system/core/internal"
 	"flag"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
 	"github.com/gin-gonic/gin"
 	"os"
 	"path/filepath"
@@ -11,8 +11,8 @@ import (
 
 	"github.com/songzhibin97/gkit/cache/local_cache"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	_ "github.com/flipped-aurora/gin-vue-admin/server/packfile"
+	"exam-system/global"
+	_ "exam-system/packfile"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )

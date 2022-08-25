@@ -1,6 +1,6 @@
 package request
 
-import "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
+import "exam-system/model/questionBank"
 
 /**
 

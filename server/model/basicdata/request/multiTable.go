@@ -7,7 +7,7 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/common/request"
 )
 
 // 接收 教学班id 和学生id 的结构体

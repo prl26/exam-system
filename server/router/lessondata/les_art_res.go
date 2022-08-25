@@ -1,8 +1,8 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ArticleResourcesRouter) InitArticleResourcesRouter(Router *gin.RouterGr
 	articleResourcesRouterWithoutRecord := Router.Group("articleResources")
 	var articleResourcesApi = v1.ApiGroupApp.LessondataApiGroup.ArticleResourcesApi
 	{
-		articleResourcesRouter.POST("createArticleResources", articleResourcesApi.CreateArticleResources)   // 新建ArticleResources
-		articleResourcesRouter.DELETE("deleteArticleResources", articleResourcesApi.DeleteArticleResources) // 删除ArticleResources
+		articleResourcesRouter.POST("createArticleResources", articleResourcesApi.CreateArticleResources)             // 新建ArticleResources
+		articleResourcesRouter.DELETE("deleteArticleResources", articleResourcesApi.DeleteArticleResources)           // 删除ArticleResources
 		articleResourcesRouter.DELETE("deleteArticleResourcesByIds", articleResourcesApi.DeleteArticleResourcesByIds) // 批量删除ArticleResources
-		articleResourcesRouter.PUT("updateArticleResources", articleResourcesApi.UpdateArticleResources)    // 更新ArticleResources
+		articleResourcesRouter.PUT("updateArticleResources", articleResourcesApi.UpdateArticleResources)              // 更新ArticleResources
 	}
 	{
-		articleResourcesRouterWithoutRecord.GET("findArticleResources", articleResourcesApi.FindArticleResources)        // 根据ID获取ArticleResources
-		articleResourcesRouterWithoutRecord.GET("getArticleResourcesList", articleResourcesApi.GetArticleResourcesList)  // 获取ArticleResources列表
+		articleResourcesRouterWithoutRecord.GET("findArticleResources", articleResourcesApi.FindArticleResources)       // 根据ID获取ArticleResources
+		articleResourcesRouterWithoutRecord.GET("getArticleResourcesList", articleResourcesApi.GetArticleResourcesList) // 获取ArticleResources列表
 	}
 }
