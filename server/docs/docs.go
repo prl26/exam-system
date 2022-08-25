@@ -3117,298 +3117,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/customer/customer": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaCustomer"
-                ],
-                "summary": "获取单一客户信息",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "客户名",
-                        "name": "customerName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "客户手机号",
-                        "name": "customerPhoneData",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "管理角色ID",
-                        "name": "sysUserAuthorityID",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "管理ID",
-                        "name": "sysUserId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "获取单一客户信息,返回包括客户详情",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.ExaCustomerResponse"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaCustomer"
-                ],
-                "summary": "更新客户信息",
-                "parameters": [
-                    {
-                        "description": "客户ID, 客户信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExaCustomer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "更新客户信息",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaCustomer"
-                ],
-                "summary": "创建客户",
-                "parameters": [
-                    {
-                        "description": "客户用户名, 客户手机号码",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExaCustomer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "创建客户",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaCustomer"
-                ],
-                "summary": "删除客户",
-                "parameters": [
-                    {
-                        "description": "客户ID",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExaCustomer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "删除客户",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/customer/customerList": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaCustomer"
-                ],
-                "summary": "分页获取权限客户列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "关键字",
-                        "name": "keyword",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页大小",
-                        "name": "pageSize",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "分页获取权限客户列表,返回包括列表,总数,页码,每页数量",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.PageResult"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/email/emailTest": {
             "post": {
                 "security": [
@@ -4141,459 +3849,6 @@ const docTemplate = `{
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/excel/downloadTemplate": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "excel"
-                ],
-                "summary": "下载模板",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "模板名称",
-                        "name": "fileName",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/excel/exportExcel": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/octet-stream"
-                ],
-                "tags": [
-                    "excel"
-                ],
-                "summary": "导出Excel",
-                "parameters": [
-                    {
-                        "description": "导出Excel文件信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExcelInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            }
-        },
-        "/excel/importExcel": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "excel"
-                ],
-                "summary": "导入Excel文件",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "导入Excel文件",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "导入Excel文件",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/excel/loadExcel": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "excel"
-                ],
-                "summary": "加载Excel数据",
-                "responses": {
-                    "200": {
-                        "description": "加载Excel数据,返回包括列表,总数,页码,每页数量",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.PageResult"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/breakpointContinue": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "断点续传到服务器",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "an example for breakpoint resume, 断点续传示例",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "断点续传到服务器",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/deleteFile": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "删除文件",
-                "parameters": [
-                    {
-                        "description": "传入文件里面id即可",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExaFileUploadAndDownload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "删除文件",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/findFile": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "创建文件",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "上传文件完成",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "创建文件,返回包括文件路径",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.FilePathResponse"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/getFileList": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "分页文件列表",
-                "parameters": [
-                    {
-                        "description": "页码, 每页大小",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.PageInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "分页文件列表,返回包括列表,总数,页码,每页数量",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.PageResult"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/removeChunk": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "删除切片",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "删除缓存切片",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "删除切片",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/fileUploadAndDownload/upload": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ExaFileUploadAndDownload"
-                ],
-                "summary": "上传文件示例",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "上传文件示例",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "上传文件示例,返回包括文件详情",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.ExaFileResponse"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -6168,12 +5423,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -6253,12 +5513,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "questionId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "question_type",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -6454,7 +5719,7 @@ const docTemplate = `{
                 "summary": "用id查询PaperTemplateItem",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "name": "chapter",
                         "in": "query"
                     },
@@ -6462,11 +5727,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "difficulty",
                         "in": "query"
                     },
                     {
@@ -6483,6 +5743,11 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -6531,7 +5796,7 @@ const docTemplate = `{
                 "summary": "分页获取PaperTemplateItem列表",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "name": "chapter",
                         "in": "query"
                     },
@@ -6539,11 +5804,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "difficulty",
                         "in": "query"
                     },
                     {
@@ -6578,6 +5838,11 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -6929,6 +6194,310 @@ const docTemplate = `{
                 }
             }
         },
+        "/programmLanguageMerge/createProgrammLanguageMerge": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "创建ProgrammLanguageMerge",
+                "parameters": [
+                    {
+                        "description": "创建ProgrammLanguageMerge",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammLanguageMerge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/programmLanguageMerge/deleteProgrammLanguageMerge": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "删除ProgrammLanguageMerge",
+                "parameters": [
+                    {
+                        "description": "删除ProgrammLanguageMerge",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammLanguageMerge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/programmLanguageMerge/deleteProgrammLanguageMergeByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "批量删除ProgrammLanguageMerge",
+                "parameters": [
+                    {
+                        "description": "批量删除ProgrammLanguageMerge",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/programmLanguageMerge/findProgrammLanguageMerge": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "用id查询ProgrammLanguageMerge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "defaultCode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "programmId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "referenceAnswer",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/programmLanguageMerge/getProgrammLanguageMergeList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "分页获取ProgrammLanguageMerge列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "defaultCode",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "programmId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "referenceAnswer",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/programmLanguageMerge/updateProgrammLanguageMerge": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProgrammLanguageMerge"
+                ],
+                "summary": "更新ProgrammLanguageMerge",
+                "parameters": [
+                    {
+                        "description": "更新ProgrammLanguageMerge",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/questionBank.ProgrammLanguageMerge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge": {
             "post": {
                 "security": [
@@ -7063,7 +6632,17 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "name": "CanExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -7081,11 +6660,6 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "主键ID",
                         "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
@@ -7135,7 +6709,17 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "name": "CanExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
                         "in": "query"
                     },
                     {
@@ -7159,11 +6743,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "关键字",
                         "name": "keyword",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "knowledgeId",
                         "in": "query"
                     },
                     {
@@ -7393,6 +6972,16 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "name": "title",
                         "in": "query"
@@ -7465,6 +7054,16 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7698,12 +7297,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "input_type",
+                        "name": "inputType",
                         "in": "query"
                     },
                     {
                         "type": "integer",
                         "name": "languageId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "memoryLimit",
                         "in": "query"
                     },
                     {
@@ -7713,7 +7317,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "out_type",
+                        "name": "outType",
                         "in": "query"
                     },
                     {
@@ -7728,7 +7332,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "programm_id",
+                        "name": "programmId",
                         "in": "query"
                     },
                     {
@@ -7820,7 +7424,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "input_type",
+                        "name": "inputType",
                         "in": "query"
                     },
                     {
@@ -7835,13 +7439,18 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "memoryLimit",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "name": "name",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "out_type",
+                        "name": "outType",
                         "in": "query"
                     },
                     {
@@ -7868,7 +7477,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "name": "programm_id",
+                        "name": "programmId",
                         "in": "query"
                     },
                     {
@@ -8096,6 +7705,16 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "更新时间",
                         "name": "updatedAt",
@@ -8168,6 +7787,16 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -8386,7 +8015,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "type",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -8471,7 +8110,17 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "type",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -8680,12 +8329,22 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "isRight",
+                        "name": "multipleChoiceId",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "name": "multipleChoiceId",
+                        "name": "orders",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -8741,11 +8400,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "name": "isRight",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
                         "description": "关键字",
                         "name": "keyword",
@@ -8758,6 +8412,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
+                        "name": "orders",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "页码",
                         "name": "page",
                         "in": "query"
@@ -8766,6 +8425,16 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -12988,7 +12657,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/teachClassStudent/createTeachClassStudent": {
+        "/teachClassStudent/deleteTeachClassStudent": {
             "post": {
                 "security": [
                     {
@@ -13004,154 +12673,21 @@ const docTemplate = `{
                 "tags": [
                     "TeachClassStudent"
                 ],
-                "summary": "创建TeachClassStudent",
+                "summary": "教学班 中移除学生",
                 "parameters": [
                     {
-                        "description": "创建TeachClassStudent",
+                        "description": "移除TeachClassStudent",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/basicdata.TeachClassStudent"
+                            "$ref": "#/definitions/request.StuTeachClass"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/teachClassStudent/deleteTeachClassStudent": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "TeachClassStudent"
-                ],
-                "summary": "删除TeachClassStudent",
-                "parameters": [
-                    {
-                        "description": "删除TeachClassStudent",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basicdata.TeachClassStudent"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/teachClassStudent/deleteTeachClassStudentByIds": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "TeachClassStudent"
-                ],
-                "summary": "批量删除TeachClassStudent",
-                "parameters": [
-                    {
-                        "description": "批量删除TeachClassStudent",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/teachClassStudent/findTeachClassStudent": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "TeachClassStudent"
-                ],
-                "summary": "用id查询TeachClassStudent",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "studentId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "teachClassId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -13175,20 +12711,8 @@ const docTemplate = `{
                 "tags": [
                     "TeachClassStudent"
                 ],
-                "summary": "分页获取TeachClassStudent列表",
+                "summary": "获取教学班中 学生列表",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
                     {
                         "type": "string",
                         "description": "关键字",
@@ -13209,18 +12733,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "studentId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
                         "name": "teachClassId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
                         "in": "query"
                     }
                 ],
@@ -13250,10 +12763,10 @@ const docTemplate = `{
                 "tags": [
                     "TeachClassStudent"
                 ],
-                "summary": "初始化关联 学生与教学班",
+                "summary": "教学班中 添加学生",
                 "parameters": [
                     {
-                        "description": "创建TeachClassStudent",
+                        "description": "添加TeachClassStudent",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -13265,44 +12778,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/teachClassStudent/updateTeachClassStudent": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "TeachClassStudent"
-                ],
-                "summary": "更新TeachClassStudent",
-                "parameters": [
-                    {
-                        "description": "更新TeachClassStudent",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/basicdata.TeachClassStudent"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -14562,6 +14037,12 @@ const docTemplate = `{
                 "sex": {
                     "type": "string"
                 },
+                "teachClass": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/basicdata.TeachClass"
+                    }
+                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
@@ -14600,33 +14081,16 @@ const docTemplate = `{
                 "procedureExamProportion": {
                     "type": "integer"
                 },
+                "student": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/basicdata.Student"
+                    }
+                },
                 "teacherId": {
                     "type": "integer"
                 },
                 "termId": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "basicdata.TeachClassStudent": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "studentId": {
-                    "type": "integer"
-                },
-                "teachClassId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -15351,10 +14815,13 @@ const docTemplate = `{
                 "paperId": {
                     "type": "integer"
                 },
+                "problemType": {
+                    "type": "integer"
+                },
                 "questionId": {
                     "type": "integer"
                 },
-                "question_type": {
+                "questionType": {
                     "type": "integer"
                 },
                 "score": {
@@ -15405,14 +14872,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "chapter": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
-                },
-                "difficulty": {
-                    "type": "integer"
                 },
                 "id": {
                     "description": "主键ID",
@@ -15424,6 +14888,9 @@ const docTemplate = `{
                 "problemType": {
                     "type": "integer"
                 },
+                "questionType": {
+                    "type": "integer"
+                },
                 "score": {
                     "type": "integer"
                 },
@@ -15433,155 +14900,6 @@ const docTemplate = `{
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
-                }
-            }
-        },
-        "example.ExaCustomer": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "customerName": {
-                    "description": "客户名",
-                    "type": "string"
-                },
-                "customerPhoneData": {
-                    "description": "客户手机号",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "sysUser": {
-                    "description": "管理详情",
-                    "$ref": "#/definitions/system.SysUser"
-                },
-                "sysUserAuthorityID": {
-                    "description": "管理角色ID",
-                    "type": "integer"
-                },
-                "sysUserId": {
-                    "description": "管理ID",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "example.ExaFile": {
-            "type": "object",
-            "properties": {
-                "chunkTotal": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "exaFileChunk": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/example.ExaFileChunk"
-                    }
-                },
-                "fileMd5": {
-                    "type": "string"
-                },
-                "fileName": {
-                    "type": "string"
-                },
-                "filePath": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "isFinish": {
-                    "type": "boolean"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "example.ExaFileChunk": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "exaFileID": {
-                    "type": "integer"
-                },
-                "fileChunkNumber": {
-                    "type": "integer"
-                },
-                "fileChunkPath": {
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "example.ExaFileUploadAndDownload": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "key": {
-                    "description": "编号",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "文件名",
-                    "type": "string"
-                },
-                "tag": {
-                    "description": "文件标签",
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                },
-                "url": {
-                    "description": "文件地址",
-                    "type": "string"
-                }
-            }
-        },
-        "example.ExcelInfo": {
-            "type": "object",
-            "properties": {
-                "fileName": {
-                    "description": "文件名",
-                    "type": "string"
-                },
-                "infoList": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/system.SysBaseMenu"
-                    }
                 }
             }
         },
@@ -15721,6 +15039,41 @@ const docTemplate = `{
                 }
             }
         },
+        "questionBank.ChapterMerge": {
+            "type": "object",
+            "properties": {
+                "CanExam": {
+                    "type": "integer"
+                },
+                "canPractice": {
+                    "type": "integer"
+                },
+                "chapterId": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "questionId": {
+                    "type": "integer"
+                },
+                "questionType": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "questionBank.Judge": {
             "type": "object",
             "properties": {
@@ -15738,33 +15091,7 @@ const docTemplate = `{
                 "isRight": {
                     "type": "integer"
                 },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "questionBank.ChapterMerge": {
-            "type": "object",
-            "properties": {
-                "canPractice": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "difficulty": {
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "knowledgeId": {
-                    "type": "integer"
-                },
-                "questionId": {
+                "problemType": {
                     "type": "integer"
                 },
                 "questionType": {
@@ -15796,8 +15123,14 @@ const docTemplate = `{
                 "mostOptions": {
                     "type": "integer"
                 },
-                "type": {
+                "problemType": {
                     "type": "integer"
+                },
+                "questionType": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -15819,10 +15152,16 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "isRight": {
+                "multipleChoiceId": {
                     "type": "integer"
                 },
-                "multipleChoiceId": {
+                "orders": {
+                    "type": "integer"
+                },
+                "problemType": {
+                    "type": "integer"
+                },
+                "questionType": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -15843,6 +15182,12 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "主键ID",
+                    "type": "integer"
+                },
+                "problemType": {
+                    "type": "integer"
+                },
+                "questionType": {
                     "type": "integer"
                 },
                 "title": {
@@ -15880,16 +15225,19 @@ const docTemplate = `{
                 "input": {
                     "type": "string"
                 },
-                "input_type": {
+                "inputType": {
                     "type": "integer"
                 },
                 "languageId": {
                     "type": "integer"
                 },
+                "memoryLimit": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
-                "out_type": {
+                "outType": {
                     "type": "integer"
                 },
                 "output": {
@@ -15898,7 +15246,7 @@ const docTemplate = `{
                 "procLimit": {
                     "type": "integer"
                 },
-                "programm_id": {
+                "programmId": {
                     "type": "string"
                 },
                 "score": {
@@ -15909,6 +15257,35 @@ const docTemplate = `{
                 },
                 "strictMemoryLimit": {
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "questionBank.ProgrammLanguageMerge": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "defaultCode": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "languageId": {
+                    "type": "integer"
+                },
+                "programmId": {
+                    "type": "integer"
+                },
+                "referenceAnswer": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -16212,13 +15589,13 @@ const docTemplate = `{
         "request.StuTeachClass": {
             "type": "object",
             "properties": {
-                "student_ids": {
+                "studentIds": {
                     "type": "array",
                     "items": {
                         "type": "integer"
                     }
                 },
-                "teach_class_id": {
+                "teachClassId": {
                     "type": "integer"
                 }
             }
@@ -16271,38 +15648,6 @@ const docTemplate = `{
                 "to": {
                     "description": "邮件发送给谁",
                     "type": "string"
-                }
-            }
-        },
-        "response.ExaCustomerResponse": {
-            "type": "object",
-            "properties": {
-                "customer": {
-                    "$ref": "#/definitions/example.ExaCustomer"
-                }
-            }
-        },
-        "response.ExaFileResponse": {
-            "type": "object",
-            "properties": {
-                "file": {
-                    "$ref": "#/definitions/example.ExaFileUploadAndDownload"
-                }
-            }
-        },
-        "response.FilePathResponse": {
-            "type": "object",
-            "properties": {
-                "filePath": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.FileResponse": {
-            "type": "object",
-            "properties": {
-                "file": {
-                    "$ref": "#/definitions/example.ExaFile"
                 }
             }
         },

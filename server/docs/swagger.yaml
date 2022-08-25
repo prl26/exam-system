@@ -134,6 +134,10 @@ definitions:
         type: integer
       sex:
         type: string
+      teachClass:
+        items:
+          $ref: '#/definitions/basicdata.TeachClass'
+        type: array
       updatedAt:
         description: 更新时间
         type: string
@@ -160,25 +164,13 @@ definitions:
         type: string
       procedureExamProportion:
         type: integer
+      student:
+        items:
+          $ref: '#/definitions/basicdata.Student'
+        type: array
       teacherId:
         type: integer
       termId:
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  basicdata.TeachClassStudent:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      studentId:
-        type: integer
-      teachClassId:
         type: integer
       updatedAt:
         description: 更新时间
@@ -683,9 +675,11 @@ definitions:
         type: integer
       paperId:
         type: integer
-      question_type:
+      problemType:
         type: integer
       questionId:
+        type: integer
+      questionType:
         type: integer
       score:
         type: integer
@@ -720,18 +714,18 @@ definitions:
   examManage.PaperTemplateItem:
     properties:
       chapter:
-        type: string
+        type: integer
       createdAt:
         description: 创建时间
         type: string
-      difficulty:
-        type: integer
       id:
         description: 主键ID
         type: integer
       num:
         type: integer
       problemType:
+        type: integer
+      questionType:
         type: integer
       score:
         type: integer
@@ -740,111 +734,6 @@ definitions:
       updatedAt:
         description: 更新时间
         type: string
-    type: object
-  example.ExaCustomer:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      customerName:
-        description: 客户名
-        type: string
-      customerPhoneData:
-        description: 客户手机号
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      sysUser:
-        $ref: '#/definitions/system.SysUser'
-        description: 管理详情
-      sysUserAuthorityID:
-        description: 管理角色ID
-        type: integer
-      sysUserId:
-        description: 管理ID
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  example.ExaFile:
-    properties:
-      chunkTotal:
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      exaFileChunk:
-        items:
-          $ref: '#/definitions/example.ExaFileChunk'
-        type: array
-      fileMd5:
-        type: string
-      fileName:
-        type: string
-      filePath:
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      isFinish:
-        type: boolean
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  example.ExaFileChunk:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      exaFileID:
-        type: integer
-      fileChunkNumber:
-        type: integer
-      fileChunkPath:
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  example.ExaFileUploadAndDownload:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      key:
-        description: 编号
-        type: string
-      name:
-        description: 文件名
-        type: string
-      tag:
-        description: 文件标签
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-      url:
-        description: 文件地址
-        type: string
-    type: object
-  example.ExcelInfo:
-    properties:
-      fileName:
-        description: 文件名
-        type: string
-      infoList:
-        items:
-          $ref: '#/definitions/system.SysBaseMenu'
-        type: array
     type: object
   lessondata.ArticleResources:
     properties:
@@ -940,6 +829,30 @@ definitions:
       url:
         type: string
     type: object
+  questionBank.ChapterMerge:
+    properties:
+      CanExam:
+        type: integer
+      canPractice:
+        type: integer
+      chapterId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      difficulty:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      questionId:
+        type: integer
+      questionType:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   questionBank.Judge:
     properties:
       createdAt:
@@ -952,25 +865,7 @@ definitions:
         type: integer
       isRight:
         type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  questionBank.KnowledgeMerge:
-    properties:
-      canPractice:
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      difficulty:
-        type: integer
-      id:
-        description: 主键ID
-        type: integer
-      knowledgeId:
-        type: integer
-      questionId:
+      problemType:
         type: integer
       questionType:
         type: integer
@@ -992,8 +887,12 @@ definitions:
         type: integer
       mostOptions:
         type: integer
-      type:
+      problemType:
         type: integer
+      questionType:
+        type: integer
+      title:
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -1008,9 +907,13 @@ definitions:
       id:
         description: 主键ID
         type: integer
-      isRight:
-        type: integer
       multipleChoiceId:
+        type: integer
+      orders:
+        type: integer
+      problemType:
+        type: integer
+      questionType:
         type: integer
       updatedAt:
         description: 更新时间
@@ -1025,6 +928,10 @@ definitions:
         type: string
       id:
         description: 主键ID
+        type: integer
+      problemType:
+        type: integer
+      questionType:
         type: integer
       title:
         type: string
@@ -1050,19 +957,21 @@ definitions:
         type: integer
       input:
         type: string
-      input_type:
+      inputType:
         type: integer
       languageId:
         type: integer
+      memoryLimit:
+        type: integer
       name:
         type: string
-      out_type:
+      outType:
         type: integer
       output:
         type: string
       procLimit:
         type: integer
-      programm_id:
+      programmId:
         type: string
       score:
         type: integer
@@ -1070,6 +979,26 @@ definitions:
         type: integer
       strictMemoryLimit:
         type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  questionBank.ProgrammLanguageMerge:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      defaultCode:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      languageId:
+        type: integer
+      programmId:
+        type: integer
+      referenceAnswer:
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -1280,11 +1209,11 @@ definitions:
     type: object
   request.StuTeachClass:
     properties:
-      student_ids:
+      studentIds:
         items:
           type: integer
         type: array
-      teach_class_id:
+      teachClassId:
         type: integer
     type: object
   request.SysAuthorityBtnReq:
@@ -1321,26 +1250,6 @@ definitions:
       to:
         description: 邮件发送给谁
         type: string
-    type: object
-  response.ExaCustomerResponse:
-    properties:
-      customer:
-        $ref: '#/definitions/example.ExaCustomer'
-    type: object
-  response.ExaFileResponse:
-    properties:
-      file:
-        $ref: '#/definitions/example.ExaFileUploadAndDownload'
-    type: object
-  response.FilePathResponse:
-    properties:
-      filePath:
-        type: string
-    type: object
-  response.FileResponse:
-    properties:
-      file:
-        $ref: '#/definitions/example.ExaFile'
     type: object
   response.LoginResponse:
     properties:
@@ -3841,175 +3750,6 @@ paths:
       summary: 更新College
       tags:
       - College
-  /customer/customer:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 客户ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExaCustomer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除客户
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除客户
-      tags:
-      - ExaCustomer
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 客户名
-        in: query
-        name: customerName
-        type: string
-      - description: 客户手机号
-        in: query
-        name: customerPhoneData
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 管理角色ID
-        in: query
-        name: sysUserAuthorityID
-        type: integer
-      - description: 管理ID
-        in: query
-        name: sysUserId
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 获取单一客户信息,返回包括客户详情
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.ExaCustomerResponse'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 获取单一客户信息
-      tags:
-      - ExaCustomer
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 客户用户名, 客户手机号码
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExaCustomer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 创建客户
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 创建客户
-      tags:
-      - ExaCustomer
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 客户ID, 客户信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExaCustomer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 更新客户信息
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 更新客户信息
-      tags:
-      - ExaCustomer
-  /customer/customerList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 分页获取权限客户列表,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取权限客户列表
-      tags:
-      - ExaCustomer
   /email/emailTest:
     post:
       produces:
@@ -4459,263 +4199,6 @@ paths:
       summary: 更新ExamPlan
       tags:
       - ExamPlan
-  /excel/downloadTemplate:
-    get:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 模板名称
-        in: query
-        name: fileName
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-      security:
-      - ApiKeyAuth: []
-      summary: 下载模板
-      tags:
-      - excel
-  /excel/exportExcel:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 导出Excel文件信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExcelInfo'
-      produces:
-      - application/octet-stream
-      responses:
-        "200":
-          description: OK
-      security:
-      - ApiKeyAuth: []
-      summary: 导出Excel
-      tags:
-      - excel
-  /excel/importExcel:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 导入Excel文件
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 导入Excel文件
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 导入Excel文件
-      tags:
-      - excel
-  /excel/loadExcel:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 加载Excel数据,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 加载Excel数据
-      tags:
-      - excel
-  /fileUploadAndDownload/breakpointContinue:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: an example for breakpoint resume, 断点续传示例
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 断点续传到服务器
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传到服务器
-      tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/deleteFile:
-    post:
-      parameters:
-      - description: 传入文件里面id即可
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExaFileUploadAndDownload'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除文件
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除文件
-      tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/findFile:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 上传文件完成
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 创建文件,返回包括文件路径
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.FilePathResponse'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 创建文件
-      tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/getFileList:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 页码, 每页大小
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.PageInfo'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 分页文件列表,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 分页文件列表
-      tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/removeChunk:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 删除缓存切片
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 删除切片
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 删除切片
-      tags:
-      - ExaFileUploadAndDownload
-  /fileUploadAndDownload/upload:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 上传文件示例
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 上传文件示例,返回包括文件详情
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.ExaFileResponse'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 上传文件示例
-      tags:
-      - ExaFileUploadAndDownload
   /init/checkdb:
     post:
       produces:
@@ -5642,10 +5125,13 @@ paths:
         name: paperId
         type: integer
       - in: query
+        name: problemType
+        type: integer
+      - in: query
         name: questionId
         type: integer
       - in: query
-        name: question_type
+        name: questionType
         type: integer
       - in: query
         name: score
@@ -5695,10 +5181,13 @@ paths:
         name: paperId
         type: integer
       - in: query
+        name: problemType
+        type: integer
+      - in: query
         name: questionId
         type: integer
       - in: query
-        name: question_type
+        name: questionType
         type: integer
       - in: query
         name: score
@@ -5818,14 +5307,11 @@ paths:
       parameters:
       - in: query
         name: chapter
-        type: string
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
         type: string
-      - in: query
-        name: difficulty
-        type: integer
       - description: 主键ID
         in: query
         name: id
@@ -5835,6 +5321,9 @@ paths:
         type: integer
       - in: query
         name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - in: query
         name: score
@@ -5865,14 +5354,11 @@ paths:
       parameters:
       - in: query
         name: chapter
-        type: string
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
         type: string
-      - in: query
-        name: difficulty
-        type: integer
       - description: 主键ID
         in: query
         name: id
@@ -5894,6 +5380,9 @@ paths:
         type: integer
       - in: query
         name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - in: query
         name: score
@@ -6114,6 +5603,192 @@ paths:
       summary: 更新Professional
       tags:
       - Professional
+  /programmLanguageMerge/createProgrammLanguageMerge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建ProgrammLanguageMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.ProgrammLanguageMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建ProgrammLanguageMerge
+      tags:
+      - ProgrammLanguageMerge
+  /programmLanguageMerge/deleteProgrammLanguageMerge:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除ProgrammLanguageMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.ProgrammLanguageMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除ProgrammLanguageMerge
+      tags:
+      - ProgrammLanguageMerge
+  /programmLanguageMerge/deleteProgrammLanguageMergeByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除ProgrammLanguageMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除ProgrammLanguageMerge
+      tags:
+      - ProgrammLanguageMerge
+  /programmLanguageMerge/findProgrammLanguageMerge:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: defaultCode
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: languageId
+        type: integer
+      - in: query
+        name: programmId
+        type: integer
+      - in: query
+        name: referenceAnswer
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询ProgrammLanguageMerge
+      tags:
+      - ProgrammLanguageMerge
+  /programmLanguageMerge/getProgrammLanguageMergeList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: defaultCode
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: languageId
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: programmId
+        type: integer
+      - in: query
+        name: referenceAnswer
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取ProgrammLanguageMerge列表
+      tags:
+      - ProgrammLanguageMerge
+  /programmLanguageMerge/updateProgrammLanguageMerge:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新ProgrammLanguageMerge
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.ProgrammLanguageMerge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新ProgrammLanguageMerge
+      tags:
+      - ProgrammLanguageMerge
   /questionBank_judge/createQuestionBankJudge:
     post:
       consumes:
@@ -6202,6 +5877,12 @@ paths:
       - in: query
         name: isRight
         type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
+        type: integer
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6248,6 +5929,12 @@ paths:
       - description: 每页大小
         in: query
         name: pageSize
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - description: 更新时间
         in: query
@@ -6380,8 +6067,14 @@ paths:
         name: mostOptions
         type: integer
       - in: query
-        name: type
+        name: problemType
         type: integer
+      - in: query
+        name: questionType
+        type: integer
+      - in: query
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6433,8 +6126,14 @@ paths:
         name: pageSize
         type: integer
       - in: query
-        name: type
+        name: problemType
         type: integer
+      - in: query
+        name: questionType
+        type: integer
+      - in: query
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6560,10 +6259,16 @@ paths:
         name: id
         type: integer
       - in: query
-        name: isRight
+        name: multipleChoiceId
         type: integer
       - in: query
-        name: multipleChoiceId
+        name: orders
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - description: 更新时间
         in: query
@@ -6597,15 +6302,15 @@ paths:
         in: query
         name: id
         type: integer
-      - in: query
-        name: isRight
-        type: integer
       - description: 关键字
         in: query
         name: keyword
         type: string
       - in: query
         name: multipleChoiceId
+        type: integer
+      - in: query
+        name: orders
         type: integer
       - description: 页码
         in: query
@@ -6614,6 +6319,12 @@ paths:
       - description: 每页大小
         in: query
         name: pageSize
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - description: 更新时间
         in: query
@@ -6844,7 +6555,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/questionBank.KnowledgeMerge'
+          $ref: '#/definitions/questionBank.ChapterMerge'
       produces:
       - application/json
       responses:
@@ -6867,7 +6578,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/questionBank.KnowledgeMerge'
+          $ref: '#/definitions/questionBank.ChapterMerge'
       produces:
       - application/json
       responses:
@@ -6909,7 +6620,13 @@ paths:
       - application/json
       parameters:
       - in: query
+        name: CanExam
+        type: integer
+      - in: query
         name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
         type: integer
       - description: 创建时间
         in: query
@@ -6921,9 +6638,6 @@ paths:
       - description: 主键ID
         in: query
         name: id
-        type: integer
-      - in: query
-        name: knowledgeId
         type: integer
       - in: query
         name: questionId
@@ -6953,7 +6667,13 @@ paths:
       - application/json
       parameters:
       - in: query
+        name: CanExam
+        type: integer
+      - in: query
         name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
         type: integer
       - description: 创建时间
         in: query
@@ -6970,9 +6690,6 @@ paths:
         in: query
         name: keyword
         type: string
-      - in: query
-        name: knowledgeId
-        type: integer
       - description: 页码
         in: query
         name: page
@@ -7013,7 +6730,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/questionBank.KnowledgeMerge'
+          $ref: '#/definitions/questionBank.ChapterMerge'
       produces:
       - application/json
       responses:
@@ -7112,6 +6829,12 @@ paths:
         name: id
         type: integer
       - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
+        type: integer
+      - in: query
         name: title
         type: string
       - description: 更新时间
@@ -7157,6 +6880,12 @@ paths:
       - description: 每页大小
         in: query
         name: pageSize
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: questionType
         type: integer
       - in: query
         name: title
@@ -7298,16 +7027,19 @@ paths:
         name: input
         type: string
       - in: query
-        name: input_type
+        name: inputType
         type: integer
       - in: query
         name: languageId
         type: integer
       - in: query
+        name: memoryLimit
+        type: integer
+      - in: query
         name: name
         type: string
       - in: query
-        name: out_type
+        name: outType
         type: integer
       - in: query
         name: output
@@ -7316,7 +7048,7 @@ paths:
         name: procLimit
         type: integer
       - in: query
-        name: programm_id
+        name: programmId
         type: string
       - in: query
         name: score
@@ -7372,7 +7104,7 @@ paths:
         name: input
         type: string
       - in: query
-        name: input_type
+        name: inputType
         type: integer
       - description: 关键字
         in: query
@@ -7382,10 +7114,13 @@ paths:
         name: languageId
         type: integer
       - in: query
+        name: memoryLimit
+        type: integer
+      - in: query
         name: name
         type: string
       - in: query
-        name: out_type
+        name: outType
         type: integer
       - in: query
         name: output
@@ -7402,7 +7137,7 @@ paths:
         name: procLimit
         type: integer
       - in: query
-        name: programm_id
+        name: programmId
         type: string
       - in: query
         name: score
@@ -9789,163 +9524,12 @@ paths:
       summary: 更新TeachClass
       tags:
       - TeachClass
-  /teachClassStudent/createTeachClassStudent:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建TeachClassStudent
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.TeachClassStudent'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建TeachClassStudent
-      tags:
-      - TeachClassStudent
   /teachClassStudent/deleteTeachClassStudent:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除TeachClassStudent
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.TeachClassStudent'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除TeachClassStudent
-      tags:
-      - TeachClassStudent
-  /teachClassStudent/deleteTeachClassStudentByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除TeachClassStudent
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除TeachClassStudent
-      tags:
-      - TeachClassStudent
-  /teachClassStudent/findTeachClassStudent:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - in: query
-        name: studentId
-        type: integer
-      - in: query
-        name: teachClassId
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询TeachClassStudent
-      tags:
-      - TeachClassStudent
-  /teachClassStudent/getTeachClassStudentList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: studentId
-        type: integer
-      - in: query
-        name: teachClassId
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取TeachClassStudent列表
-      tags:
-      - TeachClassStudent
-  /teachClassStudent/initTeachClassStudent:
     post:
       consumes:
       - application/json
       parameters:
-      - description: 创建TeachClassStudent
+      - description: 移除TeachClassStudent
         in: body
         name: data
         required: true
@@ -9960,30 +9544,62 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 初始化关联 学生与教学班
+      summary: 教学班 中移除学生
       tags:
       - TeachClassStudent
-  /teachClassStudent/updateTeachClassStudent:
-    put:
+  /teachClassStudent/getTeachClassStudentList:
+    get:
       consumes:
       - application/json
       parameters:
-      - description: 更新TeachClassStudent
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/basicdata.TeachClassStudent'
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: teachClassId
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
           schema:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 更新TeachClassStudent
+      summary: 获取教学班中 学生列表
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/initTeachClassStudent:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 添加TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.StuTeachClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 教学班中 添加学生
       tags:
       - TeachClassStudent
   /term/createTerm:

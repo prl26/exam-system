@@ -38,15 +38,6 @@ const DEFAULT_CODE_NAME string = "a.c"
 const DEFAULT_FILE_NAME string = "a"
 const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 
-//
-// Compile
-//  @Description:  虚假的编译接口，给上层进行使用的，会在默认的文件过期时间过后删除文件
-//  @receiver c*CService
-//  @param code
-//  @return string
-//  @return *time.Time
-//  @return error
-//
 func (c *CService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
@@ -65,14 +56,6 @@ func (c *CService) Compile(code string) (string, *time.Time, error) {
 	return fileID, &failedTime, nil
 }
 
-//
-// compile
-//  @Description:  真正的编译方法，返回编译之后 FileID
-//  @receiver c
-//  @param code
-//  @return string
-//  @return error
-//
 func (c *CService) compile(code string) (string, error) {
 	input := &pb.Request_File{
 		File: &pb.Request_File_Memory{
@@ -143,13 +126,6 @@ func (c *CService) compile(code string) (string, error) {
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME], nil
 }
 
-//
-// Delete
-//  @Description: 手动删除 FileId
-//  @receiver c
-//  @param id
-//  @return error
-//
 func (c *CService) Delete(id string) error {
 	_, err := c.ExecutorClient.FileDelete(context.Background(), &pb.FileID{FileID: id})
 	if err != nil {
@@ -158,15 +134,6 @@ func (c *CService) Delete(id string) error {
 	return nil
 }
 
-//
-// Judge
-//  @Description: 进行程序判断，输入FileID与所有用例，返回分数结果
-//  @receiver c
-//  @param fileId
-//  @param cases
-//  @return []*ojResp.Submit
-//  @return error
-//
 func (c *CService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
@@ -196,17 +163,6 @@ func (c *CService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*
 	return submits, nil
 }
 
-//
-// Execute
-//  @Description: 通过FileID 和程序输入并携带着限制结果进行程序的执行
-//  @receiver c
-//  @param fileId
-//  @param input
-//  @param programmLimit
-//  @return string
-//  @return *oj.ExecuteSituation
-//  @return error
-//
 func (c *CService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{

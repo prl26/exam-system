@@ -53,22 +53,32 @@ func (multiTableService *MultiTableService) DeleteTeachClassStudents(info reques
 
 // 获取教学班的学生
 func (multiTableService *MultiTableService) GetTeachClassStudentInfo(info request.TeachClassStudent) (list []basicdata.Student, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
-	// 创建db
-	db := global.GVA_DB.Model(&basicdata.Student{})
+
+	var limit, offset int
+
+	if info.PageSize <= 0 {
+		limit = 10
+	} else {
+		limit = info.PageSize
+	}
+
+	if info.Page <= 0 {
+		offset = 0
+	} else {
+		offset = info.PageSize * (info.Page - 1)
+	}
 
 	var teachClass basicdata.TeachClass
 	teachClass.ID = info.TeachClassId
 
 	var students []basicdata.Student
 
-	err = db.Count(&total).Error
-	if err != nil {
-		return
-	}
+	db := global.GVA_DB
 
-	err = db.Limit(limit).Offset(offset).Model(&teachClass).Association("Student").Find(&students)
+	//err = db.Model(&teachClass).Association("Student").Find(&students) 高端写法但是无法分页
+	db.Limit(limit).Offset(offset).Where("id in (?)", db.Table("bas_student_teach_classes").
+		Select("student_id").Where("teach_class_id = ?", teachClass.ID)).Find(&students).Count(&total)
+
 	return students, total, err
 
 }
