@@ -11,7 +11,6 @@ package questionBank
  **/
 
 type RouterGroup struct {
-	QuestionBankKnowledgeMergeRouter
 	QuestionBankMultipleChoiceRouter
 	QuestionBankJudgeRouter
 	QuestionBankSupplyBlankRouter

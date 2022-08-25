@@ -102,7 +102,6 @@ func Routers() *gin.Engine {
 
 		questionBankRouter.InitQuestionBankProgrammRouter(PrivateGroup)
 		questionBankRouter.InitQuestionBankJudgeRouter(PrivateGroup)
-		questionBankRouter.InitQuestionBankKnowledgeMergeRouter(PrivateGroup)
 		questionBankRouter.InitQuestionBankMultipleChoiceRouter(PrivateGroup)
 		questionBankRouter.InitQuestionBankOptionsRouter(PrivateGroup)
 		questionBankRouter.InitQuestionBankSupplyBlankRouter(PrivateGroup)

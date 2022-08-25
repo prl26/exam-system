@@ -79,7 +79,6 @@ func RegisterTables(db *gorm.DB) {
 		examManage.PaperTemplate{},
 
 		questionBank.Judge{},
-		questionBank.ChapterMerge{},
 		questionBank.Options{},
 		questionBank.MultipleChoice{},
 		questionBank.SupplyBlank{},
