@@ -17,5 +17,5 @@ import (
 
 type ServiceGroup struct {
 	cLanguage.CService
-	common.Service
+	common.CommonService
 }

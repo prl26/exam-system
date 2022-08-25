@@ -18,7 +18,7 @@ import (
  * @Note:
 
  **/
-var server Service
+var server CommonService
 
 func TestMain(m *testing.M) {
 	global.GVA_VP = core.Viper() // 初始化Viper

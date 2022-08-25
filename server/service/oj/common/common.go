@@ -15,9 +15,9 @@ import (
 
  **/
 
-type Service struct{}
+type CommonService struct{}
 
-func (c *Service) FindProgrammCase(programmId uint, languageId uint) (result []*questionBank.ProgrammCase, err error) {
+func (c *CommonService) FindProgrammCase(programmId uint, languageId uint) (result []*questionBank.ProgrammCase, err error) {
 	r := global.GVA_DB.Where("programm_id = ? AND language_id = ?", programmId, languageId).Find(&result)
 	if r.Error != nil {
 		return nil, r.Error
@@ -26,7 +26,7 @@ func (c *Service) FindProgrammCase(programmId uint, languageId uint) (result []*
 	return
 }
 
-func (c *Service) FindProgrammSupport(programmId uint) (result []*questionBank.ProgrammLanguageMerge, err error) {
+func (c *CommonService) FindProgrammSupport(programmId uint) (result []*questionBank.ProgrammLanguageMerge, err error) {
 	var r = global.GVA_DB.Where("programm_id", programmId).Find(&result)
 	if r.Error != nil {
 		return nil, r.Error
