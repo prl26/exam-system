@@ -73,3 +73,16 @@ func (paperQuestionMergeService *PaperQuestionMergeService) GetPaperQuestionMerg
 	err = db.Limit(limit).Offset(offset).Find(&paperQuestionMerges).Error
 	return paperQuestionMerges, total, err
 }
+
+//func (paperQuestionMergeService *PaperQuestionMergeService) SetChoiceQuestionMerge(paper examManage.ExamPaper, info []questionBank.MultipleChoice) (err error) {
+//	for i := 0; i < len(info); i++ {
+//		questionMerge := examManage.PaperQuestionMerge{
+//			GVA_MODEL:    global.GVA_MODEL{},
+//			PaperId:      paper.ID,
+//			QuestionId:   &info[i].ID,
+//			Score:        0.,
+//			QuestionType: nil,
+//			ProblemType:  nil,
+//		}
+//	}
+//}
