@@ -10,7 +10,6 @@ type ServiceGroup struct {
 	ProfessionalService
 	ClassService
 	TermService
-	TeachClassStudentService
 	TeachClassService
 	LearnResourcesChapterMergeService
 	StudentService

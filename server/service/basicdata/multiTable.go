@@ -15,21 +15,60 @@ import (
 type MultiTableService struct {
 }
 
-// 根据传入 教学班id和全部学生id 关联教学班，即更新bas_teach_class_student
-func (multiTableService *MultiTableService) UpdateTeachClassStudents(info request.StuTeachClass) error {
+// 向教学班中 加入学生的关联
+func (multiTableService *MultiTableService) InitTeachClassStudents(info request.StuTeachClass) error {
 
-	// 将数据整合到 表的结构体中方便
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
 	n := len(info.StudentIds)
+	students := make([]basicdata.Student, n)
 
-	list := make([]*basicdata.TeachClassStudent, n)
 	for i := 0; i < n; i++ {
-		list[i] = &basicdata.TeachClassStudent{
-			StudentId:    &info.StudentIds[i],
-			TeachClassId: &info.TeachClassId,
-		}
+		students[i].ID = info.StudentIds[i]
 	}
 
-	err := global.GVA_DB.Create(&list).Error
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(students)
 
 	return err
+}
+
+// 在教学班中 移除学生
+func (multiTableService *MultiTableService) DeleteTeachClassStudents(info request.StuTeachClass) error {
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
+	n := len(info.StudentIds)
+
+	students := make([]basicdata.Student, n)
+	for i := 0; i < n; i++ {
+		students[i].ID = info.StudentIds[i]
+	}
+
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Delete(students)
+
+	return err
+}
+
+// 获取教学班的学生
+func (multiTableService *MultiTableService) GetTeachClassStudentInfo(info request.TeachClassStudent) (list []basicdata.Student, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&basicdata.Student{})
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = info.TeachClassId
+
+	var students []basicdata.Student
+
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+
+	err = db.Limit(limit).Offset(offset).Model(&teachClass).Association("Student").Find(&students)
+	return students, total, err
+
 }
