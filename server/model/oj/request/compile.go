@@ -17,5 +17,5 @@ package request
 
 type Compile struct {
 	Code       string `json:"code"`
-	LanguageId int    `json:"languageId"`
+	LanguageId uint   `json:"languageId"`
 }

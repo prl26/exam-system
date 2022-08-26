@@ -21,7 +21,7 @@ func (s *ExamPlanRouter) InitExamPlanRouter(Router *gin.RouterGroup) {
 		examPlanRouter.PUT("updateExamPlan", examPlanApi.UpdateExamPlan)              // 更新ExamPlan
 	}
 	{
-		examPlanRouterWithoutRecord.GET("findExamPlan", examPlanApi.FindExamPlan)       // 根据ID获取ExamPlan
+		examPlanRouterWithoutRecord.GET("findExamPlan", examPlanApi.FindExamPlanById)   // 根据ID获取ExamPlan
 		examPlanRouterWithoutRecord.GET("getExamPlanList", examPlanApi.GetExamPlanList) // 获取ExamPlan列表
 	}
 }

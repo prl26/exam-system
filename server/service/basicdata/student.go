@@ -60,13 +60,13 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 	if info.IdCard != "" {
 		db = db.Where("id_card LIKE ?", "%d"+info.IdCard+"%d")
 	}
-	if info.CollegeId != nil {
+	if info.CollegeId != 0 {
 		db = db.Where("college_id = ?", info.CollegeId)
 	}
-	if info.ProfessionalId != nil {
+	if info.ProfessionalId != 0 {
 		db = db.Where("professional_id = ?", info.ProfessionalId)
 	}
-	if info.ClassId != nil {
+	if info.ClassId != 0 {
 		db = db.Where("class_id = ?", info.ClassId)
 	}
 	err = db.Count(&total).Error
@@ -75,4 +75,9 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 	}
 	err = db.Limit(limit).Offset(offset).Find(&students).Error
 	return students, total, err
+}
+
+func (studentService *StudentService) CreateStudents(students []*basicdata.Student) error {
+	result := global.GVA_DB.Save(&students)
+	return result.Error
 }

@@ -1,6 +1,7 @@
 package basicdata
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
@@ -8,7 +9,10 @@ import (
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
+	"github.com/xuri/excelize/v2"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type StudentApi struct {
@@ -138,5 +142,79 @@ func (studentApi *StudentApi) GetStudentList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+
+// AddStudentsByExcel 表格导入学生
+// @Tags Student
+// @Summary 表格导入学生
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query basicdataReq.StudentExcel true "表格导入学生"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /student/excel [post]
+func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
+	var studentExcel basicdataReq.StudentExcel
+	_ = c.ShouldBind(&studentExcel)
+	verify := utils.Rules{
+		"File":           {utils.NotEmpty()},
+		"CollegeId":      {utils.NotEmpty()},
+		"ProfessionalId": {utils.NotEmpty()},
+		"ClassId":        {utils.NotEmpty()},
+	}
+	if err := utils.Verify(studentExcel, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	// 此处可以增加对file的限制
+	file, err := studentExcel.File.Open()
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	reader, err := excelize.OpenReader(file)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	rows, err := reader.GetRows("Sheet1")
+	n := len(rows) - 1
+	if err != nil || n <= 0 {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	students := make([]*basicdata.Student, 0, n)
+	rows = rows[1:]
+	for i, row := range rows {
+		length := len(rows[i])
+		if length < 4 {
+			response.FailWithMessage(fmt.Sprintf("表格格式有误!第%d行只有%d个数据", i+1, length), c)
+			return
+		}
+		id, err := strconv.Atoi(row[0])
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("表格格式有误!第%d行学号为非数字(%s)", i+1, row[0]), c)
+			continue
+		}
+		student := &basicdata.Student{}
+		student.ID = uint(id)
+		student.IdCard = row[1]
+		student.Name = row[2]
+		student.Sex = row[3]
+		if length <= 5 || row[4] == "" {
+			student.Password = utils.BcryptHash(row[0])
+		} else {
+			student.Password = utils.BcryptHash(row[4])
+		}
+		students = append(students, student)
+	}
+	err = studentService.CreateStudents(students)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithMessage("添加成功", c)
+		return
 	}
 }

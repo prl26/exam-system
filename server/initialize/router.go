@@ -115,9 +115,14 @@ func Routers() *gin.Engine {
 
 	TestGroup := Router.Group("") // 此处测试接口不需要分配权限
 	{
-		questionBankRouter.InitQuestionBankRouter(TestGroup)
 		basicdataRouter.InitTeachClassStudentRouter(TestGroup)
-		ojRouter.InitOjRouter(TestGroup)
+	}
+
+	// 理论上 前台接口还需要写 中间件 拦截 登录用户  等等操作 这里就暂时全开放
+	frontDeskGroup := Router.Group("")
+	{
+		ojRouter.InitOjRouter(frontDeskGroup)
+		questionBankRouter.InitQuestionBankRouter(frontDeskGroup)
 	}
 
 	InstallPlugin(Router) // 安装插件
