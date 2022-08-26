@@ -19,6 +19,8 @@ func (s *TeachClassStudentRouter) InitTeachClassStudentRouter(Router *gin.Router
 
 		teachClassStudentRouter.POST("initTeachClassStudent", multiTableApi.InitTeachClassStudent)     // 教学班中添加学生
 		teachClassStudentRouter.POST("deleteTeachClassStudent", multiTableApi.DeleteTeachClassStudent) // 教学班中移除学生
+		teachClassStudentRouter.POST("addStudentByClass", multiTableApi.AddStudentByClass)             // 教学班中添加一个班的学生
+		teachClassStudentRouter.POST("deleteStudentByClass", multiTableApi.DeleteStudentByClass)       // 教学班中添加一个班的学生
 	}
 	{
 		teachClassStudentRouterWithoutRecord.GET("getTeachClassStudentList", multiTableApi.GetTeachClassStudentList) // 获取TeachClassStudent列表
