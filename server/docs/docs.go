@@ -10,15 +10,15 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
+        "termsOfService": "https://swagger.io/terms/",
         "contact": {
             "name": "API Support",
-            "url": "http://www.swagger.io/support",
+            "url": "https://www.swagger.io/support",
             "email": "support@swagger.io"
         },
         "license": {
             "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "{{.Version}}"
     },
@@ -3331,7 +3331,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
+                        "type": "integer",
                         "name": "templateId",
                         "in": "query"
                     },
@@ -3411,7 +3411,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "string",
+                        "type": "integer",
                         "name": "templateId",
                         "in": "query"
                     },
@@ -6498,330 +6498,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "创建QuestionBankKnowledgeMerge",
-                "parameters": [
-                    {
-                        "description": "创建QuestionBankKnowledgeMerge",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/questionBank.ChapterMerge"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMerge": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "删除QuestionBankKnowledgeMerge",
-                "parameters": [
-                    {
-                        "description": "删除QuestionBankKnowledgeMerge",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/questionBank.ChapterMerge"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMergeByIds": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "批量删除QuestionBankKnowledgeMerge",
-                "parameters": [
-                    {
-                        "description": "批量删除QuestionBankKnowledgeMerge",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/questionBankKnowledgeMerge/findQuestionBankKnowledgeMerge": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "用id查询QuestionBankKnowledgeMerge",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "name": "CanExam",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "canPractice",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "chapterId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "difficulty",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/questionBankKnowledgeMerge/getQuestionBankKnowledgeMergeList": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "分页获取QuestionBankKnowledgeMerge列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "name": "CanExam",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "canPractice",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "chapterId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "difficulty",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "关键字",
-                        "name": "keyword",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页大小",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionId",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/questionBankKnowledgeMerge/updateQuestionBankKnowledgeMerge": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "QuestionBankKnowledgeMerge"
-                ],
-                "summary": "更新QuestionBankKnowledgeMerge",
-                "parameters": [
-                    {
-                        "description": "更新QuestionBankKnowledgeMerge",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/questionBank.ChapterMerge"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/questionBankProgramm/createQuestionBankProgramm": {
             "post": {
                 "security": [
@@ -6955,6 +6631,21 @@ const docTemplate = `{
                 "summary": "用id查询QuestionBankProgramm",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -6974,11 +6665,6 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7022,6 +6708,21 @@ const docTemplate = `{
                 "summary": "分页获取QuestionBankProgramm列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7059,11 +6760,6 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -7297,11 +6993,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "inputType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
                         "name": "languageId",
                         "in": "query"
                     },
@@ -7313,11 +7004,6 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "outType",
                         "in": "query"
                     },
                     {
@@ -7423,11 +7109,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "name": "inputType",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
                         "description": "关键字",
                         "name": "keyword",
@@ -7446,11 +7127,6 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "outType",
                         "in": "query"
                     },
                     {
@@ -7683,6 +7359,21 @@ const docTemplate = `{
                 "summary": "用id查询QuestionBankJudge",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -7710,8 +7401,8 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "name": "questionType",
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -7749,6 +7440,21 @@ const docTemplate = `{
                 ],
                 "summary": "分页获取QuestionBankJudge列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "创建时间",
@@ -7795,8 +7501,8 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "name": "questionType",
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -7992,6 +7698,21 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -8016,11 +7737,6 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -8069,6 +7785,21 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -8111,11 +7842,6 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -8338,16 +8064,6 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
-                        "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
                         "description": "更新时间",
                         "name": "updatedAt",
@@ -8425,16 +8141,6 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "problemType",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "questionType",
                         "in": "query"
                     },
                     {
@@ -8625,6 +8331,21 @@ const docTemplate = `{
                 "summary": "用id查询QuestionBankSupplyBlank",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -8649,6 +8370,16 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "num",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -8686,6 +8417,21 @@ const docTemplate = `{
                 ],
                 "summary": "分页获取QuestionBankSupplyBlank列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "canExam",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "canPractice",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "chapterId",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "创建时间",
@@ -8729,6 +8475,16 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "每页大小",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "problemType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "title",
                         "in": "query"
                     },
                     {
@@ -14793,7 +14549,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "templateId": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -15039,10 +14795,10 @@ const docTemplate = `{
                 }
             }
         },
-        "questionBank.ChapterMerge": {
+        "questionBank.Judge": {
             "type": "object",
             "properties": {
-                "CanExam": {
+                "canExam": {
                     "type": "integer"
                 },
                 "canPractice": {
@@ -15051,32 +14807,6 @@ const docTemplate = `{
                 "chapterId": {
                     "type": "integer"
                 },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "difficulty": {
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "questionId": {
-                    "type": "integer"
-                },
-                "questionType": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "questionBank.Judge": {
-            "type": "object",
-            "properties": {
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -15094,8 +14824,8 @@ const docTemplate = `{
                 "problemType": {
                     "type": "integer"
                 },
-                "questionType": {
-                    "type": "integer"
+                "title": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -15108,6 +14838,15 @@ const docTemplate = `{
             "properties": {
                 "answer": {
                     "type": "string"
+                },
+                "canExam": {
+                    "type": "integer"
+                },
+                "canPractice": {
+                    "type": "integer"
+                },
+                "chapterId": {
+                    "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
@@ -15124,9 +14863,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "problemType": {
-                    "type": "integer"
-                },
-                "questionType": {
                     "type": "integer"
                 },
                 "title": {
@@ -15158,12 +14894,6 @@ const docTemplate = `{
                 "orders": {
                     "type": "integer"
                 },
-                "problemType": {
-                    "type": "integer"
-                },
-                "questionType": {
-                    "type": "integer"
-                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
@@ -15173,6 +14903,15 @@ const docTemplate = `{
         "questionBank.Programm": {
             "type": "object",
             "properties": {
+                "canExam": {
+                    "type": "integer"
+                },
+                "canPractice": {
+                    "type": "integer"
+                },
+                "chapterId": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -15185,9 +14924,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "problemType": {
-                    "type": "integer"
-                },
-                "questionType": {
                     "type": "integer"
                 },
                 "title": {
@@ -15225,9 +14961,6 @@ const docTemplate = `{
                 "input": {
                     "type": "string"
                 },
-                "inputType": {
-                    "type": "integer"
-                },
                 "languageId": {
                     "type": "integer"
                 },
@@ -15236,9 +14969,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
-                },
-                "outType": {
-                    "type": "integer"
                 },
                 "output": {
                     "type": "string"
@@ -15296,6 +15026,15 @@ const docTemplate = `{
         "questionBank.SupplyBlank": {
             "type": "object",
             "properties": {
+                "canExam": {
+                    "type": "integer"
+                },
+                "canPractice": {
+                    "type": "integer"
+                },
+                "chapterId": {
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -15312,6 +15051,12 @@ const docTemplate = `{
                 },
                 "num": {
                     "type": "integer"
+                },
+                "problemType": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -16621,7 +16366,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8888",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",

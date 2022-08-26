@@ -660,7 +660,7 @@ definitions:
       planId:
         type: integer
       templateId:
-        type: string
+        type: integer
       updatedAt:
         description: 更新时间
         type: string
@@ -829,32 +829,14 @@ definitions:
       url:
         type: string
     type: object
-  questionBank.ChapterMerge:
+  questionBank.Judge:
     properties:
-      CanExam:
+      canExam:
         type: integer
       canPractice:
         type: integer
       chapterId:
         type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      difficulty:
-        type: integer
-      id:
-        description: 主键ID
-        type: integer
-      questionId:
-        type: integer
-      questionType:
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  questionBank.Judge:
-    properties:
       createdAt:
         description: 创建时间
         type: string
@@ -867,8 +849,8 @@ definitions:
         type: integer
       problemType:
         type: integer
-      questionType:
-        type: integer
+      title:
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -877,6 +859,12 @@ definitions:
     properties:
       answer:
         type: string
+      canExam:
+        type: integer
+      canPractice:
+        type: integer
+      chapterId:
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -888,8 +876,6 @@ definitions:
       mostOptions:
         type: integer
       problemType:
-        type: integer
-      questionType:
         type: integer
       title:
         type: string
@@ -911,16 +897,18 @@ definitions:
         type: integer
       orders:
         type: integer
-      problemType:
-        type: integer
-      questionType:
-        type: integer
       updatedAt:
         description: 更新时间
         type: string
     type: object
   questionBank.Programm:
     properties:
+      canExam:
+        type: integer
+      canPractice:
+        type: integer
+      chapterId:
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -930,8 +918,6 @@ definitions:
         description: 主键ID
         type: integer
       problemType:
-        type: integer
-      questionType:
         type: integer
       title:
         type: string
@@ -957,16 +943,12 @@ definitions:
         type: integer
       input:
         type: string
-      inputType:
-        type: integer
       languageId:
         type: integer
       memoryLimit:
         type: integer
       name:
         type: string
-      outType:
-        type: integer
       output:
         type: string
       procLimit:
@@ -1005,6 +987,12 @@ definitions:
     type: object
   questionBank.SupplyBlank:
     properties:
+      canExam:
+        type: integer
+      canPractice:
+        type: integer
+      chapterId:
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -1017,6 +1005,10 @@ definitions:
         type: integer
       num:
         type: integer
+      problemType:
+        type: integer
+      title:
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -3875,7 +3867,7 @@ paths:
         type: integer
       - in: query
         name: templateId
-        type: string
+        type: integer
       - description: 更新时间
         in: query
         name: updatedAt
@@ -3925,7 +3917,7 @@ paths:
         type: integer
       - in: query
         name: templateId
-        type: string
+        type: integer
       - description: 更新时间
         in: query
         name: updatedAt
@@ -5863,6 +5855,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -5881,8 +5882,8 @@ paths:
         name: problemType
         type: integer
       - in: query
-        name: questionType
-        type: integer
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -5904,6 +5905,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -5934,8 +5944,8 @@ paths:
         name: problemType
         type: integer
       - in: query
-        name: questionType
-        type: integer
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6052,6 +6062,15 @@ paths:
       - in: query
         name: answer
         type: string
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6068,9 +6087,6 @@ paths:
         type: integer
       - in: query
         name: problemType
-        type: integer
-      - in: query
-        name: questionType
         type: integer
       - in: query
         name: title
@@ -6099,6 +6115,15 @@ paths:
       - in: query
         name: answer
         type: string
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6127,9 +6152,6 @@ paths:
         type: integer
       - in: query
         name: problemType
-        type: integer
-      - in: query
-        name: questionType
         type: integer
       - in: query
         name: title
@@ -6264,12 +6286,6 @@ paths:
       - in: query
         name: orders
         type: integer
-      - in: query
-        name: problemType
-        type: integer
-      - in: query
-        name: questionType
-        type: integer
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6319,12 +6335,6 @@ paths:
       - description: 每页大小
         in: query
         name: pageSize
-        type: integer
-      - in: query
-        name: problemType
-        type: integer
-      - in: query
-        name: questionType
         type: integer
       - description: 更新时间
         in: query
@@ -6439,6 +6449,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6456,6 +6475,12 @@ paths:
       - in: query
         name: num
         type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6477,6 +6502,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6506,6 +6540,12 @@ paths:
         in: query
         name: pageSize
         type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: title
+        type: string
       - description: 更新时间
         in: query
         name: updatedAt
@@ -6545,204 +6585,6 @@ paths:
       summary: 更新QuestionBankSupplyBlank
       tags:
       - QuestionBankSupplyBlank
-  /questionBankKnowledgeMerge/createQuestionBankKnowledgeMerge:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建QuestionBankKnowledgeMerge
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.ChapterMerge'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建QuestionBankKnowledgeMerge
-      tags:
-      - QuestionBankKnowledgeMerge
-  /questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMerge:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除QuestionBankKnowledgeMerge
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.ChapterMerge'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除QuestionBankKnowledgeMerge
-      tags:
-      - QuestionBankKnowledgeMerge
-  /questionBankKnowledgeMerge/deleteQuestionBankKnowledgeMergeByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除QuestionBankKnowledgeMerge
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除QuestionBankKnowledgeMerge
-      tags:
-      - QuestionBankKnowledgeMerge
-  /questionBankKnowledgeMerge/findQuestionBankKnowledgeMerge:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - in: query
-        name: CanExam
-        type: integer
-      - in: query
-        name: canPractice
-        type: integer
-      - in: query
-        name: chapterId
-        type: integer
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - in: query
-        name: difficulty
-        type: integer
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - in: query
-        name: questionId
-        type: integer
-      - in: query
-        name: questionType
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询QuestionBankKnowledgeMerge
-      tags:
-      - QuestionBankKnowledgeMerge
-  /questionBankKnowledgeMerge/getQuestionBankKnowledgeMergeList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - in: query
-        name: CanExam
-        type: integer
-      - in: query
-        name: canPractice
-        type: integer
-      - in: query
-        name: chapterId
-        type: integer
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - in: query
-        name: difficulty
-        type: integer
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: questionId
-        type: integer
-      - in: query
-        name: questionType
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取QuestionBankKnowledgeMerge列表
-      tags:
-      - QuestionBankKnowledgeMerge
-  /questionBankKnowledgeMerge/updateQuestionBankKnowledgeMerge:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新QuestionBankKnowledgeMerge
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.ChapterMerge'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 更新QuestionBankKnowledgeMerge
-      tags:
-      - QuestionBankKnowledgeMerge
   /questionBankProgramm/createQuestionBankProgramm:
     post:
       consumes:
@@ -6817,6 +6659,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6830,9 +6681,6 @@ paths:
         type: integer
       - in: query
         name: problemType
-        type: integer
-      - in: query
-        name: questionType
         type: integer
       - in: query
         name: title
@@ -6858,6 +6706,15 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -6883,9 +6740,6 @@ paths:
         type: integer
       - in: query
         name: problemType
-        type: integer
-      - in: query
-        name: questionType
         type: integer
       - in: query
         name: title
@@ -7027,9 +6881,6 @@ paths:
         name: input
         type: string
       - in: query
-        name: inputType
-        type: integer
-      - in: query
         name: languageId
         type: integer
       - in: query
@@ -7038,9 +6889,6 @@ paths:
       - in: query
         name: name
         type: string
-      - in: query
-        name: outType
-        type: integer
       - in: query
         name: output
         type: string
@@ -7103,9 +6951,6 @@ paths:
       - in: query
         name: input
         type: string
-      - in: query
-        name: inputType
-        type: integer
       - description: 关键字
         in: query
         name: keyword
@@ -7119,9 +6964,6 @@ paths:
       - in: query
         name: name
         type: string
-      - in: query
-        name: outType
-        type: integer
       - in: query
         name: output
         type: string
