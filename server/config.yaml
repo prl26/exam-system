@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: D:\work\github.com/prl26/exam-system/server
+  root: D:\work\exam-system
   server: /server
   server-api: /api/v1/%s
   server-plug: /plugin/%s
@@ -29,7 +29,7 @@ aws-s3:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: github.com/prl26/exam-system/server
 captcha:
   key-long: 6
   img-width: 240
@@ -96,8 +96,8 @@ mysql:
   password: cuit@123456
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: info
-  log-zap: true
+  log-mode: error
+  log-zap: false
 pgsql:
   path: ""
   port: ""
@@ -136,7 +136,7 @@ tencent-cos:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: github.com/prl26/exam-system/server
 timer:
   start: true
   spec: '@daily'

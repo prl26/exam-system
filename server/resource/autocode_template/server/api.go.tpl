@@ -1,16 +1,16 @@
 package {{.Package}}
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/prl26/exam-system/server/global"
+    "github.com/prl26/exam-system/server/model/{{.Package}}"
+    "github.com/prl26/exam-system/server/model/common/request"
+    {{.Package}}Req "github.com/prl26/exam-system/server/model/{{.Package}}/request"
+    "github.com/prl26/exam-system/server/model/common/response"
+    "github.com/prl26/exam-system/server/service"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
     {{- if .NeedValid }}
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    "github.com/prl26/exam-system/server/utils"
     {{- end }}
 )
 
