@@ -19,9 +19,8 @@ import (
 type OjRouter struct {
 }
 
-func (s *OjRouter) InitOjRouter(Router *gin.RouterGroup) {
-
-	judgesRouter := Router.Group("oj/judge").Use(middleware.OperationRecord())
+func (s *OjRouter) InitFrontDeskOjRouter(Router *gin.RouterGroup) {
+	judgesRouter := Router.Group("oj/judge")
 	var judgeApi = v1.ApiGroupApp.OjApiGroup.JudgeApi
 	{
 		judgesRouter.POST("check", judgeApi.CheckJudge)
@@ -44,4 +43,14 @@ func (s *OjRouter) InitOjRouter(Router *gin.RouterGroup) {
 	{
 		programmRouter.POST("check", programmApi.CheckProgramm)
 	}
+}
+
+func (s *OjRouter) InitBackgroundOjRouter(Router *gin.RouterGroup) {
+	programmRouter := Router.Group("oj/program")
+	programmApi := v1.ApiGroupApp.OjApiGroup.ProgrammApi
+	{
+		programmRouter.POST("compile", programmApi.Compile) //编译
+		programmRouter.POST("execute", programmApi.Execute) //运行
+	}
+
 }
