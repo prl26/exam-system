@@ -12,6 +12,7 @@ type ExamStudentPaper struct {
 	QuestionId *int   `json:"questionId" form:"questionId" gorm:"column:question_id;comment:题目id;size:32;"`
 	StudentId  *int   `json:"studentId" form:"studentId" gorm:"column:student_id;comment:学生id;size:32;"`
 	Answer     string `json:"answer" form:"answer" gorm:"column:answer;comment:题目答案;size:255;"`
+	PlanId     *int   `json:"planId" form:"planId" gorm:"column:plan_id;comment:教学计划id;size:32"`
 }
 
 // TableName ExamStudentPaper 表名
