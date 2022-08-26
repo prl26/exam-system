@@ -9,6 +9,7 @@ import (
 	"exam-system/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type ExamPaperApi struct {
@@ -29,6 +30,8 @@ var PaperTemplateItemService = service.ServiceGroupApp.ExammanageServiceGroup.Pa
 func (examPaperApi *ExamPaperApi) CreateExamPaper(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindJSON(&examPaper)
+	numOfPapers := c.Query("numOfPapers")
+	n, _ := strconv.Atoi(numOfPapers)
 	templateItems, err := examPaperService.GetTemplate(examPaper)
 	if err != nil {
 		response.FailWithMessage("查询失败", c)
@@ -37,11 +40,13 @@ func (examPaperApi *ExamPaperApi) CreateExamPaper(c *gin.Context) {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
 			response.FailWithMessage("创建失败", c)
 		} else {
-			if err := PaperTemplateItemService.SetPaperQuestion(templateItems); err != nil {
-				global.GVA_LOG.Error("创建失败!", zap.Error(err))
-				response.FailWithMessage("创建失败", c)
-			} else {
-				response.OkWithMessage("创建成功", c)
+			for i := 0; i < n; i++ {
+				if err := PaperTemplateItemService.SetPaperQuestion(templateItems); err != nil {
+					global.GVA_LOG.Error("创建失败!", zap.Error(err))
+					response.FailWithMessage("创建失败", c)
+				} else {
+					response.OkWithMessage("创建成功", c)
+				}
 			}
 		}
 	}
