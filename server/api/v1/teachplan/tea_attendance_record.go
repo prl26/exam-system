@@ -96,6 +96,26 @@ func (teachAttendanceRecordApi *TeachAttendanceRecordApi) UpdateTeachAttendanceR
 	}
 }
 
+// TeacherUpdateAttendanceRecord 修改TeacherUpdateAttendanceRecord
+// @Tags TeachAttendanceRecord
+// @Summary 更新TeachAttendanceRecord
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body teachplan.TeachAttendanceRecord true "修改TeacherUpdateAttendanceRecord"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /teachAttendanceRecord/updateTeachAttendanceRecord [put]
+func (teachAttendanceRecordApi *TeachAttendanceRecordApi) TeacherUpdateAttendanceRecord(c *gin.Context) {
+	var teachAttendanceRecord teachplan.TeachAttendanceRecord
+	_ = c.ShouldBindJSON(&teachAttendanceRecord)
+	if err := teachAttendanceRecordService.UpdateTeachAttendanceRecord(teachAttendanceRecord); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
+
 // FindTeachAttendanceRecord 用id查询TeachAttendanceRecord
 // @Tags TeachAttendanceRecord
 // @Summary 用id查询TeachAttendanceRecord

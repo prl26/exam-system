@@ -2,22 +2,43 @@ package teachplan
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
-	"github.com/prl26/exam-system/server/service"
 )
 
 type TeachAttendanceService struct {
 }
 
-var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
-
 // CreateTeachAttendance 创建TeachAttendance记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (teachAttendanceService *TeachAttendanceService) CreateTeachAttendance(teachAttendance teachplan.TeachAttendance) (err error) {
+func (teachAttendanceService *TeachAttendanceService) CreateTeachAttendance(teachAttendance teachplan.TeachAttendance, students []basicdata.Student) (err error) {
 	err = global.GVA_DB.Create(&teachAttendance).Error
-	//students := teachClassService.
+	if err != nil {
+		return err
+	} else {
+
+		if err != nil {
+			return err
+		} else {
+			if len(students) > 0 {
+				for i := 0; i < len(students); i++ {
+					studentId := int(students[i].ID)
+					attendanceId := int(teachAttendance.ID)
+					attendanceRecord := teachplan.TeachAttendanceRecord{
+						GVA_MODEL:    global.GVA_MODEL{},
+						StudentId:    &studentId,
+						Longitute:    nil,
+						Latitude:     nil,
+						Status:       0,
+						AttendanceId: &attendanceId,
+					}
+					global.GVA_DB.Create(&attendanceRecord)
+				}
+			}
+		}
+	}
 	return err
 }
 

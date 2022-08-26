@@ -3,6 +3,7 @@ package teachplan
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	request2 "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
@@ -15,6 +16,7 @@ type TeachAttendanceApi struct {
 }
 
 var teachAttendanceService = service.ServiceGroupApp.TeachplanServiceGroup.TeachAttendanceService
+var MultiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
 
 // CreateTeachAttendance 创建TeachAttendance
 // @Tags TeachAttendance
@@ -28,7 +30,19 @@ var teachAttendanceService = service.ServiceGroupApp.TeachplanServiceGroup.Teach
 func (teachAttendanceApi *TeachAttendanceApi) CreateTeachAttendance(c *gin.Context) {
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindJSON(&teachAttendance)
-	if err := teachAttendanceService.CreateTeachAttendance(teachAttendance); err != nil {
+	a := *teachAttendance.TeachClassId
+	var teachClassStudent = request2.TeachClassStudent{
+		TeachClassId: uint(a),
+		PageInfo: request.PageInfo{
+			Page:     10,
+			PageSize: 20,
+		},
+	}
+	students, _, err := MultiTableService.GetTeachClassStudentInfo(teachClassStudent)
+	if err != nil {
+		response.FailWithMessage("查询失败", c)
+	}
+	if err := teachAttendanceService.CreateTeachAttendance(teachAttendance, students); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
