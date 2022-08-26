@@ -18,7 +18,7 @@ import (
  * @Note:
 
  **/
-var obj *CService
+var obj *CLanguageService
 
 var errorCode = `
 	#include<stdio.h>
@@ -151,7 +151,7 @@ func NewClient() pb.ExecutorClient {
 }
 func TestMain(m *testing.M) {
 	client := NewClient()
-	obj = &CService{client}
+	obj = &CLanguageService{client}
 	//var s *pb.FileID
 	//s, err := client.FileAdd(context.Background(), &pb.FileContent{
 	//	Name:    "a.c",

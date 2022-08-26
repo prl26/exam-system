@@ -3660,6 +3660,11 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "termId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "name": "time",
                         "in": "query"
@@ -3782,6 +3787,11 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "name": "templateId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -5272,6 +5282,158 @@ const docTemplate = `{
                 }
             }
         },
+        "/oj/checkJudge": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验判断题",
+                "parameters": [
+                    {
+                        "description": "检验选择题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckJudge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkMultipleChoice": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验选择题",
+                "parameters": [
+                    {
+                        "description": "检验选择题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckMultipleChoice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkProgramm": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验编程题",
+                "parameters": [
+                    {
+                        "description": "检验编程题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckProgramm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkSupplyBlank": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验填空题",
+                "parameters": [
+                    {
+                        "description": "创建Term",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckSupplyBlank"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/paperQuestionMerge/createPaperQuestionMerge": {
             "post": {
                 "security": [
@@ -6491,6 +6653,33 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBank/findQuestionsByChapterId": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBank"
+                ],
+                "summary": "根据章节ID获取所有题库内的练习题",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -11622,7 +11811,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "teachId",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -11707,7 +11896,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "name": "teachId",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -11899,6 +12088,11 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "name": "attendance form:teachId:",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "attendanceId",
                         "in": "query"
                     },
@@ -11964,6 +12158,11 @@ const docTemplate = `{
                 ],
                 "summary": "分页获取TeachAttendanceRecord列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "attendance form:teachId:",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "name": "attendanceId",
@@ -12050,7 +12249,7 @@ const docTemplate = `{
                 "summary": "更新TeachAttendanceRecord",
                 "parameters": [
                     {
-                        "description": "更新TeachAttendanceRecord",
+                        "description": "修改TeacherUpdateAttendanceRecord",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -15226,6 +15425,59 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CheckJudge": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckMultipleChoice": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckProgramm": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckSupplyBlank": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.Empty": {
             "type": "object"
         },
@@ -16408,6 +16660,9 @@ const docTemplate = `{
                 "templateId": {
                     "type": "integer"
                 },
+                "termId": {
+                    "type": "integer"
+                },
                 "time": {
                     "type": "string"
                 },
@@ -16499,7 +16754,7 @@ const docTemplate = `{
                 "longitude": {
                     "type": "number"
                 },
-                "teachId": {
+                "teachClassId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -16511,6 +16766,9 @@ const docTemplate = `{
         "teachplan.TeachAttendanceRecord": {
             "type": "object",
             "properties": {
+                "attendance form:teachId:": {
+                    "type": "integer"
+                },
                 "attendanceId": {
                     "type": "integer"
                 },
@@ -16548,7 +16806,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "localhost:8888",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",

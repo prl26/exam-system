@@ -96,7 +96,7 @@ mysql:
   password: cuit@123456
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: error
+  log-mode: info
   log-zap: false
 pgsql:
   path: ""

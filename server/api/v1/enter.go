@@ -4,6 +4,7 @@ import (
 	"github.com/prl26/exam-system/server/api/v1/basicdata"
 	"github.com/prl26/exam-system/server/api/v1/examManage"
 	"github.com/prl26/exam-system/server/api/v1/lessondata"
+	"github.com/prl26/exam-system/server/api/v1/oj"
 	"github.com/prl26/exam-system/server/api/v1/questionBank"
 	"github.com/prl26/exam-system/server/api/v1/system"
 	"github.com/prl26/exam-system/server/api/v1/teachplan"
@@ -17,6 +18,7 @@ type ApiGroup struct {
 	TeachplanApiGroup    teachplan.ApiGroup
 	ExammanageApiGroup   examManage.ApiGroup
 	QuestionBankApiGroup questionBank.ApiGroup
+	OjApiGroup           oj.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)

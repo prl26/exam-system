@@ -1064,6 +1064,40 @@ definitions:
         description: 密码
         type: string
     type: object
+  request.CheckJudge:
+    properties:
+      answers:
+        type: boolean
+      id:
+        type: integer
+    type: object
+  request.CheckMultipleChoice:
+    properties:
+      answers:
+        items:
+          type: integer
+        type: array
+      id:
+        type: integer
+    type: object
+  request.CheckProgramm:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      language_id:
+        type: integer
+    type: object
+  request.CheckSupplyBlank:
+    properties:
+      answers:
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+    type: object
   request.Empty:
     type: object
   request.GetAuthorityId:
@@ -1890,6 +1924,8 @@ definitions:
         type: integer
       templateId:
         type: integer
+      termId:
+        type: integer
       time:
         type: string
       type:
@@ -1952,7 +1988,7 @@ definitions:
         type: number
       longitude:
         type: number
-      teachId:
+      teachClassId:
         type: integer
       updatedAt:
         description: 更新时间
@@ -1960,6 +1996,8 @@ definitions:
     type: object
   teachplan.TeachAttendanceRecord:
     properties:
+      'attendance form:teachId:':
+        type: integer
       attendanceId:
         type: integer
       createdAt:
@@ -1978,7 +2016,7 @@ definitions:
         description: 更新时间
         type: string
     type: object
-host: localhost:8080
+host: localhost:8888
 info:
   contact:
     email: support@swagger.io
@@ -4132,6 +4170,9 @@ paths:
         name: templateId
         type: integer
       - in: query
+        name: termId
+        type: integer
+      - in: query
         name: time
         type: string
       - in: query
@@ -4207,6 +4248,9 @@ paths:
         type: integer
       - in: query
         name: templateId
+        type: integer
+      - in: query
+        name: termId
         type: integer
       - in: query
         name: time
@@ -5096,6 +5140,98 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /oj/checkJudge:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 检验选择题
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.CheckJudge'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 检验判断题
+      tags:
+      - OJ
+  /oj/checkMultipleChoice:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 检验选择题
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.CheckMultipleChoice'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 检验选择题
+      tags:
+      - OJ
+  /oj/checkProgramm:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 检验编程题
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.CheckProgramm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 检验编程题
+      tags:
+      - OJ
+  /oj/checkSupplyBlank:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Term
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.CheckSupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 检验填空题
+      tags:
+      - OJ
   /paperQuestionMerge/createPaperQuestionMerge:
     post:
       consumes:
@@ -5846,6 +5982,22 @@ paths:
       summary: 更新ProgrammLanguageMerge
       tags:
       - ProgrammLanguageMerge
+  /questionBank/findQuestionsByChapterId:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 根据章节ID获取所有题库内的练习题
+      tags:
+      - QuestionBank
   /questionBankJudge/createQuestionBankJudge:
     post:
       consumes:
@@ -8941,7 +9093,7 @@ paths:
         name: longitude
         type: number
       - in: query
-        name: teachId
+        name: teachClassId
         type: integer
       - description: 更新时间
         in: query
@@ -8994,7 +9146,7 @@ paths:
         name: pageSize
         type: integer
       - in: query
-        name: teachId
+        name: teachClassId
         type: integer
       - description: 更新时间
         in: query
@@ -9110,6 +9262,9 @@ paths:
       - application/json
       parameters:
       - in: query
+        name: 'attendance form:teachId:'
+        type: integer
+      - in: query
         name: attendanceId
         type: integer
       - description: 创建时间
@@ -9150,6 +9305,9 @@ paths:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: 'attendance form:teachId:'
+        type: integer
       - in: query
         name: attendanceId
         type: integer
@@ -9203,7 +9361,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 更新TeachAttendanceRecord
+      - description: 修改TeacherUpdateAttendanceRecord
         in: body
         name: data
         required: true

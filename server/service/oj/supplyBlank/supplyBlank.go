@@ -21,7 +21,7 @@ import (
 type SupplyBlankService struct {
 }
 
-func (c *SupplyBlankService) Check(choiceQuestionId *uint, answer []string) (bool, error) {
+func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) (bool, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
 		return false, err
@@ -29,7 +29,7 @@ func (c *SupplyBlankService) Check(choiceQuestionId *uint, answer []string) (boo
 	return c.check(question, answer), nil
 }
 
-func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId *uint) (*questionBank.SupplyBlank, error) {
+func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.SupplyBlank, error) {
 	var question questionBank.SupplyBlank
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {

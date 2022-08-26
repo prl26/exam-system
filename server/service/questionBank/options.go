@@ -54,7 +54,7 @@ func (questionBank_optionsService *OptionsService) GetQuestionBankOptionsInfoLis
 	db := global.GVA_DB.Model(&questionBank.Options{})
 	var questionBank_optionss []questionBank.Options
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.MultipleChoiceId != nil {
+	if info.MultipleChoiceId != 0 {
 		db = db.Where("multiple_choice_id=?", info.MultipleChoiceId)
 	}
 	err = db.Count(&total).Error

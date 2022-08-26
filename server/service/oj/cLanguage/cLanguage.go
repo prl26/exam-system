@@ -22,7 +22,7 @@ import (
 
  **/
 
-type CService struct {
+type CLanguageService struct {
 	ExecutorClient pb.ExecutorClient
 }
 
@@ -38,7 +38,24 @@ const DEFAULT_CODE_NAME string = "a.c"
 const DEFAULT_FILE_NAME string = "a"
 const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 
-func (c *CService) Compile(code string) (string, *time.Time, error) {
+func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+	fileID, err := c.compile(code)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		after := time.After(FILE_FAILED_DURATION)
+		<-after
+		err := c.Delete(fileID)
+		if err != nil {
+			global.GVA_LOG.Error(err.Error())
+			return
+		}
+	}()
+	return c.Judge(code, cases)
+}
+
+func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return "", nil, err
@@ -56,7 +73,7 @@ func (c *CService) Compile(code string) (string, *time.Time, error) {
 	return fileID, &failedTime, nil
 }
 
-func (c *CService) compile(code string) (string, error) {
+func (c *CLanguageService) compile(code string) (string, error) {
 	input := &pb.Request_File{
 		File: &pb.Request_File_Memory{
 			Memory: &pb.Request_MemoryFile{
@@ -126,7 +143,7 @@ func (c *CService) compile(code string) (string, error) {
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME], nil
 }
 
-func (c *CService) Delete(id string) error {
+func (c *CLanguageService) Delete(id string) error {
 	_, err := c.ExecutorClient.FileDelete(context.Background(), &pb.FileID{FileID: id})
 	if err != nil {
 		return err
@@ -134,7 +151,7 @@ func (c *CService) Delete(id string) error {
 	return nil
 }
 
-func (c *CService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
@@ -163,7 +180,7 @@ func (c *CService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*
 	return submits, nil
 }
 
-func (c *CService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
+func (c *CLanguageService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{

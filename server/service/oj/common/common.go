@@ -2,6 +2,7 @@ package common
 
 import (
 	"github.com/prl26/exam-system/server/global"
+
 	"github.com/prl26/exam-system/server/model/questionBank"
 )
 

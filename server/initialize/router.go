@@ -23,6 +23,7 @@ func Routers() *gin.Engine {
 	systemRouter := router.RouterGroupApp.System
 	examManageRouter := router.RouterGroupApp.Exammanage
 	questionBankRouter := router.RouterGroupApp.QuestionBank
+	ojRouter := router.RouterGroupApp.Oj
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
 	// VUE_APP_BASE_API = /
 	// VUE_APP_BASE_PATH = http://localhost
@@ -113,7 +114,9 @@ func Routers() *gin.Engine {
 
 	TestGroup := Router.Group("") // 此处测试接口不需要分配权限
 	{
+		questionBankRouter.InitQuestionBankRouter(TestGroup)
 		basicdataRouter.InitTeachClassStudentRouter(TestGroup)
+		ojRouter.InitOjRouter(TestGroup)
 	}
 
 	InstallPlugin(Router) // 安装插件
