@@ -7,63 +7,66 @@ import (
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 )
 
-type ExamPaperTemplateService struct {
+type PaperTemplateService struct {
 }
 
-// CreateExamPaperTemplate 创建ExamPaperTemplate记录
+// CreatePaperTemplate 创建PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) CreateExamPaperTemplate(examPaperTemplate examManage.ExamPaperTemplate) (err error) {
-	err = global.GVA_DB.Create(&examPaperTemplate).Error
+func (PapertemplateService *PaperTemplateService) CreatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
+	err = global.GVA_DB.Create(&Papertemplate).Error
 	return err
 }
 
-// DeleteExamPaperTemplate 删除ExamPaperTemplate记录
+// DeletePaperTemplate 删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) DeleteExamPaperTemplate(examPaperTemplate examManage.ExamPaperTemplate) (err error) {
-	err = global.GVA_DB.Delete(&examPaperTemplate).Error
+func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
+	err = global.GVA_DB.Delete(&Papertemplate).Error
 	return err
 }
 
-// DeleteExamPaperTemplateByIds 批量删除ExamPaperTemplate记录
+// DeletePaperTemplateByIds 批量删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) DeleteExamPaperTemplateByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]examManage.ExamPaperTemplate{}, "id in ?", ids.Ids).Error
+func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]examManage.PaperTemplate{}, "id in ?", ids.Ids).Error
 	return err
 }
 
-// UpdateExamPaperTemplate 更新ExamPaperTemplate记录
+// UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) UpdateExamPaperTemplate(examPaperTemplate examManage.ExamPaperTemplate) (err error) {
-	err = global.GVA_DB.Save(&examPaperTemplate).Error
+func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
+	err = global.GVA_DB.Save(&Papertemplate).Error
 	return err
 }
 
-// GetExamPaperTemplate 根据id获取ExamPaperTemplate记录
+// GetPaperTemplate 根据id获取PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) GetExamPaperTemplate(id uint) (examPaperTemplate examManage.ExamPaperTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&examPaperTemplate).Error
+func (PapertemplateService *PaperTemplateService) GetPaperTemplate(id uint) (Papertemplate examManage.PaperTemplate, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&Papertemplate).Error
 	return
 }
 
-// GetExamPaperTemplateInfoList 分页获取ExamPaperTemplate记录
+// GetPaperTemplateInfoList 分页获取PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperTemplateService *ExamPaperTemplateService) GetExamPaperTemplateInfoList(info examManageReq.ExamPaperTemplateSearch) (list []examManage.ExamPaperTemplate, total int64, err error) {
+func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch) (list []examManage.PaperTemplate, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&examManage.ExamPaperTemplate{})
-	var examPaperTemplates []examManage.ExamPaperTemplate
+	db := global.GVA_DB.Model(&examManage.PaperTemplate{})
+	var Papertemplates []examManage.PaperTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.CourseId != nil {
 		db = db.Where("course_id = ?", info.CourseId)
 	}
-	if info.CreatorId != nil {
-		db = db.Where("user_id = ?", info.CreatorId)
+	if info.UserId != nil {
+		db = db.Where("user_id = ?", info.UserId)
+	}
+	if info.Name != "" {
+		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&examPaperTemplates).Error
-	return examPaperTemplates, total, err
+	err = db.Limit(limit).Offset(offset).Find(&Papertemplates).Error
+	return Papertemplates, total, err
 }

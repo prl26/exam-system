@@ -1,10 +1,10 @@
 package {{.Package}}
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/{{.Package}}"
+	"github.com/prl26/exam-system/server/model/common/request"
+    {{.Package}}Req "github.com/prl26/exam-system/server/model/{{.Package}}/request"
 )
 
 type {{.StructName}}Service struct {
