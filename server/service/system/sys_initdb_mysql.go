@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"exam-system/config"
 	"github.com/gookit/color"
+	"github.com/prl26/exam-system/server/config"
 
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/utils"
 
-	"exam-system/global"
-	"exam-system/model/system/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/request"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

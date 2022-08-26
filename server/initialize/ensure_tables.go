@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"context"
-	sysModel "exam-system/model/system"
-	"exam-system/service/system"
 	adapter "github.com/casbin/gorm-adapter/v3"
+	sysModel "github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/service/system"
 	"gorm.io/gorm"
 )
 

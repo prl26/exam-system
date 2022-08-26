@@ -1,10 +1,10 @@
 package system
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/system"
-	systemReq "exam-system/model/system/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/system"
+	systemReq "github.com/prl26/exam-system/server/model/system/request"
 )
 
 //@author: [granty1](https://github.com/granty1)

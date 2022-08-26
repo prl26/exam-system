@@ -1,9 +1,9 @@
 package router
 
 import (
-	"exam-system/middleware"
-	"exam-system/plugin/email/api"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/middleware"
+	"github.com/prl26/exam-system/server/plugin/email/api"
 )
 
 type EmailRouter struct{}

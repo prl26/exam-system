@@ -1,6 +1,6 @@
 package response
 
-import "exam-system/model/oj"
+import "github.com/prl26/exam-system/server/model/oj"
 
 /**
 

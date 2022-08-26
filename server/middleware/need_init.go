@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/response"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
 )
 
 // 处理跨域请求,支持options访问

@@ -1,13 +1,13 @@
 package teachplan
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/common/response"
-	"exam-system/model/teachplan"
-	teachplanReq "exam-system/model/teachplan/request"
-	"exam-system/service"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/teachplan"
+	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
+	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
 

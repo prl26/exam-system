@@ -1,7 +1,7 @@
 package service
 
 import (
-	"exam-system/plugin/email/utils"
+	"github.com/prl26/exam-system/server/plugin/email/utils"
 )
 
 type EmailService struct{}

@@ -1,10 +1,10 @@
 package common
 
 import (
-	"exam-system/core"
-	"exam-system/global"
-	"exam-system/initialize"
 	"fmt"
+	"github.com/prl26/exam-system/server/core"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/initialize"
 	"log"
 	"testing"
 )

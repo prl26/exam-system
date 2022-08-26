@@ -1,6 +1,6 @@
 package system
 
-import "exam-system/global"
+import "github.com/prl26/exam-system/server/global"
 
 type SysBaseMenuBtn struct {
 	global.GVA_MODEL

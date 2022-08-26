@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"exam-system/global"
-	"exam-system/model/system"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
 	"strconv"
 )
 

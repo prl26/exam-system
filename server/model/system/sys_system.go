@@ -1,7 +1,7 @@
 package system
 
 import (
-	"exam-system/config"
+	"github.com/prl26/exam-system/server/config"
 )
 
 // 配置文件结构体

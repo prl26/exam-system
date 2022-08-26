@@ -1,9 +1,9 @@
 package cLanguage
 
 import (
-	"exam-system/model/questionBank"
-	"exam-system/pb"
 	"fmt"
+	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/pb"
 	"google.golang.org/grpc"
 	"log"
 	"testing"

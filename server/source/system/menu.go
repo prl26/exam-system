@@ -2,9 +2,9 @@ package system
 
 import (
 	"context"
-	. "exam-system/model/system"
-	"exam-system/service/system"
 	"github.com/pkg/errors"
+	. "github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/service/system"
 	"gorm.io/gorm"
 )
 

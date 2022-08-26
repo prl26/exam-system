@@ -1,19 +1,19 @@
 package core
 
 import (
-	"exam-system/core/internal"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/core/internal"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/songzhibin97/gkit/cache/local_cache"
 
-	"exam-system/global"
-	_ "exam-system/packfile"
 	"github.com/fsnotify/fsnotify"
+	"github.com/prl26/exam-system/server/global"
+	_ "github.com/prl26/exam-system/server/packfile"
 	"github.com/spf13/viper"
 )
 

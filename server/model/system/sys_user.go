@@ -1,7 +1,7 @@
 package system
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	uuid "github.com/satori/go.uuid"
 )
 

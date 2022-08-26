@@ -2,7 +2,7 @@
 package teachplan
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // Score 结构体

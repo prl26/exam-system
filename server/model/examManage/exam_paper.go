@@ -2,7 +2,7 @@
 package examManage
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // ExamPaper 结构体

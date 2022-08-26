@@ -1,9 +1,9 @@
 package email
 
 import (
-	"exam-system/plugin/email/global"
-	"exam-system/plugin/email/router"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/plugin/email/global"
+	"github.com/prl26/exam-system/server/plugin/email/router"
 )
 
 type emailPlugin struct{}

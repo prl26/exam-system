@@ -2,11 +2,11 @@ package system
 
 import (
 	"errors"
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/system"
-	"exam-system/utils"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )

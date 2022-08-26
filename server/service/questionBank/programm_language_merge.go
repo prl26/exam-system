@@ -1,10 +1,10 @@
 package questionBank
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/questionBank"
-	questionBankReq "exam-system/model/questionBank/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/questionBank"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
 )
 
 type ProgrammLanguageMergeService struct {

@@ -1,11 +1,10 @@
 package main
 
 import (
-	"exam-system/core"
-	_ "exam-system/docs"
-	"exam-system/global"
-	"exam-system/initialize"
-
+	"github.com/prl26/exam-system/server/core"
+	_ "github.com/prl26/exam-system/server/docs"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/initialize"
 	"go.uber.org/zap"
 )
 

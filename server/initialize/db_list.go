@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"exam-system/config"
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/config"
+	"github.com/prl26/exam-system/server/global"
 	"gorm.io/gorm"
 )
 

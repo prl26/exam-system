@@ -2,11 +2,11 @@ package system
 
 import (
 	"errors"
-	"exam-system/global"
-	"exam-system/model/common/response"
-	"exam-system/model/system"
-	"exam-system/utils"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"net/url"

@@ -1,12 +1,12 @@
 package v1
 
 import (
-	"exam-system/api/v1/basicdata"
-	"exam-system/api/v1/examManage"
-	"exam-system/api/v1/lessondata"
-	"exam-system/api/v1/questionBank"
-	"exam-system/api/v1/system"
-	"exam-system/api/v1/teachplan"
+	"github.com/prl26/exam-system/server/api/v1/basicdata"
+	"github.com/prl26/exam-system/server/api/v1/examManage"
+	"github.com/prl26/exam-system/server/api/v1/lessondata"
+	"github.com/prl26/exam-system/server/api/v1/questionBank"
+	"github.com/prl26/exam-system/server/api/v1/system"
+	"github.com/prl26/exam-system/server/api/v1/teachplan"
 )
 
 type ApiGroup struct {

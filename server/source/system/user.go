@@ -2,10 +2,10 @@ package system
 
 import (
 	"context"
-	sysModel "exam-system/model/system"
-	"exam-system/service/system"
-	"exam-system/utils"
 	"github.com/pkg/errors"
+	sysModel "github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/service/system"
+	"github.com/prl26/exam-system/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )

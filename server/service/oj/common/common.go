@@ -1,8 +1,8 @@
 package common
 
 import (
-	"exam-system/global"
-	"exam-system/model/questionBank"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/questionBank"
 )
 
 /**

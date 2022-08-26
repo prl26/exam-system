@@ -1,4 +1,4 @@
-module exam-system
+module github.com/prl26/exam-system/server
 
 go 1.16
 

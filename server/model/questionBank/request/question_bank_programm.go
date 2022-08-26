@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/model/common/request"
-	"exam-system/model/questionBank"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/questionBank"
 )
 
 type QuestionBankProgrammSearch struct {

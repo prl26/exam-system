@@ -1,6 +1,6 @@
 package system
 
-import "exam-system/service"
+import "github.com/prl26/exam-system/server/service"
 
 type ApiGroup struct {
 	DBApi

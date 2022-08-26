@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"exam-system/global"
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 )
 

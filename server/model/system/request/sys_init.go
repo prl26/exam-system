@@ -3,7 +3,7 @@ package request
 import (
 	"fmt"
 
-	"exam-system/config"
+	"github.com/prl26/exam-system/server/config"
 )
 
 type InitDB struct {

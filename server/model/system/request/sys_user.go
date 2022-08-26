@@ -1,6 +1,6 @@
 package request
 
-import model "exam-system/model/system"
+import model "github.com/prl26/exam-system/server/model/system"
 
 // User register structure
 type Register struct {

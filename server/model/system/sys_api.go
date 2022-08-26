@@ -1,7 +1,7 @@
 package system
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 type SysApi struct {

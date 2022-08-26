@@ -2,18 +2,18 @@ package system
 
 import (
 	"errors"
-	systemReq "exam-system/model/system/request"
 	"fmt"
+	systemReq "github.com/prl26/exam-system/server/model/system/request"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"exam-system/model/system/response"
+	"github.com/prl26/exam-system/server/model/system/response"
 
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/system"
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/utils"
 
 	"go.uber.org/zap"
 )

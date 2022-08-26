@@ -1,10 +1,10 @@
 package basicdata
 
 import (
-	"exam-system/global"
-	"exam-system/model/basicdata"
-	basicdataReq "exam-system/model/basicdata/request"
-	"exam-system/model/common/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
+	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
+	"github.com/prl26/exam-system/server/model/common/request"
 )
 
 type CollegeService struct {

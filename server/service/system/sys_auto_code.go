@@ -24,11 +24,11 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"exam-system/resource/autocode_template/subcontract"
+	"github.com/prl26/exam-system/server/resource/autocode_template/subcontract"
 
-	"exam-system/global"
-	"exam-system/model/system"
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/utils"
 
 	"gorm.io/gorm"
 )

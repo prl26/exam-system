@@ -1,11 +1,11 @@
 package api
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/response"
-	email_response "exam-system/plugin/email/model/response"
-	"exam-system/plugin/email/service"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
+	email_response "github.com/prl26/exam-system/server/plugin/email/model/response"
+	"github.com/prl26/exam-system/server/plugin/email/service"
 	"go.uber.org/zap"
 )
 

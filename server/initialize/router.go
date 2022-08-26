@@ -3,11 +3,11 @@ package initialize
 import (
 	"net/http"
 
-	_ "exam-system/docs"
-	"exam-system/global"
-	"exam-system/middleware"
-	"exam-system/router"
 	"github.com/gin-gonic/gin"
+	_ "github.com/prl26/exam-system/server/docs"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/middleware"
+	"github.com/prl26/exam-system/server/router"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )

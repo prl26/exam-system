@@ -2,10 +2,10 @@ package system
 
 import (
 	"errors"
-	"exam-system/global"
-	"exam-system/model/system"
-	"exam-system/model/system/request"
-	"exam-system/model/system/response"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/model/system/request"
+	"github.com/prl26/exam-system/server/model/system/response"
 	"gorm.io/gorm"
 )
 

@@ -1,15 +1,15 @@
 package initialize
 
 import (
-	"exam-system/global"
-	"exam-system/model/questionBank"
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/system"
 	"os"
 
-	"exam-system/model/basicdata"
-	"exam-system/model/examManage"
-	"exam-system/model/lessondata"
-	"exam-system/model/teachplan"
+	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/examManage"
+	"github.com/prl26/exam-system/server/model/lessondata"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/global"
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
 )
 
 // Add menu authority info structure

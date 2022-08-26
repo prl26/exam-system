@@ -2,7 +2,7 @@
 package questionBank
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // MultipleChoice 结构体

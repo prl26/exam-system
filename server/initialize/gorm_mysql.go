@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"exam-system/config"
-	"exam-system/global"
-	"exam-system/initialize/internal"
+	"github.com/prl26/exam-system/server/config"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/initialize/internal"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/model/common/request"
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/system"
 )
 
 // api分页条件查询及排序结构体

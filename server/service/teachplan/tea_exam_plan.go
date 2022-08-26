@@ -1,10 +1,10 @@
 package teachplan
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/teachplan"
-	teachplanReq "exam-system/model/teachplan/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/teachplan"
+	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 )
 
 type ExamPlanService struct {

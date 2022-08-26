@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"exam-system/config"
-	"exam-system/global"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/config"
+	"github.com/prl26/exam-system/server/global"
 	"net/http"
 )
 

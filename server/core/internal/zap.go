@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"exam-system/global"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"

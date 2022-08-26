@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/model/common/request"
-	"exam-system/model/examManage"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/examManage"
 )
 
 type PaperTemplateSearch struct {

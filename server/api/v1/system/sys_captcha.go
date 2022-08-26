@@ -1,11 +1,11 @@
 package system
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/response"
-	systemRes "exam-system/model/system/response"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
+	systemRes "github.com/prl26/exam-system/server/model/system/response"
 	"go.uber.org/zap"
 )
 

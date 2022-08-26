@@ -4,7 +4,7 @@ package system
 import (
 	"time"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // 如果含有time.Time 请自行import time包

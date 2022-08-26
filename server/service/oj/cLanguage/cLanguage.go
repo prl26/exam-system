@@ -2,12 +2,12 @@ package cLanguage
 
 import (
 	"context"
-	"exam-system/global"
-	"exam-system/model/oj"
-	ojResp "exam-system/model/oj/response"
-	"exam-system/model/questionBank"
-	"exam-system/pb"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/oj"
+	ojResp "github.com/prl26/exam-system/server/model/oj/response"
+	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/pb"
 	"strconv"
 	"time"
 )

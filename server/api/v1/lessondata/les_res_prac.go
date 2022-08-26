@@ -1,13 +1,13 @@
 package lessondata
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/common/response"
-	"exam-system/model/lessondata"
-	lessondataReq "exam-system/model/lessondata/request"
-	"exam-system/service"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/lessondata"
+	lessondataReq "github.com/prl26/exam-system/server/model/lessondata/request"
+	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
 

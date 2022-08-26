@@ -3,8 +3,8 @@ package system
 import (
 	"errors"
 
-	"exam-system/global"
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
 	"gorm.io/gorm"
 )
 

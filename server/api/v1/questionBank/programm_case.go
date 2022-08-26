@@ -1,14 +1,14 @@
 package questionBank
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/common/response"
-	"exam-system/model/questionBank"
-	questionBankReq "exam-system/model/questionBank/request"
-	"exam-system/service"
-	"exam-system/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/questionBank"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
+	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 )
 

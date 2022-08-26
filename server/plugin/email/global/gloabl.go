@@ -1,5 +1,5 @@
 package global
 
-import "exam-system/plugin/email/config"
+import "github.com/prl26/exam-system/server/plugin/email/config"
 
 var GlobalConfig = new(config.Email)

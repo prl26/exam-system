@@ -1,6 +1,6 @@
 package response
 
-import "exam-system/model/system"
+import "github.com/prl26/exam-system/server/model/system"
 
 type SysAPIResponse struct {
 	Api system.SysApi `json:"api"`

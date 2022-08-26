@@ -1,11 +1,11 @@
 package main
 
 import (
-	"exam-system/core"
-	"exam-system/global"
-	"exam-system/initialize"
-	"exam-system/model/questionBank"
 	"fmt"
+	"github.com/prl26/exam-system/server/core"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/initialize"
+	"github.com/prl26/exam-system/server/model/questionBank"
 	"go.uber.org/zap"
 	"math/rand"
 )

@@ -1,19 +1,23 @@
 package teachplan
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/teachplan"
-	teachplanReq "exam-system/model/teachplan/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/teachplan"
+	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
+	"github.com/prl26/exam-system/server/service"
 )
 
 type TeachAttendanceService struct {
 }
 
+var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
+
 // CreateTeachAttendance 创建TeachAttendance记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teachAttendanceService *TeachAttendanceService) CreateTeachAttendance(teachAttendance teachplan.TeachAttendance) (err error) {
 	err = global.GVA_DB.Create(&teachAttendance).Error
+	//students := teachClassService.
 	return err
 }
 
@@ -54,8 +58,8 @@ func (teachAttendanceService *TeachAttendanceService) GetTeachAttendanceInfoList
 	db := global.GVA_DB.Model(&teachplan.TeachAttendance{})
 	var teachAttendances []teachplan.TeachAttendance
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.TeachId != nil {
-		db = db.Where("teach_id = ?", info.TeachId)
+	if info.TeachClassId != nil {
+		db = db.Where("teach_id = ?", info.TeachClassId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

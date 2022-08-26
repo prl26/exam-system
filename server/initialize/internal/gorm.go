@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )

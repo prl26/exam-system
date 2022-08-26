@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"time"
 
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/utils"
 
-	"exam-system/global"
-	"exam-system/model/common/response"
-	"exam-system/model/system"
-	"exam-system/service"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/service"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

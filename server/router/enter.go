@@ -1,12 +1,12 @@
 package router
 
 import (
-	"exam-system/router/basicdata"
-	"exam-system/router/examManage"
-	"exam-system/router/lessondata"
-	"exam-system/router/questionBank"
-	"exam-system/router/system"
-	"exam-system/router/teachplan"
+	"github.com/prl26/exam-system/server/router/basicdata"
+	"github.com/prl26/exam-system/server/router/examManage"
+	"github.com/prl26/exam-system/server/router/lessondata"
+	"github.com/prl26/exam-system/server/router/questionBank"
+	"github.com/prl26/exam-system/server/router/system"
+	"github.com/prl26/exam-system/server/router/teachplan"
 )
 
 type RouterGroup struct {

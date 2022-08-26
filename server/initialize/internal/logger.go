@@ -3,7 +3,7 @@ package internal
 import (
 	"fmt"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	"gorm.io/gorm/logger"
 )
 

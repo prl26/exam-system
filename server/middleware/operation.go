@@ -11,12 +11,12 @@ import (
 	"sync"
 	"time"
 
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/utils"
 
-	"exam-system/global"
-	"exam-system/model/system"
-	"exam-system/service"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
+	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
 

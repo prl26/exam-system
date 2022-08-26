@@ -1,13 +1,13 @@
 package service
 
 import (
-	"exam-system/service/basicdata"
-	"exam-system/service/examManage"
-	"exam-system/service/lesson"
-	"exam-system/service/lessondata"
-	"exam-system/service/questionBank"
-	"exam-system/service/system"
-	"exam-system/service/teachplan"
+	"github.com/prl26/exam-system/server/service/basicdata"
+	"github.com/prl26/exam-system/server/service/examManage"
+	"github.com/prl26/exam-system/server/service/lesson"
+	"github.com/prl26/exam-system/server/service/lessondata"
+	"github.com/prl26/exam-system/server/service/questionBank"
+	"github.com/prl26/exam-system/server/service/system"
+	"github.com/prl26/exam-system/server/service/teachplan"
 )
 
 type ServiceGroup struct {

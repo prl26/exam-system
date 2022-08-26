@@ -1,6 +1,6 @@
 package request
 
-import "exam-system/model/common/request"
+import "github.com/prl26/exam-system/server/model/common/request"
 
 type SysAutoHistory struct {
 	request.PageInfo

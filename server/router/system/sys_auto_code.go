@@ -1,8 +1,8 @@
 package system
 
 import (
-	v1 "exam-system/api/v1"
 	"github.com/gin-gonic/gin"
+	v1 "github.com/prl26/exam-system/server/api/v1"
 )
 
 type AutoCodeRouter struct{}

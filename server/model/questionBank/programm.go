@@ -2,7 +2,7 @@
 package questionBank
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // Programm 结构体

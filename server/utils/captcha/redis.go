@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"exam-system/global"
 	"github.com/mojocn/base64Captcha"
+	"github.com/prl26/exam-system/server/global"
 	"go.uber.org/zap"
 )
 

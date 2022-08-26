@@ -3,9 +3,9 @@ package system
 import (
 	"context"
 
-	"exam-system/service/system"
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/pkg/errors"
+	"github.com/prl26/exam-system/server/service/system"
 	"gorm.io/gorm"
 )
 

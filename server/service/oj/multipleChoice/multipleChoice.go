@@ -1,9 +1,9 @@
 package multipleChoice
 
 import (
-	"exam-system/global"
-	"exam-system/model/questionBank"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/questionBank"
 	"strconv"
 	"strings"
 )

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"os"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	"go.uber.org/zap"
 )
 

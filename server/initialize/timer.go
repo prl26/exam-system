@@ -5,9 +5,9 @@ import (
 
 	"github.com/robfig/cron/v3"
 
-	"exam-system/config"
-	"exam-system/global"
-	"exam-system/utils"
+	"github.com/prl26/exam-system/server/config"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/utils"
 )
 
 func Timer() {

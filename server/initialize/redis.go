@@ -3,7 +3,7 @@ package initialize
 import (
 	"context"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"

@@ -2,7 +2,7 @@
 package basicdata
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // Student 结构体

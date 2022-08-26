@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"exam-system/global"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/prl26/exam-system/server/global"
 	"go.uber.org/zap/zapcore"
 	"os"
 	"path"

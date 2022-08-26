@@ -1,7 +1,7 @@
 package response
 
 import (
-	"exam-system/model/system/request"
+	"github.com/prl26/exam-system/server/model/system/request"
 )
 
 type PolicyPathResponse struct {

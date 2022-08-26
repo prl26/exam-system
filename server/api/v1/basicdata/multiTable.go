@@ -7,12 +7,12 @@
 package basicdata
 
 import (
-	"exam-system/global"
-	basicdataReq "exam-system/model/basicdata/request"
-	"exam-system/model/common/response"
-	"exam-system/service"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
 

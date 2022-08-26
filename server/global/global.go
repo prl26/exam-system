@@ -4,12 +4,12 @@ import (
 	"github.com/songzhibin97/gkit/cache/singleflight"
 	"sync"
 
-	"exam-system/utils/timer"
+	"github.com/prl26/exam-system/server/utils/timer"
 	"github.com/songzhibin97/gkit/cache/local_cache"
 
 	"go.uber.org/zap"
 
-	"exam-system/config"
+	"github.com/prl26/exam-system/server/config"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"

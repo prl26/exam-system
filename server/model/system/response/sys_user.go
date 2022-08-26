@@ -1,7 +1,7 @@
 package response
 
 import (
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/model/system"
 )
 
 type SysUserResponse struct {

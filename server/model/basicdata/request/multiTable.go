@@ -7,7 +7,7 @@
 package request
 
 import (
-	"exam-system/model/common/request"
+	"github.com/prl26/exam-system/server/model/common/request"
 )
 
 // 接收 教学班id 和学生id 的结构体

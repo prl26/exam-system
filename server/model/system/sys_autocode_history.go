@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"exam-system/global"
-	"exam-system/model/common/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
 )
 
 // SysAutoCodeHistory 自动迁移代码记录,用于回滚,重放使用

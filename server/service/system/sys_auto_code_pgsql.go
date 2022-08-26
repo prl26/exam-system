@@ -1,9 +1,9 @@
 package system
 
 import (
-	"exam-system/global"
-	"exam-system/model/system/response"
 	"github.com/pkg/errors"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/response"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

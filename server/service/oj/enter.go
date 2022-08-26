@@ -1,8 +1,8 @@
 package oj
 
 import (
-	"exam-system/service/oj/cLanguage"
-	"exam-system/service/oj/common"
+	"github.com/prl26/exam-system/server/service/oj/cLanguage"
+	"github.com/prl26/exam-system/server/service/oj/common"
 )
 
 /**

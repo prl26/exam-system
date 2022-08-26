@@ -1,12 +1,12 @@
 package initialize
 
 import (
-	"exam-system/global"
-	"exam-system/middleware"
-	"exam-system/plugin/email"
-	"exam-system/utils/plugin"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/middleware"
+	"github.com/prl26/exam-system/server/plugin/email"
+	"github.com/prl26/exam-system/server/utils/plugin"
 )
 
 func PluginInit(group *gin.RouterGroup, Plugin ...plugin.Plugin) {

@@ -1,11 +1,11 @@
 package system
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/common/response"
-	systemReq "exam-system/model/system/request"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/common/response"
+	systemReq "github.com/prl26/exam-system/server/model/system/request"
 	"go.uber.org/zap"
 )
 

@@ -8,9 +8,9 @@ import (
 
 	"go.uber.org/zap"
 
-	"exam-system/global"
-	"exam-system/model/common/response"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
 )
 
 type LimitConfig struct {

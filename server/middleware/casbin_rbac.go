@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/response"
-	"exam-system/service"
-	"exam-system/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"strconv"
 )
 

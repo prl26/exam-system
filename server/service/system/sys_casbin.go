@@ -2,12 +2,12 @@ package system
 
 import (
 	"errors"
-	"exam-system/global"
-	"exam-system/model/system/request"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/request"
 	"go.uber.org/zap"
 	"strconv"
 	"sync"

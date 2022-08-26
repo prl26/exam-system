@@ -1,9 +1,9 @@
 package upload
 
 import (
-	"exam-system/global"
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
 	"github.com/pkg/errors"
+	"github.com/prl26/exam-system/server/global"
 	"mime/multipart"
 )
 

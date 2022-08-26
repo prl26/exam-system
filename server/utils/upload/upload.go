@@ -3,7 +3,7 @@ package upload
 import (
 	"mime/multipart"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // OSS 对象存储接口

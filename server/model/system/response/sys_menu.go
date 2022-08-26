@@ -1,6 +1,6 @@
 package response
 
-import "exam-system/model/system"
+import "github.com/prl26/exam-system/server/model/system"
 
 type SysMenusResponse struct {
 	Menus []system.SysMenu `json:"menus"`

@@ -2,7 +2,7 @@ package system
 
 import (
 	"errors"
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	"go/token"
 	"strings"
 )

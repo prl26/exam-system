@@ -1,9 +1,9 @@
 package questionBank
 
 import (
-	"exam-system/api/v1"
-	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/middleware"
 )
 
 type QuestionBankMultipleChoiceRouter struct {

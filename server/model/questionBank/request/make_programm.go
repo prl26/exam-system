@@ -1,6 +1,6 @@
 package request
 
-import "exam-system/model/questionBank"
+import "github.com/prl26/exam-system/server/model/questionBank"
 
 /**
 

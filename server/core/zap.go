@@ -1,10 +1,10 @@
 package core
 
 import (
-	"exam-system/core/internal"
-	"exam-system/global"
-	"exam-system/utils"
 	"fmt"
+	"github.com/prl26/exam-system/server/core/internal"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"

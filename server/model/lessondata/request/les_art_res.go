@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/model/common/request"
-	"exam-system/model/lessondata"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/lessondata"
 )
 
 type ArticleResourcesSearch struct {

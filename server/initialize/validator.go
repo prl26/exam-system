@@ -1,6 +1,6 @@
 package initialize
 
-import "exam-system/utils"
+import "github.com/prl26/exam-system/server/utils"
 
 func init() {
 	_ = utils.RegisterRule("PageVerify",

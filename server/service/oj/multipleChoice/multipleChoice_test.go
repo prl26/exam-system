@@ -1,10 +1,10 @@
 package multipleChoice
 
 import (
-	"exam-system/core"
-	"exam-system/global"
-	"exam-system/initialize"
-	"exam-system/model/questionBank"
+	"github.com/prl26/exam-system/server/core"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/initialize"
+	"github.com/prl26/exam-system/server/model/questionBank"
 	"log"
 	"testing"
 )

@@ -1,8 +1,8 @@
 package system
 
 import (
-	"exam-system/global"
-	"exam-system/model/system/response"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/response"
 )
 
 var AutoCodeMysql = new(autoCodeMysql)

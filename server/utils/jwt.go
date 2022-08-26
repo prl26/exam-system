@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	"exam-system/global"
-	"exam-system/model/system/request"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/request"
 )
 
 type JWT struct {

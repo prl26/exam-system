@@ -7,9 +7,9 @@
 package basicdata
 
 import (
-	"exam-system/global"
-	"exam-system/model/basicdata"
-	"exam-system/model/basicdata/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/basicdata/request"
 )
 
 type MultiTableService struct {

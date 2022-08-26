@@ -2,7 +2,7 @@
 package teachplan
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 	"time"
 )
 
@@ -21,6 +21,7 @@ type ExamPlan struct {
 	Type         *int       `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    *float64   `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	Weight       *float64   `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
+	TermId       *uint      `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
 
 // TableName ExamPlan 表名

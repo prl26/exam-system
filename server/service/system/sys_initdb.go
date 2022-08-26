@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"exam-system/global"
-	"exam-system/model/system/request"
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system/request"
 	"gorm.io/gorm"
 	"sort"
 )

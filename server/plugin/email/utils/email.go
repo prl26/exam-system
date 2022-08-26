@@ -6,7 +6,7 @@ import (
 	"net/smtp"
 	"strings"
 
-	"exam-system/plugin/email/global"
+	"github.com/prl26/exam-system/server/plugin/email/global"
 
 	"github.com/jordan-wright/email"
 )

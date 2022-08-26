@@ -2,7 +2,7 @@
 package lessondata
 
 import (
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 )
 
 // ResourcePractice 结构体

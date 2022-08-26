@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	_ "exam-system/source/system"
+	_ "github.com/prl26/exam-system/server/source/system"
 )
 
 func init() {

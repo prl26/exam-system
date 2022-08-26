@@ -1,9 +1,9 @@
 package utils
 
 import (
-	"exam-system/global"
-	systemReq "exam-system/model/system/request"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/global"
+	systemReq "github.com/prl26/exam-system/server/model/system/request"
 	uuid "github.com/satori/go.uuid"
 )
 

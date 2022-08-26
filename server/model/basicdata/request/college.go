@@ -1,8 +1,8 @@
 package request
 
 import (
-	"exam-system/model/basicdata"
-	"exam-system/model/common/request"
+	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/common/request"
 )
 
 type CollegeSearch struct {

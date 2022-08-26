@@ -1,10 +1,10 @@
 package examManage
 
 import (
-	"exam-system/global"
-	"exam-system/model/common/request"
-	"exam-system/model/examManage"
-	examManageReq "exam-system/model/examManage/request"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/examManage"
+	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 )
 
 type PaperTemplateService struct {

@@ -6,7 +6,7 @@ import (
 	"mime/multipart"
 	"time"
 
-	"exam-system/global"
+	"github.com/prl26/exam-system/server/global"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"

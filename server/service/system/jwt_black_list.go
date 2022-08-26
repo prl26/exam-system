@@ -6,8 +6,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"exam-system/global"
-	"exam-system/model/system"
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/system"
 )
 
 type JwtService struct{}
