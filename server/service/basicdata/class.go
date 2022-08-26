@@ -1,10 +1,10 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
 )
 
 type ClassService struct {

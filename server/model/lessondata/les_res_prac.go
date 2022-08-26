@@ -2,7 +2,7 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // ResourcePractice 结构体

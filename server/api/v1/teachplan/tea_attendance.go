@@ -1,21 +1,20 @@
 package teachplan
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/teachplan"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    teachplanReq "github.com/flipped-aurora/gin-vue-admin/server/model/teachplan/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/teachplan"
+	teachplanReq "exam-system/model/teachplan/request"
+	"exam-system/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type TeachAttendanceApi struct {
 }
 
 var teachAttendanceService = service.ServiceGroupApp.TeachplanServiceGroup.TeachAttendanceService
-
 
 // CreateTeachAttendance 创建TeachAttendance
 // @Tags TeachAttendance
@@ -30,7 +29,7 @@ func (teachAttendanceApi *TeachAttendanceApi) CreateTeachAttendance(c *gin.Conte
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindJSON(&teachAttendance)
 	if err := teachAttendanceService.CreateTeachAttendance(teachAttendance); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (teachAttendanceApi *TeachAttendanceApi) DeleteTeachAttendance(c *gin.Conte
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindJSON(&teachAttendance)
 	if err := teachAttendanceService.DeleteTeachAttendance(teachAttendance); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (teachAttendanceApi *TeachAttendanceApi) DeleteTeachAttendance(c *gin.Conte
 // @Router /teachAttendance/deleteTeachAttendanceByIds [delete]
 func (teachAttendanceApi *TeachAttendanceApi) DeleteTeachAttendanceByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := teachAttendanceService.DeleteTeachAttendanceByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (teachAttendanceApi *TeachAttendanceApi) UpdateTeachAttendance(c *gin.Conte
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindJSON(&teachAttendance)
 	if err := teachAttendanceService.UpdateTeachAttendance(teachAttendance); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (teachAttendanceApi *TeachAttendanceApi) FindTeachAttendance(c *gin.Context
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindQuery(&teachAttendance)
 	if reteachAttendance, err := teachAttendanceService.GetTeachAttendance(teachAttendance.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reteachAttendance": reteachAttendance}, c)
@@ -130,14 +129,14 @@ func (teachAttendanceApi *TeachAttendanceApi) GetTeachAttendanceList(c *gin.Cont
 	var pageInfo teachplanReq.TeachAttendanceSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := teachAttendanceService.GetTeachAttendanceInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

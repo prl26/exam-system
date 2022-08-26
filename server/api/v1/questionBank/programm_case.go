@@ -1,13 +1,13 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -33,7 +33,6 @@ func (questionBankProgrammCaseApi *QuestionBankProgrammCaseApi) CreateQuestionBa
 		"ProgrammId": {utils.NotEmpty()},
 		"Score":      {utils.NotEmpty()},
 		"LanguageId": {utils.NotEmpty()},
-		"OutType":    {utils.NotEmpty()},
 		"Output":     {utils.NotEmpty()},
 	}
 	if err := utils.Verify(questionBankProgrammCase, verify); err != nil {

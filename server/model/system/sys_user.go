@@ -1,9 +1,10 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 	uuid "github.com/satori/go.uuid"
 )
+
 //
 //type SysUser1 struct {
 //	global.GVA_MODEL
@@ -23,17 +24,17 @@ import (
 //	Enable      int            `json:"enable" gorm:"default:1;comment:用户是否被冻结 1正常 2冻结"` //用户是否被冻结 1正常 2冻结
 //}
 
-
-type SysUser struct{
+type SysUser struct {
 	global.GVA_MODEL
-	UUID        uuid.UUID      `json:"uuid" gorm:"comment:用户UUID"`                                                           // 用户UUID
-	NickName    string         `json:"nickName" gorm:"default:系统用户;comment:用户昵称"`                                            // 用户昵称
-	Username    string         `json:"userName" gorm:"comment:用户登录名"`                                                        // 用户登录名
-	Password    string         `json:"-"  gorm:"comment:用户登录密码"`                                                             // 用户登录密码
-	AuthorityId      uint			`json:"role_id" gorm:"comment:角色id"`
+	UUID        uuid.UUID      `json:"uuid" gorm:"comment:用户UUID"`                // 用户UUID
+	NickName    string         `json:"nickName" gorm:"default:系统用户;comment:用户昵称"` // 用户昵称
+	Username    string         `json:"userName" gorm:"comment:用户登录名"`             // 用户登录名
+	Password    string         `json:"-"  gorm:"comment:用户登录密码"`                  // 用户登录密码
+	AuthorityId uint           `json:"role_id" gorm:"comment:角色id"`
 	Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
 }
+
 func (SysUser) TableName() string {
 	return "sys_users"
 }

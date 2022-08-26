@@ -1,10 +1,10 @@
 package common
 
 import (
+	"exam-system/core"
+	"exam-system/global"
+	"exam-system/initialize"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"log"
 	"testing"
 )
@@ -18,7 +18,7 @@ import (
  * @Note:
 
  **/
-var server Service
+var server CommonService
 
 func TestMain(m *testing.M) {
 	global.GVA_VP = core.Viper() // 初始化Viper

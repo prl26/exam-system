@@ -1,13 +1,13 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

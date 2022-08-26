@@ -875,6 +875,10 @@ definitions:
         type: integer
       mostOptions:
         type: integer
+      options:
+        items:
+          $ref: '#/definitions/questionBank.Options'
+        type: array
       problemType:
         type: integer
       title:
@@ -954,7 +958,7 @@ definitions:
       procLimit:
         type: integer
       programmId:
-        type: string
+        type: integer
       score:
         type: integer
       stackLimit:
@@ -987,6 +991,8 @@ definitions:
     type: object
   questionBank.SupplyBlank:
     properties:
+      answer:
+        type: string
       canExam:
         type: integer
       canPractice:
@@ -1111,6 +1117,34 @@ definitions:
         description: 用户名
         type: string
     type: object
+  request.MakeProgramm:
+    properties:
+      canExam:
+        type: integer
+      canPractice:
+        type: integer
+      chapterId:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      describe:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      problemType:
+        type: integer
+      support_language:
+        items:
+          $ref: '#/definitions/request.SupportLanguage'
+        type: array
+      title:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   request.PageInfo:
     properties:
       keyword:
@@ -1207,6 +1241,30 @@ definitions:
         type: array
       teachClassId:
         type: integer
+    type: object
+  request.SupportLanguage:
+    properties:
+      cases:
+        items:
+          $ref: '#/definitions/questionBank.ProgrammCase'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      defaultCode:
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      languageId:
+        type: integer
+      programmId:
+        type: integer
+      referenceAnswer:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
   request.SysAuthorityBtnReq:
     properties:
@@ -5781,7 +5839,7 @@ paths:
       summary: 更新ProgrammLanguageMerge
       tags:
       - ProgrammLanguageMerge
-  /questionBank_judge/createQuestionBankJudge:
+  /questionBankJudge/createQuestionBankJudge:
     post:
       consumes:
       - application/json
@@ -5804,7 +5862,7 @@ paths:
       summary: 创建QuestionBankJudge
       tags:
       - QuestionBankJudge
-  /questionBank_judge/deleteQuestionBankJudge:
+  /questionBankJudge/deleteQuestionBankJudge:
     delete:
       consumes:
       - application/json
@@ -5827,7 +5885,7 @@ paths:
       summary: 删除QuestionBankJudge
       tags:
       - QuestionBankJudge
-  /questionBank_judge/deleteQuestionBankJudgeByIds:
+  /questionBankJudge/deleteQuestionBankJudgeByIds:
     delete:
       consumes:
       - application/json
@@ -5850,7 +5908,7 @@ paths:
       summary: 批量删除QuestionBankJudge
       tags:
       - QuestionBankJudge
-  /questionBank_judge/findQuestionBankJudge:
+  /questionBankJudge/findQuestionBankJudge:
     get:
       consumes:
       - application/json
@@ -5900,7 +5958,7 @@ paths:
       summary: 用id查询QuestionBankJudge
       tags:
       - QuestionBankJudge
-  /questionBank_judge/getQuestionBankJudgeList:
+  /questionBankJudge/getQuestionBankJudgeList:
     get:
       consumes:
       - application/json
@@ -5962,7 +6020,7 @@ paths:
       summary: 分页获取QuestionBankJudge列表
       tags:
       - QuestionBankJudge
-  /questionBank_judge/updateQuestionBankJudge:
+  /questionBankJudge/updateQuestionBankJudge:
     put:
       consumes:
       - application/json
@@ -5985,7 +6043,7 @@ paths:
       summary: 更新QuestionBankJudge
       tags:
       - QuestionBankJudge
-  /questionBank_multiple_choice/createQuestionBankMultipleChoice:
+  /questionBankMultipleChoice/createQuestionBankMultipleChoice:
     post:
       consumes:
       - application/json
@@ -6008,7 +6066,7 @@ paths:
       summary: 创建QuestionBankMultipleChoice
       tags:
       - MultipleChoice
-  /questionBank_multiple_choice/deleteQuestionBankMultipleChoice:
+  /questionBankMultipleChoice/deleteQuestionBankMultipleChoice:
     delete:
       consumes:
       - application/json
@@ -6031,7 +6089,7 @@ paths:
       summary: 删除QuestionBankMultipleChoice
       tags:
       - MultipleChoice
-  /questionBank_multiple_choice/deleteQuestionBankMultipleChoiceByIds:
+  /questionBankMultipleChoice/deleteQuestionBankMultipleChoiceByIds:
     delete:
       consumes:
       - application/json
@@ -6054,7 +6112,7 @@ paths:
       summary: 批量删除QuestionBankMultipleChoice
       tags:
       - MultipleChoice
-  /questionBank_multiple_choice/findQuestionBankMultipleChoice:
+  /questionBankMultipleChoice/findQuestionBankMultipleChoice:
     get:
       consumes:
       - application/json
@@ -6107,7 +6165,7 @@ paths:
       summary: 用id查询QuestionBankMultipleChoice
       tags:
       - MultipleChoice
-  /questionBank_multiple_choice/getQuestionBankMultipleChoiceList:
+  /questionBankMultipleChoice/getQuestionBankMultipleChoiceList:
     get:
       consumes:
       - application/json
@@ -6172,7 +6230,7 @@ paths:
       summary: 分页获取QuestionBankMultipleChoice列表
       tags:
       - MultipleChoice
-  /questionBank_multiple_choice/updateQuestionBankMultipleChoice:
+  /questionBankMultipleChoice/updateQuestionBankMultipleChoice:
     put:
       consumes:
       - application/json
@@ -6195,7 +6253,7 @@ paths:
       summary: 更新QuestionBankMultipleChoice
       tags:
       - MultipleChoice
-  /questionBank_options/createQuestionBankOptions:
+  /questionBankOptions/createQuestionBankOptions:
     post:
       consumes:
       - application/json
@@ -6218,7 +6276,7 @@ paths:
       summary: 创建QuestionBankOptions
       tags:
       - Options
-  /questionBank_options/deleteQuestionBankOptions:
+  /questionBankOptions/deleteQuestionBankOptions:
     delete:
       consumes:
       - application/json
@@ -6241,7 +6299,7 @@ paths:
       summary: 删除QuestionBankOptions
       tags:
       - Options
-  /questionBank_options/deleteQuestionBankOptionsByIds:
+  /questionBankOptions/deleteQuestionBankOptionsByIds:
     delete:
       consumes:
       - application/json
@@ -6264,7 +6322,7 @@ paths:
       summary: 批量删除QuestionBankOptions
       tags:
       - Options
-  /questionBank_options/findQuestionBankOptions:
+  /questionBankOptions/findQuestionBankOptions:
     get:
       consumes:
       - application/json
@@ -6302,7 +6360,7 @@ paths:
       summary: 用id查询QuestionBankOptions
       tags:
       - Options
-  /questionBank_options/getQuestionBankOptionsList:
+  /questionBankOptions/getQuestionBankOptionsList:
     get:
       consumes:
       - application/json
@@ -6352,7 +6410,7 @@ paths:
       summary: 分页获取QuestionBankOptions列表
       tags:
       - Options
-  /questionBank_options/updateQuestionBankOptions:
+  /questionBankOptions/updateQuestionBankOptions:
     put:
       consumes:
       - application/json
@@ -6375,216 +6433,6 @@ paths:
       summary: 更新QuestionBankOptions
       tags:
       - Options
-  /questionBank_supply_blank/createQuestionBankSupplyBlank:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建QuestionBankSupplyBlank
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.SupplyBlank'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建QuestionBankSupplyBlank
-      tags:
-      - QuestionBankSupplyBlank
-  /questionBank_supply_blank/deleteQuestionBankSupplyBlank:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除QuestionBankSupplyBlank
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.SupplyBlank'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除QuestionBankSupplyBlank
-      tags:
-      - QuestionBankSupplyBlank
-  /questionBank_supply_blank/deleteQuestionBankSupplyBlankByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除QuestionBankSupplyBlank
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除QuestionBankSupplyBlank
-      tags:
-      - QuestionBankSupplyBlank
-  /questionBank_supply_blank/findQuestionBankSupplyBlank:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - in: query
-        name: canExam
-        type: integer
-      - in: query
-        name: canPractice
-        type: integer
-      - in: query
-        name: chapterId
-        type: integer
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - in: query
-        name: describe
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - in: query
-        name: isOrder
-        type: integer
-      - in: query
-        name: num
-        type: integer
-      - in: query
-        name: problemType
-        type: integer
-      - in: query
-        name: title
-        type: string
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询QuestionBankSupplyBlank
-      tags:
-      - QuestionBankSupplyBlank
-  /questionBank_supply_blank/getQuestionBankSupplyBlankList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - in: query
-        name: canExam
-        type: integer
-      - in: query
-        name: canPractice
-        type: integer
-      - in: query
-        name: chapterId
-        type: integer
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - in: query
-        name: describe
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - in: query
-        name: isOrder
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - in: query
-        name: num
-        type: integer
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: problemType
-        type: integer
-      - in: query
-        name: title
-        type: string
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取QuestionBankSupplyBlank列表
-      tags:
-      - QuestionBankSupplyBlank
-  /questionBank_supply_blank/updateQuestionBankSupplyBlank:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新QuestionBankSupplyBlank
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/questionBank.SupplyBlank'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 更新QuestionBankSupplyBlank
-      tags:
-      - QuestionBankSupplyBlank
   /questionBankProgramm/createQuestionBankProgramm:
     post:
       consumes:
@@ -6595,7 +6443,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/questionBank.Programm'
+          $ref: '#/definitions/request.MakeProgramm'
       produces:
       - application/json
       responses:
@@ -6897,7 +6745,7 @@ paths:
         type: integer
       - in: query
         name: programmId
-        type: string
+        type: integer
       - in: query
         name: score
         type: integer
@@ -6980,7 +6828,7 @@ paths:
         type: integer
       - in: query
         name: programmId
-        type: string
+        type: integer
       - in: query
         name: score
         type: integer
@@ -7029,6 +6877,222 @@ paths:
       summary: 更新QuestionBankProgrammCase
       tags:
       - QuestionBankProgrammCase
+  /questionBankSupplyBlank/createQuestionBankSupplyBlank:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.SupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankSupplyBlank/deleteQuestionBankSupplyBlankByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankSupplyBlank/getQuestionBankSupplyBlankList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: answer
+        type: string
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: isOrder
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: num
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: title
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取QuestionBankSupplyBlank列表
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankSupplyBlank/updateQuestionBankSupplyBlank:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.SupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankSupplyBlankdeleteQuestionBankSupplyBlank:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除QuestionBankSupplyBlank
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/questionBank.SupplyBlank'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
+  /questionBankSupplyBlankfindQuestionBankSupplyBlank:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: answer
+        type: string
+      - in: query
+        name: canExam
+        type: integer
+      - in: query
+        name: canPractice
+        type: integer
+      - in: query
+        name: chapterId
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: describe
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: isOrder
+        type: integer
+      - in: query
+        name: num
+        type: integer
+      - in: query
+        name: problemType
+        type: integer
+      - in: query
+        name: title
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询QuestionBankSupplyBlank
+      tags:
+      - QuestionBankSupplyBlank
   /resource/createResource:
     post:
       consumes:

@@ -1,10 +1,10 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
 )
 
 type OptionsService struct {
@@ -54,11 +54,8 @@ func (questionBank_optionsService *OptionsService) GetQuestionBankOptionsInfoLis
 	db := global.GVA_DB.Model(&questionBank.Options{})
 	var questionBank_optionss []questionBank.Options
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Describe != "" {
-		db = db.Where("describe LIKE ?", "%"+info.Describe+"%")
-	}
 	if info.MultipleChoiceId != nil {
-		db = db.Where("multiple_choice_id = ?", info.MultipleChoiceId)
+		db = db.Where("multiple_choice_id=?", info.MultipleChoiceId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

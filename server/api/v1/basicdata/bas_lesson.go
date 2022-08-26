@@ -1,21 +1,20 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"exam-system/global"
+	"exam-system/model/basicdata"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type LessonApi struct {
 }
 
 var lessonService = service.ServiceGroupApp.BasicdataApiGroup.LessonService
-
 
 // CreateLesson 创建Lesson
 // @Tags Lesson
@@ -30,7 +29,7 @@ func (lessonApi *LessonApi) CreateLesson(c *gin.Context) {
 	var lesson basicdata.Lesson
 	_ = c.ShouldBindJSON(&lesson)
 	if err := lessonService.CreateLesson(lesson); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (lessonApi *LessonApi) DeleteLesson(c *gin.Context) {
 	var lesson basicdata.Lesson
 	_ = c.ShouldBindJSON(&lesson)
 	if err := lessonService.DeleteLesson(lesson); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (lessonApi *LessonApi) DeleteLesson(c *gin.Context) {
 // @Router /lesson/deleteLessonByIds [delete]
 func (lessonApi *LessonApi) DeleteLessonByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := lessonService.DeleteLessonByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (lessonApi *LessonApi) UpdateLesson(c *gin.Context) {
 	var lesson basicdata.Lesson
 	_ = c.ShouldBindJSON(&lesson)
 	if err := lessonService.UpdateLesson(lesson); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (lessonApi *LessonApi) FindLesson(c *gin.Context) {
 	var lesson basicdata.Lesson
 	_ = c.ShouldBindQuery(&lesson)
 	if relesson, err := lessonService.GetLesson(lesson.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"relesson": relesson}, c)
@@ -130,14 +129,14 @@ func (lessonApi *LessonApi) GetLessonList(c *gin.Context) {
 	var pageInfo basicdataReq.LessonSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := lessonService.GetLessonInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

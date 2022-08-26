@@ -1,10 +1,10 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/lessondata"
-	lessondataReq "github.com/flipped-aurora/gin-vue-admin/server/model/lessondata/request"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/lessondata"
+	lessondataReq "exam-system/model/lessondata/request"
 )
 
 type KnowledgeService struct {

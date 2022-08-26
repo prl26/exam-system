@@ -1,12 +1,12 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/lessondata"
-	lessondataReq "github.com/flipped-aurora/gin-vue-admin/server/model/lessondata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/lessondata"
+	lessondataReq "exam-system/model/lessondata/request"
+	"exam-system/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -15,7 +15,6 @@ type ArticleResourcesApi struct {
 }
 
 var articleResourcesService = service.ServiceGroupApp.LessondataServiceGroup.ArticleResourcesService
-
 
 // CreateArticleResources 创建ArticleResources
 // @Tags ArticleResources
@@ -30,7 +29,7 @@ func (articleResourcesApi *ArticleResourcesApi) CreateArticleResources(c *gin.Co
 	var articleResources lessondata.ArticleResources
 	_ = c.ShouldBindJSON(&articleResources)
 	if err := articleResourcesService.CreateArticleResources(articleResources); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (articleResourcesApi *ArticleResourcesApi) DeleteArticleResources(c *gin.Co
 	var articleResources lessondata.ArticleResources
 	_ = c.ShouldBindJSON(&articleResources)
 	if err := articleResourcesService.DeleteArticleResources(articleResources); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (articleResourcesApi *ArticleResourcesApi) DeleteArticleResources(c *gin.Co
 // @Router /articleResources/deleteArticleResourcesByIds [delete]
 func (articleResourcesApi *ArticleResourcesApi) DeleteArticleResourcesByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := articleResourcesService.DeleteArticleResourcesByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (articleResourcesApi *ArticleResourcesApi) UpdateArticleResources(c *gin.Co
 	var articleResources lessondata.ArticleResources
 	_ = c.ShouldBindJSON(&articleResources)
 	if err := articleResourcesService.UpdateArticleResources(articleResources); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (articleResourcesApi *ArticleResourcesApi) FindArticleResources(c *gin.Cont
 	var articleResources lessondata.ArticleResources
 	_ = c.ShouldBindQuery(&articleResources)
 	if rearticleResources, err := articleResourcesService.GetArticleResources(articleResources.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"rearticleResources": rearticleResources}, c)
@@ -130,14 +129,14 @@ func (articleResourcesApi *ArticleResourcesApi) GetArticleResourcesList(c *gin.C
 	var pageInfo lessondataReq.ArticleResourcesSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := articleResourcesService.GetArticleResourcesInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/api"
+	"exam-system/middleware"
+	"exam-system/plugin/email/api"
 	"github.com/gin-gonic/gin"
 )
 

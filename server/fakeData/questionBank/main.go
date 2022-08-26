@@ -1,11 +1,11 @@
 package main
 
 import (
+	"exam-system/core"
+	"exam-system/global"
+	"exam-system/initialize"
+	"exam-system/model/questionBank"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
 	"go.uber.org/zap"
 	"math/rand"
 )

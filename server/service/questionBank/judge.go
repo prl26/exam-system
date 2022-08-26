@@ -1,10 +1,10 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
 )
 
 type JudgeService struct {
@@ -54,12 +54,22 @@ func (questionBank_judgeService *JudgeService) GetQuestionBankJudgeInfoList(info
 	db := global.GVA_DB.Model(&questionBank.Judge{})
 	var questionBank_judges []questionBank.Judge
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.Describe != "" {
-		db = db.Where("describe LIKE ?", "%"+info.Describe+"%")
+	if info.ChapterId != nil {
+		db = db.Where("chapter_id =?", info.ChapterId)
 	}
-	if info.IsRight != nil {
-		db = db.Where("is_right = ?", info.IsRight)
+	if info.ProblemType != nil {
+		db = db.Where("problem_type = ?", info.ProblemType)
 	}
+	if info.Title != "" {
+		db = db.Where("title like ?", "%"+info.Title+"%")
+	}
+	if info.CanExam != nil {
+		db = db.Where("can_exam = ?", info.CanExam)
+	}
+	if info.CanPractice != nil {
+		db = db.Where("can_practice = ?", info.CanPractice)
+	}
+
 	err = db.Count(&total).Error
 	if err != nil {
 		return

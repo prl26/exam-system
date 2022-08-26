@@ -96,8 +96,8 @@ mysql:
   password: cuit@123456
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: error
-  log-zap: false
+  log-mode: info
+  log-zap: true
 pgsql:
   path: ""
   port: ""
@@ -149,7 +149,7 @@ timer:
     compareField: created_at
     interval: 168h
 zap:
-  level: info
+  level: debug
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
   format: console
   director: log

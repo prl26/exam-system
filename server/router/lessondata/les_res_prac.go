@@ -1,8 +1,8 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ResourcePracticeRouter) InitResourcePracticeRouter(Router *gin.RouterGr
 	resourcesPracticeRouterWithoutRecord := Router.Group("resourcesPractice")
 	var resourcesPracticeApi = v1.ApiGroupApp.LessondataApiGroup.ResourcePracticeApi
 	{
-		resourcesPracticeRouter.POST("createResourcePractice", resourcesPracticeApi.CreateResourcePractice)   // 新建ResourcePractice
-		resourcesPracticeRouter.DELETE("deleteResourcePractice", resourcesPracticeApi.DeleteResourcePractice) // 删除ResourcePractice
+		resourcesPracticeRouter.POST("createResourcePractice", resourcesPracticeApi.CreateResourcePractice)             // 新建ResourcePractice
+		resourcesPracticeRouter.DELETE("deleteResourcePractice", resourcesPracticeApi.DeleteResourcePractice)           // 删除ResourcePractice
 		resourcesPracticeRouter.DELETE("deleteResourcePracticeByIds", resourcesPracticeApi.DeleteResourcePracticeByIds) // 批量删除ResourcePractice
-		resourcesPracticeRouter.PUT("updateResourcePractice", resourcesPracticeApi.UpdateResourcePractice)    // 更新ResourcePractice
+		resourcesPracticeRouter.PUT("updateResourcePractice", resourcesPracticeApi.UpdateResourcePractice)              // 更新ResourcePractice
 	}
 	{
-		resourcesPracticeRouterWithoutRecord.GET("findResourcePractice", resourcesPracticeApi.FindResourcePractice)        // 根据ID获取ResourcePractice
-		resourcesPracticeRouterWithoutRecord.GET("getResourcePracticeList", resourcesPracticeApi.GetResourcePracticeList)  // 获取ResourcePractice列表
+		resourcesPracticeRouterWithoutRecord.GET("findResourcePractice", resourcesPracticeApi.FindResourcePractice)       // 根据ID获取ResourcePractice
+		resourcesPracticeRouterWithoutRecord.GET("getResourcePracticeList", resourcesPracticeApi.GetResourcePracticeList) // 获取ResourcePractice列表
 	}
 }

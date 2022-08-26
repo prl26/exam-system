@@ -1,13 +1,13 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,7 +25,7 @@ var questionBank_optionsService = service.ServiceGroupApp.QuestionBankServiceGro
 // @Produce application/json
 // @Param data body questionBank.Options true "创建QuestionBankOptions"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_options/createQuestionBankOptions [post]
+// @Router /questionBankOptions/createQuestionBankOptions [post]
 func (questionBank_optionsApi *QuestionBankOptionsApi) CreateQuestionBankOptions(c *gin.Context) {
 	var questionBank_options questionBank.Options
 	_ = c.ShouldBindJSON(&questionBank_options)
@@ -52,7 +52,7 @@ func (questionBank_optionsApi *QuestionBankOptionsApi) CreateQuestionBankOptions
 // @Produce application/json
 // @Param data body questionBank.Options true "删除QuestionBankOptions"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /questionBank_options/deleteQuestionBankOptions [delete]
+// @Router /questionBankOptions/deleteQuestionBankOptions [delete]
 func (questionBank_optionsApi *QuestionBankOptionsApi) DeleteQuestionBankOptions(c *gin.Context) {
 	var questionBank_options questionBank.Options
 	_ = c.ShouldBindJSON(&questionBank_options)
@@ -72,7 +72,7 @@ func (questionBank_optionsApi *QuestionBankOptionsApi) DeleteQuestionBankOptions
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除QuestionBankOptions"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /questionBank_options/deleteQuestionBankOptionsByIds [delete]
+// @Router /questionBankOptions/deleteQuestionBankOptionsByIds [delete]
 func (questionBank_optionsApi *QuestionBankOptionsApi) DeleteQuestionBankOptionsByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
@@ -92,7 +92,7 @@ func (questionBank_optionsApi *QuestionBankOptionsApi) DeleteQuestionBankOptions
 // @Produce application/json
 // @Param data body questionBank.Options true "更新QuestionBankOptions"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /questionBank_options/updateQuestionBankOptions [put]
+// @Router /questionBankOptions/updateQuestionBankOptions [put]
 func (questionBank_optionsApi *QuestionBankOptionsApi) UpdateQuestionBankOptions(c *gin.Context) {
 	var questionBank_options questionBank.Options
 	_ = c.ShouldBindJSON(&questionBank_options)
@@ -119,7 +119,7 @@ func (questionBank_optionsApi *QuestionBankOptionsApi) UpdateQuestionBankOptions
 // @Produce application/json
 // @Param data query questionBank.Options true "用id查询QuestionBankOptions"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /questionBank_options/findQuestionBankOptions [get]
+// @Router /questionBankOptions/findQuestionBankOptions [get]
 func (questionBank_optionsApi *QuestionBankOptionsApi) FindQuestionBankOptions(c *gin.Context) {
 	var questionBank_options questionBank.Options
 	_ = c.ShouldBindQuery(&questionBank_options)
@@ -139,7 +139,7 @@ func (questionBank_optionsApi *QuestionBankOptionsApi) FindQuestionBankOptions(c
 // @Produce application/json
 // @Param data query questionBankReq.QuestionBankOptionsSearch true "分页获取QuestionBankOptions列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_options/getQuestionBankOptionsList [get]
+// @Router /questionBankOptions/getQuestionBankOptionsList [get]
 func (questionBank_optionsApi *QuestionBankOptionsApi) GetQuestionBankOptionsList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankOptionsSearch
 	_ = c.ShouldBindQuery(&pageInfo)

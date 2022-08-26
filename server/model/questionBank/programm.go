@@ -2,13 +2,12 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // Programm 结构体
 type Programm struct {
 	global.GVA_MODEL
-
 	BasicModel
 }
 

@@ -1,8 +1,8 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"exam-system/model/common/request"
+	"exam-system/model/system"
 )
 
 // api分页条件查询及排序结构体

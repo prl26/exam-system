@@ -2,9 +2,9 @@ package system
 
 import (
 	"context"
+	sysModel "exam-system/model/system"
+	"exam-system/service/system"
 	"fmt"
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )

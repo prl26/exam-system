@@ -2,11 +2,11 @@ package system
 
 import (
 	"errors"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/system"
+	"exam-system/utils"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
@@ -46,7 +46,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 	err = global.GVA_DB.Where("username = ?", u.Username).Preload("Authority").First(&user).Error
 	if err == nil {
 		//if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
-		if u.Password != user.Password{
+		if u.Password != user.Password {
 			return nil, errors.New("密码错误")
 		}
 

@@ -7,11 +7,11 @@
 package basicdata
 
 import (
+	"exam-system/global"
+	basicdataReq "exam-system/model/basicdata/request"
+	"exam-system/model/common/response"
+	"exam-system/service"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	basicdataReq "github.com/flipped-aurora/gin-vue-admin/server/model/basicdata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

@@ -24,11 +24,11 @@ import (
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
+	"exam-system/resource/autocode_template/subcontract"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/system"
+	"exam-system/utils"
 
 	"gorm.io/gorm"
 )

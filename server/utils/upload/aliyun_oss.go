@@ -5,8 +5,8 @@ import (
 	"mime/multipart"
 	"time"
 
+	"exam-system/global"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
 )
 

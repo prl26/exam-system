@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/basicdata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/basicdata"
+	"exam-system/model/common/request"
 )
 
-type CollegeSearch struct{
+type CollegeSearch struct {
 	basicdata.College
-    request.PageInfo
+	request.PageInfo
 }

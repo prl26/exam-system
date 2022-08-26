@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/lessondata"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/common/request"
+	"exam-system/model/lessondata"
 )
 
-type VideoResourcesSearch struct{
-    lessondata.VideoResources
-    request.PageInfo
+type VideoResourcesSearch struct {
+	lessondata.VideoResources
+	request.PageInfo
 }

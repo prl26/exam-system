@@ -2,7 +2,7 @@
 package examManage
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // PaperTemplate 结构体

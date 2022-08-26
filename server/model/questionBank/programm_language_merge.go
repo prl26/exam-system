@@ -2,7 +2,7 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // ProgrammLanguageMerge 结构体

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/core"
-	_ "github.com/flipped-aurora/gin-vue-admin/server/docs"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"exam-system/core"
+	_ "exam-system/docs"
+	"exam-system/global"
+	"exam-system/initialize"
 
 	"go.uber.org/zap"
 )

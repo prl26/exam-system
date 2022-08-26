@@ -2,7 +2,7 @@
 package basicdata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"exam-system/global"
 )
 
 // LearnResourcesChapterMerge 结构体

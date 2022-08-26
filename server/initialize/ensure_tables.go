@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"context"
+	sysModel "exam-system/model/system"
+	"exam-system/service/system"
 	adapter "github.com/casbin/gorm-adapter/v3"
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"gorm.io/gorm"
 )
 

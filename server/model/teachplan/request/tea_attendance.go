@@ -1,11 +1,11 @@
 package request
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/model/teachplan"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"exam-system/model/common/request"
+	"exam-system/model/teachplan"
 )
 
-type TeachAttendanceSearch struct{
-    teachplan.TeachAttendance
-    request.PageInfo
+type TeachAttendanceSearch struct {
+	teachplan.TeachAttendance
+	request.PageInfo
 }

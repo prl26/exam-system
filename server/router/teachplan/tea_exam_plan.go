@@ -1,8 +1,8 @@
 package teachplan
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"exam-system/api/v1"
+	"exam-system/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,13 +15,13 @@ func (s *ExamPlanRouter) InitExamPlanRouter(Router *gin.RouterGroup) {
 	examPlanRouterWithoutRecord := Router.Group("examPlan")
 	var examPlanApi = v1.ApiGroupApp.TeachplanApiGroup.ExamPlanApi
 	{
-		examPlanRouter.POST("createExamPlan", examPlanApi.CreateExamPlan)   // 新建ExamPlan
-		examPlanRouter.DELETE("deleteExamPlan", examPlanApi.DeleteExamPlan) // 删除ExamPlan
+		examPlanRouter.POST("createExamPlan", examPlanApi.CreateExamPlan)             // 新建ExamPlan
+		examPlanRouter.DELETE("deleteExamPlan", examPlanApi.DeleteExamPlan)           // 删除ExamPlan
 		examPlanRouter.DELETE("deleteExamPlanByIds", examPlanApi.DeleteExamPlanByIds) // 批量删除ExamPlan
-		examPlanRouter.PUT("updateExamPlan", examPlanApi.UpdateExamPlan)    // 更新ExamPlan
+		examPlanRouter.PUT("updateExamPlan", examPlanApi.UpdateExamPlan)              // 更新ExamPlan
 	}
 	{
-		examPlanRouterWithoutRecord.GET("findExamPlan", examPlanApi.FindExamPlan)        // 根据ID获取ExamPlan
-		examPlanRouterWithoutRecord.GET("getExamPlanList", examPlanApi.GetExamPlanList)  // 获取ExamPlan列表
+		examPlanRouterWithoutRecord.GET("findExamPlan", examPlanApi.FindExamPlan)       // 根据ID获取ExamPlan
+		examPlanRouterWithoutRecord.GET("getExamPlanList", examPlanApi.GetExamPlanList) // 获取ExamPlan列表
 	}
 }

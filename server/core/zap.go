@@ -1,10 +1,10 @@
 package core
 
 import (
+	"exam-system/core/internal"
+	"exam-system/global"
+	"exam-system/utils"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"

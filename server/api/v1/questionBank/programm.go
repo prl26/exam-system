@@ -1,12 +1,12 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -22,17 +22,23 @@ var questionBankProgrammService = service.ServiceGroupApp.QuestionBankServiceGro
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body questionBank.Programm true "创建QuestionBankProgramm"
+// @Param data body request.MakeProgramm true "创建QuestionBankProgramm"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /questionBankProgramm/createQuestionBankProgramm [post]
 func (questionBankProgrammApi *QuestionBankProgrammApi) CreateQuestionBankProgramm(c *gin.Context) {
-	var questionBankProgramm questionBank.Programm
-	_ = c.ShouldBindJSON(&questionBankProgramm)
-	if err := questionBankProgrammService.CreateQuestionBankProgramm(questionBankProgramm); err != nil {
+	var makeProgramm questionBankReq.MakeProgramm
+	_ = c.ShouldBindJSON(makeProgramm)
+	makeProgramm.ID = 0
+	if err := questionBankProgrammService.CreateQuestionBankProgramm(makeProgramm.Programm); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
-	} else {
-		response.OkWithMessage("创建成功", c)
+		return
+	}
+	err := questionBankProgrammService.AddLanguageSupport(makeProgramm.SupportLanguage, makeProgramm.ID)
+	if err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("增加语言支持是啊比", c)
+		return
 	}
 }
 

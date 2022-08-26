@@ -1,12 +1,12 @@
 package lessondata
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/lessondata"
-	lessondataReq "github.com/flipped-aurora/gin-vue-admin/server/model/lessondata/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/lessondata"
+	lessondataReq "exam-system/model/lessondata/request"
+	"exam-system/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -15,7 +15,6 @@ type ResourcesTestApi struct {
 }
 
 var resourcesTestService = service.ServiceGroupApp.LessondataServiceGroup.ResourcesTestService
-
 
 // CreateResourcesTest 创建ResourcesTest
 // @Tags ResourcesTest
@@ -30,7 +29,7 @@ func (resourcesTestApi *ResourcesTestApi) CreateResourcesTest(c *gin.Context) {
 	var resourcesTest lessondata.ResourcesTest
 	_ = c.ShouldBindJSON(&resourcesTest)
 	if err := resourcesTestService.CreateResourcesTest(resourcesTest); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -50,7 +49,7 @@ func (resourcesTestApi *ResourcesTestApi) DeleteResourcesTest(c *gin.Context) {
 	var resourcesTest lessondata.ResourcesTest
 	_ = c.ShouldBindJSON(&resourcesTest)
 	if err := resourcesTestService.DeleteResourcesTest(resourcesTest); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -68,9 +67,9 @@ func (resourcesTestApi *ResourcesTestApi) DeleteResourcesTest(c *gin.Context) {
 // @Router /resourcesTest/deleteResourcesTestByIds [delete]
 func (resourcesTestApi *ResourcesTestApi) DeleteResourcesTestByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
+	_ = c.ShouldBindJSON(&IDS)
 	if err := resourcesTestService.DeleteResourcesTestByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -90,7 +89,7 @@ func (resourcesTestApi *ResourcesTestApi) UpdateResourcesTest(c *gin.Context) {
 	var resourcesTest lessondata.ResourcesTest
 	_ = c.ShouldBindJSON(&resourcesTest)
 	if err := resourcesTestService.UpdateResourcesTest(resourcesTest); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -110,7 +109,7 @@ func (resourcesTestApi *ResourcesTestApi) FindResourcesTest(c *gin.Context) {
 	var resourcesTest lessondata.ResourcesTest
 	_ = c.ShouldBindQuery(&resourcesTest)
 	if reresourcesTest, err := resourcesTestService.GetResourcesTest(resourcesTest.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reresourcesTest": reresourcesTest}, c)
@@ -130,14 +129,14 @@ func (resourcesTestApi *ResourcesTestApi) GetResourcesTestList(c *gin.Context) {
 	var pageInfo lessondataReq.ResourcesTestSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := resourcesTestService.GetResourcesTestInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

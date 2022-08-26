@@ -1,8 +1,8 @@
 package oj
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/service/oj/cLanguage"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/oj/common"
+	"exam-system/service/oj/cLanguage"
+	"exam-system/service/oj/common"
 )
 
 /**
@@ -17,5 +17,5 @@ import (
 
 type ServiceGroup struct {
 	cLanguage.CService
-	common.Service
+	common.CommonService
 }

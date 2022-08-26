@@ -1,13 +1,13 @@
 package questionBank
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	questionBankReq "github.com/flipped-aurora/gin-vue-admin/server/model/questionBank/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/common/response"
+	"exam-system/model/questionBank"
+	questionBankReq "exam-system/model/questionBank/request"
+	"exam-system/service"
+	"exam-system/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -25,7 +25,7 @@ var questionBank_supply_blankService = service.ServiceGroupApp.QuestionBankServi
 // @Produce application/json
 // @Param data body questionBank.SupplyBlank true "创建QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_supply_blank/createQuestionBankSupplyBlank [post]
+// @Router /questionBankSupplyBlank/createQuestionBankSupplyBlank [post]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) CreateQuestionBankSupplyBlank(c *gin.Context) {
 	var questionBank_supply_blank questionBank.SupplyBlank
 	_ = c.ShouldBindJSON(&questionBank_supply_blank)
@@ -53,7 +53,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) CreateQuestionBa
 // @Produce application/json
 // @Param data body questionBank.SupplyBlank true "删除QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /questionBank_supply_blank/deleteQuestionBankSupplyBlank [delete]
+// @Router /questionBankSupplyBlankdeleteQuestionBankSupplyBlank [delete]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBankSupplyBlank(c *gin.Context) {
 	var questionBank_supply_blank questionBank.SupplyBlank
 	_ = c.ShouldBindJSON(&questionBank_supply_blank)
@@ -73,7 +73,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBa
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /questionBank_supply_blank/deleteQuestionBankSupplyBlankByIds [delete]
+// @Router /questionBankSupplyBlank/deleteQuestionBankSupplyBlankByIds [delete]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBankSupplyBlankByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
@@ -93,7 +93,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) DeleteQuestionBa
 // @Produce application/json
 // @Param data body questionBank.SupplyBlank true "更新QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /questionBank_supply_blank/updateQuestionBankSupplyBlank [put]
+// @Router /questionBankSupplyBlank/updateQuestionBankSupplyBlank [put]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) UpdateQuestionBankSupplyBlank(c *gin.Context) {
 	var questionBank_supply_blank questionBank.SupplyBlank
 	_ = c.ShouldBindJSON(&questionBank_supply_blank)
@@ -121,7 +121,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) UpdateQuestionBa
 // @Produce application/json
 // @Param data query questionBank.SupplyBlank true "用id查询QuestionBankSupplyBlank"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /questionBank_supply_blank/findQuestionBankSupplyBlank [get]
+// @Router /questionBankSupplyBlankfindQuestionBankSupplyBlank [get]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) FindQuestionBankSupplyBlank(c *gin.Context) {
 	var questionBank_supply_blank questionBank.SupplyBlank
 	_ = c.ShouldBindQuery(&questionBank_supply_blank)
@@ -141,7 +141,7 @@ func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) FindQuestionBank
 // @Produce application/json
 // @Param data query request.QuestionBankSupplyBlankSearch true "分页获取QuestionBankSupplyBlank列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /questionBank_supply_blank/getQuestionBankSupplyBlankList [get]
+// @Router /questionBankSupplyBlank/getQuestionBankSupplyBlankList [get]
 func (questionBank_supply_blankApi *QuestionBankSupplyBlankApi) GetQuestionBankSupplyBlankList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankSupplyBlankSearch
 	_ = c.ShouldBindQuery(&pageInfo)

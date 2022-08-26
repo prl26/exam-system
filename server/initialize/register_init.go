@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	_ "github.com/flipped-aurora/gin-vue-admin/server/source/system"
+	_ "exam-system/source/system"
 )
 
 func init() {

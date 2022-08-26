@@ -1,12 +1,12 @@
 package examManage
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/examManage"
-	examManageReq "github.com/flipped-aurora/gin-vue-admin/server/model/examManage/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/questionBank"
-	"math/rand"
+	"exam-system/global"
+	"exam-system/model/common/request"
+	"exam-system/model/examManage"
+	examManageReq "exam-system/model/examManage/request"
+	"exam-system/model/questionBank"
+	"exam-system/utils"
 )
 
 type PaperTemplateItemService struct {
@@ -89,133 +89,123 @@ func (paperTemplateItemService *PaperTemplateItemService) GetPaperId(info examMa
 
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperChoiceQuestion(info []examManage.PaperTemplateItem) (err error) {
 	var list []questionBank.MultipleChoice
+	//fmt.Println(len())
 	paperId := paperTemplateItemService.GetPaperId(info[0])
-	if len(info) > 0 {
-		for i := 0; i < len(info); i++ {
-			num := info[i].Num
-			uuid := rand.Int63()
-			err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", &info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-			if err != nil {
-				return
-			} else {
-				for j := 0; j < len(list); j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	for i := 0; i < len(info); i++ {
+		num := info[i].Num
+		uuid := utils.GetUuid()
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		if err != nil {
+			return
+		} else {
+			for i := 0; i < *num; i++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &paperId,
+					QuestionId:   &list[i].ID,
+					Score:        info[i].Score,
+					QuestionType: info[i].QuestionType,
+					ProblemType:  info[i].ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperJudgeQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperCJudgeQuestion(info []examManage.PaperTemplateItem) (err error) {
 	var list []questionBank.MultipleChoice
 	paperId := paperTemplateItemService.GetPaperId(info[0])
-	if len(info) > 0 {
-		for i := 0; i < len(info); i++ {
-			num := info[i].Num
-			uuid := rand.Int63()
-			err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", &info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-			if err != nil {
-				return
-			} else {
-				for j := 0; j < len(list); j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	for i := 0; i < len(info); i++ {
+		num := info[i].Num
+		uuid := utils.GetUuid()
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		if err != nil {
+			return
+		} else {
+			for i := 0; i < *num; i++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &paperId,
+					QuestionId:   &list[i].ID,
+					Score:        info[i].Score,
+					QuestionType: info[i].QuestionType,
+					ProblemType:  info[i].ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperOptionsQuestion(info []examManage.PaperTemplateItem) (err error) {
 	var list []questionBank.MultipleChoice
 	paperId := paperTemplateItemService.GetPaperId(info[0])
-	if len(info) > 0 {
-		for i := 0; i < len(info); i++ {
-			num := info[i].Num
-			uuid := rand.Int63()
-			err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", &info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-			if err != nil {
-				return
-			} else {
-				for j := 0; j < len(list); j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	for i := 0; i < len(info); i++ {
+		num := info[i].Num
+		uuid := utils.GetUuid()
+		err = global.GVA_DB.Where("question_type = ? ", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		if err != nil {
+			return
+		} else {
+			for i := 0; i < *num; i++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &paperId,
+					QuestionId:   &list[i].ID,
+					Score:        info[i].Score,
+					QuestionType: info[i].QuestionType,
+					ProblemType:  info[i].ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgrammQuestion(info []examManage.PaperTemplateItem) (err error) {
 	var list []questionBank.MultipleChoice
 	paperId := paperTemplateItemService.GetPaperId(info[0])
-	if len(info) > 0 {
-		for i := 0; i < len(info); i++ {
-			num := info[i].Num
-			uuid := rand.Int63()
-			err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", &info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-			if err != nil {
-				return
-			} else {
-				for j := 0; j < len(list); j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	for i := 0; i < len(info); i++ {
+		num := info[i].Num
+		uuid := utils.GetUuid()
+		err = global.GVA_DB.Where("question_type = ?", info[i].ProblemType).Order(uuid).Limit(*num).Find(&list).Error
+		if err != nil {
+			return
+		} else {
+			for i := 0; i < *num; i++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &paperId,
+					QuestionId:   &list[i].ID,
+					Score:        info[i].Score,
+					QuestionType: info[i].QuestionType,
+					ProblemType:  info[i].ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info []examManage.PaperTemplateItem) (err error) {
 	err = paperTemplateItemService.SetPaperChoiceQuestion(info)
 	if err != nil {
 		return
 	} else {
-		err = paperTemplateItemService.SetPaperJudgeQuestion(info)
+		err = paperTemplateItemService.SetPaperCJudgeQuestion(info)
 		if err != nil {
 			return
 		} else {
@@ -223,7 +213,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info 
 			if err != nil {
 				return
 			} else {
-				err = paperTemplateItemService.SetPaperProgramQuestion(info)
+				err = paperTemplateItemService.SetPaperProgrammQuestion(info)
 				if err != nil {
 					return
 				}
