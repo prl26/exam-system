@@ -5,7 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 )
 
-type ExamPaperTemplateSearch struct {
-	examManage.ExamPaperTemplate
+type PaperTemplateSearch struct {
+	examManage.PaperTemplate
 	request.PageInfo
 }
