@@ -24,6 +24,7 @@ type ExamPlan struct {
 	TermId       *uint      `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
 
+//type ExamPlan
 // TableName ExamPlan 表名
 func (ExamPlan) TableName() string {
 	return "tea_examplan"
