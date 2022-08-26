@@ -12423,6 +12423,82 @@ const docTemplate = `{
                 }
             }
         },
+        "/teachClassStudent/addStudentByClass": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TeachClassStudent"
+                ],
+                "summary": "教学班中 添加指定班级的所有学生",
+                "parameters": [
+                    {
+                        "description": "添加TeachClassStudent",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AddStudentByClass"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"添加成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/teachClassStudent/deleteStudentByClass": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TeachClassStudent"
+                ],
+                "summary": "教学班中 移除指定班级的所有学生",
+                "parameters": [
+                    {
+                        "description": "添加TeachClassStudent",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AddStudentByClass"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/teachClassStudent/deleteTeachClassStudent": {
             "post": {
                 "security": [
@@ -12439,7 +12515,7 @@ const docTemplate = `{
                 "tags": [
                     "TeachClassStudent"
                 ],
-                "summary": "教学班 中移除学生",
+                "summary": "教学班中 移除学生",
                 "parameters": [
                     {
                         "description": "移除TeachClassStudent",
@@ -12453,7 +12529,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"移除成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -12543,7 +12619,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"添加成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -15095,6 +15171,17 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/system.SysBaseMenu"
                     }
+                }
+            }
+        },
+        "request.AddStudentByClass": {
+            "type": "object",
+            "properties": {
+                "classId": {
+                    "type": "integer"
+                },
+                "teachClassId": {
+                    "type": "integer"
                 }
             }
         },

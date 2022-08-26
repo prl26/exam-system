@@ -1029,6 +1029,13 @@ definitions:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
     type: object
+  request.AddStudentByClass:
+    properties:
+      classId:
+        type: integer
+      teachClassId:
+        type: integer
+    type: object
   request.CasbinInReceive:
     properties:
       authorityId:
@@ -9430,6 +9437,52 @@ paths:
       summary: 更新TeachClass
       tags:
       - TeachClass
+  /teachClassStudent/addStudentByClass:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 添加TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddStudentByClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"添加成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 教学班中 添加指定班级的所有学生
+      tags:
+      - TeachClassStudent
+  /teachClassStudent/deleteStudentByClass:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 添加TeachClassStudent
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AddStudentByClass'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 教学班中 移除指定班级的所有学生
+      tags:
+      - TeachClassStudent
   /teachClassStudent/deleteTeachClassStudent:
     post:
       consumes:
@@ -9445,12 +9498,12 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          description: '{"success":true,"data":{},"msg":"移除成功"}'
           schema:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 教学班 中移除学生
+      summary: 教学班中 移除学生
       tags:
       - TeachClassStudent
   /teachClassStudent/getTeachClassStudentList:
@@ -9500,7 +9553,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          description: '{"success":true,"data":{},"msg":"添加成功"}'
           schema:
             type: string
       security:
