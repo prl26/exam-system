@@ -18,32 +18,32 @@ type ExamPaperApi struct {
 var examPaperService = service.ServiceGroupApp.ExammanageServiceGroup.ExamPaperService
 var PaperTemplateItemService = service.ServiceGroupApp.ExammanageServiceGroup.PaperTemplateItemService
 
-// CreateExamPaper 创建ExamPaper
+// CreateExamPaperByRand 创建ExamPaper
 // @Tags ExamPaper
-// @Summary 创建ExamPaper
+// @Summary 随机创建ExamPaper
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Param data body examManage.ExamPaper true "创建ExamPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /examPaper/createExamPaper [post]
-func (examPaperApi *ExamPaperApi) CreateExamPaper(c *gin.Context) {
+func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindJSON(&examPaper)
 	numOfPapers := c.Query("numOfPapers")
 	n, _ := strconv.Atoi(numOfPapers)
 	templateItems, err := examPaperService.GetTemplate(examPaper)
 	if err != nil {
-		response.FailWithMessage("查询失败", c)
+		response.FailWithMessage("查询试卷模板失败", c)
 	} else {
 		if err := examPaperService.CreateExamPaper(examPaper); err != nil {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
-			response.FailWithMessage("创建失败", c)
+			response.FailWithMessage("试卷创建失败", c)
 		} else {
 			for i := 0; i < n; i++ {
 				if err := PaperTemplateItemService.SetPaperQuestion(templateItems); err != nil {
 					global.GVA_LOG.Error("创建失败!", zap.Error(err))
-					response.FailWithMessage("创建失败", c)
+					response.FailWithMessage("创建试卷失败", c)
 				} else {
 					response.OkWithMessage("创建成功", c)
 				}
