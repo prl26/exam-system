@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "localhost:8888",
     "basePath": "/api/v1",
     "paths": {
         "/Papertemplate/createPaperTemplate": {
@@ -3653,6 +3653,11 @@
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "name": "termId",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "name": "time",
                         "in": "query"
@@ -3775,6 +3780,11 @@
                     {
                         "type": "integer",
                         "name": "templateId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "termId",
                         "in": "query"
                     },
                     {
@@ -5265,6 +5275,158 @@
                 }
             }
         },
+        "/oj/checkJudge": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验判断题",
+                "parameters": [
+                    {
+                        "description": "检验选择题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckJudge"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkMultipleChoice": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验选择题",
+                "parameters": [
+                    {
+                        "description": "检验选择题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckMultipleChoice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkProgramm": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验编程题",
+                "parameters": [
+                    {
+                        "description": "检验编程题",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckProgramm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/oj/checkSupplyBlank": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OJ"
+                ],
+                "summary": "检验填空题",
+                "parameters": [
+                    {
+                        "description": "创建Term",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CheckSupplyBlank"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/paperQuestionMerge/createPaperQuestionMerge": {
             "post": {
                 "security": [
@@ -6484,6 +6646,33 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionBank/findQuestionsByChapterId": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "QuestionBank"
+                ],
+                "summary": "根据章节ID获取所有题库内的练习题",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -11615,7 +11804,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "teachId",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -11700,7 +11889,7 @@
                     },
                     {
                         "type": "integer",
-                        "name": "teachId",
+                        "name": "teachClassId",
                         "in": "query"
                     },
                     {
@@ -11892,6 +12081,11 @@
                 "parameters": [
                     {
                         "type": "integer",
+                        "name": "attendance form:teachId:",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "name": "attendanceId",
                         "in": "query"
                     },
@@ -11957,6 +12151,11 @@
                 ],
                 "summary": "分页获取TeachAttendanceRecord列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "attendance form:teachId:",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "name": "attendanceId",
@@ -12043,7 +12242,7 @@
                 "summary": "更新TeachAttendanceRecord",
                 "parameters": [
                     {
-                        "description": "更新TeachAttendanceRecord",
+                        "description": "修改TeacherUpdateAttendanceRecord",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -15219,6 +15418,59 @@
                 }
             }
         },
+        "request.CheckJudge": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckMultipleChoice": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckProgramm": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "language_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CheckSupplyBlank": {
+            "type": "object",
+            "properties": {
+                "answers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.Empty": {
             "type": "object"
         },
@@ -16401,6 +16653,9 @@
                 "templateId": {
                     "type": "integer"
                 },
+                "termId": {
+                    "type": "integer"
+                },
                 "time": {
                     "type": "string"
                 },
@@ -16492,7 +16747,7 @@
                 "longitude": {
                     "type": "number"
                 },
-                "teachId": {
+                "teachClassId": {
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -16504,6 +16759,9 @@
         "teachplan.TeachAttendanceRecord": {
             "type": "object",
             "properties": {
+                "attendance form:teachId:": {
+                    "type": "integer"
+                },
                 "attendanceId": {
                     "type": "integer"
                 },

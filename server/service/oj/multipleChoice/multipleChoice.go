@@ -20,7 +20,7 @@ import (
 
 type MultipleChoiceService struct{}
 
-func (c *MultipleChoiceService) Check(choiceQuestionId *uint, answer []int) (bool, error) {
+func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []int) (bool, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
 		return false, err
@@ -28,7 +28,7 @@ func (c *MultipleChoiceService) Check(choiceQuestionId *uint, answer []int) (boo
 	return c.check(question, answer), nil
 }
 
-func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId *uint) (*questionBank.MultipleChoice, error) {
+func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.MultipleChoice, error) {
 	var question questionBank.MultipleChoice
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {
