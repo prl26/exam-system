@@ -20,6 +20,12 @@ type Login struct {
 	Captcha   string `json:"captcha"`   // 验证码
 	CaptchaId string `json:"captchaId"` // 验证码ID
 }
+type StudentLogin struct {
+	ID        uint   `json:"username"`  // 用户名
+	Password  string `json:"password"`  // 密码
+	Captcha   string `json:"captcha"`   // 验证码
+	CaptchaId string `json:"captchaId"` // 验证码ID
+}
 
 // Modify password structure
 type ChangePasswordReq struct {
