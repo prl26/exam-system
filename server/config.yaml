@@ -149,7 +149,7 @@ timer:
     compareField: created_at
     interval: 168h
 zap:
-  level: debug
+  level: info
   prefix: '[github.com/prl26/exam-system/server]'
   format: console
   director: log

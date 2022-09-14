@@ -54,9 +54,7 @@ func (questionBank_multiple_choiceService *MultipleChoiceService) GetQuestionBan
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
 	var questionBank_multiple_choices []questionBank.MultipleChoice
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.ChapterId != nil {
-		db = db.Where("chapter_id =?", info.ChapterId)
-	}
+
 	if info.ProblemType != nil {
 		db = db.Where("problem_type = ?", info.ProblemType)
 	}

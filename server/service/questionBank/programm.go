@@ -54,9 +54,6 @@ func (questionBankProgrammService *ProgrammService) GetQuestionBankProgrammInfoL
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.Programm{})
 	var questionBankProgramms []questionBank.Programm
-	if info.ChapterId != nil {
-		db = db.Where("chapter_id =?", info.ChapterId)
-	}
 	if info.ProblemType != nil {
 		db = db.Where("problem_type = ?", info.ProblemType)
 	}
