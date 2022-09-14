@@ -51,6 +51,10 @@ func (jwtService *JwtService) GetRedisJWT(userName string) (redisJWT string, err
 	redisJWT, err = global.GVA_REDIS.Get(context.Background(), userName).Result()
 	return redisJWT, err
 }
+func (jwtService *JwtService) GetStudentRedisJWT(ID uint) (redisJWT string, err error) {
+	redisJWT, err = global.GVA_REDIS.Get(context.Background(), string(ID)).Result()
+	return redisJWT, err
+}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: SetRedisJWT
@@ -64,7 +68,12 @@ func (jwtService *JwtService) SetRedisJWT(jwt string, userName string) (err erro
 	err = global.GVA_REDIS.Set(context.Background(), userName, jwt, timer).Err()
 	return err
 }
-
+func (jwtService *JwtService) SetStudentRedisJWT(jwt string, ID uint) (err error) {
+	// 此处过期时间等于jwt过期时间
+	timer := time.Duration(global.GVA_CONFIG.JWT.ExpiresTime) * time.Second
+	err = global.GVA_REDIS.Set(context.Background(), string(ID), jwt, timer).Err()
+	return err
+}
 func LoadAll() {
 	var data []string
 	err := global.GVA_DB.Model(&system.JwtBlacklist{}).Select("jwt").Find(&data).Error

@@ -15,7 +15,7 @@ func (s *ExamPaperRouter) InitExamPaperRouter(Router *gin.RouterGroup) {
 	examPaperRouterWithoutRecord := Router.Group("examPaper")
 	var examPaperApi = v1.ApiGroupApp.ExammanageApiGroup.ExamPaperApi
 	{
-		examPaperRouter.POST("createExamPaper", examPaperApi.CreateExamPaper)             // 新建ExamPaper
+		examPaperRouter.POST("createExamPaper", examPaperApi.CreateExamPaperByRand)       // 新建ExamPaper
 		examPaperRouter.DELETE("deleteExamPaper", examPaperApi.DeleteExamPaper)           // 删除ExamPaper
 		examPaperRouter.DELETE("deleteExamPaperByIds", examPaperApi.DeleteExamPaperByIds) // 批量删除ExamPaper
 		examPaperRouter.PUT("updateExamPaper", examPaperApi.UpdateExamPaper)              // 更新ExamPaper

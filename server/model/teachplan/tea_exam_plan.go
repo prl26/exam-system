@@ -25,6 +25,7 @@ type ExamPlan struct {
 }
 
 //type ExamPlan
+
 // TableName ExamPlan 表名
 func (ExamPlan) TableName() string {
 	return "tea_examplan"

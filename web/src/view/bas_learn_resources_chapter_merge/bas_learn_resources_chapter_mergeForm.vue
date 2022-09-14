@@ -73,7 +73,7 @@ const save = async() => {
              case 'create':
                res = await createLearn_resources_chapter_merge(formData.value)
                break
-             case 'update':
+             case 'update':t
                res = await updateLearn_resources_chapter_merge(formData.value)
                break
              default:

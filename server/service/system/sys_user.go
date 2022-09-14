@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/system"
 	"github.com/prl26/exam-system/server/utils"
@@ -37,6 +38,37 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 //@param: u *model.SysUser
 //@return: err error, userInter *model.SysUser
 
+func (userService *UserService) StudentLogin(u *basicdata.Student) (userInter *basicdata.Student, err error) {
+	if nil == global.GVA_DB {
+		return nil, fmt.Errorf("db not init")
+	}
+	var user basicdata.Student
+	err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error
+	if err == nil {
+		//if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
+		if u.Password != user.Password {
+			return nil, errors.New("密码错误")
+		}
+
+		var SysAuthorityMenus []system.SysAuthorityMenu
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", 8888).Find(&SysAuthorityMenus).Error
+		if err != nil {
+			return
+		}
+		//var MenuIds []string
+		//
+		//for i := range SysAuthorityMenus {
+		//	MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+		//}
+
+		//var am system.SysBaseMenu
+		//ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
+		//if errors.Is(ferr, gorm.ErrRecordNotFound) {
+		//	user.Authority.DefaultRouter = "404"
+		//}
+	}
+	return &user, err
+}
 func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysUser, err error) {
 	if nil == global.GVA_DB {
 		return nil, fmt.Errorf("db not init")
@@ -68,7 +100,6 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 			user.Authority.DefaultRouter = "404"
 		}
 	}
-
 	return &user, err
 }
 
