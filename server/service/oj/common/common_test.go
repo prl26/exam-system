@@ -2,9 +2,7 @@ package common
 
 import (
 	"fmt"
-	"github.com/prl26/exam-system/server/core"
-	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/initialize"
+	testutils "github.com/prl26/exam-system/server/utils/test"
 	"log"
 	"testing"
 )
@@ -21,9 +19,7 @@ import (
 var server CommonService
 
 func TestMain(m *testing.M) {
-	global.GVA_VP = core.Viper() // 初始化Viper
-	global.GVA_DB = initialize.Gorm()
-	m.Run()
+	testutils.InitTest()
 }
 
 func TestFindProgrammCase(t *testing.T) {
