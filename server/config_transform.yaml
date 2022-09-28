@@ -88,17 +88,16 @@ local:
   path: uploads/file
   store-path: uploads/file
 mysql:
-  path: 139.9.249.149
+  path: 116.63.173.235
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gva
+  db-name: stu_system
   username: root
-  password: cuit@123456
+  password: Cuitloop@123456
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: error
   log-zap: false
-
 pgsql:
   path: ""
   port: ""

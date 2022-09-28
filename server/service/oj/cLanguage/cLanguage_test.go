@@ -142,7 +142,6 @@ func TestCLanguageService_Judge(t *testing.T) {
 func NewClient() pb.ExecutorClient {
 	rpcClient, err := grpc.Dial("localhost:5051", grpc.WithInsecure())
 	if err != nil {
-		//panic(err)
 		panic(err)
 		return nil
 	}

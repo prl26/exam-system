@@ -16,13 +16,19 @@ import (
 
  **/
 
-type QuestionBankService struct{}
+type QuestionBankService struct {
+	judge          questionBank.Judge
+	program        questionBank.Programm
+	supplyBlank    questionBank.SupplyBlank
+	multipleChoice questionBank.MultipleChoice
+	chapterMerge   questionBank.ChapterMerge
+}
 
 func (c *QuestionBankService) FindQuestions(chapterId uint) *ojResp.QuestionBank {
 	var result ojResp.QuestionBank
-	_ = global.GVA_DB.Where("chapter_id=? and can_practice = ?", chapterId, 1).Model(&questionBank.Judge{}).Find(&result.Judges)
-	_ = global.GVA_DB.Where("chapter_id=? and can_practice = ?", chapterId, 1).Model(&questionBank.Programm{}).Preload("LanguageSupports").Find(&result.Programms)
-	_ = global.GVA_DB.Where("chapter_id=? and can_practice = ?", chapterId, 1).Model(&questionBank.SupplyBlank{}).Find(&result.SupplyBlanks)
-	_ = global.GVA_DB.Where("chapter_id=? and can_practice = ?", chapterId, 1).Model(&questionBank.MultipleChoice{}).Preload("Options").Find(&result.MultipleChoices)
+	global.GVA_DB.Table(c.judge.TableName()).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.judge.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, 1, true).Find(&result.Judges)
+	global.GVA_DB.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, 2, true).Preload("LanguageSupports").Find(&result.Programms)
+	global.GVA_DB.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, 3, true).Find(&result.SupplyBlanks)
+	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, 4, true).Preload("Options").Find(&result.MultipleChoices)
 	return &result
 }

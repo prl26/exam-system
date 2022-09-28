@@ -26,11 +26,11 @@ func (s *OjRouter) InitFrontDeskOjRouter(Router *gin.RouterGroup) {
 		judgesRouter.POST("check", judgeApi.CheckJudge)
 	}
 
-	multipleChoiceRouter := Router.Group("oj/multipleChoice").Use(middleware.OperationRecord())
-	multipleChoiceApi := v1.ApiGroupApp.OjApiGroup.MultipleChoiceApi
-	{
-		multipleChoiceRouter.POST("check", multipleChoiceApi.CheckMultipleChoice)
-	}
+	//multipleChoiceRouter := Router.Group("oj/multipleChoice").Use(middleware.OperationRecord())
+	//multipleChoiceApi := v1.ApiGroupApp.OjApiGroup.MultipleChoiceApi
+	//{
+	//	multipleChoiceRouter.POST("check", multipleChoiceApi.CheckMultipleChoice)
+	//}
 
 	supplyBlankRouter := Router.Group("oj/supplyBlank").Use(middleware.OperationRecord())
 	supplyBlankApi := v1.ApiGroupApp.OjApiGroup.SupplyBlankApi

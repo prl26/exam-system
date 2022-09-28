@@ -1,10 +1,8 @@
 package multipleChoice
 
 import (
-	"github.com/prl26/exam-system/server/core"
-	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/initialize"
 	"github.com/prl26/exam-system/server/model/questionBank"
+	testutils "github.com/prl26/exam-system/server/utils/test"
 	"log"
 	"testing"
 )
@@ -22,9 +20,7 @@ import (
 var server *MultipleChoiceService
 
 func TestMain(m *testing.M) {
-	global.GVA_VP = core.Viper() // 初始化Viper
-	global.GVA_DB = initialize.Gorm()
-	m.Run()
+	testutils.InitTest()
 }
 
 func TestCheck(t *testing.T) {
@@ -32,7 +28,7 @@ func TestCheck(t *testing.T) {
 		MostOptions: getIntPoint(2),
 		Answer:      "1,2",
 	}
-	log.Fatalln(server.check(question, []int{1}))
+	log.Println(server.check(question, []int{1}))
 }
 
 func getUintPoint(a uint) *uint {

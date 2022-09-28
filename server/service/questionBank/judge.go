@@ -54,9 +54,6 @@ func (questionBank_judgeService *JudgeService) GetQuestionBankJudgeInfoList(info
 	db := global.GVA_DB.Model(&questionBank.Judge{})
 	var questionBank_judges []questionBank.Judge
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.ChapterId != nil {
-		db = db.Where("chapter_id =?", info.ChapterId)
-	}
 	if info.ProblemType != nil {
 		db = db.Where("problem_type = ?", info.ProblemType)
 	}

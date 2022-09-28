@@ -97,7 +97,7 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: info
-  log-zap: false
+  log-zap: true
 pgsql:
   path: ""
   port: ""
