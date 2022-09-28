@@ -98,6 +98,7 @@ mysql:
   max-open-conns: 100
   log-mode: error
   log-zap: false
+
 pgsql:
   path: ""
   port: ""
