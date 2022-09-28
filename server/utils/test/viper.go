@@ -18,10 +18,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Viper //
+// setViper //
 // 优先级: 命令行 > 环境变量 > 默认值
 // Author [SliverHorn](https://github.com/SliverHorn)
-func Viper(path ...string) *viper.Viper {
+func setViper(path ...string) *viper.Viper {
 	var config string
 
 	if len(path) == 0 {
@@ -49,7 +49,7 @@ func Viper(path ...string) *viper.Viper {
 		}
 	} else { // 函数传递的可变参数的第一个值赋值于config
 		config = path[0]
-		fmt.Printf("您正在使用func Viper()传递的值,config的路径为%s\n", config)
+		fmt.Printf("您正在使用func setViper()传递的值,config的路径为%s\n", config)
 	}
 
 	v := viper.New()

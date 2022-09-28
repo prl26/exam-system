@@ -15,7 +15,7 @@ import (
 
  **/
 
-func orm() *gorm.DB {
+func setOrm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
 		return GormMysql()

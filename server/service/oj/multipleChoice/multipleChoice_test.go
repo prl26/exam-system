@@ -28,7 +28,7 @@ func TestCheck(t *testing.T) {
 		MostOptions: getIntPoint(2),
 		Answer:      "1,2",
 	}
-	log.Fatalln(server.check(question, []int{1}))
+	log.Println(server.check(question, []int{1}))
 }
 
 func getUintPoint(a uint) *uint {

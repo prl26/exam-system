@@ -192,7 +192,7 @@ func (c *CLanguageService) Execute(fileId string, input string, programmLimit *q
 	}
 	response := result.Results[0]
 	var out string
-	var executeSituation *oj.ExecuteSituation = &oj.ExecuteSituation{ResultStatus: response.Status.String(), ExitStatus: int(response.ExitStatus), Time: uint(response.Time), Memory: uint(response.Memory), Runtime: uint(response.RunTime)}
+	var executeSituation = &oj.ExecuteSituation{ResultStatus: response.Status.String(), ExitStatus: int(response.ExitStatus), Time: uint(response.Time), Memory: uint(response.Memory), Runtime: uint(response.RunTime)}
 	if response.Status == pb.Response_Result_Accepted {
 		out = string(response.Files[STDOUT])
 	}
