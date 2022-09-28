@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/prl26/exam-system/server/model/enum/language"
 	"github.com/prl26/exam-system/server/model/questionBank"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -17,10 +18,6 @@ import (
 
  **/
 
-var CanPractice = newPointInt(1)
-var CanExam = newPointInt(1)
-var CanNotPractice = newPointInt(0)
-var CanNotExam = newPointInt(0)
 var ProgrammType uint = 2
 var LanguageId = newPointInt(1)
 var notCanExam = newPointInt(1)
@@ -93,18 +90,9 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 		programm := questionBank.Programm{}
 		programm.Title = result.Title
 		programm.Describe = result.Description
-		programm.CanPractice = CanPractice
-		if result.CanExam == 1 {
-			programm.CanExam = CanExam
-		} else {
-			programm.CanExam = notCanExam
-		}
-		if result.CanPractice == 1 {
-			programm.CanPractice = CanPractice
-		} else {
-			programm.CanPractice = CanPractice
-		}
-		programm.ProblemType = newPointInt(result.ProblemType)
+		programm.CanExam = result.CanExam
+		programm.CanPractice = result.CanPractice
+		programm.ProblemType = result.ProblemType
 		if err := to.Create(&programm).Error; err != nil {
 			panic(err)
 		}
@@ -132,9 +120,9 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 			thisCase.Name = fmt.Sprintf("测试用例-%d", i)
 			thisCase.Input = t.Input
 			thisCase.Output = t.Output
-			thisCase.LanguageId = LanguageId
-			thisCase.ProgrammId = newPointInt(int(programm.ID))
-			thisCase.Score = newPointInt(t.Score)
+			thisCase.LanguageId = language.C_LANGUAGE
+			thisCase.ProgrammId = programm.ID
+			thisCase.Score = uint(t.Score)
 			cases = append(cases, thisCase)
 		}
 

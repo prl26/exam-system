@@ -79,7 +79,6 @@ func TestCompile(t *testing.T) {
 }
 
 func TestCLanguageService_Judge(t *testing.T) {
-	score := 12
 	cases := []struct {
 		name    string
 		code    string
@@ -97,7 +96,7 @@ func TestCLanguageService_Judge(t *testing.T) {
 			cases: []*questionBank.ProgrammCase{
 				{
 					Name:   "你好世界!",
-					Score:  &score,
+					Score:  12,
 					Output: "hello,world!\n",
 				},
 			},
@@ -113,7 +112,7 @@ func TestCLanguageService_Judge(t *testing.T) {
 			cases: []*questionBank.ProgrammCase{
 				{
 					Name:   "你好世界!",
-					Score:  &score,
+					Score:  12,
 					Output: "hello,world!\n",
 				},
 			},

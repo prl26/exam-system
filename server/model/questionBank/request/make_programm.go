@@ -19,5 +19,5 @@ type MakeProgramm struct {
 
 type SupportLanguage struct {
 	questionBank.ProgrammLanguageMerge
-	Cases []*questionBank.ProgrammCase `json:"cases"`
+	Cases []*questionBank.ProgrammCase `json:"Cases"`
 }

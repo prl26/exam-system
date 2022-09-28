@@ -8,8 +8,8 @@ import (
 // ProgrammLanguageMerge 结构体
 type ProgrammLanguageMerge struct {
 	global.GVA_MODEL
-	LanguageId      *int   `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
-	ProgrammId      *int   `json:"programmId" form:"programmId" gorm:"column:programm_id;comment:;"`
+	LanguageId      int    `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
+	ProgrammId      uint   `json:"programmId" form:"programmId" gorm:"column:programm_id;comment:;"`
 	DefaultCode     string `json:"defaultCode" form:"defaultCode" gorm:"column:default_code;comment:;"`
 	ReferenceAnswer string `json:"referenceAnswer" form:"referenceAnswer" gorm:"column:reference_answer;comment:;"`
 }

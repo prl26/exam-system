@@ -173,7 +173,7 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 			if string(result.Files[STDOUT]) != cases[i].Output {
 				result.Status = pb.Response_Result_WrongAnswer
 			} else {
-				submits[i].Score = *cases[i].Score
+				submits[i].Score = cases[i].Score
 			}
 		}
 	}

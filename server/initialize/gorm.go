@@ -78,12 +78,6 @@ func RegisterTables(db *gorm.DB) {
 		examManage.PaperTemplate{},
 		examManage.ExamStudentPaper{},
 
-		questionBank.Judge{},
-		questionBank.Options{},
-		questionBank.MultipleChoice{},
-		questionBank.SupplyBlank{},
-		questionBank.Programm{},
-		questionBank.ProgrammCase{},
 		basicdata.Student{},
 		basicdata.TeachClass{},
 		questionBank.ProgrammLanguageMerge{},

@@ -20,9 +20,9 @@ func TestMain(t *testing.M) {
 	t.Run()
 }
 
-var server QuestionBankService
+var questionBankService QuestionBankService
 
 func TestFindQuestions(t *testing.T) {
-	questions := server.FindQuestions(2)
+	questions := questionBankService.FindQuestions(2)
 	fmt.Println(questions)
 }

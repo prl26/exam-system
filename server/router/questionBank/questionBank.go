@@ -17,7 +17,7 @@ import (
  **/
 type QuestionBankRouter struct{}
 
-func (s *QuestionBankProgrammCaseRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
+func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 	questionBankRouter := Router.Group("questionBank").Use(middleware.OperationRecord())
 	_ = Router.Group("questionBank")
 	var questionBankApi = v1.ApiGroupApp.QuestionBankApiGroup.QuestionBankApi

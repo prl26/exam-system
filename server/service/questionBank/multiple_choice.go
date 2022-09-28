@@ -55,7 +55,7 @@ func (questionBank_multiple_choiceService *MultipleChoiceService) GetQuestionBan
 	var questionBank_multiple_choices []questionBank.MultipleChoice
 	// 如果有条件搜索 下方会自动创建搜索语句
 
-	if info.ProblemType != nil {
+	if info.ProblemType != 0 {
 		db = db.Where("problem_type = ?", info.ProblemType)
 	}
 	if info.Title != "" {

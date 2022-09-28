@@ -15,6 +15,6 @@ import "github.com/prl26/exam-system/server/model/oj"
 type Submit struct {
 	//Id string `json:"id"`		// 用例ID
 	Name  string `json:"name"`  // 用例名称
-	Score int    `json:"score"` // 用例得分
+	Score uint   `json:"score"` // 用例得分
 	oj.ExecuteSituation
 }
