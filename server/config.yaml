@@ -98,7 +98,6 @@ mysql:
   max-open-conns: 100
   log-mode: error
   log-zap: false
-
 pgsql:
   path: ""
   port: ""
@@ -127,8 +126,8 @@ system:
   addr: 8888
   db-type: mysql
   oss-type: local
-  use-multipoint: false
-  use-redis: false
+  use-multipoint: true
+  use-redis: true
   iplimit-count: 15000
   iplimit-time: 3600
 tencent-cos:

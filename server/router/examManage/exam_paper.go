@@ -19,6 +19,7 @@ func (s *ExamPaperRouter) InitExamPaperRouter(Router *gin.RouterGroup) {
 		examPaperRouter.DELETE("deleteExamPaper", examPaperApi.DeleteExamPaper)           // 删除ExamPaper
 		examPaperRouter.DELETE("deleteExamPaperByIds", examPaperApi.DeleteExamPaperByIds) // 批量删除ExamPaper
 		examPaperRouter.PUT("updateExamPaper", examPaperApi.UpdateExamPaper)              // 更新ExamPaper
+		examPaperRouter.GET("setStudentsToRedis", examPaperApi.SetStudentsToRedis)
 	}
 	{
 		examPaperRouterWithoutRecord.GET("findExamPaper", examPaperApi.FindExamPaper)       // 根据ID获取ExamPaper

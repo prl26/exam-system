@@ -10,7 +10,8 @@ import (
 type ExamStatusService struct {
 }
 
-func (examStatusServices *ExamPaperService) GaSStudentsOfExam() (students []uint, err error) {
+//查找那些教学班即将进行考试,并将对应教学班的学生拉入redis黑名单中
+func (examStatusServices *ExamStatusService) GaSStudentsOfExam() (students []uint, err error) {
 	var ExamPlan []teachplan.ExamPlan
 	var teachClassIds []uint
 	err = global.GVA_DB.Where("start_time <= ?", time.Now().Add(10*time.Minute)).Select("teach_class_id").Find(&ExamPlan).Error

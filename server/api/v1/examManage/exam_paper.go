@@ -17,6 +17,7 @@ type ExamPaperApi struct {
 
 var examPaperService = service.ServiceGroupApp.ExammanageServiceGroup.ExamPaperService
 var PaperTemplateItemService = service.ServiceGroupApp.ExammanageServiceGroup.PaperTemplateItemService
+var examStatusService = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
 
 // CreateExamPaperByRand 创建ExamPaper
 // @Tags ExamPaper
@@ -154,5 +155,13 @@ func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+func (examPaperApi *ExamPaperApi) SetStudentsToRedis(c *gin.Context) {
+	students, err := examStatusService.GaSStudentsOfExam()
+	if err != nil {
+		response.FailWithMessage("设置失败", c)
+	} else {
+		response.OkWithData(gin.H{"data": students}, c)
 	}
 }

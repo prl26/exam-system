@@ -8,5 +8,5 @@ type StudentAndTeachClass struct {
 
 // TableName Student 表名
 func (StudentAndTeachClass) TableName() string {
-	return "bas_student_class_teachclasses"
+	return "bas_student_teach_classes"
 }

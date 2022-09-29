@@ -67,7 +67,6 @@ func TestProgrammService_FindProgrammCases(t *testing.T) {
 	}
 	fmt.Println(s)
 }
-
 func TestProgrammService_FindLanguageSupport(t *testing.T) {
 	var s []responese.LanguageSupport
 	err := programmService.FindLanguageSupport(&s, 500)
