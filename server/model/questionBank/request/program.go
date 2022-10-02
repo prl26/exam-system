@@ -1,6 +1,9 @@
 package request
 
-import "github.com/prl26/exam-system/server/model/questionBank"
+import (
+	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/questionBank"
+)
 
 /**
 
@@ -12,9 +15,9 @@ import "github.com/prl26/exam-system/server/model/questionBank"
 
  **/
 
-// ProgramDetailFind 获取编程题的详细情况
-type ProgramDetailFind struct {
-	ProgramId uint `json:"programId"`
+type ProgramFindList struct {
+	questionBank.Programm
+	request.PageInfo
 }
 
 type ProgramDetailEdit struct {

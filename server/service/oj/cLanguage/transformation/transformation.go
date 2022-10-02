@@ -90,8 +90,8 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 		programm := questionBank.Programm{}
 		programm.Title = result.Title
 		programm.Describe = result.Description
-		programm.CanExam = result.CanExam
-		programm.CanPractice = result.CanPractice
+		programm.CanExam = &result.CanExam
+		programm.CanPractice = &result.CanPractice
 		programm.ProblemType = result.ProblemType
 		if err := to.Create(&programm).Error; err != nil {
 			panic(err)
@@ -99,13 +99,13 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 
 		// 创建 编程题 语言支持
 		merge := questionBank.ProgrammLanguageMerge{}
-		merge.LanguageId = LanguageId
+		merge.LanguageId = language.C_LANGUAGE
 		if result.IsProgramBlank == 0 {
 			merge.ReferenceAnswer = result.Code
 		} else {
 			merge.DefaultCode = result.Code
 		}
-		merge.ProgrammId = newPointInt(int(programm.ID))
+		merge.ProgrammId = programm.ID
 		if err := to.Create(&merge).Error; err != nil {
 			panic(err)
 		}

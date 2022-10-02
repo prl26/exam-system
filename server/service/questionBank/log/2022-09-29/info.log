@@ -1,6 +1,0 @@
-[github.com/prl26/exam-system/server]2022/09/29 - 10:51:16.780	[34minfo[0m	D:/work/exam-system/server/utils/test/internal/logger.go:31	[32mD:/work/exam-system/server/service/questionBank/programm.go:52
-[0m[33m[33.609ms] [34;1m[rows:1][0m SELECT * FROM `les_questionBank_programm` WHERE `id` = 500 AND `les_questionBank_programm`.`deleted_at` IS NULL
-
-[github.com/prl26/exam-system/server]2022/09/29 - 11:31:40.897	[34minfo[0m	D:/work/exam-system/server/utils/test/internal/logger.go:31	[32mD:/work/exam-system/server/service/questionBank/programm.go:52
-[0m[33m[32.534ms] [34;1m[rows:1][0m SELECT * FROM `les_questionBank_programm` WHERE `id` = 500 AND `les_questionBank_programm`.`deleted_at` IS NULL
-

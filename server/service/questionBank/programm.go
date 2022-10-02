@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/questionBank"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
 	responese "github.com/prl26/exam-system/server/model/questionBank/response"
 	"gorm.io/gorm"
 )
@@ -39,7 +40,7 @@ var lessonSupportSql = `
 		FROM
 		bas_chapter b
 		LEFT JOIN bas_lesson c ON b.lesson_id = c.id
-		where b.deleted_at=null
+		where ISNULL(b.deleted_at)
 		) as d
 	on c.chapter_id =d.chapter_id
 	where c.question_id= ?
@@ -50,13 +51,13 @@ var lessonSupportSql = `
 // FindProgramDetail 获取 编程题的详细
 func (p *ProgrammService) FindProgramDetail(prgramm *questionBank.Programm, programId uint) error {
 	if err := global.GVA_DB.Where("id", programId).Find(&prgramm).Error; err != nil {
-		return fmt.Errorf("无法找到id为%d的编程题", programId)
+		return err
 	}
 	return nil
 }
 func (p *ProgrammService) EditProgrammDetail(prgramm *questionBank.Programm) error {
 	if err := global.GVA_DB.Updates(prgramm).Error; err != nil {
-		return fmt.Errorf("修改失败")
+		return err
 	}
 	return nil
 }
@@ -165,4 +166,28 @@ func (*ProgrammService) DeleteLanguageSupport(prgrammId uint, ints []int) error 
 			return nil
 		})
 	return err
+}
+
+func (p *ProgrammService) FindList(info questionBankReq.ProgramFindList) (list []questionBank.ProgrammView, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&questionBank.Programm{})
+	if info.ProblemType != 0 {
+		db = db.Where("problem_type = ?", info.ProblemType)
+	}
+	if info.Title != "" {
+		db = db.Where("title like ?", "%"+info.Title+"%")
+	}
+	if info.CanExam != nil {
+		db = db.Where("can_exam = ?", info.CanExam)
+	}
+	if info.CanPractice != nil {
+		db = db.Where("can_practice = ?", info.CanPractice)
+	}
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	return list, total, err
 }

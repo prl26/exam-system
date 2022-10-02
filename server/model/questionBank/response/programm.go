@@ -19,10 +19,10 @@ type Programms struct {
 	Programs []*questionBank.Programm
 }
 
-type ProgrammDetail struct {
-	Programms       questionBank.Programm
-	CourseSupport   []CourseSupport
-	LanguageSupport []LanguageSupport
+type ProgramDetail struct {
+	Program         questionBank.Programm `json:"program"`
+	CourseSupport   []CourseSupport       `json:"courseSupport"`
+	LanguageSupport []LanguageSupport     `json:"languageSupport"`
 }
 
 type LanguageSupport struct {

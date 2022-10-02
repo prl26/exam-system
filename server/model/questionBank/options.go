@@ -9,7 +9,7 @@ import (
 type Options struct {
 	global.GVA_MODEL
 	Describe         string `json:"describe" form:"describe" gorm:"column:describe;comment:描述;"`
-	Orders           *int   `json:"orders" form:"Order" gorm:"orders"`
+	Orders           uint   `json:"orders" form:"Order" gorm:"orders"`
 	MultipleChoiceId uint   `json:"multipleChoiceId" form:"multipleChoiceId" gorm:"column:multiple_choice_id;comment:选择题id;"`
 }
 

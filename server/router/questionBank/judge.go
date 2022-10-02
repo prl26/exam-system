@@ -11,17 +11,16 @@ type QuestionBankJudgeRouter struct {
 
 // InitQuestionBankJudgeRouter 初始化 QuestionBankJudge 路由信息
 func (s *QuestionBankJudgeRouter) InitQuestionBankJudgeRouter(Router *gin.RouterGroup) {
-	questionBank_judgeRouter := Router.Group("questionBankJudge").Use(middleware.OperationRecord())
-	questionBank_judgeRouterWithoutRecord := Router.Group("questionBankJudge")
-	var questionBank_judgeApi = v1.ApiGroupApp.QuestionBankApiGroup.QuestionBankJudgeApi
+	judgeRouter := Router.Group("judge").Use(middleware.OperationRecord())
+	judgeRouterWithoutRecord := Router.Group("judge")
+	var judgeApi = v1.ApiGroupApp.QuestionBankApiGroup.JudgeApi
 	{
-		questionBank_judgeRouter.POST("createQuestionBankJudge", questionBank_judgeApi.CreateQuestionBankJudge)             // 新建QuestionBankJudge
-		questionBank_judgeRouter.DELETE("deleteQuestionBankJudge", questionBank_judgeApi.DeleteQuestionBankJudge)           // 删除QuestionBankJudge
-		questionBank_judgeRouter.DELETE("deleteQuestionBankJudgeByIds", questionBank_judgeApi.DeleteQuestionBankJudgeByIds) // 批量删除QuestionBankJudge
-		questionBank_judgeRouter.PUT("updateQuestionBankJudge", questionBank_judgeApi.UpdateQuestionBankJudge)              // 更新QuestionBankJudge
+		judgeRouter.POST("create", judgeApi.Create)   // 新建QuestionBankJudge
+		judgeRouter.DELETE("delete", judgeApi.Delete) // 删除QuestionBankJudge
+		judgeRouter.PUT("update", judgeApi.Update)    // 更新QuestionBankJudge
 	}
 	{
-		questionBank_judgeRouterWithoutRecord.GET("findQuestionBankJudge", questionBank_judgeApi.FindQuestionBankJudge)       // 根据ID获取QuestionBankJudge
-		questionBank_judgeRouterWithoutRecord.GET("getQuestionBankJudgeList", questionBank_judgeApi.GetQuestionBankJudgeList) // 获取QuestionBankJudge列表
+		judgeRouterWithoutRecord.GET("findDetail", judgeApi.FindDetail)  // 根据ID获取QuestionBankJudge
+		judgeRouterWithoutRecord.GET("findList", judgeApi.FindJudgeList) // 获取QuestionBankJudge列表
 	}
 }

@@ -18,13 +18,20 @@ import (
 type QuestionBankRouter struct{}
 
 func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
-	questionBankRouter := Router.Group("questionBank").Use(middleware.OperationRecord())
-	_ = Router.Group("questionBank")
-	var questionBankApi = v1.ApiGroupApp.QuestionBankApiGroup.QuestionBankApi
+	commonRouter := Router.Group("common").Use(middleware.OperationRecord())
+	commonWithoutRecordRouter := Router.Group("common")
+	var backgroundCommonApi = v1.ApiGroupApp.QuestionBankApiGroup.Background.CommonApi
+	var frontDeskCommonApi = v1.ApiGroupApp.QuestionBankApiGroup.FrontDesk.CommonApi
+	// 后台
 	{
-		questionBankRouter.GET("findQuestionsByChapterId", questionBankApi.FindQuestionsByChapterId)
+		commonWithoutRecordRouter.GET("findQuestionSupport", backgroundCommonApi.FindQuestionSupport)
+
+		commonRouter.POST("addCourseSupport", backgroundCommonApi.AddCourseSupport)
+		commonRouter.DELETE("deleteCourseSupport", backgroundCommonApi.DeleteCourseSupport)
 	}
+	// 前台
 	{
+		commonWithoutRecordRouter.GET("findQuestions", frontDeskCommonApi.FindQuestionsByChapterId)
 
 	}
 }

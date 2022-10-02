@@ -39,7 +39,7 @@ func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (
 
 func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, answer []int) bool {
 	n := len(answer)
-	if n != *question.MostOptions {
+	if n != question.MostOptions {
 		return false
 	}
 	// 前端需要做好的

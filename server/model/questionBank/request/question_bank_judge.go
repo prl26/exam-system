@@ -9,3 +9,8 @@ type QuestionBankJudgeSearch struct {
 	questionBank.Judge
 	request.PageInfo
 }
+
+type JudgeCreate struct {
+	questionBank.Judge
+	ChapterSupport []uint `json:"chapterSupport"`
+}

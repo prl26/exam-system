@@ -32,30 +32,32 @@ var programmService = service.ServiceGroupApp.QuestionBankServiceGroup.ProgrammS
 
 //FindDetail  获取编程题的详细 信息 需要参数 programmId
 func (p *ProgramApi) FindDetail(c *gin.Context) {
-	var req questionBankReq.ProgramDetailFind
+	var req questionBankReq.DetailFind
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"ProgramId": {utils.NotEmpty()},
+		"Id": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	var resp questionBankResp.ProgrammDetail
+	var resp questionBankResp.ProgramDetail
 
-	if err := programmService.FindProgramDetail(&resp.Programms, req.ProgramId); err != nil {
+	if err := programmService.FindProgramDetail(&resp.Program, req.Id); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	if resp.Programms.ID != 0 {
-		if err := programmService.FindLanguageSupport(&resp.LanguageSupport, req.ProgramId); err != nil {
+	if resp.Program.ID != 0 {
+		if err := programmService.FindLanguageSupport(&resp.LanguageSupport, req.Id); err != nil {
+			global.GVA_LOG.Error("获取编程题语言支持失败", zap.Error(err))
 			response.FailWithMessage(err.Error(), c)
 			return
 		}
 
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.ProgramId, questionType.PROGRAM); err != nil {
+		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.PROGRAM); err != nil {
+			global.GVA_LOG.Error("获取编程题课程支持失败", zap.Error(err))
 			response.FailWithMessage(err.Error(), c)
 			return
 		}
@@ -71,12 +73,7 @@ func (p *ProgramApi) EditProgramDetail(c *gin.Context) {
 	var req questionBankReq.ProgramDetailEdit
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id":          {utils.NotEmpty()},
-		"ProblemType": {utils.NotEmpty()},
-		"CanPractice": {utils.NotEmpty()},
-		"CanExam":     {utils.NotEmpty()},
-		"Title":       {utils.NotEmpty()},
-		"Describe":    {utils.NotEmpty()},
+		"Id": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -86,6 +83,7 @@ func (p *ProgramApi) EditProgramDetail(c *gin.Context) {
 	programm.BasicModel = req.BasicModel
 	programm.ID = req.Id
 	if err := programmService.EditProgrammDetail(&programm); err != nil {
+		global.GVA_LOG.Error("编辑编程题失败", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -97,15 +95,15 @@ func (p *ProgramApi) DeleteProgramm(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
 	if err := programmService.DeleteProgramm(IDS.Ids); err != nil {
-		global.GVA_LOG.Error("", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
 	}
 }
 
-// FindProgrammCases 寻找编程题支持的语言的用例
-func (p *ProgramApi) FindProgrammCases(c *gin.Context) {
+// FindProgramCases 寻找编程题支持的语言的用例
+func (p *ProgramApi) FindProgramCases(c *gin.Context) {
 	var req questionBankReq.ProgramCaseFind
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
@@ -119,14 +117,15 @@ func (p *ProgramApi) FindProgrammCases(c *gin.Context) {
 
 	var resp []questionBank.ProgrammCase
 	if err := programmService.FindProgrammCases(&resp, req.ProgramId, req.LanguageId); err != nil {
+		global.GVA_LOG.Error("寻找编程题支持的语言的用例失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	response.OkWithData(resp, c)
 }
 
-//AddProgrammCase  增加编程题用例
-func (p *ProgramApi) AddProgrammCase(c *gin.Context) {
+//AddProgramCase  增加编程题用例
+func (p *ProgramApi) AddProgramCase(c *gin.Context) {
 	var req questionBankReq.ProgramCaseAdd
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
@@ -138,9 +137,6 @@ func (p *ProgramApi) AddProgrammCase(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	//Score      uint   `json:"score" form:"score" gorm:"column:score;comment:;"`
-	//		Input      string `json:"input" form:"input" gorm:"column:input;comment:;"`
-	//		Output     string `json:"output" form:"output" gorm:"column:output;comment:;"`
 	verify = utils.Rules{
 		"Name":   {utils.NotEmpty()},
 		"Score":  {utils.NotEmpty()},
@@ -165,14 +161,15 @@ func (p *ProgramApi) AddProgrammCase(c *gin.Context) {
 	}
 
 	if err := programmService.AddProgrammCase(&programmCases); err != nil {
+		global.GVA_LOG.Error("增加编程题用例失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	response.Ok(c)
 }
 
-// EditProgrammCases 编辑编程题用例
-func (p *ProgramApi) EditProgrammCases(c *gin.Context) {
+// EditProgramCases 编辑编程题用例
+func (p *ProgramApi) EditProgramCases(c *gin.Context) {
 	var req questionBankReq.ProgramCaseEdit
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
@@ -188,14 +185,15 @@ func (p *ProgramApi) EditProgrammCases(c *gin.Context) {
 		return
 	}
 	if err := programmService.EditProgrammCases(req.Cases); err != nil {
+		global.GVA_LOG.Error("编辑编程题用例失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	response.Ok(c)
 }
 
-//DeleteProgrammCases 删除编程题用例
-func (p *ProgramApi) DeleteProgrammCases(c *gin.Context) {
+//DeleteProgramCases 删除编程题用例
+func (p *ProgramApi) DeleteProgramCases(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
 	if err := programmService.DeleteProgrammCases(IDS.Ids); err != nil {
@@ -245,6 +243,7 @@ func (p *ProgramApi) AddLanguageSupport(c *gin.Context) {
 
 	err := programmService.AddLanguageSupport(&languageSupport, &programmCases)
 	if err != nil {
+		global.GVA_LOG.Error("增加语言支持失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -256,7 +255,7 @@ func (p *ProgramApi) EditLanguageSupport(c *gin.Context) {
 	var req questionBankReq.LanguageSupportEdit
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"id":        {utils.NotEmpty()},
+		"Id":        {utils.NotEmpty()},
 		"ProgramId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
@@ -270,6 +269,7 @@ func (p *ProgramApi) EditLanguageSupport(c *gin.Context) {
 	languageSupport.ReferenceAnswer = req.ReferenceAnswer
 
 	if err := programmService.EditLanguageSupport(&languageSupport); err != nil {
+		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -285,6 +285,7 @@ func (p *ProgramApi) DeleteLanguageSupport(c *gin.Context) {
 		"ProgramId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -294,4 +295,21 @@ func (p *ProgramApi) DeleteLanguageSupport(c *gin.Context) {
 		}
 	}
 	response.Ok(c)
+}
+
+// FindList 分页获取所有编程题
+func (p *ProgramApi) FindList(c *gin.Context) {
+	var pageInfo questionBankReq.ProgramFindList
+	_ = c.ShouldBindQuery(&pageInfo)
+	if list, total, err := programmService.FindList(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

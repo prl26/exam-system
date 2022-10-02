@@ -18,18 +18,21 @@ import (
 type ProgramRouter struct{}
 
 func (*ProgramRouter) InitProgram(Router *gin.RouterGroup) {
-	baseRouter := Router.Group("program").Use(middleware.OperationRecord())
 	var programApi = v1.ApiGroupApp.QuestionBankApiGroup.ProgramApi
+	programRouter := Router.Group("program").Use(middleware.OperationRecord())
 	{
-		baseRouter.GET("findDetail", programApi.FindDetail)
-		baseRouter.PUT("editDetail", programApi.EditProgramDetail)
-		baseRouter.DELETE("delete", programApi.DeleteProgramm)
-		baseRouter.GET("findCase", programApi.FindProgrammCases)
-		baseRouter.POST("addCase", programApi.AddProgrammCase)
-		baseRouter.PUT("editCase", programApi.EditProgrammCases)
-		baseRouter.DELETE("deleteCase", programApi.DeleteProgrammCases)
-		baseRouter.POST("addLanguageSupport", programApi.AddLanguageSupport)
-		baseRouter.PUT("editLanguageSupport", programApi.EditLanguageSupport)
-		baseRouter.DELETE("deleteLanguageSupport", programApi.DeleteLanguageSupport)
+		programRouter.PUT("editCase", programApi.EditProgramCases)
+		programRouter.PUT("editDetail", programApi.EditProgramDetail)
+		programRouter.DELETE("deleteCase", programApi.DeleteProgramCases)
+		programRouter.DELETE("delete", programApi.DeleteProgramm)
+		programRouter.POST("addCase", programApi.AddProgramCase)
+		programRouter.POST("addLanguageSupport", programApi.AddLanguageSupport)
+		programRouter.PUT("editLanguageSupport", programApi.EditLanguageSupport)
+		programRouter.DELETE("deleteLanguageSupport", programApi.DeleteLanguageSupport)
+	}
+	programWithoutRecordRouter := Router.Group("program")
+	{
+		programWithoutRecordRouter.GET("findDetail", programApi.FindDetail)
+		programWithoutRecordRouter.GET("findCase", programApi.FindProgramCases)
 	}
 }
