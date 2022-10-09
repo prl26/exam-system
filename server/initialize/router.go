@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"github.com/prl26/exam-system/server/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,7 @@ import (
 
 func Routers() *gin.Engine {
 	Router := gin.Default()
+	Router.Use(utils.Cors())
 	teachplanRouter := router.RouterGroupApp.Teachplan
 
 	lessondataRouter := router.RouterGroupApp.Lessondata
