@@ -16,6 +16,7 @@ import (
 
 func Routers() *gin.Engine {
 	Router := gin.Default()
+	Router.Use(middleware.CorsByRules())
 	teachplanRouter := router.RouterGroupApp.Teachplan
 
 	lessondataRouter := router.RouterGroupApp.Lessondata
