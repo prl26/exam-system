@@ -34,7 +34,7 @@ func (paperQuestionMergeService *PaperQuestionMergeService) DeletePaperQuestionM
 // UpdatePaperQuestionMerge 更新PaperQuestionMerge记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (paperQuestionMergeService *PaperQuestionMergeService) UpdatePaperQuestionMerge(paperQuestionMerge examManage.PaperQuestionMerge) (err error) {
-	err = global.GVA_DB.Save(&paperQuestionMerge).Error
+	err = global.GVA_DB.Updates(&paperQuestionMerge).Error
 	return err
 }
 

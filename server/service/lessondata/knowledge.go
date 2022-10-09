@@ -34,7 +34,7 @@ func (knowledgeService *KnowledgeService) DeleteKnowledgeByIds(ids request.IdsRe
 // UpdateKnowledge 更新Knowledge记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (knowledgeService *KnowledgeService) UpdateKnowledge(knowledge lessondata.Knowledge) (err error) {
-	err = global.GVA_DB.Save(&knowledge).Error
+	err = global.GVA_DB.Updates(&knowledge).Error
 	return err
 }
 

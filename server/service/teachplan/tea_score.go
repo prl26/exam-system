@@ -34,7 +34,7 @@ func (scoreService *ScoreService) DeleteScoreByIds(ids request.IdsReq) (err erro
 // UpdateScore 更新Score记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (scoreService *ScoreService) UpdateScore(score teachplan.Score) (err error) {
-	err = global.GVA_DB.Save(&score).Error
+	err = global.GVA_DB.Updates(&score).Error
 	return err
 }
 

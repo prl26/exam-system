@@ -37,7 +37,7 @@ func (paperTemplateItemService *PaperTemplateItemService) DeletePaperTemplateIte
 // UpdatePaperTemplateItem 更新PaperTemplateItem记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (paperTemplateItemService *PaperTemplateItemService) UpdatePaperTemplateItem(paperTemplateItem examManage.PaperTemplateItem) (err error) {
-	err = global.GVA_DB.Save(&paperTemplateItem).Error
+	err = global.GVA_DB.Updates(&paperTemplateItem).Error
 	return err
 }
 

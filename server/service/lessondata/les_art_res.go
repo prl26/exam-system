@@ -34,7 +34,7 @@ func (articleResourcesService *ArticleResourcesService) DeleteArticleResourcesBy
 // UpdateArticleResources 更新ArticleResources记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (articleResourcesService *ArticleResourcesService) UpdateArticleResources(articleResources lessondata.ArticleResources) (err error) {
-	err = global.GVA_DB.Save(&articleResources).Error
+	err = global.GVA_DB.Updates(&articleResources).Error
 	return err
 }
 

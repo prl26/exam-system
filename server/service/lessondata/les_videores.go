@@ -34,7 +34,7 @@ func (videoResourcesService *VideoResourcesService) DeleteVideoResourcesByIds(id
 // UpdateVideoResources 更新VideoResources记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (videoResourcesService *VideoResourcesService) UpdateVideoResources(videoResources lessondata.VideoResources) (err error) {
-	err = global.GVA_DB.Save(&videoResources).Error
+	err = global.GVA_DB.Updates(&videoResources).Error
 	return err
 }
 

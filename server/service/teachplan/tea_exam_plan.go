@@ -34,7 +34,7 @@ func (examPlanService *ExamPlanService) DeleteExamPlanByIds(ids request.IdsReq) 
 // UpdateExamPlan 更新ExamPlan记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPlanService *ExamPlanService) UpdateExamPlan(examPlan teachplan.ExamPlan) (err error) {
-	err = global.GVA_DB.Save(&examPlan).Error
+	err = global.GVA_DB.Updates(&examPlan).Error
 	return err
 }
 

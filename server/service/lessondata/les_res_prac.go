@@ -34,7 +34,7 @@ func (resourcesPracticeService *ResourcePracticeService) DeleteResourcePracticeB
 // UpdateResourcePractice 更新ResourcePractice记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (resourcesPracticeService *ResourcePracticeService) UpdateResourcePractice(resourcesPractice lessondata.ResourcePractice) (err error) {
-	err = global.GVA_DB.Save(&resourcesPractice).Error
+	err = global.GVA_DB.Updates(&resourcesPractice).Error
 	return err
 }
 

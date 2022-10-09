@@ -59,7 +59,7 @@ func (teachAttendanceService *TeachAttendanceService) DeleteTeachAttendanceByIds
 // UpdateTeachAttendance 更新TeachAttendance记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teachAttendanceService *TeachAttendanceService) UpdateTeachAttendance(teachAttendance teachplan.TeachAttendance) (err error) {
-	err = global.GVA_DB.Save(&teachAttendance).Error
+	err = global.GVA_DB.Updates(&teachAttendance).Error
 	return err
 }
 

@@ -34,7 +34,7 @@ func (examStatusServices *ExamPaperService) DeleteExamPaperByIds(ids request.Ids
 // UpdateExamPaper 更新ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examStatusServices *ExamPaperService) UpdateExamPaper(examPaper examManage.ExamPaper) (err error) {
-	err = global.GVA_DB.Save(&examPaper).Error
+	err = global.GVA_DB.Updates(&examPaper).Error
 	return err
 }
 

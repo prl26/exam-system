@@ -34,7 +34,7 @@ func (resourcesTestService *ResourcesTestService) DeleteResourcesTestByIds(ids r
 // UpdateResourcesTest 更新ResourcesTest记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (resourcesTestService *ResourcesTestService) UpdateResourcesTest(resourcesTest lessondata.ResourcesTest) (err error) {
-	err = global.GVA_DB.Save(&resourcesTest).Error
+	err = global.GVA_DB.Updates(&resourcesTest).Error
 	return err
 }
 
