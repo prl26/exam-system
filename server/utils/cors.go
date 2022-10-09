@@ -10,8 +10,8 @@ func Cors() gin.HandlerFunc {
 		method := c.Request.Method
 		c.Header("Access-Control-Allow-Origin", "*")                                                                         // 可将将 * 替换为指定的域名
 		c.Header("Access-Control-Allow-Headers", "Content-TypeAccessToken,X-CSRF-Token, Authorization,x-token,content-type") //你想放行的header也可以在后面自行添加
-		c.Header("Access-Control-Allow-Methods", "POST,GET,OPTIONS")                                                         //我自己只使用 get post 所以只放行它
-		//c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
+		//c.Header("Access-Control-Allow-Methods", "POST,GET,OPTIONS")      //看情况使用
+		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
 		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type,x-token,X-Token")
 		c.Header("Access-Control-Allow-Credentials", "true")
 
