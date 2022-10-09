@@ -37,8 +37,8 @@ captcha:
 cors:
   mode: whitelist
   whitelist:
-  - allow-origin: example1.com
-    allow-methods: GET, POST
+  - allow-origin: *
+    allow-methods: GET, POST,PUT,DELETE,UPDATE
     allow-headers: content-type
     expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
       Content-Type
