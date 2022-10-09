@@ -34,7 +34,7 @@ func (chapterService *ChapterService) DeleteChapterByIds(ids request.IdsReq) (er
 // UpdateChapter 更新Chapter记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (chapterService *ChapterService) UpdateChapter(chapter basicdata.Chapter) (err error) {
-	err = global.GVA_DB.Save(&chapter).Error
+	err = global.GVA_DB.Updates(&chapter).Error
 	return err
 }
 

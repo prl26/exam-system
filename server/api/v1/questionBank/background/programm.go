@@ -33,7 +33,7 @@ var programmService = service.ServiceGroupApp.QuestionBankServiceGroup.ProgrammS
 //FindDetail  获取编程题的详细 信息 需要参数 programmId
 func (p *ProgramApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}
@@ -63,6 +63,7 @@ func (p *ProgramApi) FindDetail(c *gin.Context) {
 		}
 	} else {
 		response.FailWithMessage("无法找到该编程题", c)
+		return
 	}
 
 	response.OkWithData(resp, c)

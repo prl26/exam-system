@@ -34,7 +34,7 @@ func (collegeService *CollegeService) DeleteCollegeByIds(ids request.IdsReq) (er
 // UpdateCollege 更新College记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (collegeService *CollegeService) UpdateCollege(college basicdata.College) (err error) {
-	err = global.GVA_DB.Save(&college).Error
+	err = global.GVA_DB.Updates(&college).Error
 	return err
 }
 

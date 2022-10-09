@@ -34,7 +34,7 @@ func (studentService *StudentService) DeleteStudentByIds(ids request.IdsReq) (er
 // UpdateStudent 更新Student记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (studentService *StudentService) UpdateStudent(student basicdata.Student) (err error) {
-	err = global.GVA_DB.Save(&student).Error
+	err = global.GVA_DB.Updates(&student).Error
 	return err
 }
 
@@ -78,6 +78,6 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 }
 
 func (studentService *StudentService) CreateStudents(students []*basicdata.Student) error {
-	result := global.GVA_DB.Save(&students)
+	result := global.GVA_DB.Updates(&students)
 	return result.Error
 }

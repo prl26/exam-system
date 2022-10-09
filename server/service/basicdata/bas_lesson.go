@@ -34,7 +34,7 @@ func (lessonService *LessonService) DeleteLessonByIds(ids request.IdsReq) (err e
 // UpdateLesson 更新Lesson记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (lessonService *LessonService) UpdateLesson(lesson basicdata.Lesson) (err error) {
-	err = global.GVA_DB.Save(&lesson).Error
+	err = global.GVA_DB.Updates(&lesson).Error
 	return err
 }
 

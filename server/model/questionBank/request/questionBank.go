@@ -13,7 +13,7 @@ import "github.com/prl26/exam-system/server/model/common/request"
  **/
 
 type DetailFind struct {
-	Id uint `json:"id"`
+	Id uint `json:"id" form:"id"`
 }
 
 type CourseSupportAdd struct {

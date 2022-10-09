@@ -26,7 +26,7 @@ func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoi
 				return err
 			}
 		}
-		return tx.Create(&multipleChoice.Options).Error
+		return nil
 	})
 }
 
@@ -58,7 +58,7 @@ func (a *MultipleChoiceService) Update(multipleChoice questionBank.MultipleChoic
 }
 
 func (a *MultipleChoiceService) FindDetail(questionBankMultipleChoice *questionBank.MultipleChoice, id uint) error {
-	return global.GVA_DB.Where("id = ?", id).Preload("CreditCards").First(questionBankMultipleChoice).Error
+	return global.GVA_DB.Where("id = ?", id).Preload("Options").First(questionBankMultipleChoice).Error
 }
 
 func (a *MultipleChoiceService) FindList(info questionBankReq.MultipleChoiceFindList) (list []questionBank.MultipleChoiceView, total int64, err error) {

@@ -94,7 +94,7 @@ func (api *JudgeApi) FindJudgeList(c *gin.Context) {
 // FindDetail  获取判断题详细
 func (api *JudgeApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}

@@ -34,7 +34,7 @@ func (professionalService *ProfessionalService) DeleteProfessionalByIds(ids requ
 // UpdateProfessional 更新Professional记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (professionalService *ProfessionalService) UpdateProfessional(professional basicdata.Professional) (err error) {
-	err = global.GVA_DB.Save(&professional).Error
+	err = global.GVA_DB.Updates(&professional).Error
 	return err
 }
 

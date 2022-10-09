@@ -34,7 +34,7 @@ func (resourceService *ResourceService) DeleteResourceByIds(ids request.IdsReq) 
 // UpdateResource 更新Resource记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (resourceService *ResourceService) UpdateResource(resource basicdata.Resource) (err error) {
-	err = global.GVA_DB.Save(&resource).Error
+	err = global.GVA_DB.Updates(&resource).Error
 	return err
 }
 

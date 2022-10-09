@@ -22,7 +22,7 @@ var supplyBlankService = service.ServiceGroupApp.QuestionBankServiceGroup.Supply
 // Create 创建填空题
 func (api *SupplyBlankApi) Create(c *gin.Context) {
 	var req questionBankReq.SupplyBlankCreate
-	_ = c.ShouldBindJSON(&req)
+	_ = c.BindQuery(&req)
 	verify := utils.Rules{
 		"ProblemType": {utils.NotEmpty()},
 		"CanPractice": {utils.NotEmpty()},
@@ -95,7 +95,7 @@ func (api *SupplyBlankApi) FindList(c *gin.Context) {
 // FindDetail  获取填空题详细
 func (api *SupplyBlankApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}

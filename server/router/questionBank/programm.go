@@ -33,6 +33,7 @@ func (*ProgramRouter) InitProgram(Router *gin.RouterGroup) {
 	programWithoutRecordRouter := Router.Group("program")
 	{
 		programWithoutRecordRouter.GET("findDetail", programApi.FindDetail)
+		programWithoutRecordRouter.GET("findList", programApi.FindList)
 		programWithoutRecordRouter.GET("findCase", programApi.FindProgramCases)
 	}
 }

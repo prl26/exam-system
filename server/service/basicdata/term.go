@@ -34,7 +34,7 @@ func (termService *TermService) DeleteTermByIds(ids request.IdsReq) (err error) 
 // UpdateTerm 更新Term记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (termService *TermService) UpdateTerm(term basicdata.Term) (err error) {
-	err = global.GVA_DB.Save(&term).Error
+	err = global.GVA_DB.Updates(&term).Error
 	return err
 }
 

@@ -34,7 +34,7 @@ func (teachClassService *TeachClassService) DeleteTeachClassByIds(ids request.Id
 // UpdateTeachClass 更新TeachClass记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teachClassService *TeachClassService) UpdateTeachClass(teachClass basicdata.TeachClass) (err error) {
-	err = global.GVA_DB.Save(&teachClass).Error
+	err = global.GVA_DB.Updates(&teachClass).Error
 	return err
 }
 

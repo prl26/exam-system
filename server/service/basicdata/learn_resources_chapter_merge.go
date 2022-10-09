@@ -34,7 +34,7 @@ func (learnResourcesChapterMergeService *LearnResourcesChapterMergeService) Dele
 // UpdateLearnResourcesChapterMerge 更新LearnResourcesChapterMerge记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (learnResourcesChapterMergeService *LearnResourcesChapterMergeService) UpdateLearnResourcesChapterMerge(learnResourcesChapterMerge basicdata.LearnResourcesChapterMerge) (err error) {
-	err = global.GVA_DB.Save(&learnResourcesChapterMerge).Error
+	err = global.GVA_DB.Updates(&learnResourcesChapterMerge).Error
 	return err
 }
 

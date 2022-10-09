@@ -119,7 +119,7 @@ func (choiceApi *MultipleChoiceApi) Update(c *gin.Context) {
 // FindDetail  获取选择题详细
 func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}
@@ -131,6 +131,7 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 	if err := multipleChoiceService.FindDetail(&resp.MultipleChoice, req.Id); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
+		return
 	}
 	if resp.MultipleChoice.ID != 0 {
 		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.MULTIPLE_CHOICE); err != nil {
