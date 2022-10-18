@@ -35,19 +35,17 @@ captcha:
   img-width: 240
   img-height: 80
 cors:
-  mode: whitelist
+  mode: allow-all
   whitelist:
-  - allow-origin: *
+  - allow-origin: example1.com
     allow-methods: GET, POST,PUT,DELETE,UPDATE
     allow-headers: content-type
-    expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-      Content-Type
+    expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,Content-Type
     allow-credentials: true
   - allow-origin: example2.com
     allow-methods: GET, POST
     allow-headers: content-type
-    expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
-      Content-Type
+    expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,Content-Type
     allow-credentials: true
 db-list:
 - disable: false
