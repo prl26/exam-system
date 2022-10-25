@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/model/enum/language"
+	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/questionBank"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -51,12 +52,12 @@ type Result struct {
 type TestCase struct {
 	Input  string `json:"input" gorm:"column:TestCaseInput"`
 	Output string `json:"output" gorm:"column:TestCaseOutput"`
-	Score  int    `json:"score" gorm:"column=ScoreWeight"`
+	Score  int    `json:"score" gorm:"column:ScoreWeight"`
 }
 
 func main() {
-	from := getDB("root:Cuitloop@123456@tcp(116.63.173.235:3306)/stu_system?charset=utf8")
-	to := getDB("root:cuit@123456@tcp(139.9.249.149:3306)/gva?charset=utf8")
+	from := getDB("root:cuitexamloopmysql123@tcp(exam.cuit.edu.cn:3306)/stu_system?charset=utf8")
+	to := getDB("root:chensida2318@tcp(47.108.150.32:3306)/gva?charset=utf8")
 	transformation(from, to)
 	defer func() {
 		db, _ := from.DB()
@@ -130,7 +131,8 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 		chapterMerge := &questionBank.ChapterMerge{}
 		chapterMerge.ChapterId = uint(result.Stage)
 		chapterMerge.QuestionId = programm.ID
-		chapterMerge.QuestionType = ProgrammType
+		chapterMerge.QuestionType = questionType.PROGRAM
+
 		chapterMerges = append(chapterMerges, chapterMerge)
 
 		fmt.Println("已经处理完", i+1, "个编程题勒！")

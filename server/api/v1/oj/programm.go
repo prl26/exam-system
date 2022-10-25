@@ -21,8 +21,8 @@ import (
 
 type ProgrammApi struct{}
 
-var cLanguageService = service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
-var commonService = service.ServiceGroupApp.OjServiceServiceGroup.CommonService
+var cLanguageService = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
+var commonService = &service.ServiceGroupApp.OjServiceServiceGroup.CommonService
 
 // CheckProgramm 检验编程题
 // @Tags OJ

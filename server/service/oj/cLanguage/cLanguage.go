@@ -9,6 +9,7 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank"
 	"github.com/prl26/exam-system/server/pb"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,19 +24,25 @@ import (
  **/
 
 type CLanguageService struct {
-	ExecutorClient pb.ExecutorClient
+	ExecutorClient                    pb.ExecutorClient
+	GCC_PATH                          string
+	DEFAULT_COMPILE_CPU_TIME_LIMIT    uint64
+	DEFAULT_COMPILE_MEMORY_TIME_LIMIT uint64
+	DEFAULT_JUDGE_CPU_TIME_LIMI       uint64
+	DEFAULT_JUDGE_MEMORY_LIMIT        uint64
 }
 
-const GCC_PATH = "/usr/bin/gcc"
 const STDOUT = "stdout"
 const STDERR = "stderr"
 
-const DEFAULT_COMPILE_CPU_TIME_LIMIT uint64 = 10000000000
-const DEFAULT_COMPILE_MEMORY_TIME_LIMIT uint64 = 104857600
-const DEFAULT_JUDGE_CPU_TIME_LIMIT uint64 = 10000000000
-const DEFAULT_JUDGE_MEMORY_LIMIT uint64 = 104857600
 const DEFAULT_CODE_NAME string = "a.c"
 const DEFAULT_FILE_NAME string = "a"
+
+var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
+
+// 注意此处并不是 服务启动的真实值
+// 此为服务启动的默认值   根据 config文件的配置 之后会进行依赖注入 来修改上面的值
+
 const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 
 func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
@@ -52,7 +59,7 @@ func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase
 			return
 		}
 	}()
-	return c.Judge(code, cases)
+	return c.Judge(fileID, cases)
 }
 
 func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
@@ -97,7 +104,7 @@ func (c *CLanguageService) compile(code string) (string, error) {
 	}
 	cmd := &pb.Request_CmdType{
 		Env:  []string{"PATH=/usr/local/bin:/usr/bin:/bin"},
-		Args: []string{GCC_PATH, DEFAULT_CODE_NAME, "-o", DEFAULT_FILE_NAME},
+		Args: []string{c.GCC_PATH, DEFAULT_CODE_NAME, "-o", DEFAULT_FILE_NAME},
 		Files: []*pb.Request_File{
 			{
 				File: stdio,
@@ -107,8 +114,8 @@ func (c *CLanguageService) compile(code string) (string, error) {
 				File: stderr,
 			},
 		},
-		CpuTimeLimit: DEFAULT_COMPILE_CPU_TIME_LIMIT,
-		MemoryLimit:  DEFAULT_COMPILE_MEMORY_TIME_LIMIT,
+		CpuTimeLimit: c.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		MemoryLimit:  c.DEFAULT_COMPILE_MEMORY_TIME_LIMIT,
 		ProcLimit:    50,
 		CopyIn: map[string]*pb.Request_File{
 			DEFAULT_CODE_NAME: input,
@@ -156,7 +163,7 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
 	for i, programmCase := range cases {
-		cmds[i] = makeCmd(fileId, programmCase.Input, &programmCase.ProgrammLimit)
+		cmds[i] = c.makeCmd(fileId, programmCase.Input, &programmCase.ProgrammLimit)
 	}
 	exec, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: cmds,
@@ -170,8 +177,14 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 			ResultStatus: result.Status.String(), ExitStatus: int(result.ExitStatus), Time: uint(result.Time), Memory: uint(result.Memory), Runtime: uint(result.RunTime)},
 		}
 		if result.Status == pb.Response_Result_Accepted {
-			if string(result.Files[STDOUT]) != cases[i].Output {
-				result.Status = pb.Response_Result_WrongAnswer
+			standardAnswer := string(result.Files[STDOUT])
+			actualAnswer := cases[i].Output
+			if standardAnswer != actualAnswer {
+				if replacer.Replace(standardAnswer) == replacer.Replace(actualAnswer) {
+					result.Status = pb.Response_Result_PartiallyCorrect
+				} else {
+					result.Status = pb.Response_Result_WrongAnswer
+				}
 			} else {
 				submits[i].Score = cases[i].Score
 			}
@@ -181,7 +194,7 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 }
 
 func (c *CLanguageService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
-	cmd := makeCmd(fileId, input, programmLimit)
+	cmd := c.makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{
 			cmd,
@@ -199,7 +212,7 @@ func (c *CLanguageService) Execute(fileId string, input string, programmLimit *q
 	return out, executeSituation, nil
 }
 
-func makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLimit) *pb.Request_CmdType {
+func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
@@ -245,21 +258,21 @@ func makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLi
 		},
 	}
 	if programmLimit != nil {
-		cmd = cmdLimit(programmLimit, cmd)
+		cmd = c.cmdLimit(programmLimit, cmd)
 	}
 	return cmd
 }
 
-func cmdLimit(programmLimit *questionBank.ProgrammLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
+func (c *CLanguageService) cmdLimit(programmLimit *questionBank.ProgrammLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
 	if programmLimit.CpuLimit != nil {
 		cmd.CpuTimeLimit = uint64(*programmLimit.CpuLimit)
 	} else {
-		cmd.CpuTimeLimit = DEFAULT_JUDGE_CPU_TIME_LIMIT
+		cmd.CpuTimeLimit = c.DEFAULT_COMPILE_CPU_TIME_LIMIT
 	}
 	if programmLimit.MemoryLimit != nil {
 		cmd.MemoryLimit = uint64(*programmLimit.MemoryLimit)
 	} else {
-		cmd.MemoryLimit = DEFAULT_JUDGE_MEMORY_LIMIT
+		cmd.MemoryLimit = c.DEFAULT_JUDGE_MEMORY_LIMIT
 	}
 	if programmLimit.ProcLimit != nil {
 		cmd.ProcLimit = uint64(*programmLimit.ProcLimit)

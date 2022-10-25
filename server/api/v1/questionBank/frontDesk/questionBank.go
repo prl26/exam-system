@@ -21,7 +21,7 @@ type CommonApi struct{}
 
 var questionBankService = service.ServiceGroupApp.QuestionBankServiceGroup.QuestionBankService
 
-// FindQuestionsByChapterId 通过chapterId 获取所有题目
+//FindQuestionsByChapterId 通过chapterId 获取所有题目
 func (q *CommonApi) FindQuestionsByChapterId(c *gin.Context) {
 	query := c.Query("id")
 	idInt, err := strconv.Atoi(query)
@@ -34,3 +34,13 @@ func (q *CommonApi) FindQuestionsByChapterId(c *gin.Context) {
 	response.OkWithData(questions, c)
 	return
 }
+
+//func (q*CommonApi) FindJudgesByChapterId(c *gin.Context){
+//	query := c.Query("id")
+//	idInt, err := strconv.Atoi(query)
+//	if err != nil {
+//		response.FailWithMessage(err.Error(), c)
+//		return
+//	}
+//	idUint := uint(idInt)
+//}
