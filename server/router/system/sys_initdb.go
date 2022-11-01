@@ -2,7 +2,7 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/prl26/exam-system/server/api/v1"
+	v1 "github.com/prl26/exam-system/server/api/Backstage"
 )
 
 type InitRouter struct{}

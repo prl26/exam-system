@@ -41,8 +41,8 @@ const (
 	packageServiceName = "service"
 	packageRouter      = "router/%s/enter.go"
 	packageRouterName  = "router"
-	packageAPI         = "api/v1/%s/enter.go"
-	packageAPIName     = "api/v1"
+	packageAPI         = "api/Backstage/%s/enter.go"
+	packageAPIName     = "api/Backstage"
 )
 
 type autoPackage struct {
@@ -110,7 +110,7 @@ func Init(Package string) {
 		},
 		packageAPIName: {
 			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
+				global.GVA_CONFIG.AutoCode.Server, "api/Backstage", "enter.go"),
 			importCodeF:  "github.com/prl26/exam-system/server/%s/%s",
 			packageNameF: "%s",
 			groupName:    "ApiGroup",

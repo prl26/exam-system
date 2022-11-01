@@ -9,7 +9,7 @@ autocode:
   transfer-restart: true
   root:  D:\work\exam-system
   server: /server
-  server-api: /api/v1/%s
+  server-api: /api/Backstage/%s
   server-plug: /plugin/%s
   server-initialize: /initialize
   server-model: /model/%s

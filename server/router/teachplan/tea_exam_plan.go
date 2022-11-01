@@ -2,7 +2,7 @@ package teachplan
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api/Backstage"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ExamPlanRouter struct {
 func (s *ExamPlanRouter) InitExamPlanRouter(Router *gin.RouterGroup) {
 	examPlanRouter := Router.Group("examPlan").Use(middleware.OperationRecord())
 	examPlanRouterWithoutRecord := Router.Group("examPlan")
-	var examPlanApi = v1.ApiGroupApp.TeachplanApiGroup.ExamPlanApi
+	var examPlanApi = Backstage.ApiGroupApp.TeachplanApiGroup.ExamPlanApi
 	{
 		examPlanRouter.POST("createExamPlan", examPlanApi.CreateExamPlan)             // 新建ExamPlan
 		examPlanRouter.DELETE("deleteExamPlan", examPlanApi.DeleteExamPlan)           // 删除ExamPlan

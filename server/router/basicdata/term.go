@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api/Backstage"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type TermRouter struct {
 func (s *TermRouter) InitTermRouter(Router *gin.RouterGroup) {
 	termRouter := Router.Group("term").Use(middleware.OperationRecord())
 	termRouterWithoutRecord := Router.Group("term")
-	var termApi = v1.ApiGroupApp.BasicdataApiGroup.TermApi
+	var termApi = Backstage.ApiGroupApp.BasicdataApiGroup.TermApi
 	{
 		termRouter.POST("createTerm", termApi.CreateTerm)             // 新建Term
 		termRouter.DELETE("deleteTerm", termApi.DeleteTerm)           // 删除Term

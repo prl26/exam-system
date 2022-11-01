@@ -111,7 +111,7 @@ autocode:
   root: ""
   server: /server
   server-plug: /plugin/%s
-  server-api: /api/v1/%s
+  server-api: /api/Backstage/%s
   server-initialize: /initialize
   server-model: /model/%s
   server-request: /model/%s/request/
