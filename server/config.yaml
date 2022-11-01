@@ -50,7 +50,8 @@ cors:
 db-list:
 - disable: false
   type: ""
-  alias-name: ""
+  alias-name: ""..
+
   path: ""
   port: ""
   config: ""

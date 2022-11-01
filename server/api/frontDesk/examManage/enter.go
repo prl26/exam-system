@@ -1,4 +1,4 @@
-package frontEnd
+package examManage
 
 type ApiGroup struct {
 	ExamApi

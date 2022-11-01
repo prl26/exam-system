@@ -1,4 +1,4 @@
-package frontEnd
+package examManage
 
 import (
 	"github.com/gin-gonic/gin"
