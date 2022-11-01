@@ -1,4 +1,4 @@
-package Backstage
+package api
 
 import (
 	"github.com/prl26/exam-system/server/api/Backstage/basicdata"
@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/api/Backstage/questionBank"
 	"github.com/prl26/exam-system/server/api/Backstage/system"
 	"github.com/prl26/exam-system/server/api/Backstage/teachplan"
+	"github.com/prl26/exam-system/server/api/frontDesk/common"
 )
 
 type ApiGroup struct {
@@ -19,6 +20,7 @@ type ApiGroup struct {
 	ExammanageApiGroup   examManage.ApiGroup
 	QuestionBankApiGroup questionBank.ApiGroup
 	OjApiGroup           oj.ApiGroup
+	CommonApiGroup       common.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)

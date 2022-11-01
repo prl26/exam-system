@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type LessonRouter struct {
 func (s *LessonRouter) InitLessonRouter(Router *gin.RouterGroup) {
 	lessonRouter := Router.Group("lesson").Use(middleware.OperationRecord())
 	lessonRouterWithoutRecord := Router.Group("lesson")
-	var lessonApi = Backstage.ApiGroupApp.BasicdataApiGroup.LessonApi
+	var lessonApi = api.ApiGroupApp.BasicdataApiGroup.LessonApi
 	{
 		lessonRouter.POST("createLesson", lessonApi.CreateLesson)             // 新建Lesson
 		lessonRouter.DELETE("deleteLesson", lessonApi.DeleteLesson)           // 删除Lesson

@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ChapterRouter struct {
 func (s *ChapterRouter) InitChapterRouter(Router *gin.RouterGroup) {
 	chapterRouter := Router.Group("chapter").Use(middleware.OperationRecord())
 	chapterRouterWithoutRecord := Router.Group("chapter")
-	var chapterApi = Backstage.ApiGroupApp.BasicdataApiGroup.ChapterApi
+	var chapterApi = api.ApiGroupApp.BasicdataApiGroup.ChapterApi
 	{
 		chapterRouter.POST("createChapter", chapterApi.CreateChapter)             // 新建Chapter
 		chapterRouter.DELETE("deleteChapter", chapterApi.DeleteChapter)           // 删除Chapter

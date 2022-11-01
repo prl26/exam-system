@@ -2,7 +2,7 @@ package oj
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/prl26/exam-system/server/api/Backstage"
+	v1 "github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 

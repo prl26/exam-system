@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ResourceRouter struct {
 func (s *ResourceRouter) InitResourceRouter(Router *gin.RouterGroup) {
 	resourceRouter := Router.Group("resource").Use(middleware.OperationRecord())
 	resourceRouterWithoutRecord := Router.Group("resource")
-	var resourceApi = Backstage.ApiGroupApp.BasicdataApiGroup.ResourceApi
+	var resourceApi = api.ApiGroupApp.BasicdataApiGroup.ResourceApi
 	{
 		resourceRouter.POST("createResource", resourceApi.CreateResource)             // 新建Resource
 		resourceRouter.DELETE("deleteResource", resourceApi.DeleteResource)           // 删除Resource

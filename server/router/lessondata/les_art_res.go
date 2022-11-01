@@ -2,7 +2,7 @@ package lessondata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ArticleResourcesRouter struct {
 func (s *ArticleResourcesRouter) InitArticleResourcesRouter(Router *gin.RouterGroup) {
 	articleResourcesRouter := Router.Group("articleResources").Use(middleware.OperationRecord())
 	articleResourcesRouterWithoutRecord := Router.Group("articleResources")
-	var articleResourcesApi = Backstage.ApiGroupApp.LessondataApiGroup.ArticleResourcesApi
+	var articleResourcesApi = api.ApiGroupApp.LessondataApiGroup.ArticleResourcesApi
 	{
 		articleResourcesRouter.POST("createArticleResources", articleResourcesApi.CreateArticleResources)             // 新建ArticleResources
 		articleResourcesRouter.DELETE("deleteArticleResources", articleResourcesApi.DeleteArticleResources)           // 删除ArticleResources

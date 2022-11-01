@@ -2,7 +2,7 @@ package examManage
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type PaperTemplateRouter struct {
 func (s *PaperTemplateRouter) InitPaperTemplateRouter(Router *gin.RouterGroup) {
 	PapertemplateRouter := Router.Group("Papertemplate").Use(middleware.OperationRecord())
 	PapertemplateRouterWithoutRecord := Router.Group("Papertemplate")
-	var PapertemplateApi = Backstage.ApiGroupApp.ExammanageApiGroup.PaperTemplateApi
+	var PapertemplateApi = api.ApiGroupApp.ExammanageApiGroup.PaperTemplateApi
 	{
 		PapertemplateRouter.POST("createPaperTemplate", PapertemplateApi.CreatePaperTemplate)             // 新建PaperTemplate
 		PapertemplateRouter.DELETE("deletePaperTemplate", PapertemplateApi.DeletePaperTemplate)           // 删除PaperTemplate

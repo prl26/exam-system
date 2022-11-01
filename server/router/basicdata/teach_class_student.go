@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -14,7 +14,7 @@ func (s *TeachClassStudentRouter) InitTeachClassStudentRouter(Router *gin.Router
 	teachClassStudentRouter := Router.Group("teachClassStudent").Use(middleware.OperationRecord())
 	teachClassStudentRouterWithoutRecord := Router.Group("teachClassStudent")
 	//var teachClassStudentApi = Backstage.ApiGroupApp.BasicdataApiGroup.TeachClassStudentApi
-	var multiTableApi = Backstage.ApiGroupApp.BasicdataApiGroup.MultiTableApi
+	var multiTableApi = api.ApiGroupApp.BasicdataApiGroup.MultiTableApi
 	{
 
 		teachClassStudentRouter.POST("initTeachClassStudent", multiTableApi.InitTeachClassStudent)     // 教学班中添加学生

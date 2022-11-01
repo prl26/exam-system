@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type LearnResourcesChapterMergeRouter struct {
 func (s *LearnResourcesChapterMergeRouter) InitLearnResourcesChapterMergeRouter(Router *gin.RouterGroup) {
 	learnResourcesChapterMergeRouter := Router.Group("learnResourcesChapterMerge").Use(middleware.OperationRecord())
 	learnResourcesChapterMergeRouterWithoutRecord := Router.Group("learnResourcesChapterMerge")
-	var learnResourcesChapterMergeApi = Backstage.ApiGroupApp.BasicdataApiGroup.LearnResourcesChapterMergeApi
+	var learnResourcesChapterMergeApi = api.ApiGroupApp.BasicdataApiGroup.LearnResourcesChapterMergeApi
 	{
 		learnResourcesChapterMergeRouter.POST("createLearnResourcesChapterMerge", learnResourcesChapterMergeApi.CreateLearnResourcesChapterMerge)             // 新建LearnResourcesChapterMerge
 		learnResourcesChapterMergeRouter.DELETE("deleteLearnResourcesChapterMerge", learnResourcesChapterMergeApi.DeleteLearnResourcesChapterMerge)           // 删除LearnResourcesChapterMerge

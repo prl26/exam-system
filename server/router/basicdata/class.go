@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ClassRouter struct {
 func (s *ClassRouter) InitClassRouter(Router *gin.RouterGroup) {
 	classRouter := Router.Group("class").Use(middleware.OperationRecord())
 	classRouterWithoutRecord := Router.Group("class")
-	var classApi = Backstage.ApiGroupApp.BasicdataApiGroup.ClassApi
+	var classApi = api.ApiGroupApp.BasicdataApiGroup.ClassApi
 	{
 		classRouter.POST("createClass", classApi.CreateClass)             // 新建Class
 		classRouter.DELETE("deleteClass", classApi.DeleteClass)           // 删除Class

@@ -2,7 +2,7 @@ package lessondata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/Backstage"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type KnowledgeRouter struct {
 func (s *KnowledgeRouter) InitKnowledgeRouter(Router *gin.RouterGroup) {
 	knowledgeRouter := Router.Group("knowledge").Use(middleware.OperationRecord())
 	knowledgeRouterWithoutRecord := Router.Group("knowledge")
-	var knowledgeApi = Backstage.ApiGroupApp.LessondataApiGroup.KnowledgeApi
+	var knowledgeApi = api.ApiGroupApp.LessondataApiGroup.KnowledgeApi
 	{
 		knowledgeRouter.POST("createKnowledge", knowledgeApi.CreateKnowledge)             // 新建Knowledge
 		knowledgeRouter.DELETE("deleteKnowledge", knowledgeApi.DeleteKnowledge)           // 删除Knowledge
