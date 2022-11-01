@@ -5,7 +5,6 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	"github.com/prl26/exam-system/server/model/system"
-	"github.com/prl26/exam-system/server/model/teachplan"
 )
 
 type CommonService struct {
@@ -33,9 +32,5 @@ func (commonService *CommonService) FindTeachClass(id uint) (teachClassAndLesson
 		err = global.GVA_DB.Where("id = ?", teachClass.TeacherId).Find(&user).Error
 		teachClassAndLesson[i].TeacherName = user.NickName
 	}
-	return
-}
-func (commonService *CommonService) FindExamPlans(teachClassId uint) (examPlans []teachplan.ExamPlan, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ?", teachClassId).Find(&examPlans).Error
 	return
 }

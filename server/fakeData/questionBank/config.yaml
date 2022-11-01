@@ -7,7 +7,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: D:\work\github.com/prl26/exam-system/server
+  root: D:\work\github.com/prl26/frontExam-system/server
   server: /server
   server-api: /api/Backstage/%s
   server-plug: /plugin/%s
@@ -29,7 +29,7 @@ aws-s3:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/prl26/exam-system/server
+  path-prefix: github.com/prl26/frontExam-system/server
 captcha:
   key-long: 6
   img-width: 240
@@ -136,7 +136,7 @@ tencent-cos:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/prl26/exam-system/server
+  path-prefix: github.com/prl26/frontExam-system/server
 timer:
   start: true
   spec: '@daily'
@@ -150,7 +150,7 @@ timer:
     interval: 168h
 zap:
   level: info
-  prefix: '[github.com/prl26/exam-system/server]'
+  prefix: '[github.com/prl26/frontExam-system/server]'
   format: console
   director: log
   encode-level: LowercaseColorLevelEncoder

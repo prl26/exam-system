@@ -148,7 +148,7 @@ timer:
     interval: 168h
 zap:
   level: info
-  prefix: '[github.com/prl26/exam-system/server]'
+  prefix: '[github.com/prl26/frontExam-system/server]'
   format: console
   director: log
   encode-level: LowercaseColorLevelEncoder

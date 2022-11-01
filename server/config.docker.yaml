@@ -1,4 +1,4 @@
-# github.com/prl26/exam-system/server Global Configuration
+# github.com/prl26/frontExam-system/server Global Configuration
 
 # jwt configuration
 jwt:
@@ -10,7 +10,7 @@ jwt:
 # zap logger configuration
 zap:
   level: 'info'
-  prefix: '[github.com/prl26/exam-system/server]'
+  prefix: '[github.com/prl26/frontExam-system/server]'
   format: 'console'
   director: 'log'
   encode-level: 'LowercaseColorLevelEncoder'
@@ -148,7 +148,7 @@ tencent-cos:
   secret-id: 'xxxxxxxx'
   secret-key: 'xxxxxxxx'
   base-url: 'https://gin.vue.admin'
-  path-prefix: 'github.com/prl26/exam-system/server'
+  path-prefix: 'github.com/prl26/frontExam-system/server'
 
 # aws s3 configuration (minio compatible)
 aws-s3:
@@ -160,7 +160,7 @@ aws-s3:
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin
-  path-prefix: github.com/prl26/exam-system/server
+  path-prefix: github.com/prl26/frontExam-system/server
 
 # huawei obs configuration
 hua-wei-obs:
