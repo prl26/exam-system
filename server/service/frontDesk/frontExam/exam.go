@@ -141,12 +141,12 @@ func (examService *ExamService) ExecPapers(examPaperCommit examManage.CommitExam
 	}
 	for i := 0; i < len(examPaperCommit.BlankCommit); i++ {
 		if Bool, err := ojService.SupplyBlankService.Check(examPaperCommit.MultipleChoiceCommit[0].QuestionId, examPaperCommit.BlankCommit[0].Answer); err != nil {
-			return
+			return err
 		} else {
 			if Bool == true {
 				err = global.GVA_DB.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.BlankCommit[0].MergeId).Error
 				if err != nil {
-					return
+					return err
 				}
 			}
 		}
