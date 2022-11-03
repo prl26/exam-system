@@ -49,5 +49,6 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 		response.FailWithMessage("试卷提交试卷失败", c)
 	} else {
 		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
+
 	}
 }
