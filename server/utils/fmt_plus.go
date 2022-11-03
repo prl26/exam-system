@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -35,4 +36,10 @@ func StructToMap(obj interface{}) map[string]interface{} {
 
 func ArrayToString(array []interface{}) string {
 	return strings.Replace(strings.Trim(fmt.Sprint(array), "[]"), " ", ",", -1)
+}
+func IntArrayToString(array []int) (result string) {
+	for _, i := range array {
+		result += strconv.Itoa(i)
+	}
+	return
 }

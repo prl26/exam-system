@@ -58,7 +58,7 @@ func RegisterTables(db *gorm.DB) {
 		basicdata.LearnResourcesChapterMerge{},
 		basicdata.Professional{},
 		basicdata.TeachClass{},
-		//basicdata.TeachClassStudent{},
+		basicdata.StudentAndTeachClass{},
 		basicdata.Term{},
 
 		lessondata.VideoResources{},

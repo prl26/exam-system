@@ -8,8 +8,8 @@ import (
 type CommonRouter struct {
 }
 
-func (c *CommonRouter) InitKnowledgeRouter(Router *gin.RouterGroup) {
-	CommonRouterWithoutRecord := Router.Group("knowledge")
+func (c *CommonRouter) InitCommonRouter(Router *gin.RouterGroup) {
+	CommonRouterWithoutRecord := Router.Group("common")
 	var commonApi = api.ApiGroupApp.CommonApiGroup.CommonApi
 	{
 		CommonRouterWithoutRecord.GET("findLessons", commonApi.FindLessons)

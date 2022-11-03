@@ -22,17 +22,18 @@ var examstudentPaperService = service.ServiceGroupApp.ExammanageServiceGroup.Exa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamStudentPaper true "创建ExamStudentPaper"
+// @Param data body frontExamManage.ExamStudentPaper true "创建ExamStudentPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /examstudentPaper/createExamStudentPaper [post]
 func (examstudentPaperApi *ExamStudentPaperApi) CreateExamStudentPaper(c *gin.Context) {
-	var examstudentPaper examManage.ExamStudentPaper
+	var examstudentPaper examManageReq.ExamComing
 	_ = c.ShouldBindJSON(&examstudentPaper)
-	if err := examstudentPaperService.CreateExamStudentPaper(examstudentPaper); err != nil {
+	if st, err := examstudentPaperService.CreateExamStudentPaper(examstudentPaper); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		//response.OkWithMessage("创建成功", c)
+		response.OkWithData(gin.H{"examPaper": st}, c)
 	}
 }
 
@@ -42,7 +43,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) CreateExamStudentPaper(c *gin.Co
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamStudentPaper true "删除ExamStudentPaper"
+// @Param data body frontExamManage.ExamStudentPaper true "删除ExamStudentPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /examstudentPaper/deleteExamStudentPaper [delete]
 func (examstudentPaperApi *ExamStudentPaperApi) DeleteExamStudentPaper(c *gin.Context) {
@@ -53,6 +54,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) DeleteExamStudentPaper(c *gin.Co
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
+
 	}
 }
 
@@ -82,7 +84,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) DeleteExamStudentPaperByIds(c *g
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamStudentPaper true "更新ExamStudentPaper"
+// @Param data body frontExamManage.ExamStudentPaper true "更新ExamStudentPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /examstudentPaper/updateExamStudentPaper [put]
 func (examstudentPaperApi *ExamStudentPaperApi) UpdateExamStudentPaper(c *gin.Context) {
@@ -102,7 +104,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) UpdateExamStudentPaper(c *gin.Co
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query examManage.ExamStudentPaper true "用id查询ExamStudentPaper"
+// @Param data query frontExamManage.ExamStudentPaper true "用id查询ExamStudentPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /examstudentPaper/findExamStudentPaper [get]
 func (examstudentPaperApi *ExamStudentPaperApi) FindExamStudentPaper(c *gin.Context) {

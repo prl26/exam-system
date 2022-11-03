@@ -9,6 +9,7 @@ import (
 	"github.com/prl26/exam-system/server/api/Backstage/system"
 	"github.com/prl26/exam-system/server/api/Backstage/teachplan"
 	"github.com/prl26/exam-system/server/api/frontDesk/common"
+	"github.com/prl26/exam-system/server/api/frontDesk/frontExamManage"
 )
 
 type ApiGroup struct {
@@ -21,6 +22,7 @@ type ApiGroup struct {
 	QuestionBankApiGroup questionBank.ApiGroup
 	OjApiGroup           oj.ApiGroup
 	CommonApiGroup       common.ApiGroup
+	FrontExamGroup       frontExamManage.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)

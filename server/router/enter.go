@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/prl26/exam-system/server/router/basicdata"
 	"github.com/prl26/exam-system/server/router/examManage"
+	"github.com/prl26/exam-system/server/router/frontDesk"
 	"github.com/prl26/exam-system/server/router/lessondata"
 	"github.com/prl26/exam-system/server/router/oj"
 	"github.com/prl26/exam-system/server/router/questionBank"
@@ -18,6 +19,7 @@ type RouterGroup struct {
 	Exammanage   examManage.RouterGroup
 	QuestionBank questionBank.RouterGroup
 	Oj           oj.RouterGroup
+	FrontDesk    frontDesk.RouterGroup
 }
 
 var RouterGroupApp = new(RouterGroup)

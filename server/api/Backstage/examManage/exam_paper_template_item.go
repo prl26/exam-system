@@ -22,7 +22,7 @@ var paperTemplateItemService = service.ServiceGroupApp.ExammanageServiceGroup.Pa
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplateItem true "创建PaperTemplateItem"
+// @Param data body frontExamManage.PaperTemplateItem true "创建PaperTemplateItem"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /paperTemplateItem/createPaperTemplateItem [post]
 func (paperTemplateItemApi *PaperTemplateItemApi) CreatePaperTemplateItem(c *gin.Context) {
@@ -42,7 +42,7 @@ func (paperTemplateItemApi *PaperTemplateItemApi) CreatePaperTemplateItem(c *gin
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplateItem true "删除PaperTemplateItem"
+// @Param data body frontExamManage.PaperTemplateItem true "删除PaperTemplateItem"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /paperTemplateItem/deletePaperTemplateItem [delete]
 func (paperTemplateItemApi *PaperTemplateItemApi) DeletePaperTemplateItem(c *gin.Context) {
@@ -82,7 +82,7 @@ func (paperTemplateItemApi *PaperTemplateItemApi) DeletePaperTemplateItemByIds(c
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplateItem true "更新PaperTemplateItem"
+// @Param data body frontExamManage.PaperTemplateItem true "更新PaperTemplateItem"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /paperTemplateItem/updatePaperTemplateItem [put]
 func (paperTemplateItemApi *PaperTemplateItemApi) UpdatePaperTemplateItem(c *gin.Context) {
@@ -102,7 +102,7 @@ func (paperTemplateItemApi *PaperTemplateItemApi) UpdatePaperTemplateItem(c *gin
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query examManage.PaperTemplateItem true "用id查询PaperTemplateItem"
+// @Param data query frontExamManage.PaperTemplateItem true "用id查询PaperTemplateItem"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /paperTemplateItem/findPaperTemplateItem [get]
 func (paperTemplateItemApi *PaperTemplateItemApi) FindPaperTemplateItem(c *gin.Context) {

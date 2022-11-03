@@ -23,7 +23,7 @@ var PapertemplateService = service.ServiceGroupApp.ExammanageServiceGroup.PaperT
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplate true "创建PaperTemplate"
+// @Param data body frontExamManage.PaperTemplate true "创建PaperTemplate"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /Papertemplate/createPaperTemplate [post]
 func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
@@ -45,7 +45,7 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplate true "删除PaperTemplate"
+// @Param data body frontExamManage.PaperTemplate true "删除PaperTemplate"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /Papertemplate/deletePaperTemplate [delete]
 func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplate(c *gin.Context) {
@@ -85,7 +85,7 @@ func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplateByIds(c *gin.Contex
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperTemplate true "更新PaperTemplate"
+// @Param data body frontExamManage.PaperTemplate true "更新PaperTemplate"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /Papertemplate/updatePaperTemplate [put]
 func (PapertemplateApi *PaperTemplateApi) UpdatePaperTemplate(c *gin.Context) {
@@ -105,7 +105,7 @@ func (PapertemplateApi *PaperTemplateApi) UpdatePaperTemplate(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query examManage.PaperTemplate true "用id查询PaperTemplate"
+// @Param data query frontExamManage.PaperTemplate true "用id查询PaperTemplate"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /Papertemplate/findPaperTemplate [get]
 func (PapertemplateApi *PaperTemplateApi) FindPaperTemplate(c *gin.Context) {
