@@ -2,7 +2,7 @@ package examManage
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ExamStudentPaperRouter struct {
 func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGroup) {
 	examstudentPaperRouter := Router.Group("examstudentPaper").Use(middleware.OperationRecord())
 	examstudentPaperRouterWithoutRecord := Router.Group("examstudentPaper")
-	var examstudentPaperApi = v1.ApiGroupApp.ExammanageApiGroup.ExamStudentPaperApi
+	var examstudentPaperApi = api.ApiGroupApp.ExammanageApiGroup.ExamStudentPaperApi
 	{
 		examstudentPaperRouter.POST("createExamStudentPaper", examstudentPaperApi.CreateExamStudentPaper)             // 新建ExamStudentPaper
 		examstudentPaperRouter.DELETE("deleteExamStudentPaper", examstudentPaperApi.DeleteExamStudentPaper)           // 删除ExamStudentPaper

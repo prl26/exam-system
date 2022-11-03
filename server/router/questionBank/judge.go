@@ -2,7 +2,7 @@ package questionBank
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type QuestionBankJudgeRouter struct {
 func (s *QuestionBankJudgeRouter) InitQuestionBankJudgeRouter(Router *gin.RouterGroup) {
 	judgeRouter := Router.Group("judge").Use(middleware.OperationRecord())
 	judgeRouterWithoutRecord := Router.Group("judge")
-	var judgeApi = v1.ApiGroupApp.QuestionBankApiGroup.JudgeApi
+	var judgeApi = api.ApiGroupApp.QuestionBankApiGroup.JudgeApi
 	{
 		judgeRouter.POST("create", judgeApi.Create)   // 新建QuestionBankJudge
 		judgeRouter.DELETE("delete", judgeApi.Delete) // 删除QuestionBankJudge

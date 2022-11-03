@@ -25,7 +25,7 @@ var examStatusService = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatu
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamPaper true "创建ExamPaper"
+// @Param data body frontExamManage.ExamPaper true "创建ExamPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /examPaper/createExamPaper [post]
 func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
@@ -59,7 +59,7 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamPaper true "删除ExamPaper"
+// @Param data body frontExamManage.ExamPaper true "删除ExamPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /examPaper/deleteExamPaper [delete]
 func (examPaperApi *ExamPaperApi) DeleteExamPaper(c *gin.Context) {
@@ -99,7 +99,7 @@ func (examPaperApi *ExamPaperApi) DeleteExamPaperByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.ExamPaper true "更新ExamPaper"
+// @Param data body frontExamManage.ExamPaper true "更新ExamPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /examPaper/updateExamPaper [put]
 func (examPaperApi *ExamPaperApi) UpdateExamPaper(c *gin.Context) {
@@ -119,7 +119,7 @@ func (examPaperApi *ExamPaperApi) UpdateExamPaper(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query examManage.ExamPaper true "用id查询ExamPaper"
+// @Param data query frontExamManage.ExamPaper true "用id查询ExamPaper"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /examPaper/findExamPaper [get]
 func (examPaperApi *ExamPaperApi) FindExamPaper(c *gin.Context) {

@@ -74,9 +74,9 @@ func (paperQuestionMergeService *PaperQuestionMergeService) GetPaperQuestionMerg
 	return paperQuestionMerges, total, err
 }
 
-//func (paperQuestionMergeService *PaperQuestionMergeService) SetChoiceQuestionMerge(paper examManage.ExamPaper, info []questionBank.MultipleChoice) (err error) {
+//func (paperQuestionMergeService *PaperQuestionMergeService) SetChoiceQuestionMerge(paper frontExamManage.ExamPaper, info []questionBank.MultipleChoice) (err error) {
 //	for i := 0; i < len(info); i++ {
-//		questionMerge := examManage.PaperQuestionMerge{
+//		questionMerge := frontExamManage.PaperQuestionMerge{
 //			GVA_MODEL:    global.GVA_MODEL{},
 //			PaperId:      paper.ID,
 //			QuestionId:   &info[i].ID,

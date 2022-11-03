@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -14,7 +14,7 @@ func (s *StudentRouter) InitStudentRouter(Router *gin.RouterGroup) {
 	studentRouter := Router.Group("student").Use(middleware.OperationRecord())
 	studentRouterWithoutRecord := Router.Group("student")
 
-	var studentApi = v1.ApiGroupApp.BasicdataApiGroup.StudentApi
+	var studentApi = api.ApiGroupApp.BasicdataApiGroup.StudentApi
 	{
 		studentRouter.POST("excel", studentApi.AddStudentsByExcel)                //表格添加Student
 		studentRouter.POST("createStudent", studentApi.CreateStudent)             // 新建Student

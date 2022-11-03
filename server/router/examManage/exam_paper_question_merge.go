@@ -2,7 +2,7 @@ package examManage
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type PaperQuestionMergeRouter struct {
 func (s *PaperQuestionMergeRouter) InitPaperQuestionMergeRouter(Router *gin.RouterGroup) {
 	paperQuestionMergeRouter := Router.Group("paperQuestionMerge").Use(middleware.OperationRecord())
 	paperQuestionMergeRouterWithoutRecord := Router.Group("paperQuestionMerge")
-	var paperQuestionMergeApi = v1.ApiGroupApp.ExammanageApiGroup.PaperQuestionMergeApi
+	var paperQuestionMergeApi = api.ApiGroupApp.ExammanageApiGroup.PaperQuestionMergeApi
 	{
 		paperQuestionMergeRouter.POST("createPaperQuestionMerge", paperQuestionMergeApi.CreatePaperQuestionMerge)             // 新建PaperQuestionMerge
 		paperQuestionMergeRouter.DELETE("deletePaperQuestionMerge", paperQuestionMergeApi.DeletePaperQuestionMerge)           // 删除PaperQuestionMerge

@@ -2,7 +2,7 @@ package teachplan
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type TeachAttendanceRouter struct {
 func (s *TeachAttendanceRouter) InitTeachAttendanceRouter(Router *gin.RouterGroup) {
 	teachAttendanceRouter := Router.Group("teachAttendance").Use(middleware.OperationRecord())
 	teachAttendanceRouterWithoutRecord := Router.Group("teachAttendance")
-	var teachAttendanceApi = v1.ApiGroupApp.TeachplanApiGroup.TeachAttendanceApi
+	var teachAttendanceApi = api.ApiGroupApp.TeachplanApiGroup.TeachAttendanceApi
 	{
 		teachAttendanceRouter.POST("createTeachAttendance", teachAttendanceApi.CreateTeachAttendance)             // 新建TeachAttendance
 		teachAttendanceRouter.DELETE("deleteTeachAttendance", teachAttendanceApi.DeleteTeachAttendance)           // 删除TeachAttendance

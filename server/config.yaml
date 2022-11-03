@@ -9,7 +9,7 @@ autocode:
   transfer-restart: true
   root:  D:\work\exam-system
   server: /server
-  server-api: /api/v1/%s
+  server-api: /api/Backstage/%s
   server-plug: /plugin/%s
   server-initialize: /initialize
   server-model: /model/%s
@@ -148,7 +148,7 @@ timer:
     interval: 168h
 zap:
   level: info
-  prefix: '[github.com/prl26/exam-system/server]'
+  prefix: '[github.com/prl26/frontExam-system/server]'
   format: console
   director: log
   encode-level: LowercaseColorLevelEncoder

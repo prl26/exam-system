@@ -22,7 +22,7 @@ var paperQuestionMergeService = service.ServiceGroupApp.ExammanageServiceGroup.P
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperQuestionMerge true "创建PaperQuestionMerge"
+// @Param data body frontExamManage.PaperQuestionMerge true "创建PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /paperQuestionMerge/createPaperQuestionMerge [post]
 func (paperQuestionMergeApi *PaperQuestionMergeApi) CreatePaperQuestionMerge(c *gin.Context) {
@@ -42,7 +42,7 @@ func (paperQuestionMergeApi *PaperQuestionMergeApi) CreatePaperQuestionMerge(c *
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperQuestionMerge true "删除PaperQuestionMerge"
+// @Param data body frontExamManage.PaperQuestionMerge true "删除PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /paperQuestionMerge/deletePaperQuestionMerge [delete]
 func (paperQuestionMergeApi *PaperQuestionMergeApi) DeletePaperQuestionMerge(c *gin.Context) {
@@ -82,7 +82,7 @@ func (paperQuestionMergeApi *PaperQuestionMergeApi) DeletePaperQuestionMergeById
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body examManage.PaperQuestionMerge true "更新PaperQuestionMerge"
+// @Param data body frontExamManage.PaperQuestionMerge true "更新PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /paperQuestionMerge/updatePaperQuestionMerge [put]
 func (paperQuestionMergeApi *PaperQuestionMergeApi) UpdatePaperQuestionMerge(c *gin.Context) {
@@ -102,7 +102,7 @@ func (paperQuestionMergeApi *PaperQuestionMergeApi) UpdatePaperQuestionMerge(c *
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query examManage.PaperQuestionMerge true "用id查询PaperQuestionMerge"
+// @Param data query frontExamManage.PaperQuestionMerge true "用id查询PaperQuestionMerge"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /paperQuestionMerge/findPaperQuestionMerge [get]
 func (paperQuestionMergeApi *PaperQuestionMergeApi) FindPaperQuestionMerge(c *gin.Context) {

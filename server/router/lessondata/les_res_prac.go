@@ -2,7 +2,7 @@ package lessondata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ResourcePracticeRouter struct {
 func (s *ResourcePracticeRouter) InitResourcePracticeRouter(Router *gin.RouterGroup) {
 	resourcesPracticeRouter := Router.Group("resourcesPractice").Use(middleware.OperationRecord())
 	resourcesPracticeRouterWithoutRecord := Router.Group("resourcesPractice")
-	var resourcesPracticeApi = v1.ApiGroupApp.LessondataApiGroup.ResourcePracticeApi
+	var resourcesPracticeApi = api.ApiGroupApp.LessondataApiGroup.ResourcePracticeApi
 	{
 		resourcesPracticeRouter.POST("createResourcePractice", resourcesPracticeApi.CreateResourcePractice)             // 新建ResourcePractice
 		resourcesPracticeRouter.DELETE("deleteResourcePractice", resourcesPracticeApi.DeleteResourcePractice)           // 删除ResourcePractice

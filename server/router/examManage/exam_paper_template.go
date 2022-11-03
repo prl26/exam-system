@@ -2,26 +2,26 @@ package examManage
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
-type ExamPaperTemplateRouter struct {
+type PaperTemplateRouter struct {
 }
 
-// InitExamPaperTemplateRouter 初始化 ExamPaperTemplate 路由信息
-func (s *ExamPaperTemplateRouter) InitExamPaperTemplateRouter(Router *gin.RouterGroup) {
-	examPaperTemplateRouter := Router.Group("examPaperTemplate").Use(middleware.OperationRecord())
-	examPaperTemplateRouterWithoutRecord := Router.Group("examPaperTemplate")
-	var examPaperTemplateApi = v1.ApiGroupApp.ExammanageApiGroup.PaperTemplateApi
+// InitPaperTemplateRouter 初始化 PaperTemplate 路由信息
+func (s *PaperTemplateRouter) InitPaperTemplateRouter(Router *gin.RouterGroup) {
+	PapertemplateRouter := Router.Group("Papertemplate").Use(middleware.OperationRecord())
+	PapertemplateRouterWithoutRecord := Router.Group("Papertemplate")
+	var PapertemplateApi = api.ApiGroupApp.ExammanageApiGroup.PaperTemplateApi
 	{
-		examPaperTemplateRouter.POST("createExamPaperTemplate", examPaperTemplateApi.CreatePaperTemplate)             // 新建ExamPaperTemplate
-		examPaperTemplateRouter.DELETE("deleteExamPaperTemplate", examPaperTemplateApi.DeletePaperTemplate)           // 删除ExamPaperTemplate
-		examPaperTemplateRouter.DELETE("deleteExamPaperTemplateByIds", examPaperTemplateApi.DeletePaperTemplateByIds) // 批量删除ExamPaperTemplate
-		examPaperTemplateRouter.PUT("updateExamPaperTemplate", examPaperTemplateApi.UpdatePaperTemplate)              // 更新ExamPaperTemplate
+		PapertemplateRouter.POST("createPaperTemplate", PapertemplateApi.CreatePaperTemplate)             // 新建PaperTemplate
+		PapertemplateRouter.DELETE("deletePaperTemplate", PapertemplateApi.DeletePaperTemplate)           // 删除PaperTemplate
+		PapertemplateRouter.DELETE("deletePaperTemplateByIds", PapertemplateApi.DeletePaperTemplateByIds) // 批量删除PaperTemplate
+		PapertemplateRouter.PUT("updatePaperTemplate", PapertemplateApi.UpdatePaperTemplate)              // 更新PaperTemplate
 	}
 	{
-		examPaperTemplateRouterWithoutRecord.GET("findExamPaperTemplate", examPaperTemplateApi.FindPaperTemplate)       // 根据ID获取ExamPaperTemplate
-		examPaperTemplateRouterWithoutRecord.GET("getExamPaperTemplateList", examPaperTemplateApi.GetPaperTemplateList) // 获取ExamPaperTemplate列表
+		PapertemplateRouterWithoutRecord.GET("findPaperTemplate", PapertemplateApi.FindPaperTemplate)       // 根据ID获取PaperTemplate
+		PapertemplateRouterWithoutRecord.GET("getPaperTemplateList", PapertemplateApi.GetPaperTemplateList) // 获取PaperTemplate列表
 	}
 }

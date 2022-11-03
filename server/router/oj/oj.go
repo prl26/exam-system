@@ -2,7 +2,7 @@ package oj
 
 import (
 	"github.com/gin-gonic/gin"
-	v1 "github.com/prl26/exam-system/server/api/v1"
+	v1 "github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -27,7 +27,7 @@ func (s *OjRouter) InitFrontDeskOjRouter(Router *gin.RouterGroup) {
 	}
 
 	//multipleChoiceRouter := Router.Group("oj/multipleChoice").Use(middleware.OperationRecord())
-	//multipleChoiceApi := v1.ApiGroupApp.OjApiGroup.MultipleChoiceApi
+	//multipleChoiceApi := Backstage.ApiGroupApp.OjApiGroup.MultipleChoiceApi
 	//{
 	//	multipleChoiceRouter.POST("check", multipleChoiceApi.CheckMultipleChoice)
 	//}

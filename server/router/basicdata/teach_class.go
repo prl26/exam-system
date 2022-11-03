@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type TeachClassRouter struct {
 func (s *TeachClassRouter) InitTeachClassRouter(Router *gin.RouterGroup) {
 	teachClassRouter := Router.Group("teachClass").Use(middleware.OperationRecord())
 	teachClassRouterWithoutRecord := Router.Group("teachClass")
-	var teachClassApi = v1.ApiGroupApp.BasicdataApiGroup.TeachClassApi
+	var teachClassApi = api.ApiGroupApp.BasicdataApiGroup.TeachClassApi
 	{
 		teachClassRouter.POST("createTeachClass", teachClassApi.CreateTeachClass)             // 新建TeachClass
 		teachClassRouter.DELETE("deleteTeachClass", teachClassApi.DeleteTeachClass)           // 删除TeachClass

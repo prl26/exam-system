@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,8 +13,8 @@ type TeachClassStudentRouter struct {
 func (s *TeachClassStudentRouter) InitTeachClassStudentRouter(Router *gin.RouterGroup) {
 	teachClassStudentRouter := Router.Group("teachClassStudent").Use(middleware.OperationRecord())
 	teachClassStudentRouterWithoutRecord := Router.Group("teachClassStudent")
-	//var teachClassStudentApi = v1.ApiGroupApp.BasicdataApiGroup.TeachClassStudentApi
-	var multiTableApi = v1.ApiGroupApp.BasicdataApiGroup.MultiTableApi
+	//var teachClassStudentApi = Backstage.ApiGroupApp.BasicdataApiGroup.TeachClassStudentApi
+	var multiTableApi = api.ApiGroupApp.BasicdataApiGroup.MultiTableApi
 	{
 
 		teachClassStudentRouter.POST("initTeachClassStudent", multiTableApi.InitTeachClassStudent)     // 教学班中添加学生

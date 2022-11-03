@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type CollegeRouter struct {
 func (s *CollegeRouter) InitCollegeRouter(Router *gin.RouterGroup) {
 	collegeRouter := Router.Group("college").Use(middleware.OperationRecord())
 	collegeRouterWithoutRecord := Router.Group("college")
-	var collegeApi = v1.ApiGroupApp.BasicdataApiGroup.CollegeApi
+	var collegeApi = api.ApiGroupApp.BasicdataApiGroup.CollegeApi
 	{
 		collegeRouter.POST("createCollege", collegeApi.CreateCollege)             // 新建College
 		collegeRouter.DELETE("deleteCollege", collegeApi.DeleteCollege)           // 删除College

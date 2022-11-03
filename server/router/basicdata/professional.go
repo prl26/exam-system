@@ -2,7 +2,7 @@ package basicdata
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/prl26/exam-system/server/api/v1"
+	"github.com/prl26/exam-system/server/api"
 	"github.com/prl26/exam-system/server/middleware"
 )
 
@@ -13,7 +13,7 @@ type ProfessionalRouter struct {
 func (s *ProfessionalRouter) InitProfessionalRouter(Router *gin.RouterGroup) {
 	professionalRouter := Router.Group("professional").Use(middleware.OperationRecord())
 	professionalRouterWithoutRecord := Router.Group("professional")
-	var professionalApi = v1.ApiGroupApp.BasicdataApiGroup.ProfessionalApi
+	var professionalApi = api.ApiGroupApp.BasicdataApiGroup.ProfessionalApi
 	{
 		professionalRouter.POST("createProfessional", professionalApi.CreateProfessional)             // 新建Professional
 		professionalRouter.DELETE("deleteProfessional", professionalApi.DeleteProfessional)           // 删除Professional
