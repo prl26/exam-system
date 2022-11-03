@@ -20,7 +20,11 @@ func (examStatusServices *ExamPaperService) CreateExamPaper(examPaper examManage
 // DeleteExamPaper 删除ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examStatusServices *ExamPaperService) DeleteExamPaper(examPaper examManage.ExamPaper) (err error) {
-	err = global.GVA_DB.Delete(&examPaper).Error
+	err = global.GVA_DB.Where("id = ?", examPaper.ID).Delete(&examPaper).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Delete(&examManage.PaperQuestionMerge{}, "paper_id = ?", examPaper.ID).Error
 	return err
 }
 
@@ -28,6 +32,7 @@ func (examStatusServices *ExamPaperService) DeleteExamPaper(examPaper examManage
 // Author [piexlmax](https://github.com/piexlmax)
 func (examStatusServices *ExamPaperService) DeleteExamPaperByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]examManage.ExamPaper{}, "id in ?", ids.Ids).Error
+	err = global.GVA_DB.Delete(&examManage.PaperQuestionMerge{}, "paper_id in ?", ids.Ids).Error
 	return err
 }
 
@@ -42,6 +47,7 @@ func (examStatusServices *ExamPaperService) UpdateExamPaper(examPaper examManage
 // Author [piexlmax](https://github.com/piexlmax)
 func (examStatusServices *ExamPaperService) GetExamPaper(id uint) (examPaper examManage.ExamPaper, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&examPaper).Error
+
 	return
 }
 

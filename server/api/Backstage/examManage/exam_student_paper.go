@@ -15,6 +15,7 @@ type ExamStudentPaperApi struct {
 }
 
 var examstudentPaperService = service.ServiceGroupApp.ExammanageServiceGroup.ExamStudentPaperService
+var examService = service.ServiceGroupApp.FrontServiceGroup.ExamService
 
 // CreateExamStudentPaper 创建ExamStudentPaper
 // @Tags ExamStudentPaper
@@ -108,9 +109,9 @@ func (examstudentPaperApi *ExamStudentPaperApi) UpdateExamStudentPaper(c *gin.Co
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /examstudentPaper/findExamStudentPaper [get]
 func (examstudentPaperApi *ExamStudentPaperApi) FindExamStudentPaper(c *gin.Context) {
-	var examstudentPaper examManage.ExamStudentPaper
+	var examstudentPaper examManageReq.ExamComing
 	_ = c.ShouldBindQuery(&examstudentPaper)
-	if reexamstudentPaper, err := examstudentPaperService.GetExamStudentPaper(examstudentPaper.ID); err != nil {
+	if reexamstudentPaper, err := examService.GetExamPapers(examstudentPaper); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
