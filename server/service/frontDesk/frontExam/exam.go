@@ -87,18 +87,20 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		}
 	}
 	for j := 0; j < len(JudgeCommit); j++ {
+		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 			Where("id = ?", BlankCommit[j].MergeId).
-			Updates(examManage.ExamStudentPaper{Answer: JudgeCommit[j].Answer}).
+			Updates(examManage.ExamStudentPaper{Answer: s}).
 			Error
 		if err != nil {
 			return
 		}
 	}
-	for j := 0; j < len(JudgeCommit); j++ {
+	for j := 0; j < len(BlankCommit); j++ {
+		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
-			Where("id = ?", JudgeCommit[j].MergeId).
-			Updates(examManage.ExamStudentPaper{Answer: BlankCommit[j].Answer}).
+			Where("id = ?", BlankCommit[j].MergeId).
+			Updates(examManage.ExamStudentPaper{Answer: blankAnswer}).
 			Error
 		if err != nil {
 			return
@@ -113,8 +115,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 
 func (examService *ExamService) ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {
-		s, _ := strconv.ParseBool(examPaperCommit.JudgeCommit[0].Answer)
-		if Bool, err := ojService.JudgeService.Check(examPaperCommit.JudgeCommit[0].QuestionId, s); err != nil {
+		if Bool, err := ojService.JudgeService.Check(examPaperCommit.JudgeCommit[0].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
 			return err
 		} else {
 			if Bool == true {
@@ -138,18 +139,17 @@ func (examService *ExamService) ExecPapers(examPaperCommit examManage.CommitExam
 			}
 		}
 	}
-	//此处判题接口应该修改参数[]string为string
-	//for i := 0; i < len(examPaperCommit.MultipleChoiceCommit); i++ {
-	//	if Bool, err := ojService.SupplyBlankService.Check(examPaperCommit.MultipleChoiceCommit[0].QuestionId, examPaperCommit.JudgeCommit[0].Answer); err != nil {
-	//		return
-	//	} else {
-	//		if Bool == true {
-	//			err = global.GVA_DB.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.JudgeCommit[0].MergeId).Error
-	//			if err != nil {
-	//				return
-	//			}
-	//		}
-	//	}
-	//}
+	for i := 0; i < len(examPaperCommit.BlankCommit); i++ {
+		if Bool, err := ojService.SupplyBlankService.Check(examPaperCommit.MultipleChoiceCommit[0].QuestionId, examPaperCommit.BlankCommit[0].Answer); err != nil {
+			return
+		} else {
+			if Bool == true {
+				err = global.GVA_DB.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.BlankCommit[0].MergeId).Error
+				if err != nil {
+					return
+				}
+			}
+		}
+	}
 	return
 }
