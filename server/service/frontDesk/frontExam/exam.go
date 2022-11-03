@@ -44,7 +44,9 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 			}
 		}
 	}
-	PaperId, err := examService.GetStudentPaperId(examComing)
+	var PaperId int64
+	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).Scan(&PaperId).Error
+	//PaperId, err := examService.GetStudentPaperId(examComing)
 	if err != nil {
 		return
 	}
@@ -89,4 +91,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		}
 	}
 	return
+}
+func (examService *ExamService) ExecPapers() {
+
 }

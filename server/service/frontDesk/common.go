@@ -4,7 +4,6 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage/response"
-	"github.com/prl26/exam-system/server/model/system"
 )
 
 type CommonService struct {
@@ -17,25 +16,11 @@ func (commonService *CommonService) FindTeachClass(id uint) (teachClassAndLesson
 		return
 	}
 	for i := 0; i < len(teachClassIds); i++ {
-		var teachClass basicdata.TeachClass
-		var user system.SysUser
-		err = global.GVA_DB.Where("id = ?", teachClassIds[i].TeachClassId).Find(&teachClass).Error
+		var teachClassAndLesson response.TeachAndLessons
+		err = global.GVA_DB.Raw("select c.id TeachClassId,c.`name` as TeachClassName,l.`name` as NameOfLesson,l.id as LessonId,u.nick_name as TeacherName from bas_teach_class c ,bas_lesson l,sys_users u where c.id = ? and l.id = c.course_id and u.id= c.teacher_id", teachClassIds[i].TeachClassId).
+			Scan(&teachClassAndLesson).Error
 		if err != nil {
 			return
-		}
-
-		var Lessons basicdata.Lesson
-		err = global.GVA_DB.Where("id = ?", teachClass.CourseId).Find(&Lessons).Error
-		if err != nil {
-			return
-		}
-		err = global.GVA_DB.Where("id = ?", teachClass.TeacherId).Find(&user).Error
-		teachClassAndLesson := response.TeachAndLessons{
-			TeachClassId:   teachClass.ID,
-			TeachClassName: teachClass.Name,
-			NameOfLesson:   Lessons.Name,
-			LessonId:       uint(*teachClass.CourseId),
-			TeacherName:    user.NickName,
 		}
 		teachClassAndLessons = append(teachClassAndLessons, teachClassAndLesson)
 	}
