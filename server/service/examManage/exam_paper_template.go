@@ -28,6 +28,10 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Papertempl
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]examManage.PaperTemplate{}, "id in ?", ids.Ids).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Delete(&[]examManage.PaperTemplateItem{}, "template_id in ?", ids.Ids).Error
 	return err
 }
 
@@ -47,6 +51,10 @@ func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertempl
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) GetPaperTemplate(id uint) (Papertemplate examManage.PaperTemplate, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&Papertemplate).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Where("template_id = ?", Papertemplate.ID).Find(&Papertemplate.PaperTemplateItems).Error
 	return
 }
 

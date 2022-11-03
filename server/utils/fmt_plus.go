@@ -43,3 +43,9 @@ func IntArrayToString(array []int) (result string) {
 	}
 	return
 }
+func StringArrayToString(arr []string) (result string) {
+	for _, v := range arr {
+		result += v
+	}
+	return
+}

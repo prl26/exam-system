@@ -38,12 +38,12 @@ type MultipleChoiceCommit struct {
 	Answers    []int `json:"answers" form:"answers"`
 }
 type JudgeCommit struct {
-	MergeId    uint   `json:"mergeId"`
-	QuestionId uint   `json:"questionId" form:"questionId"`
-	Answer     string `json:"answer" form:"answer"`
+	MergeId    uint `json:"mergeId"`
+	QuestionId uint `json:"questionId" form:"questionId"`
+	Answer     bool `json:"answer" form:"answer"`
 }
 type BlankCommit struct {
-	MergeId    uint   `json:"mergeId"`
-	QuestionId uint   `json:"questionId" form:"questionId"`
-	Answer     string `json:"answer" form:"answer"`
+	MergeId    uint     `json:"mergeId"`
+	QuestionId uint     `json:"questionId" form:"questionId"`
+	Answer     []string `json:"answer" form:"answer"`
 }

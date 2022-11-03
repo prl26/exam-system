@@ -7,14 +7,16 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
-	"github.com/prl26/exam-system/server/service/frontDesk/frontExam"
+	"github.com/prl26/exam-system/server/service/frontDesk"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"time"
 )
 
 type ExamApi struct {
 }
 
-var examService frontExam.ExamService
+var examService frontDesk.ExamService
 
 // 查询该学生 某个教学班 下所有的教学计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -49,6 +51,9 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 		response.FailWithMessage("试卷提交试卷失败", c)
 	} else {
 		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
-
+		go func() {
+			time.Sleep(time.Minute * 15)
+			utils.ExecPapers(ExamCommit)
+		}()
 	}
 }

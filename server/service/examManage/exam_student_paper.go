@@ -91,6 +91,7 @@ func (examstudentPaperService *ExamStudentPaperService) UpdateExamStudentPaper(e
 // Author [piexlmax](https://github.com/piexlmax)
 func (examstudentPaperService *ExamStudentPaperService) GetExamStudentPaper(id uint) (examstudentPaper examManage.ExamStudentPaper, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&examstudentPaper).Error
+
 	return
 }
 
