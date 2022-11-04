@@ -57,3 +57,13 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 		}()
 	}
 }
+func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
+	var examComing request.ExamComing
+	_ = c.ShouldBindJSON(&examComing)
+	if score, err := examService.GetExamScore(examComing); err != nil {
+		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
+		response.FailWithMessage("查询成绩失败", c)
+	} else {
+		response.OkWithData(gin.H{"score": score}, c)
+	}
+}
