@@ -33,7 +33,7 @@ func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 // 学生进入考试时获取试卷内容
 func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	var examComing request.ExamComing
-	_ = c.ShouldBindJSON(&examComing)
+	_ = c.ShouldBindQuery(&examComing)
 	if examPaper, err := examService.GetExamPapers(examComing); err != nil {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
