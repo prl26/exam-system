@@ -10,7 +10,6 @@ import (
 	"github.com/prl26/exam-system/server/service/frontDesk"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
-	"time"
 )
 
 type ExamApi struct {
@@ -52,7 +51,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	} else {
 		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
 		go func() {
-			time.Sleep(time.Minute * 15)
+			//time.Sleep(time.Minute * 15)
 			utils.ExecPapers(ExamCommit)
 		}()
 	}

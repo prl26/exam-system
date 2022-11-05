@@ -91,7 +91,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		answers := utils.IntArrayToString(optionCommit[j].Answers)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 			Where("id = ?", optionCommit[j].MergeId).
-			Updates(examManage.ExamStudentPaper{Answer: answers}).
+			Updates(&examManage.ExamStudentPaper{Answer: answers}).
 			Error
 		if err != nil {
 			return
@@ -100,7 +100,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	for j := 0; j < len(JudgeCommit); j++ {
 		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
-			Where("id = ?", BlankCommit[j].MergeId).
+			Where("id = ?", JudgeCommit[j].MergeId).
 			Updates(examManage.ExamStudentPaper{Answer: s}).
 			Error
 		if err != nil {
@@ -117,7 +117,6 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 			return
 		}
 	}
-
 	return
 }
 func (examService *ExamService) GetExamScore(examComing request.ExamComing) (uint, error) {
