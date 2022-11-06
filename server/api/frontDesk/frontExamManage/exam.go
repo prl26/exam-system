@@ -10,7 +10,6 @@ import (
 	"github.com/prl26/exam-system/server/service/frontDesk"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
-	"time"
 )
 
 type ExamApi struct {
@@ -33,7 +32,7 @@ func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 // 学生进入考试时获取试卷内容
 func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	var examComing request.ExamComing
-	_ = c.ShouldBindJSON(&examComing)
+	_ = c.ShouldBindQuery(&examComing)
 	if examPaper, err := examService.GetExamPapers(examComing); err != nil {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
@@ -52,8 +51,18 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	} else {
 		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
 		go func() {
-			time.Sleep(time.Minute * 15)
+			//time.Sleep(time.Minute * 15)
 			utils.ExecPapers(ExamCommit)
 		}()
+	}
+}
+func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
+	var examComing request.ExamComing
+	_ = c.ShouldBindJSON(&examComing)
+	if score, err := examService.GetExamScore(examComing); err != nil {
+		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
+		response.FailWithMessage("查询成绩失败", c)
+	} else {
+		response.OkWithData(gin.H{"score": score}, c)
 	}
 }

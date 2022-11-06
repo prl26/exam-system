@@ -7,7 +7,6 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
-
 	"github.com/prl26/exam-system/server/utils"
 	"strconv"
 )
@@ -23,36 +22,51 @@ func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []te
 func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (examPaper response.ExamPaperResponse, err error) {
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
-	var choiceCount, judgeCount, blankCount, programCount uint
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(studentPaper); i++ {
 		if *studentPaper[i].QuestionType == questionType.MULTIPLE_CHOICE {
-			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&examPaper.ChoiceComponent[choiceCount].Choice).Error
+			var Choice response.ChoiceComponent
+			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {
 				return
 			}
-			choiceCount++
-			examPaper.ChoiceComponent[i].MergeId = studentPaper[i].ID
+			Choice.MergeId = studentPaper[i].ID
+			if Choice.MergeId == 1 {
+				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
+				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
+				singleChoiceCount++
+			} else {
+				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
+				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = studentPaper[i].ID
+				MultiChoiceCount++
+			}
 		} else if *studentPaper[i].QuestionType == questionType.JUDGE {
-			err = global.GVA_DB.Table("les_questionBank_judge").Where("id = ?", studentPaper[i].QuestionId).Find(&examPaper.JudgeComponent[judgeCount].Judge).Error
+			var Judge response.JudgeComponent
+			err = global.GVA_DB.Table("les_questionBank_judge").Where("id = ?", studentPaper[i].QuestionId).Find(&Judge.Judge).Error
 			if err != nil {
 				return
 			}
+			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
+			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
 			judgeCount++
-			examPaper.JudgeComponent[i].MergeId = studentPaper[i].ID
 		} else if *studentPaper[i].QuestionType == questionType.SUPPLY_BLANK {
-			err = global.GVA_DB.Table("les_questionBank_supply_blank").Where("id = ?", studentPaper[i].QuestionId).Find(&examPaper.BlankComponent[blankCount].MergeId).Error
+			var Blank response.BlankComponent
+			err = global.GVA_DB.Table("les_questionBank_supply_blank").Where("id = ?", studentPaper[i].QuestionId).Find(&Blank.Blank).Error
 			if err != nil {
 				return
 			}
+			examPaper.BlankComponent = append(examPaper.BlankComponent, Blank)
+			examPaper.BlankComponent[blankCount].MergeId = studentPaper[i].ID
 			blankCount++
-			examPaper.BlankComponent[i].MergeId = studentPaper[i].ID
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
-			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&examPaper.ProgramComponent[programCount].Program).Error
+			var Program response.ProgramComponent
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&Program.Program).Error
 			if err != nil {
 				return
 			}
+			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
+			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
 			programCount++
-			examPaper.ProgramComponent[i].MergeId = studentPaper[i].ID
 		}
 	}
 	var PaperId int64
@@ -77,7 +91,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		answers := utils.IntArrayToString(optionCommit[j].Answers)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 			Where("id = ?", optionCommit[j].MergeId).
-			Updates(examManage.ExamStudentPaper{Answer: answers}).
+			Updates(&examManage.ExamStudentPaper{Answer: answers}).
 			Error
 		if err != nil {
 			return
@@ -86,7 +100,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	for j := 0; j < len(JudgeCommit); j++ {
 		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
-			Where("id = ?", BlankCommit[j].MergeId).
+			Where("id = ?", JudgeCommit[j].MergeId).
 			Updates(examManage.ExamStudentPaper{Answer: s}).
 			Error
 		if err != nil {
@@ -103,6 +117,10 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 			return
 		}
 	}
-
 	return
+}
+func (examService *ExamService) GetExamScore(examComing request.ExamComing) (uint, error) {
+	var sum uint
+	err := global.GVA_DB.Raw("SELECT SUM(score) FROM exam_student_paper where student_id = ? and plan_id = ? ", examComing.StudentId, examComing.PlanId).Scan(&sum).Error
+	return sum, err
 }
