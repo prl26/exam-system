@@ -30,6 +30,27 @@ func GetUserID(c *gin.Context) uint {
 		return waitUse.ID
 	}
 }
+func GetStudentClaims(c *gin.Context) (*systemReq.StudentCustomClaims, error) {
+	token := c.Request.Header.Get("x-token")
+	j := NewJWT()
+	claims, err := j.StudentParseToken(token)
+	if err != nil {
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
+	}
+	return claims, err
+}
+func GetStudentId(c *gin.Context) uint {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetStudentClaims(c); err != nil {
+			return 0
+		} else {
+			return cl.ID
+		}
+	} else {
+		waitUse := claims.(*systemReq.StudentCustomClaims)
+		return waitUse.ID
+	}
+}
 
 //GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
 func GetUserUuid(c *gin.Context) uuid.UUID {
