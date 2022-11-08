@@ -16,6 +16,7 @@ type ChapterMerge struct {
 	global.GVA_MODEL
 	QuestionId   uint `json:"question_id" gorm:"question_id"`
 	ChapterId    uint `json:"chapter_id" gorm:"chapter_id"`
+	KnowledgeId  uint `json:"knowledge_id" gorm:"knowledge_id"`
 	QuestionType int  `json:"question_type" gorm:"question_type"`
 }
 

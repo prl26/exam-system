@@ -12,7 +12,7 @@ import (
 type SupplyBlankService struct {
 }
 
-func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank, courseSupport []uint) error {
+func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank, courseSupport []*questionBankReq.LessonSupport) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(supplyBlank).Error; err != nil {
 			return err

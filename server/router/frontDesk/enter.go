@@ -1,6 +1,15 @@
 package frontDesk
 
+import (
+	"github.com/prl26/exam-system/server/router/frontDesk/basic"
+	"github.com/prl26/exam-system/server/router/frontDesk/exam"
+	"github.com/prl26/exam-system/server/router/frontDesk/questionBank"
+	"github.com/prl26/exam-system/server/router/frontDesk/system"
+)
+
 type RouterGroup struct {
-	CommonRouter
-	FrontExamRouter
+	BasicRouterGroup basic.RouterGroup
+	SystemRouterGroup system.RouterGroup
+	ExamRouterGroup exam.RouterGroup
+	QuestionBankRouterGroup questionBank.RouterGroup
 }

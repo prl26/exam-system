@@ -19,7 +19,7 @@ type SupplyBlankCreate struct {
 	questionBank.BasicModel
 	IsOrder        int                `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
 	Answers        SupplyBlankAnswers `json:"answers"`
-	ChapterSupport []uint             `json:"chapterSupport"`
+	LessonSupports []*LessonSupport `json:"LessonSupportSupports"`
 }
 
 type SupplyBlankAnswers []*SupplyBlankAnswer

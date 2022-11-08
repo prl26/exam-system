@@ -31,10 +31,10 @@ type QuestionBankService struct {
 
 func (c *QuestionBankService) FindQuestions(chapterId uint) *ojResp.QuestionBank {
 	var result ojResp.QuestionBank
-	global.GVA_DB.Model(&c.judge).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.judge.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.JUDGE, true).Find(&result.Judges)
-	global.GVA_DB.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.PROGRAM, true).Preload("LanguageSupports").Find(&result.Programms)
-	global.GVA_DB.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.SUPPLY_BLANK, true).Find(&result.SupplyBlanks)
-	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MULTIPLE_CHOICE, true).Preload("Options").Find(&result.MultipleChoices)
+	global.GVA_DB.Model(&c.judge).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.judge.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.JUDGE, true).Find(&result.Judges)
+	global.GVA_DB.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.PROGRAM, true).Preload("LanguageSupports").Find(&result.Programms)
+	global.GVA_DB.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.SUPPLY_BLANK, true).Find(&result.SupplyBlanks)
+	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MULTIPLE_CHOICE, true).Preload("Options").Find(&result.MultipleChoices)
 	return &result
 }
 func (c QuestionBankService) FindJudges(chapterId uint) (result []*ojResp.ApiJudge) {
@@ -114,12 +114,13 @@ func (c *QuestionBankService) FindQuestionSupport(req questionBankReq.QuestionsS
 }
 
 // 贫血模型
-func buildCourseSupport(chapterSupport []uint, questionId uint, questionType int) []questionBank.ChapterMerge {
-	merges := make([]questionBank.ChapterMerge, len(chapterSupport))
-	for i := 0; i < len(chapterSupport); i++ {
+func buildCourseSupport(lessonSupport []*questionBankReq.LessonSupport, questionId uint, questionType int) []questionBank.ChapterMerge {
+	merges := make([]questionBank.ChapterMerge, len(lessonSupport))
+	for i := 0; i < len(lessonSupport); i++ {
 		merges[i].QuestionId = questionId
 		merges[i].QuestionType = questionType
-		merges[i].ChapterId = chapterSupport[i]
+		merges[i].ChapterId = lessonSupport[i].ChapterId
+		merges[i].KnowledgeId=lessonSupport[i].KnowledgeId
 	}
 	return merges
 }

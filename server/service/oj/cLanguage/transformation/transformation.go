@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/enum/language"
 	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/questionBank"
@@ -47,6 +48,7 @@ type Result struct {
 	IsProgramBlank int    `json:"is_program_blank"`
 	CanPractice    int
 	CanExam        int
+	KnowledgePoint string `json:"knowledge_point"`
 }
 
 type TestCase struct {
@@ -54,10 +56,15 @@ type TestCase struct {
 	Output string `json:"output" gorm:"column:TestCaseOutput"`
 	Score  int    `json:"score" gorm:"column:ScoreWeight"`
 }
+type Knowledge struct {
+	KnowledgeBh   string `gorm:"KnowledgeBh"`
+	KnowledgeName string `gorm:"KnowledgeName"`
+	Description   string `gorm:"Description"`
+}
 
 func main() {
 	from := getDB("root:cuitexamloopmysql123@tcp(exam.cuit.edu.cn:3306)/stu_system?charset=utf8")
-	to := getDB("root:chensida2318@tcp(47.108.150.32:3306)/gva?charset=utf8")
+	to := getDB("root:cuit@123456@tcp(139.9.249.149:3306)/gva?charset=utf8")
 	transformation(from, to)
 	defer func() {
 		db, _ := from.DB()
@@ -81,9 +88,12 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 		"CASE WHEN JSON_VALID(SourceCode) THEN JSON_UNQUOTE(JSON_EXTRACT(SourceCode, \"$.key[0].code\"))  ELSE null END as `code`," +
 		"IsProgramBlank='100001' as `is_program_blank`," +
 		"Checked='100001' as 'can_exam', " +
-		"Score as 'can_practice' " +
+		"Score as 'can_practice' ," +
+		"KnowledgeBh as `knowledge_point`" +
 		" from stu_system.questions  " +
 		" where CourseID=2000301 and QuestionType=1000206").Find(&results)
+	//用来记录说编程题所对应的知识点ID
+	table := make(map[string]uint)
 	cases := make([]*questionBank.ProgrammCase, 0, 2000)
 	chapterMerges := make([]*questionBank.ChapterMerge, 0, 500)
 	for i, result := range results {
@@ -129,6 +139,23 @@ func transformation(from *gorm.DB, to *gorm.DB) {
 
 		// 加入章节绑定
 		chapterMerge := &questionBank.ChapterMerge{}
+		if v, ok := table[result.KnowledgePoint]; ok {
+			chapterMerge.KnowledgeId = v
+		} else {
+			k := Knowledge{}
+			if err := from.Raw("select * from knowledgepoint where KnowledgeBh=?", result.KnowledgePoint).Find(&k).Error; err != nil {
+				panic(err)
+			}
+			knowledge := basicdata.Knowledge{}
+			knowledge.Name = k.KnowledgeName
+			knowledge.ChapterId = uint(result.Stage)
+			knowledge.Description = k.Description
+			if err := to.Create(&knowledge).Error; err != nil {
+				panic(err)
+			}
+			chapterMerge.KnowledgeId = knowledge.Id
+			table[result.KnowledgePoint] = knowledge.Id
+		}
 		chapterMerge.ChapterId = uint(result.Stage)
 		chapterMerge.QuestionId = programm.ID
 		chapterMerge.QuestionType = questionType.PROGRAM

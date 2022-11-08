@@ -21,6 +21,7 @@ type CourseSupportAdd struct {
 		ChapterId    uint `json:"chapterId"`
 		QuestionId   uint `json:"questionId"`
 		QuestionType int  `json:"questionType"`
+		KnowledgeId uint `json:"knowledge_id"`
 	} `json:"courseSupports"`
 }
 

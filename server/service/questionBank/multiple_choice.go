@@ -12,7 +12,7 @@ import (
 type MultipleChoiceService struct {
 }
 
-func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice, chapterSupport []uint) (err error) {
+func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice, chapterSupport []*questionBankReq.LessonSupport) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(multipleChoice).Error; err != nil {
 			return err

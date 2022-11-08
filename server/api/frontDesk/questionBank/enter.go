@@ -1,5 +1,7 @@
 package questionBank
 
+import "github.com/prl26/exam-system/server/service"
+
 /**
 
  * @Author: AloneAtWar
@@ -10,6 +12,11 @@ package questionBank
 
  **/
 
-type FrontDesk struct {
+type ApiGroup struct {
 	QuestionBankApi
+	OjApi
 }
+
+var(
+  questionBankService = service.ServiceGroupApp.QuestionBankServiceGroup.QuestionBankService
+)

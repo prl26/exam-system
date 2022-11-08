@@ -30,8 +30,10 @@ type ProgrammService struct {
 //
 //}
 var lessonSupportSql = `
-	select c.*,d.lesson_id,d.chapter_name,d.lesson_name
+	select c.*,d.lesson_id,d.chapter_name,d.lesson_name,e.name as knowledge_name
 	from les_questionbank_chapter_merge c
+	left join bas_knowledge e
+	on e.id=c.knowledge_id
 	left join(SELECT
 			b.id AS 'chapter_id',
 			c.id AS 'lesson_id',
