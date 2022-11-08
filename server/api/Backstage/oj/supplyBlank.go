@@ -42,7 +42,7 @@ func (*SupplyBlankApi) CheckSupplyBlank(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	result, err := supplyBlankService.Check(r.Id, r.Answers)
+	result, _, err := supplyBlankService.Check(r.Id, r.Answers)
 	if err != nil {
 		response.FailWithMessage("找不到该题目", c)
 		return

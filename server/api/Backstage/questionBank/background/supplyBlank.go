@@ -22,21 +22,31 @@ var supplyBlankService = service.ServiceGroupApp.QuestionBankServiceGroup.Supply
 // Create 创建填空题
 func (api *SupplyBlankApi) Create(c *gin.Context) {
 	var req questionBankReq.SupplyBlankCreate
-	_ = c.BindQuery(&req)
+	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
 		"ProblemType": {utils.NotEmpty()},
 		"CanPractice": {utils.NotEmpty()},
 		"CanExam":     {utils.NotEmpty()},
 		"Title":       {utils.NotEmpty()},
 		"Describe":    {utils.NotEmpty()},
-		"IsOrder":     {utils.NotEmpty()},
+		"Answers":     {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-
-	if err := supplyBlankService.Create(&req.SupplyBlank, req.ChapterSupport); err != nil {
+	supplyBlank := questionBank.SupplyBlank{}
+	supplyBlank.BasicModel = req.BasicModel
+	supplyBlank.IsOrder = req.IsOrder
+	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		supplyBlank.Answer = a
+		supplyBlank.Proportion = b
+		supplyBlank.Num = len(req.Answers)
+	}
+	if err := supplyBlankService.Create(&supplyBlank, req.ChapterSupport); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -58,12 +68,24 @@ func (api *SupplyBlankApi) Delete(c *gin.Context) {
 
 // Update 更新填空题
 func (api *SupplyBlankApi) Update(c *gin.Context) {
-	var supplyBlank questionBank.SupplyBlank
-	_ = c.ShouldBindJSON(&supplyBlank)
+	var req questionBankReq.SupplyBlankUpdate
+	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}
-	if err := utils.Verify(supplyBlank, verify); err != nil {
+	supplyBlank := questionBank.SupplyBlank{}
+	supplyBlank.ID = req.Id
+	supplyBlank.BasicModel = req.BasicModel
+	supplyBlank.IsOrder = req.IsOrder
+	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		supplyBlank.Answer = a
+		supplyBlank.Proportion = b
+		supplyBlank.Num = len(req.Answers)
+	}
+	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

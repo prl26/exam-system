@@ -21,7 +21,7 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 	commonRouter := Router.Group("common").Use(middleware.OperationRecord())
 	commonWithoutRecordRouter := Router.Group("common")
 	var backgroundCommonApi = v1.ApiGroupApp.QuestionBankApiGroup.Background.CommonApi
-	var frontDeskCommonApi = v1.ApiGroupApp.QuestionBankApiGroup.FrontDesk.CommonApi
+	var frontDeskCommonApi = v1.ApiGroupApp.QuestionBankApiGroup.FrontDesk.QuestionBankApi
 	// 后台
 	{
 		commonWithoutRecordRouter.GET("findQuestionSupport", backgroundCommonApi.FindQuestionSupport)

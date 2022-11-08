@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/questionBank"
-	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -21,12 +21,12 @@ import (
 type SupplyBlankService struct {
 }
 
-func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) (bool, error) {
+func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bool, int, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
-		return false, err
+		return nil, 0, err
 	}
-	return c.check(question, answer), nil
+	return c.check(question, answer)
 }
 
 func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.SupplyBlank, error) {
@@ -38,26 +38,55 @@ func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*qu
 	return &question, nil
 }
 
-func (c *SupplyBlankService) check(question *questionBank.SupplyBlank, checkAnswers []string) bool {
+func (c *SupplyBlankService) check(question *questionBank.SupplyBlank, checkAnswers []string) (boolList []bool, proportion int, err error) {
 	n := len(checkAnswers)
-	if n != *question.Num {
-		return false
+	if n != question.Num {
+		return nil, 0, fmt.Errorf("应该要填入%d个空", n)
 	}
+	boolList = make([]bool, n)
 	answers := strings.Split(question.Answer, ",")
-	if *question.IsOrder == 0 {
-		sort.Slice(checkAnswers, func(i, j int) bool {
-			return checkAnswers[i] > checkAnswers[j]
-		})
-		sort.Slice(answers, func(i, j int) bool {
-			return answers[i] > answers[j]
-		})
-	}
-	for i := 0; i < n; i++ {
-		if checkAnswers[i] != answers[i] {
-			return false
+	proportions := strings.Split(question.Proportion, ",")
+	if question.IsOrder == 0 {
+		table := make(map[string]int)
+		var answerIndex [][]string
+		for i, a := range answers {
+			split := strings.Split(a, "|")
+			for _, v := range split {
+				table[v] = i
+			}
+			answerIndex = append(answerIndex, split)
+		}
+		for i, answer := range checkAnswers {
+			if v, ok := table[answer]; ok {
+				index := answerIndex[v]
+				for _, s := range index {
+					delete(table, s)
+				}
+				boolList[i] = true
+				num, _ := strconv.Atoi(proportions[i])
+				proportion += num
+			} else {
+				boolList[i] = false
+			}
+		}
+	} else {
+		for i, answer := range checkAnswers {
+			split := strings.Split(answers[i], "|")
+			flag := false
+			for _, s := range split {
+				if s == answer {
+					flag = true
+					break
+				}
+			}
+			if flag {
+				boolList[i] = true
+				num, _ := strconv.Atoi(proportions[i])
+				proportion += num
+			}
 		}
 	}
-	return true
+	return boolList, proportion, nil
 }
 
 func (c *SupplyBlankService) GetAnswer(question *questionBank.SupplyBlank) []string {

@@ -37,6 +37,25 @@ func (c *QuestionBankService) FindQuestions(chapterId uint) *ojResp.QuestionBank
 	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MULTIPLE_CHOICE, true).Preload("Options").Find(&result.MultipleChoices)
 	return &result
 }
+func (c QuestionBankService) FindJudges(chapterId uint) (result []*ojResp.ApiJudge) {
+	global.GVA_DB.Model(&c.judge).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.judge.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.JUDGE, true).Find(&result)
+	return
+}
+
+func (c QuestionBankService) FindProgramms(chapterId uint) (result []*ojResp.ApiProgramm) {
+	global.GVA_DB.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.PROGRAM, true).Preload("LanguageSupports").Find(&result)
+	return
+}
+
+func (c QuestionBankService) FindSupplyBlank(chapterId uint) (result []*ojResp.ApiSupplyBlank) {
+	global.GVA_DB.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.SUPPLY_BLANK, true).Find(&result)
+	return
+}
+
+func (c QuestionBankService) FindMultipleChoices(chapterId uint) (result []*ojResp.ApiJudge) {
+	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MULTIPLE_CHOICE, true).Preload("Options").Find(&result)
+	return
+}
 
 var languageSupport = `
 	select *

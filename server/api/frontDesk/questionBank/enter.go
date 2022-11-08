@@ -11,5 +11,5 @@ package questionBank
  **/
 
 type FrontDesk struct {
-	CommonApi
+	QuestionBankApi
 }
