@@ -7,6 +7,7 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
+	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service/frontDesk"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -31,8 +32,13 @@ func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 
 // 学生进入考试时获取试卷内容
 func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
-	var examComing request.ExamComing
-	_ = c.ShouldBindQuery(&examComing)
+	var planId request3.ExamPlan
+	_ = c.ShouldBindQuery(&planId)
+	studentId := utils.GetStudentId(c)
+	var examComing = request.ExamComing{
+		StudentId: studentId,
+		PlanId:    planId.PlanId,
+	}
 	if examPaper, err := examService.GetExamPapers(examComing); err != nil {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
@@ -45,6 +51,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
 	_ = c.ShouldBindJSON(&ExamCommit)
+	ExamCommit.StudentId = utils.GetStudentId(c)
 	if err := examService.CommitExamPapers(ExamCommit); err != nil {
 		global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
 		response.FailWithMessage("试卷提交试卷失败", c)

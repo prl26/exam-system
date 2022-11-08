@@ -123,10 +123,11 @@ func Routers() *gin.Engine {
 	}
 
 	// 理论上 前台接口还需要写 中间件 拦截 登录用户  等等操作 这里就暂时全开放
+	frontDeskRouter.InitCommonRouter(PublicGroup)
 	frontDeskGroup := Router.Group("")
+	frontDeskGroup.Use(middleware.StudentJWTAuth())
 	{
 		ojRouter.InitFrontDeskOjRouter(frontDeskGroup)
-		frontDeskRouter.InitCommonRouter(frontDeskGroup)
 		frontDeskRouter.InitFrontExamRouter(frontDeskGroup)
 	}
 

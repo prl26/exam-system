@@ -5,7 +5,6 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
-	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/system"
 	systemReq "github.com/prl26/exam-system/server/model/system/request"
@@ -102,19 +101,32 @@ func (commonAPi *CommonApi) StudentTokenNext(c *gin.Context, user basicdata.Stud
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
-		response.OkWithDetailed(systemRes.StudentLoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-		}, "登录成功", c)
+		Lessons, err := commonService.FindTeachClass(user.ID)
+		if err != nil {
+			response.FailWithMessage("查询班级失败", c)
+			return
+		}
+		//response.OkWithDetailed(systemRes.StudentLoginResponse{
+		//	User:      user,
+		//	Token:     token,
+		//	ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+		//}, "登录成功", c)
+		response.OkWithData(gin.H{
+			"loginResponse": systemRes.StudentLoginResponse{
+				User:      user,
+				Token:     token,
+				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			},
+			"classAndlesson": Lessons,
+			"状态":             "登录成功",
+		}, c)
 	}
 }
 
 //获取该学生所在的每个教学班
 func (commonApi *CommonApi) FindLessons(c *gin.Context) {
-	var studentId request.GetByStudentId
-	_ = c.ShouldBindQuery(&studentId)
-	if teachClassAndLesson, err := commonService.FindTeachClass(studentId.StudentId); err != nil {
+	studentId := utils.GetStudentId(c)
+	if teachClassAndLesson, err := commonService.FindTeachClass(studentId); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
