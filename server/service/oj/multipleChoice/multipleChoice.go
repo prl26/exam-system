@@ -20,7 +20,7 @@ import (
 
 type MultipleChoiceService struct{}
 
-func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []int) (bool, error) {
+func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []string) (bool, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
 		return false, err
@@ -37,7 +37,7 @@ func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (
 	return &question, nil
 }
 
-func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, answer []int) bool {
+func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, answer []string) bool {
 	n := len(answer)
 	if n != question.MostOptions {
 		return false
@@ -46,11 +46,7 @@ func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, ans
 	//sort.Slice(answer, func(i, j int) bool {
 	//	return answer[i]<answer[j]
 	//})
-	answerStrs := make([]string, n)
-	for i := 0; i < n; i++ {
-		answerStrs[i] = strconv.Itoa(answer[i])
-	}
-	checkAnswer := strings.Join(answerStrs, ",")
+	checkAnswer := strings.Join(answer, ",")
 	return checkAnswer == question.Answer
 }
 

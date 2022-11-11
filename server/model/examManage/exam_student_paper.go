@@ -33,9 +33,9 @@ type CommitExamPaper struct {
 	BlankCommit          []BlankCommit          `json:"blankCommit"`
 }
 type MultipleChoiceCommit struct {
-	MergeId    uint  `json:"mergeId"`
-	QuestionId uint  `json:"questionId" form:"questionId"`
-	Answers    []int `json:"answers" form:"answers"`
+	MergeId    uint     `json:"mergeId"`
+	QuestionId uint     `json:"questionId" form:"questionId"`
+	Answers    []string `json:"answers" form:"answers"`
 }
 type JudgeCommit struct {
 	MergeId    uint `json:"mergeId"`
