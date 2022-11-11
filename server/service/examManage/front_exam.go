@@ -9,6 +9,7 @@ import (
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
 	"strconv"
+	"strings"
 )
 
 type ExamService struct {
@@ -88,7 +89,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
 	for j := 0; j < len(optionCommit); j++ {
-		answers := utils.IntArrayToString(optionCommit[j].Answers)
+		answers := strings.Join(optionCommit[j].Answers, ",")
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 			Where("id = ?", optionCommit[j].MergeId).
 			Updates(&examManage.ExamStudentPaper{Answer: answers}).
