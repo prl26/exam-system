@@ -20,6 +20,11 @@ func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []te
 }
 
 func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (examPaper response.ExamPaperResponse, err error) {
+	examPaper.BlankComponent = make([]response.BlankComponent, 0)
+	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
+	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
+	examPaper.JudgeComponent = make([]response.JudgeComponent, 0)
+	examPaper.ProgramComponent = make([]response.ProgramComponent, 0)
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
@@ -31,7 +36,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 				return
 			}
 			Choice.MergeId = studentPaper[i].ID
-			if Choice.MergeId == 1 {
+			if Choice.Choice.MostOptions == 1 {
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
 				singleChoiceCount++
