@@ -94,7 +94,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
 	for j := 0; j < len(optionCommit); j++ {
-		answers := strings.Join(optionCommit[j].Answers, ",")
+		answers := strings.Join(optionCommit[j].Answer, ",")
 		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 			Where("id = ?", optionCommit[j].MergeId).
 			Updates(&examManage.ExamStudentPaper{Answer: answers}).

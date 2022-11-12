@@ -24,7 +24,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 	}
 	for i := 0; i < len(examPaperCommit.MultipleChoiceCommit); i++ {
-		if Bool, err := ojService.MultipleChoiceService.Check(examPaperCommit.MultipleChoiceCommit[i].QuestionId, examPaperCommit.MultipleChoiceCommit[i].Answers); err != nil {
+		if Bool, err := ojService.MultipleChoiceService.Check(examPaperCommit.MultipleChoiceCommit[i].QuestionId, examPaperCommit.MultipleChoiceCommit[i].Answer); err != nil {
 			return err
 		} else {
 			if Bool == true {
