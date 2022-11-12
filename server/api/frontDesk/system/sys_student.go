@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
@@ -51,6 +52,8 @@ func (b *BaseApi) StudentLogin(c *gin.Context) {
 // 登录以后签发jwt
 func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
+	Lessons, err := teachClassService.FindTeachClass(user.ID)
+	fmt.Println(Lessons)
 	claims := j.CreateStudentClaims(systemReq.StudentBaseClaims{
 		ID:          user.ID,
 		Name:        user.Name,
@@ -63,11 +66,15 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 		return
 	}
 	if !global.GVA_CONFIG.System.UseMultipoint {
-		response.OkWithDetailed(systemRes.StudentLoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-		}, "登录成功", c)
+		response.OkWithData(gin.H{
+			"loginResponse": systemRes.StudentLoginResponse{
+				User:      user,
+				Token:     token,
+				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			},
+			"classAndlesson": Lessons,
+			"状态":             "登录成功",
+		}, c)
 		return
 	}
 	if jwtStr, err := jwtService.GetStudentRedisJWT(user.ID); err == redis.Nil {
@@ -76,11 +83,15 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
-		response.OkWithDetailed(systemRes.StudentLoginResponse{
-			User:      user,
-			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-		}, "登录成功", c)
+		response.OkWithData(gin.H{
+			"loginResponse": systemRes.StudentLoginResponse{
+				User:      user,
+				Token:     token,
+				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			},
+			"classAndlesson": Lessons,
+			"状态":             "登录成功",
+		}, c)
 	} else if err != nil {
 		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
 		response.FailWithMessage("设置登录状态失败", c)
@@ -95,7 +106,6 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
-		Lessons, err := teachClassService.FindTeachClass(user.ID)
 		if err != nil {
 			response.FailWithMessage("查询班级失败", c)
 			return
