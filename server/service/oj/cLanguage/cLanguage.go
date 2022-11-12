@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/oj"
+	exception "github.com/prl26/exam-system/server/model/oj/error"
 	ojResp "github.com/prl26/exam-system/server/model/oj/response"
 	"github.com/prl26/exam-system/server/model/questionBank"
 	"github.com/prl26/exam-system/server/pb"
@@ -48,7 +49,7 @@ const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
-		return nil, err
+		return nil, exception.CompileError{Msg: err.Error()}
 	}
 	defer func() {
 		after := time.After(FILE_FAILED_DURATION)

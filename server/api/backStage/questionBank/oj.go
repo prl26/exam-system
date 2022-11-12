@@ -10,12 +10,11 @@ import (
 )
 
 type OjApi struct {
-
 }
 
-var(
+var (
 	cLanguageService = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
-	commonService = &service.ServiceGroupApp.OjServiceServiceGroup.CommonService
+	commonService    = &service.ServiceGroupApp.OjServiceServiceGroup.CommonService
 )
 
 // Compile 编程题编译
@@ -42,7 +41,7 @@ func (*OjApi) Compile(c *gin.Context) {
 	case 1:
 		fileId, expireTime, err := cLanguageService.Compile(r.Code)
 		if err != nil {
-			response.FailWithMessage(err.Error(), c)
+			ojResp.ErrorHandle(c, err)
 			return
 		}
 		response.OkWithData(ojResp.Compile{FileId: fileId, ExpirationTime: *expireTime}, c)
@@ -87,4 +86,3 @@ func (*OjApi) Execute(c *gin.Context) {
 		return
 	}
 }
-
