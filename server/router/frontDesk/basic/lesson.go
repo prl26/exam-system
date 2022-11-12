@@ -12,6 +12,7 @@ func (c *LessonRouter) InitLessonRouter(Router *gin.RouterGroup) {
 	lessonRouter := Router.Group("lesson")
 	var lessonApi = v1.ApiGroupApp.FrontDesk.BasicApiGroup.LessonApi
 	{
-		lessonRouter.GET("findDetail", lessonApi.FindLessonDetail)
+		lessonRouter.GET("findChapter", lessonApi.FindLessonDetail)
+		lessonRouter.GET("findKnowledge", lessonApi.FindKnowledge)
 	}
 }

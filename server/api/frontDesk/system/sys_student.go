@@ -49,7 +49,6 @@ func (b *BaseApi) StudentLogin(c *gin.Context) {
 	//}
 }
 
-// 登录以后签发jwt
 func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	Lessons, err := teachClassService.FindTeachClass(user.ID)

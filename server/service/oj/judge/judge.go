@@ -1,8 +1,8 @@
 package judge
 
 import (
-	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	exception "github.com/prl26/exam-system/server/model/common/error"
 	"github.com/prl26/exam-system/server/model/questionBank"
 )
 
@@ -21,7 +21,7 @@ type JudgeService struct{}
 func (s *JudgeService) Check(questionId uint, answer bool) (bool, error) {
 	question, err := s.FindCanPracticeQuestion(questionId)
 	if err != nil {
-		return false, err
+		return false, exception.NotFoundError
 	}
 	return s.check(question, answer), nil
 }
@@ -30,7 +30,7 @@ func (s *JudgeService) FindCanPracticeQuestion(choiceQuestionId uint) (*question
 	var question questionBank.Judge
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {
-		return nil, fmt.Errorf("找不到该题目")
+		return nil, exception.NotFoundError
 	}
 	return &question, nil
 }

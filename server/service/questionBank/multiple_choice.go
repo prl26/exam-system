@@ -17,9 +17,6 @@ func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoi
 		if err := tx.Create(multipleChoice).Error; err != nil {
 			return err
 		}
-		for i := 0; i < len(multipleChoice.Options); i++ {
-			multipleChoice.Options[i].MultipleChoiceId = multipleChoice.ID
-		}
 		if len(chapterSupport) != 0 {
 			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.MULTIPLE_CHOICE)
 			if err := tx.Create(&courseSupport).Error; err != nil {
@@ -53,7 +50,7 @@ func (a *MultipleChoiceService) Update(multipleChoice questionBank.MultipleChoic
 		if err := tx.Where("multiple_choice_id=?", multipleChoice.ID).Delete(&questionBank.Options{}).Error; err != nil {
 			return err
 		}
-		return tx.Create(multipleChoice.Options).Error
+		return nil
 	})
 }
 

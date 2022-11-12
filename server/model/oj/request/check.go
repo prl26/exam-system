@@ -16,8 +16,8 @@ type CheckSupplyBlank struct {
 }
 
 type CheckMultipleChoice struct {
-	Id      uint  `json:"id"`
-	Answers []int `json:"answers"`
+	Id      uint     `json:"id"`
+	Answers []string `json:"answers"`
 }
 
 type CheckJudge struct {

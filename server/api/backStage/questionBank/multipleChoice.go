@@ -1,7 +1,6 @@
 package questionBank
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -35,28 +34,7 @@ func (choiceApi *MultipleChoiceApi) Create(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if req.MostOptions > len(req.Options) {
-		response.FailWithMessage("可选择项数大于总的选项个数", c)
-	}
-	if len(req.Options) != 0 {
-		verify := utils.Rules{
-			"Describe": {utils.NotEmpty()},
-			"Orders":   {utils.NotEmpty()},
-		}
-		var max uint
-		for i := 0; i < len(req.Options); i++ {
-			if err := utils.Verify(req.Options[i], verify); err != nil {
-				response.FailWithMessage(fmt.Sprintf("%d Option:%s", i+1, err.Error()), c)
-				return
-			}
-			if req.Options[i].Orders > max {
-				max = req.Options[i].Orders
-			}
-		}
-		if max != uint(len(req.Options)) {
-			response.FailWithMessage(fmt.Sprintf("Order 参数输入错误"), c)
-		}
-	}
+
 	if err := multipleChoiceService.Create(&req.MultipleChoice, req.LessonSupports); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -87,26 +65,6 @@ func (choiceApi *MultipleChoiceApi) Update(c *gin.Context) {
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
-	}
-	if len(req.Options) != 0 {
-		verify := utils.Rules{
-			"Describe": {utils.NotEmpty()},
-			"Orders":   {utils.NotEmpty()},
-		}
-		var max uint
-		for i := 0; i < len(req.Options); i++ {
-			req.Options[i].MultipleChoiceId = req.ID
-			if err := utils.Verify(req.Options[i], verify); err != nil {
-				response.FailWithMessage(fmt.Sprintf("%d Option:%s", i+1, err.Error()), c)
-				return
-			}
-			if req.Options[i].Orders > max {
-				max = req.Options[i].Orders
-			}
-		}
-		if max != uint(len(req.Options)) {
-			response.FailWithMessage(fmt.Sprintf("Order 参数输入错误"), c)
-		}
 	}
 	if err := multipleChoiceService.Update(req.MultipleChoice); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
