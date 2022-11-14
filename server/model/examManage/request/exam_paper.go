@@ -9,3 +9,6 @@ type ExamPaperSearch struct {
 	examManage.ExamPaper
 	request.PageInfo
 }
+type PaperDistribution struct {
+	PlanId uint `json:"planId"`
+}

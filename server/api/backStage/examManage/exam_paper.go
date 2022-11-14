@@ -7,9 +7,11 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 	"strconv"
+	"strings"
 )
 
 type ExamPaperApi struct {
@@ -18,6 +20,7 @@ type ExamPaperApi struct {
 var examPaperService = service.ServiceGroupApp.ExammanageServiceGroup.ExamPaperService
 var PaperTemplateItemService = service.ServiceGroupApp.ExammanageServiceGroup.PaperTemplateItemService
 var examStatusService = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
+var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
 
 // CreateExamPaperByRand 创建ExamPaper
 // @Tags ExamPaper
@@ -157,6 +160,8 @@ func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+// 判断学生最近是否有考试
 func (examPaperApi *ExamPaperApi) SetStudentsToRedis(c *gin.Context) {
 	students, err := examStatusService.GaSStudentsOfExam()
 	if err != nil {
@@ -164,4 +169,35 @@ func (examPaperApi *ExamPaperApi) SetStudentsToRedis(c *gin.Context) {
 	} else {
 		response.OkWithData(gin.H{"data": students}, c)
 	}
+}
+
+//试卷分发
+func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
+	var planId examManageReq.PaperDistribution
+	_ = c.ShouldBindQuery(&planId)
+	err := examPaperService.PaperDistribution(planId.PlanId)
+	if err != nil {
+		response.FailWithMessage("试卷分发失败", c)
+	} else {
+		response.OkWithMessage("试卷分发成功", c)
+	}
+}
+
+//导出成绩表
+func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
+	var excelInfo request3.Excel
+	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
+	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
+	err := examService.ExportPaperScore(excelInfo.InfoList, filePath)
+	if err != nil {
+		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+		response.FailWithMessage("转换Excel失败", c)
+		return
+	}
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
+	c.File(filePath)
 }

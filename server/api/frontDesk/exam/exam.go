@@ -16,7 +16,7 @@ import (
 type ExamApi struct {
 }
 
-var examService =service.ServiceGroupApp.ExammanageServiceGroup.ExamService
+var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的教学计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {

@@ -72,7 +72,7 @@ func (q *QuestionBankApi) FindQuestionsByKnowledgeId(c *gin.Context) {
 		programms := questionBankService.FindProgramms(uint(chapterId))
 		response.OkWithData(programms, c)
 		break
-	case questionType.MULTIPLE_CHOICE:
+	case questionType.MultipleChoice:
 		multipleChoics := questionBankService.FindMultipleChoices(uint(chapterId))
 		response.OkWithData(multipleChoics, c)
 		break

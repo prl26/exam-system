@@ -92,7 +92,7 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 		return
 	}
 	if resp.MultipleChoice.ID != 0 {
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.MULTIPLE_CHOICE); err != nil {
+		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.MultipleChoice); err != nil {
 			global.GVA_LOG.Error("查询失败!", zap.Error(err))
 			response.FailWithMessage(err.Error(), c)
 			return

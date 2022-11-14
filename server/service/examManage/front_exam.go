@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/examManage"
@@ -8,6 +9,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
+	"github.com/xuri/excelize/v2"
 	"strconv"
 	"strings"
 )
@@ -30,7 +32,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(studentPaper); i++ {
-		if *studentPaper[i].QuestionType == questionType.MULTIPLE_CHOICE {
+		if *studentPaper[i].QuestionType == questionType.MultipleChoice {
 			var Choice response.ChoiceComponent
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {
@@ -125,8 +127,33 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	}
 	return
 }
+
 func (examService *ExamService) GetExamScore(examComing request.ExamComing) (uint, error) {
 	var sum uint
-	err := global.GVA_DB.Raw("SELECT SUM(score) FROM exam_student_paper where student_id = ? and plan_id = ? ", examComing.StudentId, examComing.PlanId).Scan(&sum).Error
+	err := global.GVA_DB.Table("tea_score").Select("exam_score").Where("plan_id= ? and student_id = ?", examComing.PlanId, examComing.StudentId).Scan(&sum).Error
 	return sum, err
+}
+func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
+	excel := excelize.NewFile()
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",
+		"期末考试成绩", "期末考试占比", "过程化考核得分", "过程化考核占比",
+		"考勤得分", "考勤占比", "学习资源得分", "学习资源占比"})
+	for i, paper := range infoList {
+		axis := fmt.Sprintf("A%d", i+2)
+		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
+			paper.ID,
+			paper.CourseName,
+			paper.TeachClassName,
+			paper.ExamScrore,
+			paper.ExamProporation,
+			paper.ProcedureScore,
+			paper.ProcedureProportion,
+			paper.AttendanceScore,
+			paper.AttendanceProportion,
+			paper.LearnResourcesScore,
+			paper.LearnResourcesProportion,
+		})
+	}
+	err := excel.SaveAs(filePath)
+	return err
 }

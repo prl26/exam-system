@@ -22,7 +22,9 @@ func (s *ExamPaperRouter) InitExamPaperRouter(Router *gin.RouterGroup) {
 		examPaperRouter.GET("setStudentsToRedis", examPaperApi.SetStudentsToRedis)
 	}
 	{
-		examPaperRouterWithoutRecord.GET("findExamPaper", examPaperApi.FindExamPaper)       // 根据ID获取ExamPaper
-		examPaperRouterWithoutRecord.GET("getExamPaperList", examPaperApi.GetExamPaperList) // 获取ExamPaper列表
+		examPaperRouterWithoutRecord.GET("findExamPaper", examPaperApi.FindExamPaper)         // 根据ID获取ExamPaper
+		examPaperRouterWithoutRecord.GET("getExamPaperList", examPaperApi.GetExamPaperList)   // 获取ExamPaper列表
+		examPaperRouterWithoutRecord.GET("paperDistribution", examPaperApi.PaperDistribution) //试卷分发
+		examPaperRouterWithoutRecord.POST("exportPaper", examPaperApi.ExportPaper)            //导出成绩表
 	}
 }
