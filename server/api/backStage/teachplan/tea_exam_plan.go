@@ -106,10 +106,9 @@ func (examPlanApi *ExamPlanApi) UpdateExamPlan(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /examPlan/findExamPlan [get]
 func (examPlanApi *ExamPlanApi) FindExamPlanById(c *gin.Context) {
-	//var examPlan teachplan.ExamPlan
-	var examPlanId uint
-	_ = c.ShouldBindQuery(&examPlanId)
-	if reexamPlan, err := examPlanService.GetExamPlan(examPlanId); err != nil {
+	var examPlan teachplan.ExamPlan
+	_ = c.ShouldBindQuery(&examPlan)
+	if reexamPlan, err := examPlanService.GetExamPlan(examPlan.ID); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {

@@ -10,5 +10,5 @@ type ExamPaperSearch struct {
 	request.PageInfo
 }
 type PaperDistribution struct {
-	PlanId uint `json:"planId"`
+	PlanId uint `json:"planId" form:"planId"`
 }

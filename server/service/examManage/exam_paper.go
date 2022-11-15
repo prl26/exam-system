@@ -1,11 +1,11 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
-	"gorm.io/gorm"
 	"math/rand"
 	"time"
 )
@@ -15,9 +15,9 @@ type ExamPaperService struct {
 
 // CreateExamPaper 创建ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {
+func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (Id uint, err error) {
 	err = global.GVA_DB.Create(&examPaper).Error
-	return err
+	return examPaper.ID, err
 }
 
 // DeleteExamPaper 删除ExamPaper记录
@@ -84,27 +84,17 @@ func (examPaperService *ExamPaperService) GetTemplate(info examManage.ExamPaper)
 	return
 }
 func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err error) {
-	var number int64
-	global.GVA_DB.Table("exam_paper").Where("plan_id = ?", PlanId).Count(&number)
+	var number []int64
+	global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number)
 	var studentList []int64
-	global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and bas_student_teach_classes.teach_class_id = ? GROUP BY student_id ", PlanId).
+	global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and tea_examplan.id = ?  GROUP BY student_id ", PlanId).
 		Scan(&studentList)
 	rand.Seed(time.Now().UnixNano())
-	for _, v := range studentList {
-		go func() {
-			a := rand.Intn(int(number))
-			global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-				err = tx.Table("exam_student_paper").Raw("INSERT INTO exam_student_paper(question_id,score,question_type,problem_type,paper_id) SELECT question_id,score,question_type,problem_type,paper_id from exam_paper_question_merge WHERE paper_id = ?", a).Error
-				if err != nil {
-					return err
-				}
-				err = tx.Table("exam_student_paper").Raw("UPDATE exam_student_paper SET id = ?,plan_id =? ", v, PlanId).Where("paper_id = ?", a).Error
-				if err != nil {
-					return err
-				}
-				return nil
-			})
-		}()
+	fmt.Println(studentList)
+	for i := 0; i < len(studentList); i++ {
+		a := rand.Intn(len(number))
+		var result examManage.ExamStudentPaper
+		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ?", number[a], studentList[i], PlanId).Scan(&result)
 	}
 	return
 }

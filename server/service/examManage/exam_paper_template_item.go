@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/questionBank"
-	"math/rand"
 )
 
 type PaperTemplateItemService struct {
@@ -88,124 +88,105 @@ func (paperTemplateItemService *PaperTemplateItemService) GetPaperId(info examMa
 	return paper.ID
 }
 
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperChoiceQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperChoiceQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
 	var list []questionBank.MultipleChoice
-	//fmt.Println(len())
-	paperId := paperTemplateItemService.GetPaperId(info[0])
-	for i := 0; i < len(info); i++ {
-		num := info[i].Num
-		uuid := rand.Intn(9)
-		err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-		if err != nil {
-			return
-		} else {
-			if len(list) > 0 {
-				for j := 0; j < *num; j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	num := info.Num
+	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+	if err != nil {
+		return
+	} else {
+		if len(list) > 0 {
+			for j := 0; j < *num; j++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &Id,
+					QuestionId:   &list[j].ID,
+					Score:        info.Score,
+					QuestionType: info.QuestionType,
+					ProblemType:  info.ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperJudgeQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperJudgeQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
 	var list []questionBank.Judge
-	//fmt.Println(len())
-	paperId := paperTemplateItemService.GetPaperId(info[0])
-	for i := 0; i < len(info); i++ {
-		num := info[i].Num
-		uuid := rand.Intn(9)
-		err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-		if err != nil {
-			return
-		} else {
-			if len(list) > 0 {
-				for j := 0; j < *num; j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	num := info.Num
+	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+	if err != nil {
+		return
+	} else {
+		if len(list) > 0 {
+			for j := 0; j < *num; j++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &Id,
+					QuestionId:   &list[j].ID,
+					Score:        info.Score,
+					QuestionType: info.QuestionType,
+					ProblemType:  info.ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperBlankQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperBlankQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
 	var list []questionBank.SupplyBlank
-	paperId := paperTemplateItemService.GetPaperId(info[0])
-	for i := 0; i < len(info); i++ {
-		num := info[i].Num
-		uuid := rand.Intn(9)
-		err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-		if err != nil {
-			return
-		} else {
-			if len(list) > 0 {
-				for j := 0; j < *num; j++ {
-					fmt.Println(j)
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	num := info.Num
+	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+	if err != nil {
+		return
+	} else {
+		if len(list) > 0 {
+			for j := 0; j < *num; j++ {
+				fmt.Println(j)
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &Id,
+					QuestionId:   &list[j].ID,
+					Score:        info.Score,
+					QuestionType: info.QuestionType,
+					ProblemType:  info.ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
 	}
 	return
 }
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestion(info []examManage.PaperTemplateItem) (err error) {
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
 	var list []questionBank.Programm
-	//fmt.Println(len())
-	paperId := paperTemplateItemService.GetPaperId(info[0])
-	for i := 0; i < len(info); i++ {
-		num := info[i].Num
-		uuid := rand.Intn(9)
-		err = global.GVA_DB.Where("problem_type = ? and can_exam = ?", info[i].ProblemType, 1).Order(uuid).Limit(*num).Find(&list).Error
-		if err != nil {
-			return
-		} else {
-			if len(list) > 0 {
-				for j := 0; j < *num; j++ {
-					questionMerge := examManage.PaperQuestionMerge{
-						GVA_MODEL:    global.GVA_MODEL{},
-						PaperId:      &paperId,
-						QuestionId:   &list[j].ID,
-						Score:        info[i].Score,
-						QuestionType: info[i].QuestionType,
-						ProblemType:  info[i].ProblemType,
-					}
-					err = global.GVA_DB.Create(&questionMerge).Error
-					if err != nil {
-						return
-					}
+	num := info.Num
+	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+	if err != nil {
+		return
+	} else {
+		if len(list) > 0 {
+			for j := 0; j < *num; j++ {
+				questionMerge := examManage.PaperQuestionMerge{
+					GVA_MODEL:    global.GVA_MODEL{},
+					PaperId:      &Id,
+					QuestionId:   &list[j].ID,
+					Score:        info.Score,
+					QuestionType: info.QuestionType,
+					ProblemType:  info.ProblemType,
+				}
+				err = global.GVA_DB.Create(&questionMerge).Error
+				if err != nil {
+					return
 				}
 			}
 		}
@@ -213,24 +194,34 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestio
 	return
 }
 
-func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info []examManage.PaperTemplateItem) (err error) {
-	err = paperTemplateItemService.SetPaperChoiceQuestion(info)
-	if err != nil {
-		return
-	} else {
-		err = paperTemplateItemService.SetPaperJudgeQuestion(info)
-		if err != nil {
-			return
-		} else {
-			err = paperTemplateItemService.SetPaperBlankQuestion(info)
-			if err != nil {
-				return
-			} else {
-				err = paperTemplateItemService.SetPaperProgramQuestion(info)
+func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
+	for _, v := range info {
+		if *v.QuestionType == questionType.MultipleChoice {
+			go func() {
+				err = paperTemplateItemService.SetPaperChoiceQuestion(v, Id)
 				if err != nil {
 					return
 				}
+			}()
+		} else if *v.QuestionType == questionType.JUDGE {
+			go func() {
+				err = paperTemplateItemService.SetPaperJudgeQuestion(v, Id)
+				if err != nil {
+					return
+				}
+			}()
+		} else if *v.QuestionType == questionType.SUPPLY_BLANK {
+			err = paperTemplateItemService.SetPaperBlankQuestion(v, Id)
+			if err != nil {
+				return
 			}
+		} else if *v.QuestionType == questionType.PROGRAM {
+			go func() {
+				err = paperTemplateItemService.SetPaperProgramQuestion(v, Id)
+				if err != nil {
+					return
+				}
+			}()
 		}
 	}
 	return

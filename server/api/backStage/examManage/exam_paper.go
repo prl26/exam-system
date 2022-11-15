@@ -40,12 +40,12 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage("查询试卷模板失败", c)
 	} else {
-		if err := examPaperService.CreateExamPaper(examPaper); err != nil {
-			global.GVA_LOG.Error("创建失败!", zap.Error(err))
-			response.FailWithMessage("试卷创建失败", c)
-		} else {
-			for i := 0; i < n; i++ {
-				if err := PaperTemplateItemService.SetPaperQuestion(templateItems); err != nil {
+		for i := 0; i < n; i++ {
+			if id, err := examPaperService.CreateExamPaper(examPaper); err != nil {
+				global.GVA_LOG.Error("创建失败!", zap.Error(err))
+				response.FailWithMessage("试卷创建失败", c)
+			} else {
+				if err := PaperTemplateItemService.SetPaperQuestion(templateItems, id); err != nil {
 					global.GVA_LOG.Error("创建失败!", zap.Error(err))
 					response.FailWithMessage("创建试卷失败", c)
 				} else {
@@ -54,6 +54,7 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 			}
 		}
 	}
+	response.OkWithData("创建成功", c)
 }
 
 // DeleteExamPaper 删除ExamPaper
