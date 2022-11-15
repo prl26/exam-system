@@ -129,11 +129,14 @@ func (examPaperApi *ExamPaperApi) UpdateExamPaper(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) FindExamPaper(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindQuery(&examPaper)
-	if reexamPaper, err := examPaperService.GetExamPaper(examPaper.ID); err != nil {
+	if reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper(examPaper.ID); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"reexamPaper": reexamPaper}, c)
+		response.OkWithData(gin.H{
+			"reexamPaper":    reexamPaper,
+			"examPaperTitle": examPaperTitle,
+		}, c)
 	}
 }
 

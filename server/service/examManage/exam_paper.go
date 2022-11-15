@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	"github.com/prl26/exam-system/server/model/examManage/response"
 	"math/rand"
 	"time"
 )
@@ -48,9 +50,64 @@ func (examPaperService *ExamPaperService) UpdateExamPaper(examPaper examManage.E
 
 // GetExamPaper 根据id获取ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper examManage.ExamPaper, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&examPaper).Error
+func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper response.ExamPaperResponse, PaperTitle examManage.ExamPaper, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&PaperTitle).Error
 
+	examPaper.BlankComponent = make([]response.BlankComponent, 0)
+	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
+	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
+	examPaper.JudgeComponent = make([]response.JudgeComponent, 0)
+	examPaper.ProgramComponent = make([]response.ProgramComponent, 0)
+	var Paper []examManage.PaperQuestionMerge
+	err = global.GVA_DB.Where("paper_id = ?", id).Find(&Paper).Error
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
+	for i := 0; i < len(Paper); i++ {
+		if *Paper[i].QuestionType == questionType.MultipleChoice {
+			var Choice response.ChoiceComponent
+			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", Paper[i].QuestionId).Find(&Choice.Choice).Error
+			if err != nil {
+				return
+			}
+			Choice.MergeId = Paper[i].ID
+			if Choice.Choice.MostOptions == 1 {
+				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
+				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = Paper[i].ID
+				singleChoiceCount++
+			} else {
+				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
+				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = Paper[i].ID
+				MultiChoiceCount++
+			}
+		} else if *Paper[i].QuestionType == questionType.JUDGE {
+			var Judge response.JudgeComponent
+			err = global.GVA_DB.Table("les_questionBank_judge").Where("id = ?", Paper[i].QuestionId).Find(&Judge.Judge).Error
+			if err != nil {
+				return
+			}
+			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
+			examPaper.JudgeComponent[judgeCount].MergeId = Paper[i].ID
+			judgeCount++
+		} else if *Paper[i].QuestionType == questionType.SUPPLY_BLANK {
+			var Blank response.BlankComponent
+			err = global.GVA_DB.Table("les_questionBank_supply_blank").Where("id = ?", Paper[i].QuestionId).Find(&Blank.Blank).Error
+			if err != nil {
+				return
+			}
+			examPaper.BlankComponent = append(examPaper.BlankComponent, Blank)
+			examPaper.BlankComponent[blankCount].MergeId = Paper[i].ID
+			blankCount++
+		} else if *Paper[i].QuestionType == questionType.PROGRAM {
+			var Program response.ProgramComponent
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", Paper[i].QuestionId).Find(&Program.Program).Error
+			if err != nil {
+				return
+			}
+			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
+			examPaper.ProgramComponent[programCount].MergeId = Paper[i].ID
+			programCount++
+		}
+	}
+	examPaper.PaperId = id
 	return
 }
 
@@ -93,7 +150,7 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err er
 	fmt.Println(studentList)
 	for i := 0; i < len(studentList); i++ {
 		a := rand.Intn(len(number))
-		var result examManage.ExamStudentPaper
+		var result examManage.ExamPaper
 		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ?", number[a], studentList[i], PlanId).Scan(&result)
 	}
 	return
