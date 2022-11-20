@@ -124,8 +124,8 @@ system:
   addr: 8888
   db-type: mysql
   oss-type: local
-  use-multipoint: true
-  use-redis: true
+  use-multipoint: false
+  use-redis: false
   iplimit-count: 15000
   iplimit-time: 3600
 tencent-cos:
