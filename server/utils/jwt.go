@@ -68,6 +68,12 @@ func (j *JWT) CreateTokenByOldToken(oldToken string, claims request.CustomClaims
 	})
 	return v.(string), err
 }
+func (j *JWT) CreateStudentTokenByOldToken(oldToken string, claims request.StudentCustomClaims) (string, error) {
+	v, err, _ := global.GVA_Concurrency_Control.Do("JWT:"+oldToken, func() (interface{}, error) {
+		return j.CreateStudentToken(claims)
+	})
+	return v.(string), err
+}
 
 // 解析 token
 func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
@@ -90,6 +96,34 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 	}
 	if token != nil {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
+			return claims, nil
+		}
+		return nil, TokenInvalid
+
+	} else {
+		return nil, TokenInvalid
+	}
+}
+func (j *JWT) StudentParseToken(tokenString string) (*request.StudentCustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &request.StudentCustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
+		return j.SigningKey, nil
+	})
+	if err != nil {
+		if ve, ok := err.(*jwt.ValidationError); ok {
+			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+				return nil, TokenMalformed
+			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
+				// Token is expired
+				return nil, TokenExpired
+			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
+				return nil, TokenNotValidYet
+			} else {
+				return nil, TokenInvalid
+			}
+		}
+	}
+	if token != nil {
+		if claims, ok := token.Claims.(*request.StudentCustomClaims); ok && token.Valid {
 			return claims, nil
 		}
 		return nil, TokenInvalid

@@ -12,9 +12,7 @@ import (
 type SupplyBlankService struct {
 }
 
-// Create 创建QuestionBankSupplyBlank记录
-// Author [piexlmax](https://github.com/piexlmax)
-func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank, courseSupport []uint) error {
+func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank, courseSupport []*questionBankReq.LessonSupport) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(supplyBlank).Error; err != nil {
 			return err
@@ -40,21 +38,15 @@ func (service *SupplyBlankService) Delete(ids request.IdsReq) error {
 	})
 }
 
-// UpdateQuestionBankSupplyBlank 更新QuestionBankSupplyBlank记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *SupplyBlankService) UpdateQuestionBankSupplyBlank(questionBank_supply_blank questionBank.SupplyBlank) (err error) {
 	return global.GVA_DB.Updates(&questionBank_supply_blank).Error
 }
 
-// GetQuestionBankSupplyBlank 根据id获取QuestionBankSupplyBlank记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *SupplyBlankService) GetQuestionBankSupplyBlank(id uint) (questionBank_supply_blank questionBank.SupplyBlank, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&questionBank_supply_blank).Error
 	return
 }
 
-// FindList 分页获取QuestionBankSupplyBlank记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSupplyBlankSearch) (list []questionBank.SupplyBlankView, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

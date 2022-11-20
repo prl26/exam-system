@@ -21,6 +21,7 @@ type Score struct {
 	ProcedureProportion      *float64 `json:"procedureProportion" form:"procedureProportion" gorm:"column:procedure_proportion;comment:过程化考核占比;size:8;"`
 	ExamScrore               *float64 `json:"examScrore" form:"examScrore" gorm:"column:exam_scrore;comment:期末考试成绩;size:8;"`
 	ExamProporation          *float64 `json:"examProporation" form:"examProporation" gorm:"column:exam_proporation;comment:期末考试占比;size:8;"`
+	PlanId                   *uint    `json:"planId" form:"planId"`
 }
 
 // TableName Score 表名

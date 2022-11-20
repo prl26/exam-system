@@ -9,7 +9,7 @@ autocode:
   transfer-restart: true
   root:  D:\work\exam-system
   server: /server
-  server-api: /api/v1/%s
+  server-api: /api/Backstage/%s
   server-plug: /plugin/%s
   server-initialize: /initialize
   server-model: /model/%s
@@ -148,7 +148,7 @@ timer:
     interval: 168h
 zap:
   level: info
-  prefix: '[github.com/prl26/exam-system/server]'
+  prefix: '[github.com/prl26/frontExam-system/server]'
   format: console
   director: log
   encode-level: LowercaseColorLevelEncoder
@@ -156,3 +156,13 @@ zap:
   max-age: 30
   show-line: true
   log-in-console: true
+goJudge:
+  enable: true
+  address: localhost:5050
+  cLanguage:
+    enable: true
+    gcc_path: /usr/bin/gcc
+    default_compile_cpu_time_limit:   10000000000
+    default_compile_memory_time_limit: 104857600
+    default_judge_cpu_time_limit:  10000000000
+    default_judge_memory_limit: 104857600

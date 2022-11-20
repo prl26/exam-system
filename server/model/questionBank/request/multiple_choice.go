@@ -15,7 +15,7 @@ type MultipleChoiceFindList struct {
 
 type MultipleChoiceCreate struct {
 	questionBank.MultipleChoice
-	ChapterSupport []uint `json:"chapterSupport"`
+	LessonSupports []*LessonSupport `json:"LessonSupportSupports"`
 }
 
 type MultipleChoiceUpdate struct {

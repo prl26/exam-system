@@ -11,6 +11,12 @@ type PageInfo struct {
 type GetById struct {
 	ID int `json:"id" form:"id"` // 主键ID
 }
+type GetByStudentId struct {
+	StudentId uint `json:"studentId" form:"studentId"`
+}
+type GetByTeachClassId struct {
+	TeachClassId uint `json:"teachClassId" form:"teachClassId"`
+}
 
 func (r *GetById) Uint() uint {
 	return uint(r.ID)

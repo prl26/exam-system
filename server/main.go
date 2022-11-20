@@ -26,7 +26,7 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host      localhost:8888
-// @BasePath  /api/v1
+// @BasePath  /api/Backstage
 
 // @securityDefinitions.basic  BasicAuth
 func main() {
@@ -34,9 +34,11 @@ func main() {
 	global.GVA_LOG = core.Zap()  // 初始化zap日志库
 	zap.ReplaceGlobals(global.GVA_LOG)
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
+	initialize.GoJudge()
 	//initialize.Redis()
 	//initialize.Timer()
 	//initialize.DBList()
+
 	if global.GVA_DB != nil {
 		//initialize.RegisterTables(global.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接

@@ -1,8 +1,11 @@
 package request
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/questionBank"
+	"strconv"
+	"strings"
 )
 
 type QuestionBankSupplyBlankSearch struct {
@@ -13,6 +16,39 @@ type QuestionBankSupplyBlankSearch struct {
 	request.PageInfo
 }
 type SupplyBlankCreate struct {
-	questionBank.SupplyBlank
-	ChapterSupport []uint `json:"chapterSupport"`
+	questionBank.BasicModel
+	IsOrder        int                `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
+	Answers        SupplyBlankAnswers `json:"answers"`
+	LessonSupports []*LessonSupport `json:"LessonSupportSupports"`
+}
+
+type SupplyBlankAnswers []*SupplyBlankAnswer
+
+//	充血模式
+func (this SupplyBlankAnswers) GetAnswersAndProportions() (answer string, proportion string, err error) {
+
+	var thisAnswers []string
+	var thisProportion []string
+	ans := 0
+	for _, answer := range this {
+		ans += answer.Proportion
+		thisAnswers = append(thisAnswers, answer.Answer)
+		thisProportion = append(thisProportion, strconv.Itoa(answer.Proportion))
+	}
+	if ans != 100 {
+		err = fmt.Errorf("占比之和不等于100")
+		return
+	}
+	return strings.Join(thisAnswers, ","), strings.Join(thisProportion, ","), nil
+}
+
+type SupplyBlankAnswer struct {
+	Answer     string `json:"answer"`
+	Proportion int    `json:"proportion"`
+}
+type SupplyBlankUpdate struct {
+	Id uint `json:"id"`
+	questionBank.BasicModel
+	IsOrder int                `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
+	Answers SupplyBlankAnswers `json:"answers"`
 }

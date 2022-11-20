@@ -12,5 +12,11 @@ type QuestionBankJudgeSearch struct {
 
 type JudgeCreate struct {
 	questionBank.Judge
-	ChapterSupport []uint `json:"chapterSupport"`
+	LessonSupports []*LessonSupport `json:"LessonSupports"`
+}
+
+
+type LessonSupport struct {
+	ChapterId uint
+	KnowledgeId uint
 }

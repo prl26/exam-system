@@ -14,5 +14,5 @@ const (
 	JUDGE = 1 + iota
 	PROGRAM
 	SUPPLY_BLANK
-	MULTIPLE_CHOICE
+	MultipleChoice
 )

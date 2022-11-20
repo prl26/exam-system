@@ -45,9 +45,9 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 //@return: error
 
 func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
-	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
-		"v1": newPath,
-		"v2": newMethod,
+	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("Backstage = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+		"Backstage": newPath,
+		"v2":        newMethod,
 	}).Error
 	return err
 }

@@ -9,9 +9,8 @@ import (
 type MultipleChoice struct {
 	global.GVA_MODEL
 	BasicModel
-	Answer      string    `json:"answer" form:"answer" gorm:"column:answer;comment:"`
-	MostOptions int       `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
-	Options     []Options `json:"options" gorm:"foreignKey:MultipleChoiceId"`
+	Answer      string `json:"answer" form:"answer" gorm:"column:answer;comment:"`
+	MostOptions int    `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
 }
 
 // TableName MultipleChoice 表名

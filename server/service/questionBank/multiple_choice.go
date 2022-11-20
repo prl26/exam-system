@@ -12,16 +12,13 @@ import (
 type MultipleChoiceService struct {
 }
 
-func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice, chapterSupport []uint) (err error) {
+func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice, chapterSupport []*questionBankReq.LessonSupport) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(multipleChoice).Error; err != nil {
 			return err
 		}
-		for i := 0; i < len(multipleChoice.Options); i++ {
-			multipleChoice.Options[i].MultipleChoiceId = multipleChoice.ID
-		}
 		if len(chapterSupport) != 0 {
-			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.MULTIPLE_CHOICE)
+			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.MultipleChoice)
 			if err := tx.Create(&courseSupport).Error; err != nil {
 				return err
 			}
@@ -38,7 +35,7 @@ func (a *MultipleChoiceService) Delete(ids request.IdsReq) error {
 		if err := tx.Delete(&[]questionBank.Options{}, "multiple_choice_id in", ids.Ids).Error; err != nil {
 			return err
 		}
-		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type=?", ids, questionType.MULTIPLE_CHOICE).Error; err != nil {
+		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type=?", ids, questionType.MultipleChoice).Error; err != nil {
 			return err
 		}
 		return nil
@@ -53,7 +50,7 @@ func (a *MultipleChoiceService) Update(multipleChoice questionBank.MultipleChoic
 		if err := tx.Where("multiple_choice_id=?", multipleChoice.ID).Delete(&questionBank.Options{}).Error; err != nil {
 			return err
 		}
-		return tx.Create(multipleChoice.Options).Error
+		return nil
 	})
 }
 

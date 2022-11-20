@@ -14,12 +14,12 @@ type JudgeService struct {
 
 // Create 创建QuestionBankJudge记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) Create(judge *questionBank.Judge, chapterSupport []uint) error {
+func (service *JudgeService) Create(judge *questionBank.Judge, lessonSupports []*questionBankReq.LessonSupport) error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(judge).Error; err != nil {
 			return err
 		}
-		courseSupport := buildCourseSupport(chapterSupport, judge.ID, questionType.JUDGE)
+		courseSupport := buildCourseSupport(lessonSupports, judge.ID, questionType.JUDGE)
 		if err := tx.Create(&courseSupport).Error; err != nil {
 			return err
 		}

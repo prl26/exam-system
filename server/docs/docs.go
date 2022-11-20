@@ -49,7 +49,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplate"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplate"
                         }
                     }
                 ],
@@ -87,7 +87,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplate"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplate"
                         }
                     }
                 ],
@@ -315,7 +315,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplate"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplate"
                         }
                     }
                 ],
@@ -3200,7 +3200,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.ExamPaper"
+                            "$ref": "#/definitions/frontExamManage.ExamPaper"
                         }
                     }
                 ],
@@ -3238,7 +3238,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.ExamPaper"
+                            "$ref": "#/definitions/frontExamManage.ExamPaper"
                         }
                     }
                 ],
@@ -3456,7 +3456,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.ExamPaper"
+                            "$ref": "#/definitions/frontExamManage.ExamPaper"
                         }
                     }
                 ],
@@ -5458,7 +5458,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperQuestionMerge"
+                            "$ref": "#/definitions/frontExamManage.PaperQuestionMerge"
                         }
                     }
                 ],
@@ -5496,7 +5496,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperQuestionMerge"
+                            "$ref": "#/definitions/frontExamManage.PaperQuestionMerge"
                         }
                     }
                 ],
@@ -5734,7 +5734,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperQuestionMerge"
+                            "$ref": "#/definitions/frontExamManage.PaperQuestionMerge"
                         }
                     }
                 ],
@@ -5772,7 +5772,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplateItem"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplateItem"
                         }
                     }
                 ],
@@ -5810,7 +5810,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplateItem"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplateItem"
                         }
                     }
                 ],
@@ -6058,7 +6058,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/examManage.PaperTemplateItem"
+                            "$ref": "#/definitions/frontExamManage.PaperTemplateItem"
                         }
                     }
                 ],
@@ -14816,7 +14816,7 @@ const docTemplate = `{
                 }
             }
         },
-        "examManage.ExamPaper": {
+        "frontExamManage.ExamPaper": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -14842,7 +14842,7 @@ const docTemplate = `{
                 }
             }
         },
-        "examManage.PaperQuestionMerge": {
+        "frontExamManage.PaperQuestionMerge": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -14874,7 +14874,7 @@ const docTemplate = `{
                 }
             }
         },
-        "examManage.PaperTemplate": {
+        "frontExamManage.PaperTemplate": {
             "type": "object",
             "properties": {
                 "course_id": {
@@ -14897,7 +14897,7 @@ const docTemplate = `{
                 "paper_template_items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/examManage.PaperTemplateItem"
+                        "$ref": "#/definitions/frontExamManage.PaperTemplateItem"
                     }
                 },
                 "updatedAt": {
@@ -14909,7 +14909,7 @@ const docTemplate = `{
                 }
             }
         },
-        "examManage.PaperTemplateItem": {
+        "frontExamManage.PaperTemplateItem": {
             "type": "object",
             "properties": {
                 "chapter": {
@@ -16807,7 +16807,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8888",
-	BasePath:         "/api/v1",
+	BasePath:         "/api/Backstage",
 	Schemes:          []string{},
 	Title:            "Swagger Example API",
 	Description:      "This is a sample server celler server.",

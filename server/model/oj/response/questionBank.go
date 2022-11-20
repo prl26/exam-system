@@ -60,6 +60,5 @@ func (ApiOption) TableName() string {
 
 type ApiMultipleChoice struct {
 	Base
-	MostOptions *int        `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
-	Options     []ApiOption `json:"options" gorm:"foreignKey:MultipleChoiceId"`
+	MostOptions *int `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
 }

@@ -9,3 +9,6 @@ type ExamPlanSearch struct {
 	teachplan.ExamPlan
 	request.PageInfo
 }
+type ExamPlan struct {
+	PlanId uint `json:"planId" form:"planId"`
+}
