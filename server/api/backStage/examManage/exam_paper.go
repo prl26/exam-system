@@ -36,6 +36,9 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	_ = c.ShouldBindJSON(&examPaper)
 	numOfPapers := c.Query("numOfPapers")
 	n, _ := strconv.Atoi(numOfPapers)
+	if n == 0 {
+		response.FailWithMessage("试卷分数不能为0", c)
+	}
 	templateItems, err := examPaperService.GetTemplate(examPaper)
 	if err != nil {
 		response.FailWithMessage("查询试卷模板失败", c)

@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -92,7 +93,11 @@ func (paperTemplateItemApi *PaperTemplateItemApi) UpdatePaperTemplateItem(c *gin
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		if bool := utils.Check(paperTemplateItem[0].TemplateId); bool == false {
+			response.FailWithMessage("更新成功,但试卷配置出错,总分需100分,是否继续保存", c)
+		} else {
+			response.OkWithMessage("更新成功", c)
+		}
 	}
 }
 
