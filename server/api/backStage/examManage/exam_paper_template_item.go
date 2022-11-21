@@ -86,7 +86,7 @@ func (paperTemplateItemApi *PaperTemplateItemApi) DeletePaperTemplateItemByIds(c
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /paperTemplateItem/updatePaperTemplateItem [put]
 func (paperTemplateItemApi *PaperTemplateItemApi) UpdatePaperTemplateItem(c *gin.Context) {
-	var paperTemplateItem examManage.PaperTemplateItem
+	var paperTemplateItem []examManage.PaperTemplateItem
 	_ = c.ShouldBindJSON(&paperTemplateItem)
 	if err := paperTemplateItemService.UpdatePaperTemplateItem(paperTemplateItem); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))

@@ -8,6 +8,8 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/questionBank"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type PaperTemplateItemService struct {
@@ -36,8 +38,17 @@ func (paperTemplateItemService *PaperTemplateItemService) DeletePaperTemplateIte
 
 // UpdatePaperTemplateItem 更新PaperTemplateItem记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (paperTemplateItemService *PaperTemplateItemService) UpdatePaperTemplateItem(paperTemplateItem examManage.PaperTemplateItem) (err error) {
-	err = global.GVA_DB.Updates(&paperTemplateItem).Error
+func (paperTemplateItemService *PaperTemplateItemService) UpdatePaperTemplateItem(paperTemplateItem []examManage.PaperTemplateItem) (err error) {
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		err = tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "id"}},
+			UpdateAll: true,
+		}).Create(&paperTemplateItem).Error
+		if err != nil {
+			return err
+		}
+		return err
+	})
 	return err
 }
 
@@ -195,6 +206,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestio
 }
 
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
+	fmt.Println("jinru")
 	for _, v := range info {
 		if *v.QuestionType == questionType.MultipleChoice {
 			go func() {

@@ -1,6 +1,7 @@
 package teachplan
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -28,6 +29,7 @@ var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanServ
 func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplan.ExamPlan
 	_ = c.ShouldBindJSON(&examPlan)
+	fmt.Println(examPlan.Time)
 	if err := examPlanService.CreateExamPlan(examPlan); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)

@@ -47,7 +47,7 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 			} else {
 				if err := PaperTemplateItemService.SetPaperQuestion(templateItems, id); err != nil {
 					global.GVA_LOG.Error("创建失败!", zap.Error(err))
-					response.FailWithMessage("创建试卷失败", c)
+					response.FailWithMessage("创建试卷详情内容失败", c)
 				} else {
 					response.OkWithMessage("创建成功", c)
 				}
