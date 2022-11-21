@@ -91,7 +91,8 @@ func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplateByIds(c *gin.Contex
 func (PapertemplateApi *PaperTemplateApi) UpdatePaperTemplate(c *gin.Context) {
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate); err != nil {
+	userId := utils.GetUserID(c)
+	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate, int(userId)); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
