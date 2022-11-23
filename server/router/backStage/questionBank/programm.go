@@ -21,6 +21,7 @@ func (*ProgramRouter) InitProgram(Router *gin.RouterGroup) {
 	var programApi = v1.ApiGroupApp.BackStage.QuestionBankApiGroup.ProgramApi
 	programRouter := Router.Group("program").Use(middleware.OperationRecord())
 	{
+		programRouter.POST("create", programApi.Create)
 		programRouter.PUT("editCase", programApi.EditProgramCases)
 		programRouter.PUT("editDetail", programApi.EditProgramDetail)
 		programRouter.DELETE("deleteCase", programApi.DeleteProgramCases)

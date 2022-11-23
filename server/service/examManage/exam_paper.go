@@ -286,7 +286,7 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 
 func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
-		if *v.QuestionType == questionType.MultipleChoice {
+		if *v.QuestionType == questionType.SINGLE_CHOICE {
 			go func() {
 				err = examPaperService.SetPaperChoiceQuestion(v, Id)
 				if err != nil {

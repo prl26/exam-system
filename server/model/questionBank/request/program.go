@@ -15,6 +15,12 @@ import (
 
  **/
 
+type ProgramCreate struct {
+	questionBank.Programm
+	LanguageSupports []*LanguageSupport `json:"languageSupports"`
+	LessonSupports   []*LessonSupport   `json:"LessonSupportSupports"`
+}
+
 type ProgramFindList struct {
 	questionBank.Programm
 	request.PageInfo
@@ -46,8 +52,7 @@ type ProgramCaseEdit struct {
 	Cases []questionBank.ProgrammCase `json:"cases"`
 }
 
-type LanguageSupportAdd struct {
-	ProgramId       uint   `json:"programId"`
+type LanguageSupport struct {
 	LanguageId      int    `json:"languageId"`
 	DefaultCode     string `json:"defaultCode" form:"defaultCode" gorm:"column:default_code;comment:;"`
 	ReferenceAnswer string `json:"referenceAnswer" form:"referenceAnswer" gorm:"column:reference_answer;comment:;"`
@@ -58,6 +63,10 @@ type LanguageSupportAdd struct {
 		Output string `json:"output" form:"output" gorm:"column:output;comment:;"`
 		questionBank.ProgrammLimit
 	}
+}
+type LanguageSupportAdd struct {
+	ProgramId uint `json:"programId"`
+	LanguageSupport
 }
 
 type LanguageSupportEdit struct {

@@ -30,6 +30,30 @@ type ProgramApi struct {
 
 var programmService = service.ServiceGroupApp.QuestionBankServiceGroup.ProgrammService
 
+// Create 创建编程题
+func (p *ProgramApi) Create(c *gin.Context) {
+	var req questionBankReq.ProgramCreate
+	_ = c.ShouldBindQuery(&req)
+	verify := utils.Rules{
+		"ProblemType": {utils.NotEmpty()},
+		"CanPractice": {utils.NotEmpty()},
+		"CanExam":     {utils.NotEmpty()},
+		"Title":       {utils.NotEmpty()},
+		"Describe":    {utils.NotEmpty()},
+	}
+	if err := utils.Verify(req, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := programmService.CreateProgram(req.Programm, req.LessonSupports, req.LanguageSupports); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithMessage("创建成功", c)
+		return
+	}
+}
+
 //FindDetail  获取编程题的详细 信息 需要参数 programmId
 func (p *ProgramApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind

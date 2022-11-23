@@ -193,3 +193,62 @@ func (p *ProgrammService) FindList(info questionBankReq.ProgramFindList) (list [
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
 	return list, total, err
 }
+
+func (p *ProgrammService) CreateProgram(program questionBank.Programm, chapterSupport []*questionBankReq.LessonSupport, languageSupports []*questionBankReq.LanguageSupport) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(program).Error; err != nil {
+			return err
+		}
+		if len(chapterSupport) != 0 {
+			courseSupport := buildCourseSupport(chapterSupport, program.ID, questionType.PROGRAM)
+			if err := tx.Create(&courseSupport).Error; err != nil {
+				return err
+			}
+		}
+		if len(languageSupports) != 0 {
+			var languages []*questionBank.ProgrammLanguageMerge
+			var programmCases []*questionBank.ProgrammCase
+			for _, req := range languageSupports {
+				for i := 0; i < len(req.Cases); i++ {
+					programmCases[i].ProgrammId = program.ID
+					programmCases[i].LanguageId = req.LanguageId
+					programmCases[i].ProgrammLimit = req.Cases[i].ProgrammLimit
+					programmCases[i].Name = req.Cases[i].Name
+					programmCases[i].Score = req.Cases[i].Score
+					programmCases[i].Input = req.Cases[i].Input
+					programmCases[i].Output = req.Cases[i].Output
+					programmCases = append(programmCases, &questionBank.ProgrammCase{
+						ProgrammId:    program.ID,
+						LanguageId:    req.LanguageId,
+						ProgrammLimit: req.Cases[i].ProgrammLimit,
+						Name:          req.Cases[i].Name,
+						Score:         req.Cases[i].Score,
+						Input:         req.Cases[i].Input,
+						Output:        req.Cases[i].Output,
+					})
+				}
+
+				language := questionBank.ProgrammLanguageMerge{}
+				language.LanguageId = req.LanguageId
+				language.ProgrammId = program.ID
+				language.DefaultCode = req.DefaultCode
+				language.ReferenceAnswer = req.ReferenceAnswer
+				languages = append(languages, &language)
+				if len(programmCases) != 0 {
+					if err := tx.Create(programmCases).Error; err != nil {
+						return fmt.Errorf("创建编程用例失败")
+					}
+				}
+				return nil
+			}
+			if err := global.GVA_DB.Create(&languages).Error; err != nil {
+				return err
+			}
+			if err := global.GVA_DB.Create(&programmCases).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
+}
