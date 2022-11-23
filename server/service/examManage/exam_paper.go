@@ -239,7 +239,6 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 	} else {
 		if len(list) > 0 {
 			for j := 0; j < *num; j++ {
-				fmt.Println(j)
 				questionMerge := examManage.PaperQuestionMerge{
 					GVA_MODEL:    global.GVA_MODEL{},
 					PaperId:      &Id,
@@ -301,10 +300,12 @@ func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.Pap
 				}
 			}()
 		} else if *v.QuestionType == questionType.SUPPLY_BLANK {
-			err = examPaperService.SetPaperBlankQuestion(v, Id)
-			if err != nil {
-				return
-			}
+			go func() {
+				err = examPaperService.SetPaperBlankQuestion(v, Id)
+				if err != nil {
+					return
+				}
+			}()
 		} else if *v.QuestionType == questionType.PROGRAM {
 			go func() {
 				err = examPaperService.SetPaperProgramQuestion(v, Id)
