@@ -208,6 +208,7 @@ func (examPaperService *ExamPaperService) SetPaperChoiceQuestion(info examManage
 		}
 		return nil
 	})
+	wg.Done()
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
@@ -237,6 +238,7 @@ func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.
 		}
 		return nil
 	})
+	wg.Done()
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
@@ -266,6 +268,7 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 		}
 		return nil
 	})
+	wg.Done()
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
@@ -295,39 +298,29 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 		}
 		return nil
 	})
+	wg.Done()
 	return
 }
 
 func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
 		if *v.QuestionType == questionType.MultipleChoice {
-			err = examPaperService.SetPaperChoiceQuestion(v, Id)
-			if err != nil {
-				return
-			}
-
+			wg.Add(1)
+			go examPaperService.SetPaperChoiceQuestion(v, Id)
 		} else if *v.QuestionType == questionType.JUDGE {
-
-			err = examPaperService.SetPaperJudgeQuestion(v, Id)
-			if err != nil {
-				return
-			}
+			wg.Add(1)
+			go examPaperService.SetPaperJudgeQuestion(v, Id)
 
 		} else if *v.QuestionType == questionType.SUPPLY_BLANK {
-
-			err = examPaperService.SetPaperBlankQuestion(v, Id)
-			if err != nil {
-				return
-			}
+			wg.Add(1)
+			go examPaperService.SetPaperBlankQuestion(v, Id)
 
 		} else if *v.QuestionType == questionType.PROGRAM {
-
-			err = examPaperService.SetPaperProgramQuestion(v, Id)
-			if err != nil {
-				return
-			}
+			wg.Add(1)
+			go examPaperService.SetPaperProgramQuestion(v, Id)
 
 		}
 	}
+	wg.Wait()
 	return
 }
