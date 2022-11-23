@@ -128,10 +128,9 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	return
 }
 
-func (examService *ExamService) GetExamScore(examComing request.ExamComing) (uint, error) {
-	var sum uint
-	err := global.GVA_DB.Table("tea_score").Select("exam_score").Where("plan_id= ? and student_id = ?", examComing.PlanId, examComing.StudentId).Scan(&sum).Error
-	return sum, err
+func (examService *ExamService) GetExamScore(studentId uint) (studentScore []teachplan.Score, err error) {
+	err = global.GVA_DB.Where("student_id = ?", studentId).Find(&studentScore).Error
+	return
 }
 func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
 	excel := excelize.NewFile()

@@ -36,25 +36,16 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	_ = c.ShouldBindJSON(&examPaper)
 	numOfPapers := c.Query("numOfPapers")
 	n, _ := strconv.Atoi(numOfPapers)
-	templateItems, err := examPaperService.GetTemplate(examPaper)
-	if err != nil {
-		response.FailWithMessage("查询试卷模板失败", c)
-	} else {
-		for i := 0; i < n; i++ {
-			if id, err := examPaperService.CreateExamPaper(examPaper); err != nil {
-				global.GVA_LOG.Error("创建失败!", zap.Error(err))
-				response.FailWithMessage("试卷创建失败", c)
-			} else {
-				if err := PaperTemplateItemService.SetPaperQuestion(templateItems, id); err != nil {
-					global.GVA_LOG.Error("创建失败!", zap.Error(err))
-					response.FailWithMessage("创建试卷失败", c)
-				} else {
-					response.OkWithMessage("创建成功", c)
-				}
-			}
+	if n == 0 {
+		response.FailWithMessage("试卷份数不能为0", c)
+	}
+	for i := 0; i < n; i++ {
+		if err := examPaperService.CreateExamPaper(examPaper, n); err != nil {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("试卷创建失败", c)
 		}
 	}
-	response.OkWithData("创建成功", c)
+	response.OkWithMessage("创建成功", c)
 }
 
 // DeleteExamPaper 删除ExamPaper
@@ -109,10 +100,20 @@ func (examPaperApi *ExamPaperApi) DeleteExamPaperByIds(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) UpdateExamPaper(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindJSON(&examPaper)
-	if err := examPaperService.UpdateExamPaper(examPaper); err != nil {
+	if bool, err := examPaperService.UpdateExamPaper(examPaper); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
+		if bool == true {
+			err = examPaperService.DeletePaperMerge(examPaper)
+			if err != nil {
+				response.FailWithMessage("删除失败", c)
+			}
+			err = examPaperService.CreateExamPaper(examPaper, 1)
+			if err != nil {
+				response.FailWithMessage("更新试卷失败", c)
+			}
+		}
 		response.OkWithMessage("更新成功", c)
 	}
 }

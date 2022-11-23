@@ -5,6 +5,8 @@ import (
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type PaperTemplateService struct {
@@ -37,13 +39,20 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids r
 
 // UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
-	err = global.GVA_DB.Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
-	if Papertemplate.PaperTemplateItems != nil {
-		for _, v := range Papertemplate.PaperTemplateItems {
-			err = global.GVA_DB.Where("id = ?", v.ID).Updates(&v).Error
+func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate, userId int) (err error) {
+	Papertemplate.UserId = &userId
+	paperTemplateItem := Papertemplate.PaperTemplateItems
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
+		err = tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "id"}},
+			UpdateAll: true,
+		}).Create(&paperTemplateItem).Error
+		if err != nil {
+			return err
 		}
-	}
+		return nil
+	})
 	return err
 }
 

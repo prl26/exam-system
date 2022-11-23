@@ -1,6 +1,7 @@
 package exam
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	request2 "github.com/prl26/exam-system/server/model/common/request"
@@ -11,11 +12,14 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"sync"
+	"time"
 )
 
 type ExamApi struct {
 }
 
+var wg sync.WaitGroup
 var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的教学计划
@@ -58,17 +62,20 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	} else {
 		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
 		go func() {
-			//time.Sleep(time.Minute * 15)
-			utils.ExecPapers(ExamCommit)
+			fmt.Println("start")
+			time.AfterFunc(time.Second*5, func() {
+				wg.Add(1)
+				utils.ExecPapers(ExamCommit)
+				defer wg.Done()
+			})
+			wg.Wait()
 		}()
 	}
 }
 
 func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
-	var examComing request.ExamComing
-	_ = c.ShouldBindQuery(&examComing)
-	examComing.StudentId = utils.GetStudentId(c)
-	if score, err := examService.GetExamScore(examComing); err != nil {
+	StudentId := utils.GetStudentId(c)
+	if score, err := examService.GetExamScore(StudentId); err != nil {
 		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
 		response.FailWithMessage("查询成绩失败", c)
 	} else {

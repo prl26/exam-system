@@ -30,16 +30,12 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
 	uid := int(utils.GetUserID(c))
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	if bool := utils.Check(Papertemplate); bool == false {
-		response.FailWithMessage("试卷配置出错,总分需100分", c)
+	Papertemplate.UserId = &uid
+	if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("创建失败", c)
 	} else {
-		Papertemplate.UserId = &uid
-		if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
-			global.GVA_LOG.Error("创建失败!", zap.Error(err))
-			response.FailWithMessage("创建失败", c)
-		} else {
-			response.OkWithMessage("创建成功", c)
-		}
+		response.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -95,7 +91,8 @@ func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplateByIds(c *gin.Contex
 func (PapertemplateApi *PaperTemplateApi) UpdatePaperTemplate(c *gin.Context) {
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate); err != nil {
+	userId := utils.GetUserID(c)
+	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate, int(userId)); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
