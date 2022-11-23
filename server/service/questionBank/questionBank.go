@@ -34,7 +34,7 @@ func (c *QuestionBankService) FindQuestions(chapterId uint) *ojResp.QuestionBank
 	global.GVA_DB.Model(&c.judge).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.judge.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.JUDGE, true).Find(&result.Judges)
 	global.GVA_DB.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.PROGRAM, true).Preload("LanguageSupports").Find(&result.Programms)
 	global.GVA_DB.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.SUPPLY_BLANK, true).Find(&result.SupplyBlanks)
-	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MultipleChoice, true).Find(&result.MultipleChoices)
+	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.SINGLE_CHOICE, true).Find(&result.MultipleChoices)
 	return &result
 }
 func (c QuestionBankService) FindJudges(chapterId uint) (result []*ojResp.ApiJudge) {
@@ -52,8 +52,14 @@ func (c QuestionBankService) FindSupplyBlank(chapterId uint) (result []*ojResp.A
 	return
 }
 
-func (c QuestionBankService) FindMultipleChoices(chapterId uint) (result []*ojResp.ApiJudge) {
-	global.GVA_DB.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("knowledge_id = ? and question_type = ? and can_practice=?", chapterId, questionType.MultipleChoice, true).Find(&result)
+func (c QuestionBankService) FindChoice(chapterId uint, isMultiple bool) (result []*ojResp.ApiJudge) {
+	db := global.GVA_DB.Model(&c.multipleChoice).Joins("join " + c.chapterMerge.TableName() + " on " + c.chapterMerge.TableName() + ".question_id=" + c.multipleChoice.TableName() + ".id")
+	if isMultiple {
+		db.Where("most_options>1")
+	} else {
+		db.Where("most_options=1")
+	}
+	db.Where("knowledge_id = ? and question_type = ? and can_practice=? ", chapterId, questionType.SINGLE_CHOICE, true).Find(&result)
 	return
 }
 
@@ -79,15 +85,15 @@ func (c *QuestionBankService) AddCourseSupport(merges []questionBank.ChapterMerg
 	return global.GVA_DB.Create(&merges).Error
 }
 
-func (c *QuestionBankService) FindQuestionSupport(req questionBankReq.QuestionsSupportFind) (list []questionBank.MultipleChoice, total int64, err error) {
+func (c *QuestionBankService) FindQuestionSupport(req questionBankReq.QuestionsSupportFind) (list []questionBankResp.QuestionSupport, total int64, err error) {
 	limit := req.PageSize
 	offset := req.PageSize * (req.Page - 1)
 	db := global.GVA_DB
 	switch req.QuestionType {
 	case questionType.PROGRAM:
 		db = db.Model(&c.program).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.program.TableName()+".id").Where("chapter_id = ? and question_type = ?", req.ChapterId, questionType.PROGRAM)
-	case questionType.MultipleChoice:
-		db = db.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ?", req.ChapterId, questionType.MultipleChoice)
+	case questionType.SINGLE_CHOICE:
+		db = db.Model(&c.multipleChoice).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.multipleChoice.TableName()+".id").Where("chapter_id = ? and question_type = ?", req.ChapterId, questionType.SINGLE_CHOICE)
 	case questionType.SUPPLY_BLANK:
 		db = db.Model(&c.supplyBlank).Joins("join "+c.chapterMerge.TableName()+" on "+c.chapterMerge.TableName()+".question_id="+c.supplyBlank.TableName()+".id").Where("chapter_id = ? and question_type = ?", req.ChapterId, questionType.SUPPLY_BLANK)
 	case questionType.JUDGE:
@@ -104,12 +110,11 @@ func (c *QuestionBankService) FindQuestionSupport(req questionBankReq.QuestionsS
 	if req.Title != "" {
 		db.Where("title Like ?", "%"+req.Title+"%")
 	}
-	var resp []questionBankResp.QuestionSupport
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&resp).Error
+	err = db.Limit(limit).Offset(offset).Find(&list).Error
 	return
 }
 

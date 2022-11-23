@@ -92,7 +92,7 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 		return
 	}
 	if resp.MultipleChoice.ID != 0 {
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.MultipleChoice); err != nil {
+		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.SINGLE_CHOICE); err != nil {
 			global.GVA_LOG.Error("查询失败!", zap.Error(err))
 			response.FailWithMessage(err.Error(), c)
 			return
@@ -104,11 +104,28 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 	}
 }
 
-// FindList  分页查找选择题
-func (choiceApi *MultipleChoiceApi) FindList(c *gin.Context) {
+// FindSingleChoice  分页查找单选题
+func (choiceApi *MultipleChoiceApi) FindSingleChoice(c *gin.Context) {
 	var pageInfo questionBankReq.MultipleChoiceFindList
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := multipleChoiceService.FindList(pageInfo); err != nil {
+	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// FindMultipleChoice 分页查找多选题
+func (choiceApi *MultipleChoiceApi) FindMultipleChoice(c *gin.Context) {
+	var pageInfo questionBankReq.MultipleChoiceFindList
+	_ = c.ShouldBindQuery(&pageInfo)
+	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

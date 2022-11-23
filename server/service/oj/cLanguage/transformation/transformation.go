@@ -339,7 +339,7 @@ func transformationMultipleChoice(from *gorm.DB, to *gorm.DB, knowledgeTable map
 		chapterMerge.KnowledgeId = getKnowledgeId(result.KnowledgeBh, knowledgeTable, from, to)
 		chapterMerge.ChapterId = uint(result.Stage)
 		chapterMerge.QuestionId = multipleChoice.ID
-		chapterMerge.QuestionType = questionType.MultipleChoice
+		chapterMerge.QuestionType = questionType.SINGLE_CHOICE
 		chapterMerges = append(chapterMerges, chapterMerge)
 		fmt.Printf("处理完%d个选择题了!\n", i+1)
 	}

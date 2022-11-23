@@ -18,8 +18,10 @@ func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank,
 			return err
 		}
 		courseSupport := buildCourseSupport(courseSupport, supplyBlank.ID, questionType.SUPPLY_BLANK)
-		if err := tx.Create(&courseSupport).Error; err != nil {
-			return err
+		if len(courseSupport) == 0 {
+			if err := tx.Create(&courseSupport).Error; err != nil {
+				return err
+			}
 		}
 		return nil
 	})

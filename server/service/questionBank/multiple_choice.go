@@ -18,7 +18,7 @@ func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoi
 			return err
 		}
 		if len(chapterSupport) != 0 {
-			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.MultipleChoice)
+			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.SINGLE_CHOICE)
 			if err := tx.Create(&courseSupport).Error; err != nil {
 				return err
 			}
@@ -35,7 +35,7 @@ func (a *MultipleChoiceService) Delete(ids request.IdsReq) error {
 		if err := tx.Delete(&[]questionBank.Options{}, "multiple_choice_id in", ids.Ids).Error; err != nil {
 			return err
 		}
-		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type=?", ids, questionType.MultipleChoice).Error; err != nil {
+		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type=?", ids, questionType.SINGLE_CHOICE).Error; err != nil {
 			return err
 		}
 		return nil
@@ -58,12 +58,16 @@ func (a *MultipleChoiceService) FindDetail(questionBankMultipleChoice *questionB
 	return global.GVA_DB.Where("id = ?", id).Preload("Options").First(questionBankMultipleChoice).Error
 }
 
-func (a *MultipleChoiceService) FindList(info questionBankReq.MultipleChoiceFindList) (list []questionBank.MultipleChoiceView, total int64, err error) {
+func (a *MultipleChoiceService) FindList(info questionBankReq.MultipleChoiceFindList, isMultiple bool) (list []questionBank.MultipleChoiceView, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
-
+	if isMultiple {
+		db = db.Where("most_options > 1")
+	} else {
+		db = db.Where("most_options = 1")
+	}
 	if info.ProblemType != 0 {
 		db = db.Where("problem_type = ?", info.ProblemType)
 	}

@@ -196,7 +196,7 @@ func (paperTemplateItemService *PaperTemplateItemService) SetPaperProgramQuestio
 
 func (paperTemplateItemService *PaperTemplateItemService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
-		if *v.QuestionType == questionType.MultipleChoice {
+		if *v.QuestionType == questionType.SINGLE_CHOICE {
 			go func() {
 				err = paperTemplateItemService.SetPaperChoiceQuestion(v, Id)
 				if err != nil {

@@ -20,8 +20,10 @@ func (service *JudgeService) Create(judge *questionBank.Judge, lessonSupports []
 			return err
 		}
 		courseSupport := buildCourseSupport(lessonSupports, judge.ID, questionType.JUDGE)
-		if err := tx.Create(&courseSupport).Error; err != nil {
-			return err
+		if len(courseSupport) == 0 {
+			if err := tx.Create(&courseSupport).Error; err != nil {
+				return err
+			}
 		}
 		return nil
 	})

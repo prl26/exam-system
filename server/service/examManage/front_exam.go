@@ -32,7 +32,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(studentPaper); i++ {
-		if *studentPaper[i].QuestionType == questionType.MultipleChoice {
+		if *studentPaper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {

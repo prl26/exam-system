@@ -66,7 +66,7 @@ func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase
 func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
-		return "", nil, err
+		return "", nil, exception.CompileError{Msg: err.Error()}
 	}
 	failedTime := time.Now().Add(FILE_FAILED_DURATION)
 	go func() {

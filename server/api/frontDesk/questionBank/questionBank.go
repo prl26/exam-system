@@ -72,13 +72,17 @@ func (q *QuestionBankApi) FindQuestionsByKnowledgeId(c *gin.Context) {
 		programms := questionBankService.FindProgramms(uint(chapterId))
 		response.OkWithData(programms, c)
 		break
-	case questionType.MultipleChoice:
-		multipleChoics := questionBankService.FindMultipleChoices(uint(chapterId))
+	case questionType.SINGLE_CHOICE:
+		multipleChoics := questionBankService.FindChoice(uint(chapterId), false)
 		response.OkWithData(multipleChoics, c)
 		break
 	case questionType.SUPPLY_BLANK:
 		supplyBlanks := questionBankService.FindSupplyBlank(uint(chapterId))
 		response.OkWithData(supplyBlanks, c)
+		break
+	case questionType.MULTIPLE_CHOICE:
+		multipleChoics := questionBankService.FindChoice(uint(chapterId), true)
+		response.OkWithData(multipleChoics, c)
 		break
 	default:
 		response.FailWithMessage("题型输入错误", c)

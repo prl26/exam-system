@@ -62,7 +62,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 	err = global.GVA_DB.Where("paper_id = ?", id).Find(&Paper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(Paper); i++ {
-		if *Paper[i].QuestionType == questionType.MultipleChoice {
+		if *Paper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", Paper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {
