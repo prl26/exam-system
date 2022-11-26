@@ -5,6 +5,8 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/utils"
+	"strconv"
 )
 
 type StudentService struct {
@@ -78,6 +80,20 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 }
 
 func (studentService *StudentService) CreateStudents(students []*basicdata.Student) error {
-	result := global.GVA_DB.Updates(&students)
-	return result.Error
+	err := global.GVA_DB.Create(&students).Error
+	return err
+}
+
+func (studentService *StudentService) QueryStudentById(id uint) basicdata.Student {
+	var student basicdata.Student
+	global.GVA_DB.Where("id = ?", id).First(&student)
+	return student
+}
+
+// ResetStudentsPassword 重置密码为学号
+func (studentService *StudentService) ResetStudentsPassword(idReq request.IdReq) error {
+	var student basicdata.Student
+	id := idReq.Id
+	resetpwd := utils.BcryptHash(strconv.Itoa(id))
+	return global.GVA_DB.Model(&student).Where("id = ?", id).Update("password", resetpwd).Error
 }

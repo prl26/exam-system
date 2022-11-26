@@ -12,6 +12,7 @@ import (
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/xuri/excelize/v2"
 	"go.uber.org/zap"
+	"log"
 	"strconv"
 )
 
@@ -158,10 +159,10 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	var studentExcel basicdataReq.StudentExcel
 	_ = c.ShouldBind(&studentExcel)
 	verify := utils.Rules{
-		"File":           {utils.NotEmpty()},
-		"CollegeId":      {utils.NotEmpty()},
-		"ProfessionalId": {utils.NotEmpty()},
-		"ClassId":        {utils.NotEmpty()},
+		"File": {utils.NotEmpty()},
+		//"CollegeId": {utils.NotEmpty()},
+		//"ProfessionalId": {utils.NotEmpty()}, 专业和学院去掉
+		"ClassId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(studentExcel, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -184,7 +185,9 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	students := make([]*basicdata.Student, 0, n)
+
+	NewStudents := make([]*basicdata.Student, 0, n)
+	//ExitStudents := make([]*basicdata.Student, 0, n)
 	rows = rows[1:]
 	for i, row := range rows {
 		length := len(rows[i])
@@ -197,24 +200,61 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 			response.FailWithMessage(fmt.Sprintf("表格格式有误!第%d行学号为非数字(%s)", i+1, row[0]), c)
 			continue
 		}
+
 		student := &basicdata.Student{}
 		student.ID = uint(id)
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]
-		if length <= 5 || row[4] == "" {
-			student.Password = utils.BcryptHash(row[0])
+		student.Password = utils.BcryptHash(row[0]) //密码默认为学号
+		//if length <= 5 || row[4] == "" {
+		//	student.Password = utils.BcryptHash(row[0])
+		//} else {
+		//	student.Password = utils.BcryptHash(row[4])
+		//}
+
+		user := studentService.QueryStudentById(student.ID)
+		if user.ID != 0 {
+			// 学生已存在，直接关联
+			multiTableService.AssociationStudent(student, studentExcel.ClassId)
 		} else {
-			student.Password = utils.BcryptHash(row[4])
+			// 学生不存在
+			NewStudents = append(NewStudents, student)
 		}
-		students = append(students, student)
 	}
-	err = studentService.CreateStudents(students)
+
+	// 学生不存在 先创建学生
+	err = studentService.CreateStudents(NewStudents)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		log.Printf(err.Error())
+	}
+	err = multiTableService.AssociationStudents(NewStudents, studentExcel.ClassId)
+
+	if err != nil {
+		response.FailWithMessage("学生导入失败", c)
 		return
 	} else {
-		response.OkWithMessage("添加成功", c)
+		response.OkWithMessage("学生导入成功", c)
 		return
+	}
+}
+
+// ResetStudentsPassword 批量重置学生密码
+// @Tags Student
+// @Summary 批量重置学生密码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.IdsReq true "批量重置学生密码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"重置密码成功"}"
+// @Router /student/deleteStudentByIds [post]
+func (studentApi *StudentApi) ResetStudentPassword(c *gin.Context) {
+	var id request.IdReq
+	_ = c.ShouldBindJSON(&id)
+	if err := studentService.ResetStudentsPassword(id); err != nil {
+		global.GVA_LOG.Error("重置密码失败!", zap.Error(err))
+		response.FailWithMessage("重置密码失败", c)
+	} else {
+		response.OkWithMessage("重置密码成功", c)
 	}
 }
