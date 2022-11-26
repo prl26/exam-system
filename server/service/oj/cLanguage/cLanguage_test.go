@@ -2,6 +2,9 @@ package cLanguage
 
 import (
 	"fmt"
+	"github.com/prl26/exam-system/server/global"
+	"os"
+
 	"github.com/prl26/exam-system/server/model/questionBank"
 	"github.com/prl26/exam-system/server/pb"
 	"google.golang.org/grpc"
@@ -140,16 +143,23 @@ func TestCLanguageService_Judge(t *testing.T) {
 }
 func NewClient() pb.ExecutorClient {
 	rpcClient, err := grpc.Dial("localhost:5051", grpc.WithInsecure())
-	if err != nil {
-		panic(err)
-		return nil
-	}
 	client := pb.NewExecutorClient(rpcClient)
+	if err != nil {
+		global.GVA_LOG.Error("无法正常连接 goJudge")
+		panic(err)
+	}
 	return client
 }
 func TestMain(m *testing.M) {
-	client := NewClient()
-	obj = &CLanguageService{client}
+	//client := NewClient()
+	//obj = &CLanguageService{
+	//	ExecutorClient:                    client,
+	//	GCC_PATH:                          "/usr/bin/gcc",
+	//	DEFAULT_COMPILE_CPU_TIME_LIMIT:    100000000000,
+	//	DEFAULT_COMPILE_MEMORY_TIME_LIMIT: 100000000000,
+	//	DEFAULT_JUDGE_CPU_TIME_LIMI:       100000000000,
+	//	DEFAULT_JUDGE_MEMORY_LIMIT:        100000000000,
+	//}
 	//var s *pb.FileID
 	//s, err := client.FileAdd(context.Background(), &pb.FileContent{
 	//	Name:    "a.c",
@@ -159,7 +169,7 @@ func TestMain(m *testing.M) {
 	//	panic(err)
 	//	return
 	//}
-	//s, err = client.FileAdd(context.Background(),&pb.FileContent{
+	//s, err = client.FileAdd(context.Background(), &pb.FileContent{
 	//	Name:    "a.c",
 	//	Content: []byte("我是bb"),
 	//})
@@ -169,7 +179,7 @@ func TestMain(m *testing.M) {
 	//	return
 	//}
 	//
-	//client.FileAdd(context.Background(),&pb.FileContent{
+	//client.FileAdd(context.Background(), &pb.FileContent{
 	//	Name:    "a.c",
 	//	Content: []byte("我是ExecutorClient"),
 	//})
@@ -177,13 +187,13 @@ func TestMain(m *testing.M) {
 	//	panic(err)
 	//	return
 	//}
-	//list, err := client.FileList(context.Background(),&emptypb.Empty{})
+	//list, err := client.FileList(context.Background(), &emptypb.Empty{})
 	//
 	//if err != nil {
 	//	panic(err)
 	//	return
 	//}
 	//log.Println(list)
-	m.Run()
-
+	exitcoe := m.Run()
+	os.Exit(exitcoe)
 }

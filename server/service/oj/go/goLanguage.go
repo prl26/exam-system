@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-type CLanguageService struct {
+type GoLanguageService struct {
 	ExecutorClient                    pb.ExecutorClient
 	GCC_PATH                          string
 	DEFAULT_COMPILE_CPU_TIME_LIMIT    uint64
@@ -26,8 +26,8 @@ type CLanguageService struct {
 const STDOUT = "stdout"
 const STDERR = "stderr"
 
-const DEFAULT_CODE_NAME string = "a.c"
-const DEFAULT_FILE_NAME string = "a"
+const DEFAULT_CODE_NAME string = "g.c"
+const DEFAULT_FILE_NAME string = "g"
 
 var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
@@ -36,7 +36,7 @@ var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
 const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 
-func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *GoLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return nil, exception.CompileError{Msg: err.Error()}
@@ -53,7 +53,7 @@ func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase
 	return c.Judge(fileID, cases)
 }
 
-func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
+func (c *GoLanguageService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return "", nil, err
@@ -71,7 +71,7 @@ func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
 	return fileID, &failedTime, nil
 }
 
-func (c *CLanguageService) compile(code string) (string, error) {
+func (c *GoLanguageService) compile(code string) (string, error) {
 	input := &pb.Request_File{
 		File: &pb.Request_File_Memory{
 			Memory: &pb.Request_MemoryFile{
@@ -141,7 +141,7 @@ func (c *CLanguageService) compile(code string) (string, error) {
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME], nil
 }
 
-func (c *CLanguageService) Delete(id string) error {
+func (c *GoLanguageService) Delete(id string) error {
 	_, err := c.ExecutorClient.FileDelete(context.Background(), &pb.FileID{FileID: id})
 	if err != nil {
 		return err
@@ -149,7 +149,7 @@ func (c *CLanguageService) Delete(id string) error {
 	return nil
 }
 
-func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *GoLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
@@ -184,7 +184,7 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 	return submits, nil
 }
 
-func (c *CLanguageService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
+func (c *GoLanguageService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := c.makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{
@@ -203,7 +203,7 @@ func (c *CLanguageService) Execute(fileId string, input string, programmLimit *q
 	return out, executeSituation, nil
 }
 
-func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLimit) *pb.Request_CmdType {
+func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
@@ -254,7 +254,7 @@ func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit *q
 	return cmd
 }
 
-func (c *CLanguageService) cmdLimit(programmLimit *questionBank.ProgrammLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
+func (c *GoLanguageService) cmdLimit(programmLimit *questionBank.ProgrammLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
 	if programmLimit.CpuLimit != nil {
 		cmd.CpuTimeLimit = uint64(*programmLimit.CpuLimit)
 	} else {

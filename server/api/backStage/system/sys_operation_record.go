@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -24,6 +25,7 @@ type OperationRecordApi struct{}
 func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
+	fmt.Println(sysOperationRecord.CreatedAt)
 	if err := operationRecordService.CreateSysOperationRecord(sysOperationRecord); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
