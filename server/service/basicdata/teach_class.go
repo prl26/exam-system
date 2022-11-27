@@ -20,6 +20,8 @@ func (teachClassService *TeachClassService) CreateTeachClass(teachClass basicdat
 // DeleteTeachClass 删除TeachClass记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teachClassService *TeachClassService) DeleteTeachClass(teachClass basicdata.TeachClass) (err error) {
+	// 删除教学班级之前先删除 该教学计划班级 与学生的引用关系
+	global.GVA_DB.Model(&teachClass).Association("Student").Clear()
 	err = global.GVA_DB.Delete(&teachClass).Error
 	return err
 }
@@ -27,7 +29,13 @@ func (teachClassService *TeachClassService) DeleteTeachClass(teachClass basicdat
 // DeleteTeachClassByIds 批量删除TeachClass记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teachClassService *TeachClassService) DeleteTeachClassByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]basicdata.TeachClass{}, "id in ?", ids.Ids).Error
+	var teachClass basicdata.TeachClass
+	Ids := ids.Ids
+	for i := 0; i < len(Ids); i++ {
+		teachClass.ID = uint(Ids[i])
+		global.GVA_DB.Model(&teachClass).Association("Student").Clear()
+	}
+	err = global.GVA_DB.Delete(&[]basicdata.TeachClass{}, "id in ?", Ids).Error
 	return err
 }
 

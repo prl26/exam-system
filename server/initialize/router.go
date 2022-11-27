@@ -83,7 +83,7 @@ func Routers() *gin.Engine {
 			basicdataRouter.InitCollegeRouter(PrivateGroup)
 			basicdataRouter.InitProfessionalRouter(PrivateGroup)
 			basicdataRouter.InitTeachClassRouter(PrivateGroup)
-			//basicdataRouter.InitTeachClassStudentRouter(PrivateGroup)    // 测试
+			basicdataRouter.InitTeachClassStudentRouter(PrivateGroup) // 测试
 			basicdataRouter.InitTermRouter(PrivateGroup)
 
 			lessondataRouter.InitVideoResourcesRouter(PrivateGroup)
@@ -116,12 +116,11 @@ func Routers() *gin.Engine {
 			questionBankRouter.InitQuestionBankSupplyBlankRouter(questionGroup)
 			questionBankRouter.InitQuestionBankMultipleChoiceRouter(questionGroup)
 			questionBankRouter.InitQuestionBankJudgeRouter(questionGroup)
-			questionBankRouter.InitPublicProgram(questionGroup)
 		}
-		TestGroup := Router.Group("") // 此处测试接口不需要分配权限
-		{
-			basicdataRouter.InitTeachClassStudentRouter(TestGroup)
-		}
+		//TestGroup := Router.Group("") // 此处测试接口不需要分配权限
+		//{
+		//	basicdataRouter.InitTeachClassStudentRouter(TestGroup)
+		//}
 
 	}
 

@@ -33,6 +33,26 @@ func (multiTableService *MultiTableService) InitTeachClassStudents(info request.
 	return err
 }
 
+func (multiTableService *MultiTableService) AssociationStudents(students []*basicdata.Student, teachClassID uint) error {
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = teachClassID
+
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(students)
+
+	return err
+}
+
+func (multiTableService *MultiTableService) AssociationStudent(student *basicdata.Student, teachClassID uint) error {
+
+	var teachClass basicdata.TeachClass
+	teachClass.ID = teachClassID
+
+	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(student)
+
+	return err
+}
+
 // DeleteTeachClassStudents 在教学班中 移除学生
 func (multiTableService *MultiTableService) DeleteTeachClassStudents(info request.StuTeachClass) error {
 
