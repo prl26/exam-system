@@ -3,7 +3,7 @@ package multipleChoice
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	"strconv"
 	"strings"
 )
@@ -28,8 +28,8 @@ func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []string) (b
 	return c.check(question, answer), nil
 }
 
-func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.MultipleChoice, error) {
-	var question questionBank.MultipleChoice
+func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.MultipleChoice, error) {
+	var question po.MultipleChoice
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {
 		return nil, fmt.Errorf("找不到该题目")
@@ -37,7 +37,7 @@ func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (
 	return &question, nil
 }
 
-func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, answer []string) bool {
+func (c *MultipleChoiceService) check(question *po.MultipleChoice, answer []string) bool {
 	n := len(answer)
 	if n != question.MostOptions {
 		return false
@@ -50,7 +50,7 @@ func (c *MultipleChoiceService) check(question *questionBank.MultipleChoice, ans
 	return checkAnswer == question.Answer
 }
 
-func (c *MultipleChoiceService) GetAnswer(question *questionBank.MultipleChoice) []int {
+func (c *MultipleChoiceService) GetAnswer(question *po.MultipleChoice) []int {
 	answers := strings.Split(question.Answer, ",")
 	result := make([]int, len(answers))
 	for i := 0; i < len(answers); i++ {

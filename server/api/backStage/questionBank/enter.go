@@ -1,10 +1,9 @@
 package questionBank
 
 type ApiGroup struct {
-	MultipleChoiceApi
-	JudgeApi
-	SupplyBlankApi
+	PublicProgramApi
 	ProgramApi
-	CommonApi
-	OjApi
+	SupplyBlankApi
+	JudgeApi
+	MultipleChoiceApi
 }

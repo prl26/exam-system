@@ -1,14 +1,15 @@
 package questionBank
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	"github.com/prl26/exam-system/server/model/questionBank"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/response"
+
+	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -32,14 +33,14 @@ func (api *JudgeApi) Create(c *gin.Context) {
 		"IsRight":     {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.CheckHandle(c, err)
 		return
 	}
-	if err := judgeService.Create(&req.Judge, req.LessonSupports); err != nil {
+	if err := judgeService.Create(&req.Judge); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("创建失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("创建成功", c)
+		questionBankResp.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -49,15 +50,15 @@ func (api *JudgeApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&IDS)
 	if err := judgeService.Delete(IDS); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("批量删除失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("批量删除成功", c)
+		questionBankResp.OkWithMessage("批量删除成功", c)
 	}
 }
 
 // Update 更新判断题
 func (api *JudgeApi) Update(c *gin.Context) {
-	var req questionBank.Judge
+	var req questionBankPo.Judge
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
@@ -68,9 +69,9 @@ func (api *JudgeApi) Update(c *gin.Context) {
 	}
 	if err := judgeService.Update(req); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("更新失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("更新成功", c)
+		questionBankResp.OkWithMessage("更新成功", c)
 	}
 }
 
@@ -78,11 +79,11 @@ func (api *JudgeApi) Update(c *gin.Context) {
 func (api *JudgeApi) FindJudgeList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankJudgeSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := judgeService.FindJudgeList(pageInfo); err != nil {
+	if list, total, err := judgeService.FindJudgeList(pageInfo.JudgeSearchCriteria, pageInfo.PageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 	} else {
-		response.OkWithDetailed(response.PageResult{
+		questionBankResp.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
@@ -99,24 +100,15 @@ func (api *JudgeApi) FindDetail(c *gin.Context) {
 		"Id": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.CheckHandle(c, err)
 		return
 	}
-	resp := questionBankResp.JudgeDetail{}
-	if err := judgeService.FindDetail(&resp.Judge, req.Id); err != nil {
+
+	if judge, err := judgeService.FindDetail(req.Id); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 		return
-	}
-	if resp.Judge.ID != 0 {
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, resp.Judge.ID, questionType.JUDGE); err != nil {
-			global.GVA_LOG.Error("获取语言支持失败", zap.Error(err))
-			response.FailWithMessage("获取语言支持失败", c)
-			return
-		}
-		response.OkWithData(resp, c)
 	} else {
-		response.FailWithMessage("找不到该编程题", c)
-		return
+		questionBankResp.OkWithDetailed(judge, "获取成功", c)
 	}
 }

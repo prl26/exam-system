@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/initialize"
 	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	"go.uber.org/zap"
 	"math/rand"
 )
@@ -40,9 +41,9 @@ func buildBasicQuestion(chapterId *int, question *questionBank.BasicModel) {
 }
 
 func fakeSupplyBlankQuestion(chapterId *int, n int) {
-	questions := make([]*questionBank.SupplyBlank, n)
+	questions := make([]*po.SupplyBlank, n)
 	for i := 0; i < len(questions); i++ {
-		questions[i] = &questionBank.SupplyBlank{}
+		questions[i] = &po.SupplyBlank{}
 		questions[i].IsOrder = getPoint(RandInt(0, 1))
 		questions[i].Num = getPoint(RandInt(1, 3))
 		buildBasicQuestion(chapterId, &questions[i].BasicModel)
@@ -51,19 +52,19 @@ func fakeSupplyBlankQuestion(chapterId *int, n int) {
 }
 
 func fakeJudgeQuestion(chapterId *int, n int) {
-	questions := make([]*questionBank.Judge, n)
+	questions := make([]*po.Judge, n)
 	for i := 0; i < n; i++ {
-		questions[i] = &questionBank.Judge{}
+		questions[i] = &po.Judge{}
 		questions[i].IsRight = getPoint(RandInt(0, 1))
 		buildBasicQuestion(chapterId, &questions[i].BasicModel)
 	}
 	global.GVA_DB.Create(questions)
 }
 func fakeChoiceQuestion(chapterId *int, n int) {
-	questions := make([]*questionBank.MultipleChoice, n)
+	questions := make([]*po.MultipleChoice, n)
 	options := make([]*questionBank.Options, 0, 4*n)
 	for i := 0; i < n; i++ {
-		questions[i] = &questionBank.MultipleChoice{}
+		questions[i] = &po.MultipleChoice{}
 		randInt := RandInt(10, 21)
 		questions[i].Title = randChineseStr(int(randInt) - 7)
 		questions[i].Describe = randChineseStr(randInt) + "?"

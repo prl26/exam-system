@@ -17,6 +17,6 @@ type ApiGroup struct {
 	OjApi
 }
 
-var(
-  questionBankService = service.ServiceGroupApp.QuestionBankServiceGroup.QuestionBankService
+var (
+	questionBankService = service.ServiceGroupApp.QuestionBankServiceGroup.QuestionBankService
 )

@@ -1,6 +1,8 @@
 package response
 
-import "github.com/prl26/exam-system/server/model/questionBank"
+import (
+	"github.com/prl26/exam-system/server/model/questionBank/po"
+)
 
 type ExamPaperResponse struct {
 	PaperId               uint               `json:"paperId"`
@@ -11,18 +13,18 @@ type ExamPaperResponse struct {
 	ProgramComponent      []ProgramComponent `json:"programComponent"`
 }
 type ChoiceComponent struct {
-	MergeId uint                        `json:"mergeId"`
-	Choice  questionBank.MultipleChoice `json:"questionComponent"`
+	MergeId uint              `json:"mergeId"`
+	Choice  po.MultipleChoice `json:"questionComponent"`
 }
 type JudgeComponent struct {
-	MergeId uint                     `json:"mergeId"`
-	Judge   questionBank.SupplyBlank `json:"blankComponent"`
+	MergeId uint           `json:"mergeId"`
+	Judge   po.SupplyBlank `json:"blankComponent"`
 }
 type BlankComponent struct {
-	MergeId uint                     `json:"mergeId"`
-	Blank   questionBank.SupplyBlank `json:"blankComponent"`
+	MergeId uint           `json:"mergeId"`
+	Blank   po.SupplyBlank `json:"blankComponent"`
 }
 type ProgramComponent struct {
-	MergeId uint                  `json:"mergeId"`
-	Program questionBank.Programm `json:"programComponent"`
+	MergeId uint       `json:"mergeId"`
+	Program po.Program `json:"programComponent"`
 }

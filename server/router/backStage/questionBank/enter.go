@@ -16,4 +16,5 @@ type RouterGroup struct {
 	QuestionBankSupplyBlankRouter
 	QuestionBankRouter
 	ProgramRouter
+	PublicProgramRouter
 }

@@ -9,7 +9,7 @@ import (
 type QuestionBankSupplyBlankRouter struct {
 }
 
-// InitQuestionBankSupplyBlankRouter 初始化 QuestionBankSupplyBlank 路由信息
+//// InitQuestionBankSupplyBlankRouter 初始化 QuestionBankSupplyBlank 路由信息
 func (s *QuestionBankSupplyBlankRouter) InitQuestionBankSupplyBlankRouter(Router *gin.RouterGroup) {
 	supplyBlankRouter := Router.Group("supplyBlank").Use(middleware.OperationRecord())
 	supplyBlankRouterWithoutRecord := Router.Group("supplyBlank")

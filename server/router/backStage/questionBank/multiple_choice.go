@@ -20,8 +20,7 @@ func (s *QuestionBankMultipleChoiceRouter) InitQuestionBankMultipleChoiceRouter(
 		multipleChoiceRouter.PUT("update", api.Update)    // 更新QuestionBankMultipleChoice
 	}
 	{
-		multipleChoiceRouterWithoutRecord.GET("findDetail", api.FindDetail)                 // 根据ID获取QuestionBankMultipleChoice
-		multipleChoiceRouterWithoutRecord.GET("findSingleChoice", api.FindSingleChoice)     // 获取QuestionBankMultipleChoice列表
-		multipleChoiceRouterWithoutRecord.GET("findMultipleChoice", api.FindMultipleChoice) //寻找多选题
+		multipleChoiceRouterWithoutRecord.GET("findDetail", api.FindDetail) // 根据ID获取QuestionBankMultipleChoice
+		multipleChoiceRouterWithoutRecord.GET("findList", api.FindSingleChoice)
 	}
 }

@@ -1,7 +1,7 @@
 package multipleChoice
 
 import (
-	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	testutils "github.com/prl26/exam-system/server/utils/test"
 	"log"
 	"testing"
@@ -24,7 +24,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestCheck(t *testing.T) {
-	question := &questionBank.MultipleChoice{
+	question := &po.MultipleChoice{
 		MostOptions: getIntPoint(2),
 		Answer:      "1,2",
 	}

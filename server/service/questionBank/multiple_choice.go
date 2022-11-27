@@ -3,82 +3,59 @@ package questionBank
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	"github.com/prl26/exam-system/server/model/questionBank"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	"gorm.io/gorm"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )
 
 type MultipleChoiceService struct {
 }
 
-func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice, chapterSupport []*questionBankReq.LessonSupport) (err error) {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(multipleChoice).Error; err != nil {
-			return err
-		}
-		if len(chapterSupport) != 0 {
-			courseSupport := buildCourseSupport(chapterSupport, multipleChoice.ID, questionType.SINGLE_CHOICE)
-			if err := tx.Create(&courseSupport).Error; err != nil {
-				return err
-			}
-		}
-		return nil
-	})
+func (a *MultipleChoiceService) Create(multipleChoice *questionBank.MultipleChoice) (err error) {
+	return global.GVA_DB.Create(multipleChoice).Error
 }
 
 func (a *MultipleChoiceService) Delete(ids request.IdsReq) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(&[]questionBank.MultipleChoice{}, "id in ?", ids.Ids).Error; err != nil {
-			return err
-		}
-		if err := tx.Delete(&[]questionBank.Options{}, "multiple_choice_id in", ids.Ids).Error; err != nil {
-			return err
-		}
-		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type=?", ids, questionType.SINGLE_CHOICE).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	return global.GVA_DB.Delete(&[]questionBank.MultipleChoice{}, "id in ?", ids.Ids).Error
 }
 
 func (a *MultipleChoiceService) Update(multipleChoice questionBank.MultipleChoice) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Updates(multipleChoice).Error; err != nil {
-			return err
-		}
-		if err := tx.Where("multiple_choice_id=?", multipleChoice.ID).Delete(&questionBank.Options{}).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	return global.GVA_DB.Updates(multipleChoice).Error
 }
 
-func (a *MultipleChoiceService) FindDetail(questionBankMultipleChoice *questionBank.MultipleChoice, id uint) error {
-	return global.GVA_DB.Where("id = ?", id).Preload("Options").First(questionBankMultipleChoice).Error
+func (a *MultipleChoiceService) FindDetail(id uint) (result *questionBankBo.MultipleDetail, err error) {
+	result = &questionBankBo.MultipleDetail{}
+	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.MultipleChoice{}).First(result, id).Error
+	return
 }
 
-func (a *MultipleChoiceService) FindList(info questionBankReq.MultipleChoiceFindList, isMultiple bool) (list []questionBank.MultipleChoiceView, total int64, err error) {
+func (a *MultipleChoiceService) FindList(criteria questionBankBo.MultipleCriteria, info request.PageInfo) (list []questionBankResp.MultipleChoiceSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
-	if isMultiple {
+	if criteria.IsMultiple == 1 {
 		db = db.Where("most_options > 1")
 	} else {
 		db = db.Where("most_options = 1")
 	}
-	if info.ProblemType != 0 {
-		db = db.Where("problem_type = ?", info.ProblemType)
+	if criteria.ProblemType != 0 {
+		db = db.Where("problem_type = ?", criteria.ProblemType)
 	}
-	if info.Title != "" {
-		db = db.Where("title like ?", "%"+info.Title+"%")
+	if criteria.Title != "" {
+		db = db.Where("title like ?", "%"+criteria.Title+"%")
 	}
-	if info.CanExam != nil {
-		db = db.Where("can_exam = ?", info.CanExam)
+	if criteria.CanExam != nil {
+		db = db.Where("can_exam = ?", criteria.CanExam)
 	}
-	if info.CanPractice != nil {
-		db = db.Where("can_practice = ?", info.CanPractice)
+	if criteria.CanPractice != nil {
+		db = db.Where("can_practice = ?", criteria.CanPractice)
+	}
+	if criteria.ChapterId != 0 {
+		db = db.Where("chapter_id =?", criteria.ChapterId)
+	}
+	if criteria.KnowledgeId != 0 {
+		db = db.Where("knowledge_id=?", criteria.KnowledgeId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

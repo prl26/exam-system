@@ -1,14 +1,14 @@
 package questionBank
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	"github.com/prl26/exam-system/server/model/questionBank"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/response"
+	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -35,22 +35,23 @@ func (api *SupplyBlankApi) Create(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	supplyBlank := questionBank.SupplyBlank{}
+	supplyBlank := questionBankPo.SupplyBlank{}
 	supplyBlank.BasicModel = req.BasicModel
 	supplyBlank.IsOrder = req.IsOrder
+	supplyBlank.SupplyBlankModel = req.SupplyBlankModel
 	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
 		supplyBlank.Answer = a
 		supplyBlank.Proportion = b
 		supplyBlank.Num = len(req.Answers)
 	}
-	if err := supplyBlankService.Create(&supplyBlank, req.LessonSupports); err != nil {
+	if err := supplyBlankService.Create(&supplyBlank); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("创建失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("创建成功", c)
+		questionBankResp.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -73,12 +74,11 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
 	}
-	supplyBlank := questionBank.SupplyBlank{}
+	supplyBlank := questionBankPo.SupplyBlank{}
 	supplyBlank.ID = req.Id
-	supplyBlank.BasicModel = req.BasicModel
-	supplyBlank.IsOrder = req.IsOrder
+	supplyBlank.SupplyBlankModel = req.SupplyBlankModel
 	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
 		supplyBlank.Answer = a
@@ -86,14 +86,14 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 		supplyBlank.Num = len(req.Answers)
 	}
 	if err := utils.Verify(req, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 		return
 	}
 	if err := supplyBlankService.UpdateQuestionBankSupplyBlank(supplyBlank); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("更新失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("更新成功", c)
+		questionBankResp.OkWithMessage("更新成功", c)
 	}
 }
 
@@ -103,9 +103,9 @@ func (api *SupplyBlankApi) FindList(c *gin.Context) {
 	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := supplyBlankService.FindList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 	} else {
-		response.OkWithDetailed(response.PageResult{
+		questionBankResp.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
@@ -122,22 +122,18 @@ func (api *SupplyBlankApi) FindDetail(c *gin.Context) {
 		"Id": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.CheckHandle(c, err)
 		return
 	}
-	resp := questionBankResp.SupplyBlankDetail{}
-	if err := supplyBlankService.FindDetail(&resp.SupplyBlank, req.Id); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
-	}
-	if resp.SupplyBlank.ID == 0 {
-		response.FailWithMessage("该填空题不存在", c)
-		return
+
+	if data, err := supplyBlankService.FindDetail(req.Id); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 	} else {
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, resp.SupplyBlank.ID, questionType.SUPPLY_BLANK); err != nil {
-			global.GVA_LOG.Error("查询失败!", zap.Error(err))
-			response.FailWithMessage("查询失败", c)
+		if data == nil {
+			questionBankResp.NotFind(c)
+			return
 		}
-		response.OkWithData(resp, c)
+		questionBankResp.OkWithDetailed(data, "获取成功", c)
 	}
 }

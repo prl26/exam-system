@@ -3,41 +3,23 @@ package questionBank
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	"github.com/prl26/exam-system/server/model/questionBank"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	"gorm.io/gorm"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
+	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
+
+	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
 type SupplyBlankService struct {
 }
 
-func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank, courseSupport []*questionBankReq.LessonSupport) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(supplyBlank).Error; err != nil {
-			return err
-		}
-		courseSupport := buildCourseSupport(courseSupport, supplyBlank.ID, questionType.SUPPLY_BLANK)
-		if len(courseSupport) == 0 {
-			if err := tx.Create(&courseSupport).Error; err != nil {
-				return err
-			}
-		}
-		return nil
-	})
+func (service *SupplyBlankService) Create(supplyBlank *questionBank.SupplyBlank) error {
+	return global.GVA_DB.Create(supplyBlank).Error
+
 }
 
 func (service *SupplyBlankService) Delete(ids request.IdsReq) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(&[]questionBank.SupplyBlank{}, "id in ?", ids.Ids).Error; err != nil {
-			global.GVA_LOG.Sugar().Errorf("SupplyBlankService.Delete:%s", err.Error())
-			return err
-		}
-		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "question_id in ? and question_type =?", ids, questionType.SUPPLY_BLANK).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	return global.GVA_DB.Delete(&[]questionBank.SupplyBlank{}, "id in ?", ids.Ids).Error
 }
 
 func (service *SupplyBlankService) UpdateQuestionBankSupplyBlank(questionBank_supply_blank questionBank.SupplyBlank) (err error) {
@@ -49,7 +31,7 @@ func (service *SupplyBlankService) GetQuestionBankSupplyBlank(id uint) (question
 	return
 }
 
-func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSupplyBlankSearch) (list []questionBank.SupplyBlankView, total int64, err error) {
+func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSupplyBlankSearch) (list []questionBankVoResp.JudgeSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -67,14 +49,22 @@ func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSup
 	if info.ProblemType != 0 {
 		db = db.Where("problem_type= ?", info.ProblemType)
 	}
+	if info.ChapterId != 0 {
+		db = db.Where("chapter_id =?", info.ChapterId)
+	}
+	if info.KnowledgeId != 0 {
+		db = db.Where("knowledge_id=?", info.KnowledgeId)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Model(&questionBank.SupplyBlankView{}).Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Model(&questionBank.SupplyBlank{}).Limit(limit).Offset(offset).Find(&list).Error
 	return list, total, err
 }
 
-func (service *SupplyBlankService) FindDetail(j *questionBank.SupplyBlank, id uint) error {
-	return global.GVA_DB.Where("id = ?", id).Find(j).Error
+func (service *SupplyBlankService) FindDetail(id uint) (j *questionBankBo.JudgeDetail, err error) {
+	j = &questionBankBo.JudgeDetail{}
+	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.SupplyBlank{}).First(j, id).Error
+	return
 }

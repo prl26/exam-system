@@ -136,6 +136,11 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 	for i := 0; i < num; i++ {
 		tagVal := typ.Field(i)
 		val := val.Field(i)
+		if valT := val.Kind(); valT == reflect.Struct {
+			if err := Verify(val.Interface(), roleMap); err != nil {
+				return err
+			}
+		}
 		if len(roleMap[tagVal.Name]) > 0 {
 			for _, v := range roleMap[tagVal.Name] {
 				switch {

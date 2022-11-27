@@ -1,6 +1,6 @@
 package request
 
-import "github.com/prl26/exam-system/server/model/questionBank"
+import questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 
 /**
 
@@ -18,8 +18,8 @@ import "github.com/prl26/exam-system/server/model/questionBank"
 //
 
 type Execute struct {
-	FileId                     string `json:"fileId"`     //文件ID
-	LanguageId                 int    `json:"languageId"` //此是用于一些特殊语言的编译运行，例如 PY
-	Input                      string `json:"input"`      //文件标准输入
-	questionBank.ProgrammLimit        //各种限制
+	FileId                       string `json:"fileId"`     //文件ID
+	LanguageId                   int    `json:"languageId"` //此是用于一些特殊语言的编译运行，例如 PY
+	Input                        string `json:"input"`      //文件标准输入
+	questionBankBo.LanguageLimit        //各种限制
 }

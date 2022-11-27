@@ -8,7 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	"gorm.io/gorm"
 	"math/rand"
 	"time"
@@ -179,7 +179,7 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err er
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperChoiceQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
-	var list []questionBank.MultipleChoice
+	var list []po.MultipleChoice
 	num := info.Num
 	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
 	if err != nil {
@@ -205,7 +205,7 @@ func (examPaperService *ExamPaperService) SetPaperChoiceQuestion(info examManage
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
-	var list []questionBank.Judge
+	var list []po.Judge
 	num := info.Num
 	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
 	if err != nil {
@@ -231,7 +231,7 @@ func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
-	var list []questionBank.SupplyBlank
+	var list []po.SupplyBlank
 	num := info.Num
 	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
 	if err != nil {
@@ -258,7 +258,7 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
-	var list []questionBank.Programm
+	var list []po.Program
 	num := info.Num
 	err = global.GVA_DB.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
 	if err != nil {

@@ -1,11 +1,5 @@
 package common
 
-import (
-	"github.com/prl26/exam-system/server/global"
-
-	"github.com/prl26/exam-system/server/model/questionBank"
-)
-
 /**
 
  * @Author: AloneAtWar
@@ -16,21 +10,21 @@ import (
 
  **/
 
-type CommonService struct{}
-
-func (c *CommonService) FindProgrammCase(programmId uint, languageId uint) (result []*questionBank.ProgrammCase, err error) {
-	r := global.GVA_DB.Where("programm_id = ? AND language_id = ?", programmId, languageId).Find(&result)
-	if r.Error != nil {
-		return nil, r.Error
-	}
-
-	return
-}
-
-func (c *CommonService) FindProgrammSupport(programmId uint) (result []*questionBank.ProgrammLanguageMerge, err error) {
-	var r = global.GVA_DB.Where("programm_id", programmId).Find(&result)
-	if r.Error != nil {
-		return nil, r.Error
-	}
-	return
-}
+//type CommonService struct{}
+//
+//func (c *CommonService) FindProgrammCase(programmId uint, languageId uint) (result []*questionBank.ProgrammCase, err error) {
+//	r := global.GVA_DB.Where("programm_id = ? AND language_id = ?", programmId, languageId).Find(&result)
+//	if r.Error != nil {
+//		return nil, r.Error
+//	}
+//
+//	return
+//}
+//
+//func (c *CommonService) FindProgrammSupport(programmId uint) (result []*questionBank.ProgrammLanguageMerge, err error) {
+//	var r = global.GVA_DB.Where("programm_id", programmId).Find(&result)
+//	if r.Error != nil {
+//		return nil, r.Error
+//	}
+//	return
+//}

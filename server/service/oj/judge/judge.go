@@ -3,7 +3,7 @@ package judge
 import (
 	"github.com/prl26/exam-system/server/global"
 	exception "github.com/prl26/exam-system/server/model/common/error"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
 /**
@@ -26,8 +26,8 @@ func (s *JudgeService) Check(questionId uint, answer bool) (bool, error) {
 	return s.check(question, answer), nil
 }
 
-func (s *JudgeService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.Judge, error) {
-	var question questionBank.Judge
+func (s *JudgeService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.Judge, error) {
+	var question po.Judge
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {
 		return nil, exception.NotFoundError
@@ -35,13 +35,13 @@ func (s *JudgeService) FindCanPracticeQuestion(choiceQuestionId uint) (*question
 	return &question, nil
 }
 
-func (s *JudgeService) check(question *questionBank.Judge, checkAnswer bool) bool {
-	if *question.IsRight == 1 {
+func (s *JudgeService) check(question *po.Judge, checkAnswer bool) bool {
+	if question.IsRight {
 		return checkAnswer
 	} else {
 		return !checkAnswer
 	}
 }
-func (c *JudgeService) GetAnswer(question *questionBank.Judge) bool {
-	return *question.IsRight == 1
+func (c *JudgeService) GetAnswer(question *po.Judge) bool {
+	return question.IsRight
 }

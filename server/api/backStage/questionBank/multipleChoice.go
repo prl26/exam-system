@@ -1,13 +1,13 @@
 package questionBank
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/response"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -22,24 +22,22 @@ var multipleChoiceService = service.ServiceGroupApp.QuestionBankServiceGroup.Mul
 func (choiceApi *MultipleChoiceApi) Create(c *gin.Context) {
 	var req questionBankReq.MultipleChoiceCreate
 	_ = c.ShouldBindJSON(&req)
-	req.ID = 0
 	verify := utils.Rules{
 		"ProblemType": {utils.NotEmpty()},
 		"CanPractice": {utils.NotEmpty()},
 		"CanExam":     {utils.NotEmpty()},
 		"Title":       {utils.NotEmpty()},
-		"Describe":    {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	if err := multipleChoiceService.Create(&req.MultipleChoice, req.LessonSupports); err != nil {
+	if err := multipleChoiceService.Create(&req.MultipleChoice); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("创建失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("创建成功", c)
+		questionBankResp.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -49,9 +47,9 @@ func (choiceApi *MultipleChoiceApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&IDS)
 	if err := multipleChoiceService.Delete(IDS); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("批量删除失败:%s", err.Error()))
 	} else {
-		response.OkWithMessage("批量删除成功", c)
+		questionBankResp.OkWithMessage("批量删除成功", c)
 	}
 }
 
@@ -68,9 +66,10 @@ func (choiceApi *MultipleChoiceApi) Update(c *gin.Context) {
 	}
 	if err := multipleChoiceService.Update(req.MultipleChoice); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("更新错误:%s", err.Error()))
+		return
 	} else {
-		response.OkWithMessage("更新成功", c)
+		questionBankResp.OkWithMessage("更新成功", c)
 	}
 }
 
@@ -82,37 +81,32 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 		"Id": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
-		response.FailWithMessage(err.Error(), c)
+		questionBankResp.CheckHandle(c, err)
 		return
 	}
-	resp := questionBankResp.MultipleChoiceDetail{}
-	if err := multipleChoiceService.FindDetail(&resp.MultipleChoice, req.Id); err != nil {
+	if data, err := multipleChoiceService.FindDetail(req.Id); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		questionBankResp.ErrorHandle(c, fmt.Errorf("查询错误:%s", err.Error()))
 		return
-	}
-	if resp.MultipleChoice.ID != 0 {
-		if err := questionBankService.FindCourseSupport(&resp.CourseSupport, req.Id, questionType.SINGLE_CHOICE); err != nil {
-			global.GVA_LOG.Error("查询失败!", zap.Error(err))
-			response.FailWithMessage(err.Error(), c)
-			return
-		}
-		response.OkWithData(resp, c)
 	} else {
-		response.FailWithMessage("该选择题不存在", c)
-		return
+		if data != nil {
+			questionBankResp.OkWithDetailed(data, "获取成功", c)
+		} else {
+			questionBankResp.NotFind(c)
+		}
 	}
 }
 
 // FindSingleChoice  分页查找单选题
 func (choiceApi *MultipleChoiceApi) FindSingleChoice(c *gin.Context) {
-	var pageInfo questionBankReq.MultipleChoiceFindList
+	var pageInfo questionBankReq.MultipleChoiceList
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+	if list, total, err := multipleChoiceService.FindList(pageInfo.MultipleCriteria, pageInfo.PageInfo); err != nil {
+		global.GVA_LOG.Error(err.Error())
+		questionBankResp.ErrorHandle(c, fmt.Errorf("查询错误:%s", err.Error()))
+		return
 	} else {
-		response.OkWithDetailed(response.PageResult{
+		questionBankResp.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
@@ -121,19 +115,19 @@ func (choiceApi *MultipleChoiceApi) FindSingleChoice(c *gin.Context) {
 	}
 }
 
-// FindMultipleChoice 分页查找多选题
-func (choiceApi *MultipleChoiceApi) FindMultipleChoice(c *gin.Context) {
-	var pageInfo questionBankReq.MultipleChoiceFindList
-	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
-	} else {
-		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
-	}
-}
+//// FindMultipleChoice 分页查找多选题
+//func (choiceApi *MultipleChoiceApi) FindMultipleChoice(c *gin.Context) {
+//	var pageInfo request2.MultipleChoiceList
+//	_ = c.ShouldBindQuery(&pageInfo)
+//	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
+//		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+//		response.FailWithMessage("获取失败", c)
+//	} else {
+//		response.OkWithDetailed(response.PageResult{
+//			List:     list,
+//			Total:    total,
+//			Page:     pageInfo.Page,
+//			PageSize: pageInfo.PageSize,
+//		}, "获取成功", c)
+//	}
+//}

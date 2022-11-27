@@ -3,10 +3,9 @@ package questionBank
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
-	"github.com/prl26/exam-system/server/model/questionBank"
-	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/request"
-	"gorm.io/gorm"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
+	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )
 
 type JudgeService struct {
@@ -14,19 +13,8 @@ type JudgeService struct {
 
 // Create 创建QuestionBankJudge记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) Create(judge *questionBank.Judge, lessonSupports []*questionBankReq.LessonSupport) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Create(judge).Error; err != nil {
-			return err
-		}
-		courseSupport := buildCourseSupport(lessonSupports, judge.ID, questionType.JUDGE)
-		if len(courseSupport) == 0 {
-			if err := tx.Create(&courseSupport).Error; err != nil {
-				return err
-			}
-		}
-		return nil
-	})
+func (service *JudgeService) Create(judge *questionBank.Judge) error {
+	return global.GVA_DB.Create(judge).Error
 }
 
 // DeleteQuestionBankJudge 删除QuestionBankJudge记录
@@ -39,21 +27,13 @@ func (service *JudgeService) DeleteQuestionBankJudge(judge questionBank.Judge) (
 // Delete 批量删除QuestionBankJudge记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (service *JudgeService) Delete(ids request.IdsReq) error {
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Delete(&[]questionBank.Judge{}, "id in ?", ids.Ids).Error; err != nil {
-			return err
-		}
-		if err := tx.Delete(&[]questionBank.ChapterMerge{}, "id in ? and question_type=?", ids.Ids, questionType.JUDGE).Error; err != nil {
-			return err
-		}
-		return nil
-	})
+	return global.GVA_DB.Delete(&[]questionBank.Judge{}, "id in ?", ids.Ids).Error
 }
 
 // Update 更新QuestionBankJudge记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (service *JudgeService) Update(judge questionBank.Judge) (err error) {
-	err = global.GVA_DB.Save(&judge).Error
+	err = global.GVA_DB.Updates(&judge).Error
 	return err
 }
 
@@ -66,23 +46,29 @@ func (service *JudgeService) GetQuestionBankJudge(id uint) (judge questionBank.J
 
 // FindJudgeList 分页获取QuestionBankJudge记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) FindJudgeList(info questionBankReq.QuestionBankJudgeSearch) (list []questionBank.JudgeView, total int64, err error) {
+func (service *JudgeService) FindJudgeList(criteria questionBankBo.JudgeSearchCriteria, info request.PageInfo) (list []questionBankVoResp.JudgeSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.Judge{})
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.ProblemType != 0 {
-		db = db.Where("problem_type = ?", info.ProblemType)
+	if criteria.ProblemType != 0 {
+		db = db.Where("problem_type = ?", criteria.ProblemType)
 	}
-	if info.Title != "" {
-		db = db.Where("title like ?", "%"+info.Title+"%")
+	if criteria.Title != "" {
+		db = db.Where("title like ?", "%"+criteria.Title+"%")
 	}
-	if info.CanExam != nil {
-		db = db.Where("can_exam = ?", info.CanExam)
+	if criteria.CanExam != nil {
+		db = db.Where("can_exam = ?", criteria.CanExam)
 	}
-	if info.CanPractice != nil {
-		db = db.Where("can_practice = ?", info.CanPractice)
+	if criteria.CanPractice != nil {
+		db = db.Where("can_practice = ?", criteria.CanPractice)
+	}
+	if criteria.ChapterId != 0 {
+		db = db.Where("chapter_id =?", criteria.ChapterId)
+	}
+	if criteria.KnowledgeId != 0 {
+		db = db.Where("knowledge_id=?", criteria.KnowledgeId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -92,6 +78,8 @@ func (service *JudgeService) FindJudgeList(info questionBankReq.QuestionBankJudg
 	return list, total, err
 }
 
-func (service *JudgeService) FindDetail(judge *questionBank.Judge, id uint) error {
-	return global.GVA_DB.Where("id=?", id).Find(judge).Error
+func (service *JudgeService) FindDetail(id uint) (judge *questionBankBo.JudgeDetail, err error) {
+	judge = &questionBankBo.JudgeDetail{}
+	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Judge{}).First(judge, id).Error
+	return
 }

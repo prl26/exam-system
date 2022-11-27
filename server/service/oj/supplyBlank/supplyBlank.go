@@ -3,7 +3,7 @@ package supplyBlank
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	"strconv"
 	"strings"
 )
@@ -29,8 +29,8 @@ func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bo
 	return c.check(question, answer)
 }
 
-func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*questionBank.SupplyBlank, error) {
-	var question questionBank.SupplyBlank
+func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.SupplyBlank, error) {
+	var question po.SupplyBlank
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
 	if result.Error != nil {
 		return nil, fmt.Errorf("找不到该题目")
@@ -38,7 +38,7 @@ func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*qu
 	return &question, nil
 }
 
-func (c *SupplyBlankService) check(question *questionBank.SupplyBlank, checkAnswers []string) (boolList []bool, proportion int, err error) {
+func (c *SupplyBlankService) check(question *po.SupplyBlank, checkAnswers []string) (boolList []bool, proportion int, err error) {
 	n := len(checkAnswers)
 	if n != question.Num {
 		return nil, 0, fmt.Errorf("应该要填入%d个空", n)
@@ -89,6 +89,6 @@ func (c *SupplyBlankService) check(question *questionBank.SupplyBlank, checkAnsw
 	return boolList, proportion, nil
 }
 
-func (c *SupplyBlankService) GetAnswer(question *questionBank.SupplyBlank) []string {
+func (c *SupplyBlankService) GetAnswer(question *po.SupplyBlank) []string {
 	return strings.Split(question.Answer, ",")
 }

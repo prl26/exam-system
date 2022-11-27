@@ -7,7 +7,7 @@ import (
 	"github.com/prl26/exam-system/server/model/oj"
 	exception "github.com/prl26/exam-system/server/model/oj/error"
 	ojResp "github.com/prl26/exam-system/server/model/oj/response"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/pb"
 	"strconv"
 	"strings"
@@ -46,7 +46,7 @@ var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
 const FILE_FAILED_DURATION time.Duration = 5 * time.Second
 
-func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *CLanguageService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return nil, exception.CompileError{Msg: err.Error()}
@@ -60,7 +60,7 @@ func (c *CLanguageService) Check(code string, cases []*questionBank.ProgrammCase
 			return
 		}
 	}()
-	return c.Judge(fileID, cases)
+	return c.Judge(fileID, limit, cases)
 }
 
 func (c *CLanguageService) Compile(code string) (string, *time.Time, error) {
@@ -159,12 +159,12 @@ func (c *CLanguageService) Delete(id string) error {
 	return nil
 }
 
-func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCase) ([]*ojResp.Submit, error) {
+func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
 	for i, programmCase := range cases {
-		cmds[i] = c.makeCmd(fileId, programmCase.Input, &programmCase.ProgrammLimit)
+		cmds[i] = c.makeCmd(fileId, programmCase.Input, limit)
 	}
 	exec, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: cmds,
@@ -194,7 +194,7 @@ func (c *CLanguageService) Judge(fileId string, cases []*questionBank.ProgrammCa
 	return submits, nil
 }
 
-func (c *CLanguageService) Execute(fileId string, input string, programmLimit *questionBank.ProgrammLimit) (string, *oj.ExecuteSituation, error) {
+func (c *CLanguageService) Execute(fileId string, input string, programmLimit questionBankBo.LanguageLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := c.makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{
@@ -213,7 +213,7 @@ func (c *CLanguageService) Execute(fileId string, input string, programmLimit *q
 	return out, executeSituation, nil
 }
 
-func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit *questionBank.ProgrammLimit) *pb.Request_CmdType {
+func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
@@ -258,13 +258,13 @@ func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit *q
 			},
 		},
 	}
-	if programmLimit != nil {
-		cmd = c.cmdLimit(programmLimit, cmd)
-	}
+
+	cmd = c.cmdLimit(programmLimit, cmd)
+
 	return cmd
 }
 
-func (c *CLanguageService) cmdLimit(programmLimit *questionBank.ProgrammLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
+func (c *CLanguageService) cmdLimit(programmLimit questionBankBo.LanguageLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
 	if programmLimit.CpuLimit != nil {
 		cmd.CpuTimeLimit = uint64(*programmLimit.CpuLimit)
 	} else {

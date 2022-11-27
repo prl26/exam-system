@@ -45,7 +45,6 @@ func Routers() *gin.Engine {
 		questionBankRouter := backStageRouterGroup.QuestionBank
 		//ojRouter := router.RouterGroupApp.Oj
 
-
 		PublicGroup := Router.Group("")
 		{
 			// 健康监测
@@ -117,12 +116,12 @@ func Routers() *gin.Engine {
 			questionBankRouter.InitQuestionBankSupplyBlankRouter(questionGroup)
 			questionBankRouter.InitQuestionBankMultipleChoiceRouter(questionGroup)
 			questionBankRouter.InitQuestionBankJudgeRouter(questionGroup)
+			questionBankRouter.InitPublicProgram(questionGroup)
 		}
 		TestGroup := Router.Group("") // 此处测试接口不需要分配权限
 		{
 			basicdataRouter.InitTeachClassStudentRouter(TestGroup)
 		}
-
 
 	}
 
@@ -130,9 +129,9 @@ func Routers() *gin.Engine {
 	frontDeskRouterGroup := router.RouterGroupApp.FrontDesk
 	{
 		basicRouterGroup := frontDeskRouterGroup.BasicRouterGroup
-		systemRouter:=frontDeskRouterGroup.SystemRouterGroup
+		systemRouter := frontDeskRouterGroup.SystemRouterGroup
 		examRouterGroup := frontDeskRouterGroup.ExamRouterGroup
-		questionBankGroup:=frontDeskRouterGroup.QuestionBankRouterGroup
+		questionBankGroup := frontDeskRouterGroup.QuestionBankRouterGroup
 		PublicGroup := Router.Group("")
 		{
 			systemRouter.InitBaseRouter(PublicGroup) // 学生登录 不做鉴权
