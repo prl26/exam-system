@@ -8,7 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
-	"github.com/prl26/exam-system/server/model/questionBank"
+	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	"gorm.io/gorm"
 	"math/rand"
 	"sync"
@@ -88,7 +88,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 	err = global.GVA_DB.Where("paper_id = ?", id).Find(&Paper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(Paper); i++ {
-		if *Paper[i].QuestionType == questionType.MultipleChoice {
+		if *Paper[i].QuestionType == questionType.MULTIPLE_CHOICE {
 			var Choice response.ChoiceComponent
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", Paper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {
@@ -272,7 +272,7 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 	return
 }
 func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
-	var list []questionBank.Programm
+	var list []questionBank.Program
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		err = tx.Raw("SELECT * FROM les_questionbank_programm ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
@@ -304,7 +304,7 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 
 func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
-		if *v.QuestionType == questionType.MultipleChoice {
+		if *v.QuestionType == questionType.MULTIPLE_CHOICE {
 			wg.Add(1)
 			go examPaperService.SetPaperChoiceQuestion(v, Id)
 		} else if *v.QuestionType == questionType.JUDGE {
