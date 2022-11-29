@@ -36,8 +36,8 @@ func (p *PublicProgramApi) Create(c *gin.Context) {
 		}
 		programPo.ProgramCases = programCaseStr
 	} else {
-		questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
-		return
+		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
+		//return
 	}
 	if len(req.LanguageSupports) != 0 {
 		languageSupportStr, err := req.LanguageSupports.Serialize()
@@ -47,8 +47,8 @@ func (p *PublicProgramApi) Create(c *gin.Context) {
 		}
 		programPo.LanguageSupports = languageSupportStr
 	} else {
-		questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
-		return
+		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
+		//return
 	}
 	if len(req.ReferenceAnswers) != 0 {
 		languageSupportStr, err := req.ReferenceAnswers.Serialize()
@@ -70,6 +70,8 @@ func (p *PublicProgramApi) Create(c *gin.Context) {
 	if err := publicProgramService.Create(&programPo); err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
+	} else {
+		questionBankResp.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -104,16 +106,35 @@ func (api *PublicProgramApi) FindDetail(c *gin.Context) {
 			return
 		} else {
 			programDetail := questionBankResp.PublicProgramDetail{}
+			programDetail.GVA_MODEL = detail.GVA_MODEL
 			programDetail.BasicModel = detail.BasicModel
-			if err := programDetail.ProgramCases.Deserialize(detail.ProgramCases); err != nil {
-				global.GVA_LOG.Error(err.Error())
-				questionBankResp.ErrorHandle(c, err)
-				return
+			if detail.ProgramCases != "" {
+				if err := programDetail.ProgramCases.Deserialize(detail.ProgramCases); err != nil {
+					global.GVA_LOG.Error(err.Error())
+					questionBankResp.ErrorHandle(c, err)
+					return
+				}
 			}
-			if err := programDetail.LanguageSupports.Deserialization(detail.LanguageSupports); err != nil {
-				global.GVA_LOG.Error(err.Error())
-				questionBankResp.ErrorHandle(c, err)
-				return
+			if detail.LanguageSupports != "" {
+				if err := programDetail.LanguageSupports.Deserialization(detail.LanguageSupports); err != nil {
+					global.GVA_LOG.Error(err.Error())
+					questionBankResp.ErrorHandle(c, err)
+					return
+				}
+			}
+			if detail.ReferenceAnswers != "" {
+				if err := programDetail.ReferenceAnswers.Deserialization(detail.ReferenceAnswers); err != nil {
+					global.GVA_LOG.Error(err.Error())
+					questionBankResp.ErrorHandle(c, err)
+					return
+				}
+			}
+			if detail.DefaultCodes != "" {
+				if err := programDetail.DefaultCodes.Deserialization(detail.DefaultCodes); err != nil {
+					global.GVA_LOG.Error(err.Error())
+					questionBankResp.ErrorHandle(c, err)
+					return
+				}
 			}
 			questionBankResp.OkWithDetailed(programDetail, "获取成功", c)
 		}
@@ -128,6 +149,7 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		return
 	}
 	programPo := questionBankPo.Program{}
+	programPo.ID = req.Id
 	if len(req.ProgramCases) != 0 {
 		programCaseStr, err := req.ProgramCases.Serialize()
 		if err != nil {
@@ -157,5 +179,7 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 	if err := programService.Update(&programPo); err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
+	} else {
+		questionBankResp.OkWithMessage("更新成功", c)
 	}
 }

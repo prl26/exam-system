@@ -247,9 +247,9 @@ func transformationProgram(from *gorm.DB, to *gorm.DB, knowledgeTable map[string
 		programm.CanPractice = &result.CanPractice
 		programm.ProblemType = result.ProblemType
 		if result.Code != "" {
-			marshal, err := json.Marshal([]map[string]string{map[string]string{
+			marshal, err := json.Marshal(map[string]string{
 				"c": result.Code,
-			}})
+			})
 			if err != nil {
 				panic(err)
 				return
@@ -287,11 +287,13 @@ func transformationProgram(from *gorm.DB, to *gorm.DB, knowledgeTable map[string
 			return
 		}
 		programm.ProgramCases = serialize
-		programm.ChapterId = uint(result.Stage)
+		programm.ChapterId = uint(result.Stage) + 1
 		programm.KnowledgeId = getKnowledgeId(result.KnowledgePoint, knowledgeTable, from, to)
-
 		fmt.Println("已经处理完", i+1, "个编程题勒！")
 		if err := to.Create(&programm).Error; err != nil {
+			panic(err)
+		}
+		if err := to.Model(&po.PublicProgram{}).Create(&programm).Error; err != nil {
 			panic(err)
 		}
 	}

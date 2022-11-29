@@ -121,7 +121,7 @@ func (s *ReferenceAnswers) Serialize() (string, error) {
 }
 
 func (s *ReferenceAnswers) Deserialization(str string) error {
-	table := make(map[string]string)
+	table := make(map[string]string, 0)
 	err := json.Unmarshal([]byte(str), &table)
 	if err != nil {
 		return err

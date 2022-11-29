@@ -2,6 +2,7 @@ package questionBank
 
 import (
 	"github.com/gin-gonic/gin"
+	v1 "github.com/prl26/exam-system/server/api"
 )
 
 /**
@@ -18,11 +19,11 @@ type OjRouter struct {
 }
 
 func (s *OjRouter) InitBackgroundOjRouter(Router *gin.RouterGroup) {
-	//programmRouter := Router.Group("oj/program")
-	//programmApi :=v1.ApiGroupApp.BackStage.QuestionBankApiGroup.OjApi
-	//{
-	//	programmRouter.POST("compile", programmApi.Compile) //编译
-	//	programmRouter.POST("execute", programmApi.Execute) //运行
-	//}
+	programmRouter := Router.Group("oj/program")
+	programmApi := v1.ApiGroupApp.BackStage.QuestionBankApiGroup.OjApi
+	{
+		programmRouter.POST("compile", programmApi.Compile) //编译
+		programmRouter.POST("execute", programmApi.Execute) //运行
+	}
 
 }

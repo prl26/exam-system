@@ -6,4 +6,5 @@ type ApiGroup struct {
 	SupplyBlankApi
 	JudgeApi
 	MultipleChoiceApi
+	OjApi
 }

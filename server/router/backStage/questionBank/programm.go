@@ -22,6 +22,7 @@ func (*ProgramRouter) InitProgram(Router *gin.RouterGroup) {
 	programRouter := Router.Group("program").Use(middleware.OperationRecord())
 	{
 		programRouter.POST("create", programApi.Create)
+		programRouter.PUT("update", programApi.Update)
 		//programRouter.PUT("editCase", programApi.EditProgramCases)
 		//programRouter.PUT("editDetail", programApi.EditProgramDetail)
 		//programRouter.DELETE("deleteCase", programApi.DeleteProgramCases)

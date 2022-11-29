@@ -46,6 +46,6 @@ func (p *PublicProgramService) FindDetail(id int) (result *questionBankPo.Public
 	return
 }
 
-func (p *PublicProgramService) Update(t *questionBankPo.PublicProgram) error {
+func (p *PublicProgramService) Update(t *questionBankPo.Program) error {
 	return global.GVA_DB.Updates(t).Error
 }
