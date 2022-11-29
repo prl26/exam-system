@@ -148,7 +148,7 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		questionBankResp.CheckHandle(c, fmt.Errorf("请输入修改ID"))
 		return
 	}
-	programPo := questionBankPo.Program{}
+	programPo := questionBankPo.PublicProgram{}
 	programPo.ID = req.Id
 	if len(req.ProgramCases) != 0 {
 		programCaseStr, err := req.ProgramCases.Serialize()
@@ -175,8 +175,7 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		//return
 	}
 	programPo.BasicModel = req.BasicModel
-	programPo.CourseSupport = req.CourseSupport
-	if err := programService.Update(&programPo); err != nil {
+	if err := publicProgramService.Update(&programPo); err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {

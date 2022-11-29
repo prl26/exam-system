@@ -44,7 +44,7 @@ var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 // 注意此处并不是 服务启动的真实值
 // 此为服务启动的默认值   根据 config文件的配置 之后会进行依赖注入 来修改上面的值
 
-const FILE_FAILED_DURATION time.Duration = 5 * time.Second
+const FILE_FAILED_DURATION time.Duration = 3 * time.Minute
 
 func (c *CLanguageService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, error) {
 	fileID, err := c.compile(code)

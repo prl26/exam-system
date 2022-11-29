@@ -17,4 +17,5 @@ type RouterGroup struct {
 	QuestionBankRouter
 	ProgramRouter
 	PublicProgramRouter
+	OjRouter
 }

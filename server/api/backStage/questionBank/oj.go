@@ -13,7 +13,7 @@ import (
 type OjApi struct {
 }
 
-var cService = service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
+var cService = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
 
 func (p *OjApi) Compile(c *gin.Context) {
 	var req questionBankReq.Compile

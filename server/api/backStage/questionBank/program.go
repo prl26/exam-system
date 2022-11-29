@@ -194,7 +194,8 @@ func (api *ProgramApi) Update(c *gin.Context) {
 		programPo.ReferenceAnswers = referenceAnswerStr
 	}
 	programPo.BasicModel = req.BasicModel
-	if err := publicProgramService.Update(&programPo); err != nil {
+	programPo.CourseSupport = req.CourseSupport
+	if err := programService.Update(&programPo); err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
