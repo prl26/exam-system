@@ -142,7 +142,7 @@ func (api *PublicProgramApi) FindDetail(c *gin.Context) {
 }
 
 func (api *PublicProgramApi) Update(c *gin.Context) {
-	var req questionBankReq.ProgramUpdate
+	var req questionBankReq.PublicProgramUpdate
 	_ = c.ShouldBindJSON(&req)
 	if req.Id == 0 {
 		questionBankResp.CheckHandle(c, fmt.Errorf("请输入修改ID"))
@@ -173,6 +173,22 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		// 修改的时候不一定修改语言支持
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
 		//return
+	}
+	if len(req.DefaultCodes) != 0 {
+		defaultCodeStr, err := req.DefaultCodes.Serialize()
+		if err != nil {
+			questionBankResp.ErrorHandle(c, err)
+			return
+		}
+		programPo.DefaultCodes = defaultCodeStr
+	}
+	if len(req.ReferenceAnswers) != 0 {
+		referenceAnswerStr, err := req.ReferenceAnswers.Serialize()
+		if err != nil {
+			questionBankResp.ErrorHandle(c, err)
+			return
+		}
+		programPo.ReferenceAnswers = referenceAnswerStr
 	}
 	programPo.BasicModel = req.BasicModel
 	if err := publicProgramService.Update(&programPo); err != nil {

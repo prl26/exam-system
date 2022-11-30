@@ -9,10 +9,10 @@ import (
 type PublicProgramDetail struct {
 	global.GVA_MODEL
 	questionBank.BasicModel
-	questionBankBo.LanguageSupports
-	questionBankBo.ProgramCases
-	questionBankBo.DefaultCodes
-	questionBankBo.ReferenceAnswers
+	questionBankBo.LanguageSupports `json:"languageSupports"`
+	questionBankBo.ProgramCases     `json:"programCases"`
+	questionBankBo.DefaultCodes     `json:"defaultCodes"`
+	questionBankBo.ReferenceAnswers `json:"referenceAnswers"`
 }
 
 type PublicProgramSimple struct {

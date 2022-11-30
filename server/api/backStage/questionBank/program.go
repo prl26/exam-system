@@ -36,8 +36,8 @@ func (p *ProgramApi) Create(c *gin.Context) {
 		}
 		programPo.ProgramCases = programCaseStr
 	} else {
-		questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
-		return
+		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
+		//return
 	}
 	if len(req.LanguageSupports) != 0 {
 		languageSupportStr, err := req.LanguageSupports.Serialize()
@@ -47,8 +47,8 @@ func (p *ProgramApi) Create(c *gin.Context) {
 		}
 		programPo.LanguageSupports = languageSupportStr
 	} else {
-		questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
-		return
+		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
+		//return
 	}
 	if len(req.DefaultCodes) != 0 {
 		defaultCodeStr, err := req.DefaultCodes.Serialize()

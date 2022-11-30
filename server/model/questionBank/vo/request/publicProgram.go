@@ -18,8 +18,7 @@ type PublicProgramCreate struct {
 type PublicProgramUpdate struct {
 	Id uint `json:"id"`
 	questionBankPo.BasicModel
-	LanguageSupports questionBankBo.LanguageSupports `json:"languageSupports,omitempty"`
-	ProgramCases     questionBankBo.ProgramCases     `json:"programCases,omitempty"`
+	questionBankBo.ProgramOjSupport
 }
 
 type PublicProgramSearch struct {
