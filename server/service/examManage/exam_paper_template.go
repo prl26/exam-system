@@ -89,6 +89,6 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info 
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&Papertemplates).Error
+	err = db.Limit(limit).Offset(offset).Find(&Papertemplates).Order("updated_at desc").Error
 	return Papertemplates, total, err
 }

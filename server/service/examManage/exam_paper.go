@@ -159,7 +159,7 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&examPapers).Error
+	err = db.Limit(limit).Offset(offset).Find(&examPapers).Order("updated_at desc").Error
 	return examPapers, total, err
 }
 func (examPaperService *ExamPaperService) GetTemplate(info examManage.ExamPaper) (list []examManage.PaperTemplateItem, err error) {

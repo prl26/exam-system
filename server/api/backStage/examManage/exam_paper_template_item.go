@@ -93,7 +93,7 @@ func (paperTemplateItemApi *PaperTemplateItemApi) UpdatePaperTemplateItem(c *gin
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
-		if bool := utils.Check(paperTemplateItem[0].TemplateId); bool == false {
+		if bool := utils.Check(paperTemplateItem); bool == false {
 			response.FailWithMessage("更新成功,但试卷配置出错,总分需100分,是否继续保存", c)
 		} else {
 			response.OkWithMessage("更新成功", c)

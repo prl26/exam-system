@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
+	"github.com/prl26/exam-system/server/utils"
 )
 
 type ExamPlanService struct {
@@ -12,8 +13,28 @@ type ExamPlanService struct {
 
 // CreateExamPlan 创建ExamPlan记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplan.ExamPlan) (err error) {
-	err = global.GVA_DB.Create(&examPlan).Error
+func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.ExamPlanRq) (err error) {
+	startTime := utils.StringToTime(examPlan.StartTime)
+	endTime := utils.StringToTime(examPlan.EndTime)
+	time := int64(endTime.Sub(startTime).Minutes())
+
+	ExamPlan := teachplan.ExamPlan{
+		GVA_MODEL:    global.GVA_MODEL{},
+		Name:         examPlan.Name,
+		TeachClassId: examPlan.TeachClassId,
+		Time:         &time,
+		StartTime:    &startTime,
+		EndTime:      &endTime,
+		CourseId:     examPlan.CourseId,
+		TemplateId:   examPlan.TemplateId,
+		State:        examPlan.State,
+		Audit:        examPlan.Audit,
+		Type:         examPlan.Type,
+		PassScore:    examPlan.PassScore,
+		Weight:       examPlan.Weight,
+		TermId:       examPlan.TermId,
+	}
+	err = global.GVA_DB.Create(&ExamPlan).Error
 	return err
 }
 

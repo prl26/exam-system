@@ -31,12 +31,17 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
 	Papertemplate.UserId = &uid
-	if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+	if bool := utils.Check(Papertemplate.PaperTemplateItems); bool == false {
+		response.FailWithMessage("试卷分数应为100分,请重新配置", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("创建失败", c)
+		} else {
+			response.OkWithMessage("创建成功", c)
+		}
 	}
+
 }
 
 // DeletePaperTemplate 删除PaperTemplate

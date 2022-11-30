@@ -1,10 +1,15 @@
 package utils
 
-import "github.com/prl26/exam-system/server/global"
+import "github.com/prl26/exam-system/server/model/examManage"
 
-func Check(id *int) bool {
+func Check(item []examManage.PaperTemplateItem) bool {
 	var sum int
-	global.GVA_DB.Raw("SELECT sum(num*score) from exam_paper_template_item where template_id = ?", id).Scan(&sum)
+	for i := 0; i < len(item); i++ {
+		score := *item[i].Score
+		num := *item[i].Num
+		temp := num * score
+		sum += temp
+	}
 	if sum == 100 {
 		return true
 	}

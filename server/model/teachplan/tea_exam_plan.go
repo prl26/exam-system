@@ -11,7 +11,7 @@ type ExamPlan struct {
 	global.GVA_MODEL
 	Name         string     `json:"name" form:"name" gorm:"column:name;comment:考试名称;size:32;"`
 	TeachClassId *uint      `json:"teachClassId" form:"teachClassId" gorm:"column:teach_class_id;comment:教学班id;size:32;"`
-	Time         *time.Time `json:"time" form:"time" gorm:"column:time;comment:考试时长;"`
+	Time         *int64     `json:"time" form:"time" gorm:"column:time;comment:考试时长;"`
 	StartTime    *time.Time `json:"startTime" form:"startTime" gorm:"column:start_time;comment:考试时间;"`
 	EndTime      *time.Time `json:"endTime" form:"endTime" gorm:"column:end_time;comment:结束时间;"`
 	CourseId     *int       `json:"courseId" form:"courseId" gorm:"column:course_id;comment:课程Id;size:32;"`
