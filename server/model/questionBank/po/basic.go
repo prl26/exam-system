@@ -25,7 +25,7 @@ type PracticeExamSupport struct {
 	CanPractice *int `json:"canPractice" form:"canPractice" gorm:"column:can_practice;comment:是否训练题目"`
 	CanExam     *int `json:"canExam" form:"canExam" gorm:"column:can_exam;comment:是否为考试题目"`
 }
-type giCourseSupport struct {
+type CourseSupport struct {
 	ChapterId   uint `json:"chapterId" form:"chapterId" gorm:"column:chapter_id"`
 	KnowledgeId uint `json:"knowledgeId" form:"knowledgeId"`
 }
