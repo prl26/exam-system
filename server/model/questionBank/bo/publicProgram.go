@@ -7,6 +7,10 @@ import (
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
+type PublicProgramMigration struct {
+	questionBankPo.CourseSupport
+	LanguageIds []enum.LanguageType `json:"languageIds"`
+}
 type LanguageSupport struct {
 	LanguageId enum.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
 	LanguageLimit
@@ -159,4 +163,37 @@ func (s *LanguageSupports) Deserialization(str string) error {
 
 type PublicProgramSearchCriteria struct {
 	questionBankPo.SimpleModel
+}
+
+func (s *DefaultCodes) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &DefaultCodes{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
+}
+
+func (s *LanguageSupports) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &LanguageSupports{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
+}
+
+func (s *ReferenceAnswers) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &ReferenceAnswers{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
@@ -196,5 +197,68 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		return
 	} else {
 		questionBankResp.OkWithMessage("更新成功", c)
+	}
+}
+
+func (api *PublicProgramApi) Migrate(c *gin.Context) {
+	var req questionBankReq.PublicProgramMigration
+	_ = c.ShouldBindJSON(&req)
+	verify := utils.Rules{
+		"Id":        {utils.NotEmpty()},
+		"ChapterId": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(req, verify); err != nil {
+		questionBankResp.CheckHandle(c, err)
+		return
+	}
+	if err := publicProgramService.Migrate([]uint{req.Id}, req.PublicProgramMigration); err != nil {
+		questionBankResp.ErrorHandle(c, err)
+		return
+	} else {
+		questionBankResp.OkWithMessage("迁移成功", c)
+	}
+}
+
+func (api *PublicProgramApi) Migrates(c *gin.Context) {
+	var req questionBankReq.PublicProgramMigrations
+	_ = c.ShouldBindJSON(&req)
+	verify := utils.Rules{
+		"Ids":       {utils.NotEmpty()},
+		"ChapterId": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(req, verify); err != nil {
+		questionBankResp.CheckHandle(c, err)
+		return
+	}
+	if err := publicProgramService.Migrate(req.Ids, req.PublicProgramMigration); err != nil {
+		questionBankResp.ErrorHandle(c, err)
+		return
+	} else {
+		questionBankResp.OkWithMessage("迁移成功", c)
+	}
+}
+
+func (api *PublicProgramApi) Delete(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		questionBankResp.CheckHandle(c, err)
+		return
+	}
+	if err := publicProgramService.Delete([]uint{uint(id)}); err != nil {
+		questionBankResp.ErrorHandle(c, err)
+		return
+	} else {
+		questionBankResp.OkWithMessage("删除成功", c)
+	}
+}
+
+func (api *PublicProgramApi) Deletes(c *gin.Context) {
+	var req request.IdsReq
+	_ = c.ShouldBindJSON(&req)
+	if err := publicProgramService.Delete(req.Ids); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("批量删除失败:%s", err.Error()))
+	} else {
+		questionBankResp.OkWithMessage("批量删除成功", c)
 	}
 }

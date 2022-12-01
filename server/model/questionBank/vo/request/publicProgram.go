@@ -25,3 +25,13 @@ type PublicProgramSearch struct {
 	questionBankBo.PublicProgramSearchCriteria
 	request.PageInfo
 }
+
+type PublicProgramMigration struct {
+	Id uint `json:"id"`
+	questionBankBo.PublicProgramMigration
+}
+
+type PublicProgramMigrations struct {
+	Ids []uint `json:"ids"`
+	questionBankBo.PublicProgramMigration
+}
