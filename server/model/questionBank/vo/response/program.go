@@ -19,3 +19,8 @@ type ProgramSimple struct {
 	global.GVA_MODEL
 	questionBank.SimpleModel
 }
+
+type ProgramPractice struct {
+	questionBankBo.PracticeModel
+	questionBankBo.DefaultCodes `json:"defaultCodes"`
+}

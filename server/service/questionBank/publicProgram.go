@@ -15,7 +15,9 @@ func (p *PublicProgramService) Create(programCase *questionBankPo.PublicProgram)
 	return global.GVA_DB.Create(programCase).Error
 }
 
-func (p *PublicProgramService) FindList(criteria questionBankBo.PublicProgramSearchCriteria, info request.PageInfo) (data []questionBankVoResp.PublicProgramSimple, total int64, err error) {
+func (p *PublicProgramService) FindList(criteria questionBankBo.PublicProgramSearchCriteria, info request.PageInfo) ([]questionBankVoResp.PublicProgramSimple, int64, error) {
+	var data []questionBankVoResp.PublicProgramSimple
+	var total int64
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -33,12 +35,12 @@ func (p *PublicProgramService) FindList(criteria questionBankBo.PublicProgramSea
 	if criteria.ProblemType != 0 {
 		db = db.Where("problem_type =?", criteria.ProblemType)
 	}
-	err = db.Count(&total).Error
+	err := db.Count(&total).Error
 	if err != nil {
-		return
+		return nil, 0, err
 	}
 	err = db.Model(&questionBankPo.PublicProgram{}).Limit(limit).Offset(offset).Find(&data).Error
-	return
+	return data, total, err
 }
 
 func (p *PublicProgramService) FindDetail(id int) (result *questionBankPo.PublicProgram, err error) {
@@ -98,7 +100,7 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 				return err
 			}
 			defaultCode.Filter(table)
-			serialize, err := defaultCode.Serialize()
+			serialize, _, err := defaultCode.Serialize()
 			if err != nil {
 				return err
 			}
@@ -142,7 +144,7 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
 				return err
 			}
-			serialize, err := defaultCode.Serialize()
+			serialize, _, err := defaultCode.Serialize()
 			if err != nil {
 				return err
 			}

@@ -17,7 +17,7 @@ type ProgramModel struct {
 	LanguageSupports      string `json:"languageSupport"`
 	ReferenceAnswers      string `json:"referenceAnswer"`
 	DefaultCodes          string `json:"defaultCodes"`
-	LanguageSupportsBrief string `json:"languageSupport"`
+	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }
 
 // TableName Program 表名

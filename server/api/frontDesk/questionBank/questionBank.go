@@ -163,5 +163,17 @@ func (q *QuestionBankApi) FindSupplyBlank(c *gin.Context) {
 }
 
 func (q *QuestionBankApi) FindProgram(c *gin.Context) {
-
+	var pageInfo questionBankReq.ProgramPracticeSearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	if list, total, err := questionBankService.FindProgramList(pageInfo.ProgramPracticeCriteria, pageInfo.PageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
+	} else {
+		questionBankResp.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

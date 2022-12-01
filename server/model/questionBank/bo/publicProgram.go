@@ -68,17 +68,21 @@ func (s *ProgramCases) Deserialize(str string) error {
 	return err
 }
 
-func (s *LanguageSupports) Serialize() (string, error) {
+func (s *LanguageSupports) Serialize() (string, string, error) {
 	table := make(map[string]*LanguageLimit)
 	for _, support := range *s {
 		name, err := support.LanguageId.GetLanguageName()
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 		table[name] = &support.LanguageLimit
 	}
 	jsons, err := json.Marshal(table)
-	return string(jsons), err
+	var briefs []string
+	for k, _ := range table {
+		briefs = append(briefs, k)
+	}
+	return string(jsons), strings.Join(briefs, ","), err
 }
 
 func (s *DefaultCodes) Serialize() (string, error) {
@@ -96,9 +100,11 @@ func (s *DefaultCodes) Serialize() (string, error) {
 
 func (s *DefaultCodes) Deserialization(str string) error {
 	table := make(map[string]string)
-	err := json.Unmarshal([]byte(str), &table)
-	if err != nil {
-		return err
+	if str != "" {
+		err := json.Unmarshal([]byte(str), &table)
+		if err != nil {
+			return err
+		}
 	}
 	*s = make([]*DefaultCode, len(table))
 	i := 0
@@ -113,6 +119,30 @@ func (s *DefaultCodes) Deserialization(str string) error {
 	return nil
 }
 
+func (s *DefaultCodes) DeserializationWithBrief(str string, brief string) error {
+	table := make(map[string]string)
+	if str != "" {
+		err := json.Unmarshal([]byte(str), &table)
+		if err != nil {
+			return err
+		}
+	}
+	split := strings.Split(brief, ",")
+	for _, v := range split {
+		table[v] = ""
+	}
+	*s = make([]*DefaultCode, len(table))
+	i := 0
+	for k, support := range table {
+		(*s)[i] = &DefaultCode{}
+		err := (*s)[i].LanguageId.ToLanguageId(k)
+		if err != nil {
+			return err
+		}
+		(*s)[i].Code = support
+	}
+	return nil
+}
 func (s *ReferenceAnswers) Serialize() (string, error) {
 	table := make(map[string]string)
 	for _, support := range *s {

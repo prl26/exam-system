@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
@@ -11,6 +12,6 @@ type MultipleChoiceSimple struct {
 }
 
 type MultipleChoicePractice struct {
-	PracticeModel
+	questionBankBo.PracticeModel
 	MostOptions int `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
 }

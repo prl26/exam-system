@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
@@ -11,5 +12,5 @@ type JudgeSimple struct {
 }
 
 type JudgePractice struct {
-	PracticeModel
+	questionBankBo.PracticeModel
 }

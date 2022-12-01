@@ -41,13 +41,13 @@ func (p *ProgramApi) Create(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
-		programPo.LanguageSupportsBrief = req.Brief()
+		programPo.LanguageSupportsBrief = brief
 	} else {
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
 		//return
@@ -168,13 +168,13 @@ func (api *ProgramApi) Update(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
-		programPo.LanguageSupportsBrief = req.Brief()
+		programPo.LanguageSupportsBrief = brief
 	} else {
 		// 修改的时候不一定修改语言支持
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))

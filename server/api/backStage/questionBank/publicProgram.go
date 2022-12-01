@@ -41,7 +41,7 @@ func (p *PublicProgramApi) Create(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, _, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
@@ -164,7 +164,7 @@ func (api *PublicProgramApi) Update(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, _, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return

@@ -22,3 +22,7 @@ type ProgramSearch struct {
 	questionBankBo.ProgramSearchCriteria
 	request.PageInfo
 }
+type ProgramPracticeSearch struct {
+	questionBankBo.ProgramPracticeCriteria
+	request.PageInfo
+}
