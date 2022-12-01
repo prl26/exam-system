@@ -1,5 +1,7 @@
 package request
 
+import questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum"
+
 /**
 
  * @Author: AloneAtWar
@@ -26,7 +28,7 @@ type CheckJudge struct {
 }
 
 type CheckProgramm struct {
-	Id         uint   `json:"id"`
-	Code       string `json:"code"`
-	LanguageId uint   `json:"language_id"`
+	Id         uint                          `json:"id"`
+	Code       string                        `json:"code"`
+	LanguageId questionBankEnum.LanguageType `json:"languageId"`
 }

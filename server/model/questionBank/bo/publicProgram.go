@@ -51,6 +51,25 @@ type ProgramCases []*ProgramCase
 type DefaultCodes []*DefaultCode
 type ReferenceAnswers []*ReferenceAnswer
 
+func (s *LanguageSupport) Deserialize(languageSupport string, languageType enum.LanguageType) error {
+	name, err := languageType.GetLanguageName()
+	if err != nil {
+		return err
+	}
+	table := make(map[string]*LanguageLimit)
+	err = json.Unmarshal([]byte(languageSupport), &table)
+	if err != nil {
+		return err
+	}
+	if v, ok := table[name]; ok {
+		s.LanguageId = languageType
+		s.LanguageLimit = *v
+	} else {
+		return questionBankError.NotLanguageSupportError
+	}
+	return nil
+}
+
 func (s *ProgramCases) Serialize() (string, error) {
 	jsons, err := json.Marshal(s)
 	var sum uint

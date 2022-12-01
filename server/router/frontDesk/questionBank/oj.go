@@ -28,9 +28,9 @@ func (s *OjRouter) InitOjRouter(Router *gin.RouterGroup) {
 		supplyBlankRouter.POST("check", supplyBlankApi.CheckSupplyBlank)
 	}
 
-	//programmRouter := Router.Group("oj/program")
-	//programmApi :=	v1.ApiGroupApp.FrontDesk.QuestionBankGroup.OjApi
-	//{
-	//	programmRouter.POST("check", programmApi.CheckProgramm)
-	//}
+	programmRouter := Router.Group("oj/program")
+	programmApi := v1.ApiGroupApp.FrontDesk.QuestionBankGroup.OjApi
+	{
+		programmRouter.POST("check", programmApi.CheckProgram)
+	}
 }
