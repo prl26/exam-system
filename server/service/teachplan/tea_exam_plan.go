@@ -97,6 +97,6 @@ func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.Ex
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&examPlans).Error
+	err = db.Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&examPlans).Error
 	return examPlans, total, err
 }

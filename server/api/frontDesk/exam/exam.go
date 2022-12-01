@@ -73,6 +73,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	}
 }
 
+//获取考试分数
 func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 	StudentId := utils.GetStudentId(c)
 	if score, err := examService.GetExamScore(StudentId); err != nil {

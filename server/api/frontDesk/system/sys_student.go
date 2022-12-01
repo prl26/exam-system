@@ -1,7 +1,6 @@
 package system
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
@@ -52,7 +51,6 @@ func (b *BaseApi) StudentLogin(c *gin.Context) {
 func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	Lessons, err := teachClassService.FindTeachClass(user.ID)
-	fmt.Println(Lessons)
 	claims := j.CreateStudentClaims(systemReq.StudentBaseClaims{
 		ID:          user.ID,
 		Name:        user.Name,
