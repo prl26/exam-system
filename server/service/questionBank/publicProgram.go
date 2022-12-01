@@ -103,6 +103,7 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 				return err
 			}
 			program.LanguageSupports = serialize
+			program.LanguageSupportsBrief = defaultCode.Brief()
 		}
 		if program.DefaultCodes != "" {
 			defaultCode := questionBankBo.DefaultCodes{}
@@ -131,6 +132,22 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 				return err
 			}
 			program.ReferenceAnswers = serialize
+		}
+
+	} else {
+		if program.LanguageSupports != "" {
+			defaultCode := questionBankBo.LanguageSupports{}
+			err := defaultCode.Deserialization(program.LanguageSupports)
+			if err != nil {
+				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
+				return err
+			}
+			serialize, err := defaultCode.Serialize()
+			if err != nil {
+				return err
+			}
+			program.LanguageSupports = serialize
+			program.LanguageSupportsBrief = defaultCode.Brief()
 		}
 	}
 	return nil

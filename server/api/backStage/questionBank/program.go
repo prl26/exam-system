@@ -47,6 +47,7 @@ func (p *ProgramApi) Create(c *gin.Context) {
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
+		programPo.LanguageSupportsBrief = req.Brief()
 	} else {
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
 		//return
@@ -173,6 +174,7 @@ func (api *ProgramApi) Update(c *gin.Context) {
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
+		programPo.LanguageSupportsBrief = req.Brief()
 	} else {
 		// 修改的时候不一定修改语言支持
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))

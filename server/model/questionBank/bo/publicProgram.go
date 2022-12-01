@@ -5,6 +5,8 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank/enum"
 	questionBankError "github.com/prl26/exam-system/server/model/questionBank/error"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
+	"strconv"
+	"strings"
 )
 
 type PublicProgramMigration struct {
@@ -196,4 +198,16 @@ func (s *ReferenceAnswers) Filter(languageIds map[enum.LanguageType]bool) {
 		}
 	}
 	*s = *code
+}
+
+func (s *LanguageSupports) Brief() string {
+	str := []string{}
+	table := make(map[enum.LanguageType]bool)
+	for _, support := range *s {
+		table[support.LanguageId] = true
+	}
+	for k, _ := range table {
+		str = append(str, strconv.Itoa(int(k)))
+	}
+	return strings.Join(str, ",")
 }

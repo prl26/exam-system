@@ -86,10 +86,8 @@ func (q *QuestionBankApi) FindQuestionsByChapterId(c *gin.Context) {
 	switch questionT {
 	case questionType.JUDGE:
 		q.FindJudge(c)
-	//case questionType.PROGRAM:
-	//	programms := questionBankService.FindProgramms(uint(chapterId))
-	//	response.OkWithData(programms, c)
-	//	break
+	case questionType.PROGRAM:
+		q.FindProgram(c)
 	case questionType.SINGLE_CHOICE:
 		q.FindSingleChoice(c)
 	case questionType.SUPPLY_BLANK:
@@ -162,4 +160,8 @@ func (q *QuestionBankApi) FindSupplyBlank(c *gin.Context) {
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
+}
+
+func (q *QuestionBankApi) FindProgram(c *gin.Context) {
+
 }
