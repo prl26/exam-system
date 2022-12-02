@@ -148,7 +148,9 @@ func (s *DefaultCodes) DeserializationWithBrief(str string, brief string) error 
 	}
 	split := strings.Split(brief, ",")
 	for _, v := range split {
-		table[v] = ""
+		if table[v] == "" {
+			table[v] = ""
+		}
 	}
 	*s = make([]*DefaultCode, len(table))
 	i := 0

@@ -177,3 +177,5 @@ func (q *QuestionBankApi) FindProgram(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+//{"c":"#include \u003cstdio.h\u003e\n\nint main() {\n   printf(\"Hello World!\\n\");\n   return 0;\n}\n//更多请阅读：https://www.yiibai.com/c_examples/hello_world_program_in_c.html\n\n"}

@@ -12,9 +12,9 @@ type ProgramSearchCriteria struct {
 
 type ProgramOjSupport struct {
 	LanguageSupports `json:"languageSupports"`
-	ProgramCases     `json:"programCases"`
-	ReferenceAnswers `json:"referenceAnswers"`
 	DefaultCodes     `json:"defaultCodes"`
+	ReferenceAnswers `json:"referenceAnswers"`
+	ProgramCases     `json:"programCases"`
 }
 
 type ProgramDetail struct {
@@ -22,4 +22,14 @@ type ProgramDetail struct {
 	questionBankPo.CourseSupport
 	CourseSupportPtr
 	questionBankPo.ProgramModel
+}
+
+type ProgramPracticeCriteria struct {
+	questionBankPo.CourseSupport
+}
+
+type ProgramPractice struct {
+	PracticeModel
+	DefaultCodes          string `json:"defaultCodes"`
+	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }
