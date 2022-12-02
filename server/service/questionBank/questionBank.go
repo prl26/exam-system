@@ -70,7 +70,7 @@ func (service *QuestionBankService) FindSupplyBlankList(criteria questionBankBo.
 	return list, total, err
 }
 
-func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isMultiSelect bool) (list []questionBankBo.PracticeModel, total int64, err error) {
+func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isMultiSelect bool) (list []questionBankVoResp.MultipleChoicePractice, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
