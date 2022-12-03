@@ -13,10 +13,11 @@ type Program struct {
 
 type ProgramModel struct {
 	BasicModel
-	ProgramCases     string `json:"programCases"`
-	LanguageSupports string `json:"languageSupport"`
-	ReferenceAnswers string `json:"referenceAnswer"`
-	DefaultCodes     string `json:"defaultCodes"`
+	ProgramCases          string `json:"programCases"`
+	LanguageSupports      string `json:"languageSupport"`
+	ReferenceAnswers      string `json:"referenceAnswer"`
+	DefaultCodes          string `json:"defaultCodes"`
+	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }
 
 // TableName Program 表名

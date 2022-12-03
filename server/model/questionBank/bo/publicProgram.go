@@ -5,8 +5,14 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank/enum"
 	questionBankError "github.com/prl26/exam-system/server/model/questionBank/error"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
+	"strconv"
+	"strings"
 )
 
+type PublicProgramMigration struct {
+	questionBankPo.CourseSupport
+	LanguageIds []enum.LanguageType `json:"languageIds"`
+}
 type LanguageSupport struct {
 	LanguageId enum.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
 	LanguageLimit
@@ -45,6 +51,25 @@ type ProgramCases []*ProgramCase
 type DefaultCodes []*DefaultCode
 type ReferenceAnswers []*ReferenceAnswer
 
+func (s *LanguageSupport) Deserialize(languageSupport string, languageType enum.LanguageType) error {
+	name, err := languageType.GetLanguageName()
+	if err != nil {
+		return err
+	}
+	table := make(map[string]*LanguageLimit)
+	err = json.Unmarshal([]byte(languageSupport), &table)
+	if err != nil {
+		return err
+	}
+	if v, ok := table[name]; ok {
+		s.LanguageId = languageType
+		s.LanguageLimit = *v
+	} else {
+		return questionBankError.NotLanguageSupportError
+	}
+	return nil
+}
+
 func (s *ProgramCases) Serialize() (string, error) {
 	jsons, err := json.Marshal(s)
 	var sum uint
@@ -62,17 +87,21 @@ func (s *ProgramCases) Deserialize(str string) error {
 	return err
 }
 
-func (s *LanguageSupports) Serialize() (string, error) {
+func (s *LanguageSupports) Serialize() (string, string, error) {
 	table := make(map[string]*LanguageLimit)
 	for _, support := range *s {
 		name, err := support.LanguageId.GetLanguageName()
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 		table[name] = &support.LanguageLimit
 	}
 	jsons, err := json.Marshal(table)
-	return string(jsons), err
+	var briefs []string
+	for k, _ := range table {
+		briefs = append(briefs, k)
+	}
+	return string(jsons), strings.Join(briefs, ","), err
 }
 
 func (s *DefaultCodes) Serialize() (string, error) {
@@ -90,9 +119,11 @@ func (s *DefaultCodes) Serialize() (string, error) {
 
 func (s *DefaultCodes) Deserialization(str string) error {
 	table := make(map[string]string)
-	err := json.Unmarshal([]byte(str), &table)
-	if err != nil {
-		return err
+	if str != "" {
+		err := json.Unmarshal([]byte(str), &table)
+		if err != nil {
+			return err
+		}
 	}
 	*s = make([]*DefaultCode, len(table))
 	i := 0
@@ -107,6 +138,32 @@ func (s *DefaultCodes) Deserialization(str string) error {
 	return nil
 }
 
+func (s *DefaultCodes) DeserializationWithBrief(str string, brief string) error {
+	table := make(map[string]string)
+	if str != "" {
+		err := json.Unmarshal([]byte(str), &table)
+		if err != nil {
+			return err
+		}
+	}
+	split := strings.Split(brief, ",")
+	for _, v := range split {
+		if table[v] == "" {
+			table[v] = ""
+		}
+	}
+	*s = make([]*DefaultCode, len(table))
+	i := 0
+	for k, support := range table {
+		(*s)[i] = &DefaultCode{}
+		err := (*s)[i].LanguageId.ToLanguageId(k)
+		if err != nil {
+			return err
+		}
+		(*s)[i].Code = support
+	}
+	return nil
+}
 func (s *ReferenceAnswers) Serialize() (string, error) {
 	table := make(map[string]string)
 	for _, support := range *s {
@@ -159,4 +216,49 @@ func (s *LanguageSupports) Deserialization(str string) error {
 
 type PublicProgramSearchCriteria struct {
 	questionBankPo.SimpleModel
+}
+
+func (s *DefaultCodes) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &DefaultCodes{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
+}
+
+func (s *LanguageSupports) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &LanguageSupports{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
+}
+
+func (s *ReferenceAnswers) Filter(languageIds map[enum.LanguageType]bool) {
+	code := &ReferenceAnswers{}
+	for i := 0; i < len(*s); i++ {
+		this := (*s)[i]
+		if languageIds[this.LanguageId] {
+			*code = append(*code, this)
+		}
+	}
+	*s = *code
+}
+
+func (s *LanguageSupports) Brief() string {
+	str := []string{}
+	table := make(map[enum.LanguageType]bool)
+	for _, support := range *s {
+		table[support.LanguageId] = true
+	}
+	for k, _ := range table {
+		str = append(str, strconv.Itoa(int(k)))
+	}
+	return strings.Join(str, ",")
 }

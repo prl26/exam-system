@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
@@ -40,12 +41,13 @@ func (p *ProgramApi) Create(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
+		programPo.LanguageSupportsBrief = brief
 	} else {
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
 		//return
@@ -166,12 +168,13 @@ func (api *ProgramApi) Update(c *gin.Context) {
 		//return
 	}
 	if len(req.LanguageSupports) != 0 {
-		languageSupportStr, err := req.LanguageSupports.Serialize()
+		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
 		programPo.LanguageSupports = languageSupportStr
+		programPo.LanguageSupportsBrief = brief
 	} else {
 		// 修改的时候不一定修改语言支持
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
@@ -200,5 +203,30 @@ func (api *ProgramApi) Update(c *gin.Context) {
 		return
 	} else {
 		questionBankResp.OkWithMessage("更新成功", c)
+	}
+}
+
+func (api *ProgramApi) Delete(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		questionBankResp.CheckHandle(c, err)
+		return
+	}
+	if err := programService.Delete([]uint{uint(id)}); err != nil {
+		questionBankResp.ErrorHandle(c, err)
+		return
+	} else {
+		questionBankResp.OkWithMessage("删除成功", c)
+	}
+}
+
+func (api *ProgramApi) Deletes(c *gin.Context) {
+	var req request.IdsReq
+	_ = c.ShouldBindJSON(&req)
+	if err := programService.Delete(req.Ids); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("批量删除失败:%s", err.Error()))
+	} else {
+		questionBankResp.OkWithMessage("批量删除成功", c)
 	}
 }

@@ -23,6 +23,8 @@ func (*ProgramRouter) InitProgram(Router *gin.RouterGroup) {
 	{
 		programRouter.POST("create", programApi.Create)
 		programRouter.PUT("update", programApi.Update)
+		programRouter.DELETE("delete", programApi.Delete)
+		programRouter.DELETE("deletes", programApi.Deletes)
 		//programRouter.PUT("editCase", programApi.EditProgramCases)
 		//programRouter.PUT("editDetail", programApi.EditProgramDetail)
 		//programRouter.DELETE("deleteCase", programApi.DeleteProgramCases)

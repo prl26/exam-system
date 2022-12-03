@@ -86,10 +86,8 @@ func (q *QuestionBankApi) FindQuestionsByChapterId(c *gin.Context) {
 	switch questionT {
 	case questionType.JUDGE:
 		q.FindJudge(c)
-	//case questionType.PROGRAM:
-	//	programms := questionBankService.FindProgramms(uint(chapterId))
-	//	response.OkWithData(programms, c)
-	//	break
+	case questionType.PROGRAM:
+		q.FindProgram(c)
 	case questionType.SINGLE_CHOICE:
 		q.FindSingleChoice(c)
 	case questionType.SUPPLY_BLANK:
@@ -163,3 +161,21 @@ func (q *QuestionBankApi) FindSupplyBlank(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+func (q *QuestionBankApi) FindProgram(c *gin.Context) {
+	var pageInfo questionBankReq.ProgramPracticeSearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	if list, total, err := questionBankService.FindProgramList(pageInfo.ProgramPracticeCriteria, pageInfo.PageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
+	} else {
+		questionBankResp.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+//{"c":"#include \u003cstdio.h\u003e\n\nint main() {\n   printf(\"Hello World!\\n\");\n   return 0;\n}\n//更多请阅读：https://www.yiibai.com/c_examples/hello_world_program_in_c.html\n\n"}

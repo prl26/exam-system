@@ -5382,7 +5382,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CheckProgramm"
+                            "$ref": "#/definitions/request.CheckProgram"
                         }
                     }
                 ],
@@ -15450,7 +15450,7 @@ const docTemplate = `{
                 }
             }
         },
-        "request.CheckProgramm": {
+        "request.CheckProgram": {
             "type": "object",
             "properties": {
                 "code": {

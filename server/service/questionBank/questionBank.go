@@ -40,7 +40,7 @@ type QuestionBankService struct {
 
 //
 
-func (service *QuestionBankService) FindJudgeList(criteria questionBankBo.JudgePracticeCriteria, info request.PageInfo) (list []questionBankVoResp.PracticeModel, total int64, err error) {
+func (service *QuestionBankService) FindJudgeList(criteria questionBankBo.JudgePracticeCriteria, info request.PageInfo) (list []questionBankBo.PracticeModel, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -70,7 +70,7 @@ func (service *QuestionBankService) FindSupplyBlankList(criteria questionBankBo.
 	return list, total, err
 }
 
-func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isMultiSelect bool) (list []questionBankVoResp.PracticeModel, total int64, err error) {
+func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isMultiSelect bool) (list []questionBankVoResp.MultipleChoicePractice, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -87,6 +87,28 @@ func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBank
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	return list, total, err
+}
+
+func (service *QuestionBankService) FindProgramList(criteria questionBankBo.ProgramPracticeCriteria, info request.PageInfo) (list []*questionBankVoResp.ProgramPractice, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&questionBank.Program{})
+	db = db.Where("can_practice = ?", 1)
+	db = db.Where("chapter_id =?", criteria.ChapterId)
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	var l []*questionBankBo.ProgramPractice
+	err = db.Limit(limit).Offset(offset).Find(&l).Error
+	list = make([]*questionBankVoResp.ProgramPractice, len(l))
+	for i, practice := range l {
+		list[i] = new(questionBankVoResp.ProgramPractice)
+		list[i].PracticeModel = practice.PracticeModel
+		list[i].DefaultCodes.DeserializationWithBrief(practice.DefaultCodes, practice.LanguageSupportsBrief)
+	}
 	return list, total, err
 }
 

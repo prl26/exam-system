@@ -51,7 +51,7 @@ func (c *CLanguageService) Check(code string, limit questionBankBo.LanguageLimit
 	if err != nil {
 		return nil, exception.CompileError{Msg: err.Error()}
 	}
-	defer func() {
+	go func() {
 		after := time.After(FILE_FAILED_DURATION)
 		<-after
 		err := c.Delete(fileID)

@@ -14,6 +14,10 @@ func (*PublicProgramRouter) InitPublicProgram(Router *gin.RouterGroup) {
 	{
 		programRouter.POST("create", publicProgramApi.Create)
 		programRouter.PUT("update", publicProgramApi.Update)
+		programRouter.POST("migrate", publicProgramApi.Migrate)
+		programRouter.POST("migrates", publicProgramApi.Migrates)
+		programRouter.DELETE("delete", publicProgramApi.Delete)
+		programRouter.DELETE("deletes", publicProgramApi.Deletes)
 	}
 	programWithoutRecordRouter := Router.Group("publicProgram")
 	{

@@ -57,3 +57,11 @@ func (p *ProgramService) FindDetail(id int) (result *questionBankBo.ProgramDetai
 func (p *ProgramService) Update(t *po.Program) error {
 	return global.GVA_DB.Updates(t).Error
 }
+
+func (p *ProgramService) Delete(uints []uint) error {
+	if len(uints) == 1 {
+		return global.GVA_DB.Delete(&questionBankPo.Program{}, uints[0]).Error
+	} else {
+		return global.GVA_DB.Delete(&questionBankPo.Program{}, uints).Error
+	}
+}
