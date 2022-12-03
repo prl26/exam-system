@@ -2,8 +2,10 @@ package examManage
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -26,4 +28,16 @@ func (examStatusServices *ExamStatusService) GaSStudentsOfExam() (students []uin
 		return nil, err
 	}
 	return students, err
+}
+func (student_paper_status *ExamStatusService) GetStatus(status examManage.StudentPaperStatus) (err error) {
+	var num int64
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		err = tx.Table("student_paper_status").Where("student_id = ? and plan_id = ?", status.StudentId, status.PlanId).Count(&num).Error
+		if err != nil || num != 0 {
+			return err
+		}
+		tx.Create(&status)
+		return nil
+	})
+	return
 }

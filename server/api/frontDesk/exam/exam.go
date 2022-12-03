@@ -21,6 +21,7 @@ type ExamApi struct {
 
 var wg sync.WaitGroup
 var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
+var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的教学计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -47,7 +48,10 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
 	} else {
-		response.OkWithData(gin.H{"examPaper": examPaper}, c)
+		response.OkWithData(gin.H{
+			"examPaper": examPaper,
+			"time":      time.Now(),
+		}, c)
 	}
 }
 
@@ -56,6 +60,14 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
 	_ = c.ShouldBindJSON(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
+	status := examManage.StudentPaperStatus{
+		GVA_MODEL: global.GVA_MODEL{},
+		StudentId: ExamCommit.StudentId,
+		PlanId:    ExamCommit.PlanId,
+	}
+	if err := statuServie.GetStatus(status); err != nil {
+		response.FailWithMessage("你已经提交过了", c)
+	}
 	if err := examService.CommitExamPapers(ExamCommit); err != nil {
 		global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
 		response.FailWithMessage("试卷提交试卷失败", c)

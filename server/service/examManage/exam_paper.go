@@ -1,7 +1,6 @@
 package examManage
 
 import (
-	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/enum/questionType"
@@ -88,7 +87,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 	err = global.GVA_DB.Where("paper_id = ?", id).Find(&Paper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(Paper); i++ {
-		if *Paper[i].QuestionType == questionType.MULTIPLE_CHOICE {
+		if *Paper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", Paper[i].QuestionId).Find(&Choice.Choice).Error
 			if err != nil {
@@ -173,7 +172,6 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err er
 	global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and tea_examplan.id = ?  GROUP BY student_id ", PlanId).
 		Scan(&studentList)
 	rand.Seed(time.Now().UnixNano())
-	fmt.Println(studentList)
 	for i := 0; i < len(studentList); i++ {
 		a := rand.Intn(len(number))
 		var result examManage.ExamPaper
@@ -304,7 +302,7 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 
 func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
-		if *v.QuestionType == questionType.MULTIPLE_CHOICE {
+		if *v.QuestionType == questionType.SINGLE_CHOICE {
 			wg.Add(1)
 			go examPaperService.SetPaperChoiceQuestion(v, Id)
 		} else if *v.QuestionType == questionType.JUDGE {
