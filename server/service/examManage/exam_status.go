@@ -29,15 +29,14 @@ func (examStatusServices *ExamStatusService) GaSStudentsOfExam() (students []uin
 	}
 	return students, err
 }
-func (student_paper_status *ExamStatusService) GetStatus(status examManage.StudentPaperStatus) (err error) {
-	var num int64
+func (student_paper_status *ExamStatusService) GetStatus(status examManage.StudentPaperStatus) (num int64, err error) {
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		err = tx.Table("student_paper_status").Where("student_id = ? and plan_id = ?", status.StudentId, status.PlanId).Count(&num).Error
-		if err != nil || num != 0 {
+		if err != nil {
 			return err
 		}
 		tx.Create(&status)
 		return nil
 	})
-	return
+	return num, err
 }

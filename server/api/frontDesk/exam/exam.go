@@ -65,23 +65,25 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 		StudentId: ExamCommit.StudentId,
 		PlanId:    ExamCommit.PlanId,
 	}
-	if err := statuServie.GetStatus(status); err != nil {
+	num, _ := statuServie.GetStatus(status)
+	if num != 0 {
 		response.FailWithMessage("你已经提交过了", c)
-	}
-	if err := examService.CommitExamPapers(ExamCommit); err != nil {
-		global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
-		response.FailWithMessage("试卷提交试卷失败", c)
 	} else {
-		response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
-		go func() {
-			fmt.Println("start")
-			time.AfterFunc(time.Second*5, func() {
-				wg.Add(1)
-				utils.ExecPapers(ExamCommit)
-				defer wg.Done()
-			})
-			wg.Wait()
-		}()
+		if err := examService.CommitExamPapers(ExamCommit); err != nil {
+			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
+			response.FailWithMessage("试卷提交试卷失败", c)
+		} else {
+			response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
+			go func() {
+				fmt.Println("start")
+				time.AfterFunc(time.Second*5, func() {
+					wg.Add(1)
+					utils.ExecPapers(ExamCommit)
+					defer wg.Done()
+				})
+				wg.Wait()
+			}()
+		}
 	}
 }
 
