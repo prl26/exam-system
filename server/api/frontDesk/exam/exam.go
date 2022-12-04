@@ -68,8 +68,11 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
 	_ = c.ShouldBindJSON(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
+	PlanDetail, _ := examPlanService.GetExamPlan(ExamCommit.PlanId)
 	status, _ := statuServie.GetStatus(ExamCommit.StudentId, ExamCommit.PlanId)
-	if status.IsCommit {
+	if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
+	} else if status.IsCommit {
 		response.FailWithMessage("你已经提交过了", c)
 	} else {
 		if err := examService.CommitExamPapers(ExamCommit); err != nil {
