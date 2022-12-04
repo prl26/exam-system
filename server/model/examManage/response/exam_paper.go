@@ -1,7 +1,7 @@
 package response
 
 import (
-	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	"github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )
 
@@ -26,6 +26,11 @@ type BlankComponent struct {
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blank"`
 }
 type ProgramComponent struct {
-	MergeId uint                         `json:"mergeId"`
-	Program questionBankBo.PracticeModel `json:"program"`
+	MergeId uint        `json:"mergeId"`
+	Program ProgramExam `json:"program"`
+}
+type ProgramExam struct {
+	po.BasicModel
+	LanguageSupports      string `json:"languageSupport"`
+	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }
