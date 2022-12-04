@@ -10,6 +10,7 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type PaperTemplateApi struct {
@@ -41,7 +42,6 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
 			response.OkWithMessage("创建成功", c)
 		}
 	}
-
 }
 
 // DeletePaperTemplate 删除PaperTemplate
@@ -147,5 +147,22 @@ func (PapertemplateApi *PaperTemplateApi) GetPaperTemplateList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+
+//配置模板前先查询一下数据详情
+func (PapertemplateApi *PaperTemplateApi) BeforeTemplate(c *gin.Context) {
+	lessonId := c.Query("lessonId")
+	LessonId, _ := strconv.Atoi(lessonId)
+	details, err := PapertemplateService.GetDetails(uint(LessonId))
+	if err != nil {
+		response.FailWithMessage("查询出错了", c)
+	} else {
+		response.OkWithData(gin.H{
+			"选择题": details.Choice,
+			"判断题": details.Judge,
+			"填空题": details.Blank,
+			"编程题": details.Program,
+		}, c)
 	}
 }

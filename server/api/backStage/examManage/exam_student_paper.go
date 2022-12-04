@@ -111,7 +111,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) UpdateExamStudentPaper(c *gin.Co
 func (examstudentPaperApi *ExamStudentPaperApi) FindExamStudentPaper(c *gin.Context) {
 	var examstudentPaper examManageReq.ExamComing
 	_ = c.ShouldBindQuery(&examstudentPaper)
-	if reexamstudentPaper, err := examService.GetExamPapers(examstudentPaper); err != nil {
+	if reexamstudentPaper, _, err := examService.GetExamPapers(examstudentPaper); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {

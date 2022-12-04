@@ -17,7 +17,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 	startTime := utils.StringToTime(examPlan.StartTime)
 	endTime := utils.StringToTime(examPlan.EndTime)
 	time := int64(endTime.Sub(startTime).Minutes())
-
+	state := 0
 	ExamPlan := teachplan.ExamPlan{
 		GVA_MODEL:    global.GVA_MODEL{},
 		Name:         examPlan.Name,
@@ -27,7 +27,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 		EndTime:      &endTime,
 		CourseId:     examPlan.CourseId,
 		TemplateId:   examPlan.TemplateId,
-		State:        examPlan.State,
+		State:        &state,
 		Audit:        examPlan.Audit,
 		Type:         examPlan.Type,
 		PassScore:    examPlan.PassScore,

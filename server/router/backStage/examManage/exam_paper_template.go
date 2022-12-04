@@ -19,6 +19,7 @@ func (s *PaperTemplateRouter) InitPaperTemplateRouter(Router *gin.RouterGroup) {
 		PapertemplateRouter.DELETE("deletePaperTemplate", PapertemplateApi.DeletePaperTemplate)           // 删除PaperTemplate
 		PapertemplateRouter.DELETE("deletePaperTemplateByIds", PapertemplateApi.DeletePaperTemplateByIds) // 批量删除PaperTemplate
 		PapertemplateRouter.PUT("updatePaperTemplate", PapertemplateApi.UpdatePaperTemplate)              // 更新PaperTemplate
+		PapertemplateRouter.GET("beforeTemplate", PapertemplateApi.BeforeTemplate)
 	}
 	{
 		PapertemplateRouterWithoutRecord.GET("findPaperTemplate", PapertemplateApi.FindPaperTemplate)       // 根据ID获取PaperTemplate

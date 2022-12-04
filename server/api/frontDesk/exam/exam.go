@@ -22,6 +22,7 @@ type ExamApi struct {
 var wg sync.WaitGroup
 var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
+var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的教学计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -44,13 +45,20 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 		StudentId: studentId,
 		PlanId:    planId.PlanId,
 	}
-	if examPaper, err := examService.GetExamPapers(examComing); err != nil {
+	PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
+	if PlanDetail.StartTime.Unix() > time.Now().Unix() {
+		response.FailWithMessage("还没开考呢,莫急", c)
+	} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
+		response.FailWithMessage("你来晚了,考试已经结束了", c)
+	} else if examPaper, status, err := examService.GetExamPapers(examComing); err != nil {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
+	} else if status.IsCommit {
+		response.FailWithMessage("你已经提交过了", c)
 	} else {
 		response.OkWithData(gin.H{
 			"examPaper": examPaper,
-			"time":      time.Now(),
+			"enterTime": status.EnterTime,
 		}, c)
 	}
 }
@@ -60,13 +68,8 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
 	_ = c.ShouldBindJSON(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
-	status := examManage.StudentPaperStatus{
-		GVA_MODEL: global.GVA_MODEL{},
-		StudentId: ExamCommit.StudentId,
-		PlanId:    ExamCommit.PlanId,
-	}
-	num, _ := statuServie.GetStatus(status)
-	if num != 0 {
+	status, _ := statuServie.GetStatus(ExamCommit.StudentId, ExamCommit.PlanId)
+	if status.IsCommit {
 		response.FailWithMessage("你已经提交过了", c)
 	} else {
 		if err := examService.CommitExamPapers(ExamCommit); err != nil {

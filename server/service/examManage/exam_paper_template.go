@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	"github.com/prl26/exam-system/server/model/examManage/response"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -76,8 +77,8 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info 
 	db := global.GVA_DB.Model(&examManage.PaperTemplate{})
 	var Papertemplates []examManage.PaperTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.CourseId != nil {
-		db = db.Where("course_id = ?", info.CourseId)
+	if info.LessonId != nil {
+		db = db.Where("course_id = ?", info.LessonId)
 	}
 	if info.UserId != nil {
 		db = db.Where("user_id = ?", info.UserId)
@@ -91,4 +92,32 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info 
 	}
 	err = db.Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&Papertemplates).Error
 	return Papertemplates, total, err
+}
+
+//查找该课程下有哪些章节,章节下面各题目难度的题目数目
+func (PapertemplateService *PaperTemplateService) GetDetails(lessonId uint) (templates response.Template, err error) {
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_multiple_choice as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+		Scan(&templates.Choice).Error
+	if err != nil {
+		return
+	}
+
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_judge as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+		Scan(&templates.Judge).Error
+	if err != nil {
+		return
+	}
+
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_supply_blank as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+		Scan(&templates.Blank).Error
+	if err != nil {
+		return
+	}
+
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_programm as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+		Scan(&templates.Program).Error
+	if err != nil {
+		return
+	}
+	return
 }

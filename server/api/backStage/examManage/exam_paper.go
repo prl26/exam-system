@@ -180,11 +180,18 @@ func (examPaperApi *ExamPaperApi) SetStudentsToRedis(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 	var planId examManageReq.PaperDistribution
 	_ = c.ShouldBindQuery(&planId)
-	err := examPaperService.PaperDistribution(planId.PlanId)
+	status, err := examPaperService.GetPlanStatus(planId.PlanId)
 	if err != nil {
 		response.FailWithMessage("试卷分发失败", c)
+	} else if status != 0 {
+		response.FailWithMessage("试卷已经分发了", c)
 	} else {
-		response.OkWithMessage("试卷分发成功", c)
+		err := examPaperService.PaperDistribution(planId.PlanId)
+		if err != nil {
+			response.FailWithMessage("试卷分发失败", c)
+		} else {
+			response.OkWithMessage("试卷分发成功", c)
+		}
 	}
 }
 

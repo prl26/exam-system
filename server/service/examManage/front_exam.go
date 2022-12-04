@@ -12,6 +12,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type ExamService struct {
@@ -22,7 +23,7 @@ func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []te
 	return
 }
 
-func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (examPaper response.ExamPaperResponse, err error) {
+func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, err error) {
 	examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -84,10 +85,33 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 		return
 	}
 	examPaper.PaperId = uint(PaperId)
+	status, err = examService.CreateStatus(examComing)
+	if err != nil {
+		return
+	}
 	return
 }
 func (examService *ExamService) GetStudentPaperId(examComing request.ExamComing) (Id int64, err error) {
 	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).First(&Id).Error
+	return
+}
+
+func (examService *ExamService) CreateStatus(examComing request.ExamComing) (status examManage.StudentPaperStatus, err error) {
+	var num int64
+	status1 := examManage.StudentPaperStatus{
+		GVA_MODEL: global.GVA_MODEL{},
+		StudentId: examComing.StudentId,
+		PlanId:    examComing.PlanId,
+		EnterTime: time.Now(),
+		IsCommit:  false,
+	}
+
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ? and is_commit = 1", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
+	if err != nil {
+		return
+	} else if num == 0 {
+		global.GVA_DB.Create(&status1)
+	}
 	return
 }
 

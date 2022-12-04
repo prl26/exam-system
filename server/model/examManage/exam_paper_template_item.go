@@ -8,7 +8,7 @@ import (
 // PaperTemplateItem 结构体
 type PaperTemplateItem struct {
 	global.GVA_MODEL
-	ChapterId    *int `json:"chapter" form:"chapter" gorm:"column:chapter;comment:章节;size:32;"`
+	ChapterId    *int `json:"chapterId" form:"chapterId" gorm:"column:chapter_id;comment:章节id;size:32;"`
 	ProblemType  *int `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:难度;size:8;"`
 	QuestionType *int `json:"questionType" form:"paperId" gorm:"column:question_type;comment:题目类型;size:8;"`
 	Num          *int `json:"num" form:"num" gorm:"column:num;comment:数量;size:32;"`

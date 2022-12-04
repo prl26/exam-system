@@ -165,12 +165,30 @@ func (examPaperService *ExamPaperService) GetTemplate(info examManage.ExamPaper)
 	err = global.GVA_DB.Where("template_id = ?", info.TemplateId).Find(&list).Error
 	return
 }
+
+//该考试计划是否已经分发试卷
+func (examPaperService *ExamPaperService) GetPlanStatus(PlanId uint) (status int, err error) {
+	err = global.GVA_DB.Table("tea_examPlan").Select("status").Where("id = ?").Find(&status).Error
+	return
+}
+
 func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err error) {
 	var number []int64
-	global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number)
 	var studentList []int64
-	global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and tea_examplan.id = ?  GROUP BY student_id ", PlanId).
-		Scan(&studentList)
+	global.GVA_DB.Table("tea_examPlan").Where("id = ?", PlanId).Update("status", 1)
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		err = global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number).Error
+		if err != nil {
+			return err
+		}
+		err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and tea_examplan.id = ?  GROUP BY student_id ", PlanId).
+			Scan(&studentList).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < len(studentList); i++ {
 		a := rand.Intn(len(number))
@@ -179,11 +197,12 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err er
 	}
 	return
 }
+
 func (examPaperService *ExamPaperService) SetPaperChoiceQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
 	var list []questionBank.MultipleChoice
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_multiple_choice ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_multiple_choice ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -213,7 +232,7 @@ func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.
 	var list []questionBank.Judge
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_judge ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_judge ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -243,7 +262,7 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 	var list []questionBank.SupplyBlank
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -273,7 +292,7 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 	var list []questionBank.Program
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_programm ORDER BY RAND()").Where("problem_type = ? and can_exam = ?", info.ProblemType, 1).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_programm ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
