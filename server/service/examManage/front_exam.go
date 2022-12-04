@@ -105,8 +105,7 @@ func (examService *ExamService) CreateStatus(examComing request.ExamComing) (sta
 		EnterTime: time.Now(),
 		IsCommit:  false,
 	}
-
-	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ? and is_commit = 1", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
 	if err != nil {
 		return
 	} else if num == 0 {

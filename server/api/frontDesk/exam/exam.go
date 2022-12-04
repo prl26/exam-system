@@ -47,14 +47,14 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	}
 	PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
 	if PlanDetail.StartTime.Unix() > time.Now().Unix() {
-		response.FailWithMessage("还没开考呢,莫急", c)
+		response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
 	} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
-		response.FailWithMessage("你来晚了,考试已经结束了", c)
+		response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
 	} else if examPaper, status, err := examService.GetExamPapers(examComing); err != nil {
 		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 		response.FailWithMessage("查询考试试卷失败", c)
 	} else if status.IsCommit {
-		response.FailWithMessage("你已经提交过了", c)
+		response.FailWithMessageAndError(703, "你已经提交过了", c)
 	} else {
 		response.OkWithData(gin.H{
 			"examPaper": examPaper,
