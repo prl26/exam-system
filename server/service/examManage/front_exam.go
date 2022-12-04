@@ -149,6 +149,10 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 			return
 		}
 	}
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("is_commit", 1).Error
+	if err != nil {
+		return
+	}
 	return
 }
 
