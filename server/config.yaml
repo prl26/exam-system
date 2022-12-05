@@ -168,7 +168,7 @@ goJudge:
     default_judge_memory_limit: 104857600
   goLanguage:
     enable: true
-    gc_path: /usr/bin/go
+    gc_path: /usr/local/go/bin/go
     default_compile_cpu_time_limit: 10000000000
     default_compile_memory_time_limit: 104857600
     default_judge_cpu_time_limit: 10000000000

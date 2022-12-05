@@ -94,7 +94,7 @@ func (c *GoLanguage) compile(code string) (string, error) {
 		},
 	}
 	cmd := &pb.Request_CmdType{
-		Env:  []string{"GOCACHE=/tmp/go-build"},
+		Env:  []string{"GOCACHE=/tmp/go-build", "GOPATH=/tmp/gopath"},
 		Args: []string{c.GC_PATH, "build", "-o", DEFAULT_FILE_NAME, DEFAULT_CODE_NAME},
 		Files: []*pb.Request_File{
 			{
@@ -107,7 +107,7 @@ func (c *GoLanguage) compile(code string) (string, error) {
 		},
 		CpuTimeLimit: c.DEFAULT_COMPILE_CPU_TIME_LIMIT,
 		MemoryLimit:  c.DEFAULT_COMPILE_MEMORY_TIME_LIMIT,
-		ProcLimit:    50,
+		ProcLimit:    100,
 		CopyIn: map[string]*pb.Request_File{
 			DEFAULT_CODE_NAME: input,
 		},
@@ -136,7 +136,7 @@ func (c *GoLanguage) compile(code string) (string, error) {
 	if result.Status != pb.Response_Result_Accepted {
 		//说明出现了错误
 		//此数应该打日志
-		return "", fmt.Errorf(string(result.Files[STDERR]))
+		return "", fmt.Errorf("compile:%s", string(result.Files[STDERR]))
 	}
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME], nil
 }
