@@ -109,10 +109,10 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	}()
 	program.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)
-	status, _ := statuServie.GetStatus(program.StudentId, program.PlanId)
+	num, _ := examService.CommitProgram(program)
 	if time.Now().Unix() > PlanDetail.EndTime.Unix() {
 		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
-	} else if status.IsCommit {
+	} else if num != 0 {
 		response.FailWithMessageAndError(703, "你已经提交过了", c)
 	} else {
 		result := <-resp
