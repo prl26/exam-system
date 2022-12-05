@@ -15,19 +15,19 @@ type ExamPaperResponse struct {
 }
 type ChoiceComponent struct {
 	MergeId uint                                      `json:"mergeId"`
-	Choice  questionBankVoResp.MultipleChoicePractice `json:"question"`
+	Choice  questionBankVoResp.MultipleChoicePractice `json:"choiceComponent"`
 }
 type JudgeComponent struct {
 	MergeId uint                             `json:"mergeId"`
-	Judge   questionBankVoResp.JudgePractice `json:"Judge"`
+	Judge   questionBankVoResp.JudgePractice `json:"judgeComponent"`
 }
 type BlankComponent struct {
 	MergeId uint                                   `json:"mergeId"`
-	Blank   questionBankVoResp.SupplyBlankPractice `json:"blank"`
+	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
 }
 type ProgramComponent struct {
 	MergeId uint        `json:"mergeId"`
-	Program ProgramExam `json:"program"`
+	Program ProgramExam `json:"programComponent"`
 }
 type ProgramExam struct {
 	po.BasicModel
