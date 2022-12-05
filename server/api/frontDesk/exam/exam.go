@@ -104,8 +104,8 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	var err error
 	go func() {
 		checkProgram, score, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
-		resp <- ojResp.SubmitResponse{Submit: checkProgram, Score: score}
 		err = e
+		resp <- ojResp.SubmitResponse{Submit: checkProgram, Score: score}
 	}()
 	program.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)

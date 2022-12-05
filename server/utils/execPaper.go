@@ -62,6 +62,8 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 
 func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	var result examManage.ExamStudentPaper
-	err = global.GVA_DB.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/? where id = ?", score, program.MergeId).Scan(&result).Error
+	if score != 0 {
+		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
+	}
 	return err
 }
