@@ -179,8 +179,8 @@ func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLim
 			ResultStatus: result.Status.String(), ExitStatus: int(result.ExitStatus), Time: uint(result.Time), Memory: uint(result.Memory), Runtime: uint(result.RunTime)},
 		}
 		if result.Status == pb.Response_Result_Accepted {
-			standardAnswer := string(result.Files[STDOUT])
-			actualAnswer := cases[i].Output
+			standardAnswer := strings.ReplaceAll(string(result.Files[STDOUT]), "\r\n", "\n")
+			actualAnswer := strings.ReplaceAll(cases[i].Output, "\r\n", "\n")
 			if standardAnswer != actualAnswer {
 				if replacer.Replace(standardAnswer) == replacer.Replace(actualAnswer) {
 					result.Status = pb.Response_Result_PartiallyCorrect
