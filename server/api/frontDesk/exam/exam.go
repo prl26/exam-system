@@ -101,12 +101,11 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	_ = c.ShouldBindJSON(&program)
 	program.StudentId = utils.GetStudentId(c)
 	resp := make(chan ojResp.SubmitResponse)
+	var err error
 	go func() {
-		checkProgram, score, err := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
-		if err != nil {
-			return
-		}
+		checkProgram, score, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
 		resp <- ojResp.SubmitResponse{Submit: checkProgram, Score: score}
+		err = e
 	}()
 	program.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)
@@ -117,6 +116,11 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 		response.FailWithMessageAndError(703, "你已经提交过了", c)
 	} else {
 		result := <-resp
+		if err != nil {
+			global.GVA_LOG.Error(err.Error())
+			ojResp.ErrorHandle(c, err)
+			return
+		}
 		err := utils.ExecProgram(program, result.Score)
 		if err != nil {
 			global.GVA_LOG.Error(err.Error())
