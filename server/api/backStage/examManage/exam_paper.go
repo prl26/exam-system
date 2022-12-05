@@ -182,8 +182,8 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 	_ = c.ShouldBindQuery(&planId)
 	status, err := examPaperService.GetPlanStatus(planId.PlanId)
 	if err != nil {
-		response.FailWithMessage("试卷分发失败", c)
-	} else if status != 0 {
+		response.FailWithMessageAndError(601, "试卷分发失败", c)
+	} else if status {
 		response.FailWithMessage("试卷已经分发了", c)
 	} else {
 		err := examPaperService.PaperDistribution(planId.PlanId)

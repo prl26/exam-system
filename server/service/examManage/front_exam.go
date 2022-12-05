@@ -86,6 +86,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 	}
 	examPaper.PaperId = uint(PaperId)
 	status, err = examService.CreateStatus(examComing)
+	fmt.Println(status)
 	if err != nil {
 		return
 	}
@@ -98,18 +99,19 @@ func (examService *ExamService) GetStudentPaperId(examComing request.ExamComing)
 
 func (examService *ExamService) CreateStatus(examComing request.ExamComing) (status examManage.StudentPaperStatus, err error) {
 	var num int64
-	status1 := examManage.StudentPaperStatus{
-		GVA_MODEL: global.GVA_MODEL{},
-		StudentId: examComing.StudentId,
-		PlanId:    examComing.PlanId,
-		EnterTime: time.Now(),
-		IsCommit:  false,
-	}
+
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
 	if err != nil {
 		return
 	} else if num == 0 {
-		global.GVA_DB.Create(&status1)
+		status = examManage.StudentPaperStatus{
+			GVA_MODEL: global.GVA_MODEL{},
+			StudentId: examComing.StudentId,
+			PlanId:    examComing.PlanId,
+			EnterTime: time.Now(),
+			IsCommit:  false,
+		}
+		global.GVA_DB.Create(&status)
 	}
 	return
 }

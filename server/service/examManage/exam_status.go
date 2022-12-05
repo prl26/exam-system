@@ -29,7 +29,7 @@ func (examStatusServices *ExamStatusService) GaSStudentsOfExam() (students []uin
 	return students, err
 }
 func (student_paper_status *ExamStatusService) GetStatus(StudentId uint, PlanId uint) (status examManage.StudentPaperStatus, err error) {
-	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ? and commit_time is null", StudentId, PlanId).Find(&status).Error
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", StudentId, PlanId).Find(&status).Error
 	if err != nil {
 		return
 	}

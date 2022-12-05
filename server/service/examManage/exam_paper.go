@@ -167,15 +167,15 @@ func (examPaperService *ExamPaperService) GetTemplate(info examManage.ExamPaper)
 }
 
 //该考试计划是否已经分发试卷
-func (examPaperService *ExamPaperService) GetPlanStatus(PlanId uint) (status int, err error) {
-	err = global.GVA_DB.Table("tea_examPlan").Select("status").Where("id = ?").Find(&status).Error
+func (examPaperService *ExamPaperService) GetPlanStatus(PlanId uint) (status bool, err error) {
+	err = global.GVA_DB.Table("tea_examplan").Select("is_distributed").Where("id = ?", PlanId).Scan(&status).Error
 	return
 }
 
 func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err error) {
 	var number []int64
 	var studentList []int64
-	global.GVA_DB.Table("tea_examPlan").Where("id = ?", PlanId).Update("status", 1)
+	global.GVA_DB.Table("tea_examplan").Where("id = ?", PlanId).Update("is_distributed", 1)
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		err = global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number).Error
 		if err != nil {
