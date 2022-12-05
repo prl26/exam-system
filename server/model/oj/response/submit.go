@@ -18,3 +18,8 @@ type Submit struct {
 	Score uint   `json:"score"` // 用例得分
 	oj.ExecuteSituation
 }
+
+type SubmitResponse struct {
+	Score  uint
+	Submit []*Submit
+}

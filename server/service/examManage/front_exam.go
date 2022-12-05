@@ -7,6 +7,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/xuri/excelize/v2"
@@ -69,10 +70,12 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 			blankCount++
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent
-			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&Program.Program).Error
+			var program questionBankBo.ProgramPractice
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&program).Error
 			if err != nil {
 				return
 			}
+			Program.Program.Convert(&program)
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
 			programCount++

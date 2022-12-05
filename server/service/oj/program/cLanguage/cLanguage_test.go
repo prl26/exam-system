@@ -5,7 +5,6 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"os"
 
-	"github.com/prl26/exam-system/server/model/questionBank"
 	"github.com/prl26/exam-system/server/pb"
 	"google.golang.org/grpc"
 	"log"

@@ -5,8 +5,6 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	ojReq "github.com/prl26/exam-system/server/model/oj/request"
 	ojResp "github.com/prl26/exam-system/server/model/oj/response"
-	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
-	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 )
@@ -27,7 +25,7 @@ type OjApi struct {
 //
 var (
 	judgeService          = service.ServiceGroupApp.OjServiceServiceGroup.JudgeService
-	cLanguageService      = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
+	programService        = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
 	commonService         = &service.ServiceGroupApp.OjServiceServiceGroup.CommonService
 	supplyBlankService    = service.ServiceGroupApp.OjServiceServiceGroup.SupplyBlankService
 	multipleChoiceService = service.ServiceGroupApp.OjServiceServiceGroup.MultipleChoiceService
@@ -64,35 +62,13 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 		ojResp.ErrorHandle(c, err)
 		return
 	}
-	program, err := commonService.FindProgram(r.Id)
+
+	program, _, err := programService.CheckProgram(r.Id, r.Code, r.LanguageId)
 	if err != nil {
 		ojResp.ErrorHandle(c, err)
 		return
-	}
-	support := questionBankBo.LanguageSupport{}
-	err = support.Deserialize(program.LanguageSupports, questionBankEnum.LanguageType(r.LanguageId))
-	if err != nil {
-		ojResp.ErrorHandle(c, err)
-		return
-	}
-	cases := questionBankBo.ProgramCases{}
-	err = cases.Deserialize(program.ProgramCases)
-	if err != nil {
-		ojResp.ErrorHandle(c, err)
-		return
-	}
-	switch r.LanguageId {
-	case questionBankEnum.C_LANGUAGE:
-		result, err := cLanguageService.Check(r.Code, support.LanguageLimit, cases)
-		if err != nil {
-			ojResp.ErrorHandle(c, err)
-			return
-		}
-		response.OkWithData(result, c)
-		return
-	default:
-		ojResp.ErrorHandle(c, err)
-		return
+	} else {
+		response.OkWithData(program, c)
 	}
 }
 

@@ -1,10 +1,10 @@
 package oj
 
 import (
-	"github.com/prl26/exam-system/server/service/oj/cLanguage"
-	"github.com/prl26/exam-system/server/service/oj/common"
 	"github.com/prl26/exam-system/server/service/oj/judge"
 	"github.com/prl26/exam-system/server/service/oj/multipleChoice"
+	"github.com/prl26/exam-system/server/service/oj/program"
+	"github.com/prl26/exam-system/server/service/oj/program/common"
 	"github.com/prl26/exam-system/server/service/oj/supplyBlank"
 )
 
@@ -22,6 +22,6 @@ type ServiceGroup struct {
 	supplyBlank.SupplyBlankService
 	judge.JudgeService
 	multipleChoice.MultipleChoiceService
-	cLanguage.CLanguageService
+	program.ProgramService
 	common.CommonService
 }

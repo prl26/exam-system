@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
+	ojResp "github.com/prl26/exam-system/server/model/oj/response"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
@@ -23,6 +24,7 @@ var wg sync.WaitGroup
 var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
+var programService = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的教学计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -90,6 +92,38 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 				wg.Wait()
 			}()
 		}
+	}
+}
+
+// 考试的时候提交编程题
+func (examApi *ExamApi) CommitProgram(c *gin.Context) {
+	var program examManage.CommitProgram
+	_ = c.ShouldBindJSON(&program)
+	program.StudentId = utils.GetStudentId(c)
+	resp := make(chan ojResp.SubmitResponse)
+	go func() {
+		checkProgram, score, err := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
+		if err != nil {
+			return
+		}
+		resp <- ojResp.SubmitResponse{Submit: checkProgram, Score: score}
+	}()
+	program.StudentId = utils.GetStudentId(c)
+	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)
+	status, _ := statuServie.GetStatus(program.StudentId, program.PlanId)
+	if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
+	} else if status.IsCommit {
+		response.FailWithMessageAndError(703, "你已经提交过了", c)
+	} else {
+		result := <-resp
+		err := utils.ExecProgram(program, result.Score)
+		if err != nil {
+			global.GVA_LOG.Error(err.Error())
+			response.Fail(c)
+			return
+		}
+		response.OkWithData(result.Score, c)
 	}
 }
 

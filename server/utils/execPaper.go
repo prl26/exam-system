@@ -59,3 +59,9 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	global.GVA_DB.Model(&teachplan.Score{}).Where("student_id = ? and planId = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("exam_score", sum)
 	return
 }
+
+func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
+	var result examManage.ExamStudentPaper
+	err = global.GVA_DB.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/? where id = ?", score, program.MergeId).Scan(&result).Error
+	return err
+}

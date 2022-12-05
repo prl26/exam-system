@@ -24,3 +24,8 @@ type ProgramPractice struct {
 	questionBankBo.PracticeModel
 	questionBankBo.DefaultCodes `json:"defaultCodes"`
 }
+
+func (p *ProgramPractice) Convert(practice *questionBankBo.ProgramPractice) error {
+	p.PracticeModel = practice.PracticeModel
+	return p.DefaultCodes.DeserializationWithBrief(practice.DefaultCodes, practice.LanguageSupportsBrief)
+}

@@ -106,8 +106,7 @@ func (service *QuestionBankService) FindProgramList(criteria questionBankBo.Prog
 	list = make([]*questionBankVoResp.ProgramPractice, len(l))
 	for i, practice := range l {
 		list[i] = new(questionBankVoResp.ProgramPractice)
-		list[i].PracticeModel = practice.PracticeModel
-		list[i].DefaultCodes.DeserializationWithBrief(practice.DefaultCodes, practice.LanguageSupportsBrief)
+		list[i].Convert(practice)
 	}
 	return list, total, err
 }

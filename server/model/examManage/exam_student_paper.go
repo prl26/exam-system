@@ -3,6 +3,7 @@ package examManage
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum"
 )
 
 // ExamStudentPaper 结构体
@@ -46,4 +47,13 @@ type BlankCommit struct {
 	MergeId    uint     `json:"mergeId"`
 	QuestionId uint     `json:"questionId" form:"questionId"`
 	Answer     []string `json:"answer" form:"answer"`
+}
+
+type CommitProgram struct {
+	PlanId     uint                          `json:"planId" form:"planId"`
+	MergeId    uint                          `json:"mergeId"`
+	QuestionId uint                          `json:"questionId" form:"questionId"`
+	StudentId  uint                          `json:"studentId" form:"studentId"`
+	Code       string                        `json:"code"`
+	LanguageId questionBankEnum.LanguageType `json:"languageId"`
 }

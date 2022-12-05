@@ -46,10 +46,10 @@ var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
 const FILE_FAILED_DURATION time.Duration = 3 * time.Minute
 
-func (c *CLanguageService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, error) {
+func (c *CLanguageService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
-		return nil, exception.CompileError{Msg: err.Error()}
+		return nil, 0, exception.CompileError{Msg: err.Error()}
 	}
 	go func() {
 		after := time.After(FILE_FAILED_DURATION)
@@ -159,7 +159,7 @@ func (c *CLanguageService) Delete(id string) error {
 	return nil
 }
 
-func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, error) {
+func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
@@ -170,9 +170,10 @@ func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLim
 		Cmd: cmds,
 	})
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	results := exec.GetResults()
+	var sum uint
 	for i, result := range results {
 		submits[i] = &ojResp.Submit{Name: cases[i].Name, Score: 0, ExecuteSituation: oj.ExecuteSituation{
 			ResultStatus: result.Status.String(), ExitStatus: int(result.ExitStatus), Time: uint(result.Time), Memory: uint(result.Memory), Runtime: uint(result.RunTime)},
@@ -188,10 +189,11 @@ func (c *CLanguageService) Judge(fileId string, limit questionBankBo.LanguageLim
 				}
 			} else {
 				submits[i].Score = cases[i].Score
+				sum += cases[i].Score
 			}
 		}
 	}
-	return submits, nil
+	return submits, sum, nil
 }
 
 func (c *CLanguageService) Execute(fileId string, input string, programmLimit questionBankBo.LanguageLimit) (string, *oj.ExecuteSituation, error) {

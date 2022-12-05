@@ -26,8 +26,8 @@ type BlankComponent struct {
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
 }
 type ProgramComponent struct {
-	MergeId uint        `json:"mergeId"`
-	Program ProgramExam `json:"programComponent"`
+	MergeId uint                               `json:"mergeId"`
+	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
 }
 type ProgramExam struct {
 	po.BasicModel
