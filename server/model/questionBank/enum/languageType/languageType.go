@@ -1,4 +1,4 @@
-package enum
+package languageType
 
 import (
 	questionBankError "github.com/prl26/exam-system/server/model/questionBank/error"

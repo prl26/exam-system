@@ -11,9 +11,7 @@ import (
 type OjApi struct {
 }
 
-var cService = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
-var goService = &service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService
-var programOjService = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
+var programOjService = &service.ServiceGroupApp.QuestionBankServiceGroup.OjService.ProgramService
 
 func (p *OjApi) Compile(c *gin.Context) {
 	var req questionBankReq.Compile

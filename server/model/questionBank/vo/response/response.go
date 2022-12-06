@@ -13,11 +13,12 @@ type Response struct {
 }
 
 const (
-	ERROR        = 7
-	SUCCESS      = 0
-	NOT_FIND     = 404
-	ClientError  = 400
-	ServiceError = 500
+	ERROR            = 7
+	SUCCESS          = 0
+	NOT_FIND         = 404
+	ClientError      = 400
+	ServiceError     = 500
+	compilationError = 10000
 )
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {
@@ -43,7 +44,11 @@ func ErrorHandle(c *gin.Context, err error) {
 	case questionBankError.NotLanguageSupportError:
 		Result(ClientError, nil, err.Error(), c)
 	default:
-		Result(ServiceError, nil, err.Error(), c)
+		if e, ok := err.(questionBankError.CompileError); ok {
+			Result(compilationError, nil, e.Error(), c)
+		} else {
+			Result(ServiceError, nil, err.Error(), c)
+		}
 	}
 }
 

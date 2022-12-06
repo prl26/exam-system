@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/response"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"go.uber.org/zap"
@@ -83,7 +83,7 @@ func (q *QuestionBankApi) FindQuestionsByChapterId(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	switch questionT {
+	switch questionType.QuestionType(questionT) {
 	case questionType.JUDGE:
 		q.FindJudge(c)
 	case questionType.PROGRAM:

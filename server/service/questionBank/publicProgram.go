@@ -4,7 +4,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
-	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum"
+	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )

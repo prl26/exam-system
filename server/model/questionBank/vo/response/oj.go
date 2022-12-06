@@ -1,16 +1,21 @@
 package response
 
 import (
-	"github.com/prl26/exam-system/server/model/oj"
+	ojBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"time"
 )
 
 type Execute struct {
 	Output string `json:"output"` // 标准输出
-	oj.ExecuteSituation
+	ojBo.ExecuteSituation
 }
 
 type Compile struct {
 	FileId         string    `json:"fileId"`
 	ExpirationTime time.Time `json:"expirationTime"`
+}
+
+type SubmitResponse struct {
+	Score  uint
+	Submit []*ojBo.Submit
 }

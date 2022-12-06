@@ -5,10 +5,10 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
-	"github.com/prl26/exam-system/server/service/oj"
+	"github.com/prl26/exam-system/server/service/questionBank/oj"
 )
 
-var ojService oj.ServiceGroup
+var ojService oj.OjService
 
 func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	//判断题处理

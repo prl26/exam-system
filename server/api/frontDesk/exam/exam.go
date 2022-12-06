@@ -8,7 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
-	ojResp "github.com/prl26/exam-system/server/model/oj/response"
+	response2 "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
@@ -24,7 +24,7 @@ var wg sync.WaitGroup
 var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
-var programService = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
+var programService = &service.ServiceGroupApp.QuestionBankServiceGroup.OjService.ProgramService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的考试计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -100,12 +100,12 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	var program examManage.CommitProgram
 	_ = c.ShouldBindJSON(&program)
 	program.StudentId = utils.GetStudentId(c)
-	resp := make(chan ojResp.SubmitResponse)
+	resp := make(chan response2.SubmitResponse)
 	var err error
 	go func() {
 		checkProgram, score, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
 		err = e
-		resp <- ojResp.SubmitResponse{Submit: checkProgram, Score: score}
+		resp <- response2.SubmitResponse{Submit: checkProgram, Score: score}
 	}()
 	program.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)
@@ -119,7 +119,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 			result := <-resp
 			if err != nil {
 				global.GVA_LOG.Error(err.Error())
-				ojResp.ErrorHandle(c, err)
+				response2.ErrorHandle(c, err)
 				return
 			}
 			err := utils.ExecProgram(program, result.Score)

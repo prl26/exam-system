@@ -6711,7 +6711,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.Judge"
+                            "$ref": "#/definitions/questionBank.judge"
                         }
                     }
                 ],
@@ -6749,7 +6749,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.Judge"
+                            "$ref": "#/definitions/questionBank.judge"
                         }
                     }
                 ],
@@ -7007,7 +7007,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/questionBank.Judge"
+                            "$ref": "#/definitions/questionBank.judge"
                         }
                     }
                 ],
@@ -15080,7 +15080,7 @@ const docTemplate = `{
                 }
             }
         },
-        "questionBank.Judge": {
+        "questionBank.judge": {
             "type": "object",
             "properties": {
                 "canExam": {

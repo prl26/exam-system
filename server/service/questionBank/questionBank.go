@@ -160,7 +160,7 @@ func (service *QuestionBankService) FindProgramList(criteria questionBankBo.Prog
 //}
 //
 //func (c *QuestionBankService) DeleteCourseSupport(ids []int) error {
-//	return global.GVA_DB.Delete(&[]questionBank.ChapterMerge{}, ids).Error
+//	return global.GVA_DB.delete(&[]questionBank.ChapterMerge{}, ids).Error
 //}
 //
 //func (c *QuestionBankService) AddCourseSupport(merges []questionBank.ChapterMerge) error {

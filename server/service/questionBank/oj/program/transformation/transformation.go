@@ -262,7 +262,8 @@ func transformationProgram(from *gorm.DB, to *gorm.DB, knowledgeTable map[string
 		}
 		supports := questionBankBo.LanguageSupports{}
 		supports = append(supports, &questionBankBo.LanguageSupport{LanguageId: 1})
-		s, err := supports.Serialize()
+		s, brief, err := supports.Serialize()
+		programm.LanguageSupportsBrief = brief
 		if err != nil {
 			panic(err)
 			return

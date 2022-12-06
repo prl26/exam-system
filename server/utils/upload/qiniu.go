@@ -63,8 +63,8 @@ func (*Qiniu) DeleteFile(key string) error {
 	cfg := qiniuConfig()
 	bucketManager := storage.NewBucketManager(mac, cfg)
 	if err := bucketManager.Delete(global.GVA_CONFIG.Qiniu.Bucket, key); err != nil {
-		global.GVA_LOG.Error("function bucketManager.Delete() Filed", zap.Any("err", err.Error()))
-		return errors.New("function bucketManager.Delete() Filed, err:" + err.Error())
+		global.GVA_LOG.Error("function bucketManager.delete() Filed", zap.Any("err", err.Error()))
+		return errors.New("function bucketManager.delete() Filed, err:" + err.Error())
 	}
 	return nil
 }
