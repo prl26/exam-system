@@ -210,6 +210,7 @@ func (s *LanguageSupports) Deserialization(str string) error {
 			return err
 		}
 		(*s)[i].LanguageLimit = *support
+		i++
 	}
 	return nil
 }
