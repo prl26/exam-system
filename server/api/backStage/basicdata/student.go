@@ -8,6 +8,7 @@ import (
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/xuri/excelize/v2"
@@ -186,6 +187,9 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		return
 	}
 
+	teachClassID := int(studentExcel.ClassId)
+	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
+	scoreStudents := make([]*teachplan.Score, 0, n)
 	NewStudents := make([]*basicdata.Student, 0, n)
 	//ExitStudents := make([]*basicdata.Student, 0, n)
 	rows = rows[1:]
@@ -202,7 +206,10 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		}
 
 		student := &basicdata.Student{}
+		scoreStudent := &teachplan.Score{}
 		student.ID = uint(id)
+		scoreStudent.StudentId = &id
+		scoreStudent.TeachClassId = &teachClassID
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]
@@ -212,7 +219,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		//} else {
 		//	student.Password = utils.BcryptHash(row[4])
 		//}
-
+		scoreStudents = append(scoreStudents, scoreStudent)
 		user := studentService.QueryStudentById(student.ID)
 		if user.ID != 0 {
 			// 学生已存在，直接关联
@@ -229,6 +236,9 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		log.Printf(err.Error())
 	}
 	err = multiTableService.AssociationStudents(NewStudents, studentExcel.ClassId)
+
+	// 所有学生创建 tea-score 数据
+	scoreService.CreateScores(scoreStudents)
 
 	if err != nil {
 		response.FailWithMessage("学生导入失败", c)
