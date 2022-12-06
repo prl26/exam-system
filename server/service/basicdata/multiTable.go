@@ -11,7 +11,7 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/teachplan"
-	"github.com/prl26/exam-system/server/service"
+	teachplanService "github.com/prl26/exam-system/server/service/teachplan"
 )
 
 type MultiTableService struct {
@@ -20,7 +20,7 @@ type MultiTableService struct {
 // InitTeachClassStudents 向教学班中 加入学生的关联（单一加入）
 func (multiTableService *MultiTableService) InitTeachClassStudents(info request.StuTeachClass) error {
 
-	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
+	var scoreService = teachplanService.ScoreService{}
 	var teachClass basicdata.TeachClass
 
 	teachClass.ID = info.TeachClassId
