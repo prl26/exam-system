@@ -154,7 +154,7 @@ package cLanguage
 //	//client := NewClient()
 //	//obj = &CLanguageService{
 //	//	ExecutorClient:                    client,
-//	//	GC_PATH:                          "/usr/bin/gcc",
+//	//	JAVAC_PATH:                          "/usr/bin/gcc",
 //	//	DEFAULT_COMPILE_CPU_TIME_LIMIT:    100000000000,
 //	//	DEFAULT_COMPILE_MEMORY_TIME_LIMIT: 100000000000,
 //	//	DEFAULT_JUDGE_CPU_TIME_LIMI:       100000000000,

@@ -173,4 +173,12 @@ goJudge:
     default_compile_memory_time_limit: 104857600
     default_judge_cpu_time_limit: 10000000000
     default_judge_memory_limit: 104857600
+  javaLanguage:
+    enable: true
+    javac_path: /usr/bin/javac
+    java_path: /usr/bin/java
+    default_compile_cpu_time_limit: 10000000000
+    default_compile_memory_time_limit: 104857600
+    default_judge_cpu_time_limit: 10000000000
+    default_judge_memory_limit: 104857600
   

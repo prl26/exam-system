@@ -9,12 +9,14 @@ import (
 	"github.com/prl26/exam-system/server/service/oj/program/cLanguage"
 	"github.com/prl26/exam-system/server/service/oj/program/common"
 	goLanguage "github.com/prl26/exam-system/server/service/oj/program/go"
+	"github.com/prl26/exam-system/server/service/oj/program/java"
 	"time"
 )
 
 type ProgramService struct {
 	cLanguage.CLanguageService
-	goLanguage.GoLanguage
+	goLanguage.GoLanguageService
+	java.JavaService
 	common.CommonService
 }
 
@@ -41,7 +43,13 @@ func (s *ProgramService) CheckProgram(id uint, code string, languageId questionB
 		}
 		return result, sum, nil
 	case questionBankEnum.GO_LANGUAGE:
-		result, sum, err := s.GoLanguage.Check(code, support.LanguageLimit, cases)
+		result, sum, err := s.GoLanguageService.Check(code, support.LanguageLimit, cases)
+		if err != nil {
+			return nil, 0, err
+		}
+		return result, sum, nil
+	case questionBankEnum.JAVA:
+		result, sum, err := s.JavaService.Check(code, support.LanguageLimit, cases)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -57,7 +65,9 @@ func (s *ProgramService) Compile(code string, languageId questionBankEnum.Langua
 		compile, t, err := s.CLanguageService.Compile(code)
 		return compile, t, err
 	case questionBankEnum.GO_LANGUAGE:
-		return s.GoLanguage.Compile(code)
+		return s.GoLanguageService.Compile(code)
+	case questionBankEnum.JAVA:
+		return s.JavaService.Compile(code)
 	default:
 		return "", nil, questionBankError.NotLanguageSupportError
 	}
@@ -68,7 +78,9 @@ func (s *ProgramService) Execute(languageId questionBankEnum.LanguageType, fileI
 	case questionBankEnum.C_LANGUAGE:
 		return s.CLanguageService.Execute(fileId, input, limit)
 	case questionBankEnum.GO_LANGUAGE:
-		return s.GoLanguage.Execute(fileId, input, limit)
+		return s.GoLanguageService.Execute(fileId, input, limit)
+	case questionBankEnum.JAVA:
+		return s.JavaService.Execute(fileId, input, limit)
 	default:
 		return "", nil, questionBankError.NotLanguageSupportError
 	}

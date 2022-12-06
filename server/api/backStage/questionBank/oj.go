@@ -12,7 +12,7 @@ type OjApi struct {
 }
 
 var cService = &service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService
-var goService = &service.ServiceGroupApp.OjServiceServiceGroup.GoLanguage
+var goService = &service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService
 var programOjService = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
 
 func (p *OjApi) Compile(c *gin.Context) {
@@ -28,7 +28,7 @@ func (p *OjApi) Compile(c *gin.Context) {
 	}
 	compile, t, err := programOjService.Compile(req.Code, req.LanguageId)
 	if err != nil {
-		questionBankResp.CheckHandle(c, err)
+		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
 		questionBankResp.OkWithDetailed(questionBankResp.Compile{

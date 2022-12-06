@@ -1,4 +1,4 @@
-package goLanguage
+package java
 
 import (
 	"context"
@@ -14,9 +14,10 @@ import (
 	"time"
 )
 
-type GoLanguageService struct {
+type JavaService struct {
 	ExecutorClient                    pb.ExecutorClient
-	GC_PATH                           string
+	JAVAC_PATH                        string
+	JAVA_PATH                         string
 	DEFAULT_COMPILE_CPU_TIME_LIMIT    uint64
 	DEFAULT_COMPILE_MEMORY_TIME_LIMIT uint64
 	DEFAULT_JUDGE_CPU_TIME_LIMI       uint64
@@ -26,8 +27,9 @@ type GoLanguageService struct {
 const STDOUT = "stdout"
 const STDERR = "stderr"
 
-const DEFAULT_CODE_NAME string = "a.go"
-const DEFAULT_FILE_NAME string = "a"
+const DEFAULT_CODE_NAME string = "Main.java"
+const DEFAULT_FILE_NAME string = "Main"
+const CLASS_SUFFIX string = ".class"
 
 var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
@@ -36,7 +38,7 @@ var replacer = strings.NewReplacer("\n", "", " ", "", "\t", "")
 
 const FILE_FAILED_DURATION time.Duration = 3 * time.Minute
 
-func (c *GoLanguageService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
+func (c *JavaService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return nil, 0, exception.CompileError{Msg: err.Error()}
@@ -53,7 +55,7 @@ func (c *GoLanguageService) Check(code string, limit questionBankBo.LanguageLimi
 	return c.Judge(fileID, limit, cases)
 }
 
-func (c *GoLanguageService) Compile(code string) (string, *time.Time, error) {
+func (c *JavaService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(code)
 	if err != nil {
 		return "", nil, exception.CompileError{Msg: err.Error()}
@@ -71,7 +73,7 @@ func (c *GoLanguageService) Compile(code string) (string, *time.Time, error) {
 	return fileID, &failedTime, nil
 }
 
-func (c *GoLanguageService) compile(code string) (string, error) {
+func (c *JavaService) compile(code string) (string, error) {
 	input := &pb.Request_File{
 		File: &pb.Request_File_Memory{
 			Memory: &pb.Request_MemoryFile{
@@ -94,8 +96,8 @@ func (c *GoLanguageService) compile(code string) (string, error) {
 		},
 	}
 	cmd := &pb.Request_CmdType{
-		Env:  []string{"GOCACHE=/tmp/go-build", "GOPATH=/tmp/gopath"},
-		Args: []string{c.GC_PATH, "build", "-o", DEFAULT_FILE_NAME, DEFAULT_CODE_NAME},
+		Env:  []string{"GOCACHE=/tmp/go-build"},
+		Args: []string{c.JAVAC_PATH, DEFAULT_CODE_NAME},
 		Files: []*pb.Request_File{
 			{
 				File: stdio,
@@ -120,7 +122,7 @@ func (c *GoLanguageService) compile(code string) (string, error) {
 		},
 		CopyOutCached: []*pb.Request_CmdCopyOutFile{
 			{
-				Name: DEFAULT_FILE_NAME,
+				Name: DEFAULT_FILE_NAME + CLASS_SUFFIX,
 			},
 		},
 	}
@@ -138,10 +140,10 @@ func (c *GoLanguageService) compile(code string) (string, error) {
 		//此数应该打日志
 		return "", fmt.Errorf("compile:%s", string(result.Files[STDERR]))
 	}
-	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME], nil
+	return exec.GetResults()[0].GetFileIDs()[DEFAULT_FILE_NAME+CLASS_SUFFIX], nil
 }
 
-func (c *GoLanguageService) Delete(id string) error {
+func (c *JavaService) Delete(id string) error {
 	_, err := c.ExecutorClient.FileDelete(context.Background(), &pb.FileID{FileID: id})
 	if err != nil {
 		return err
@@ -149,7 +151,7 @@ func (c *GoLanguageService) Delete(id string) error {
 	return nil
 }
 
-func (c *GoLanguageService) Judge(fileId string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
+func (c *JavaService) Judge(fileId string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*ojResp.Submit, uint, error) {
 	n := len(cases)
 	submits := make([]*ojResp.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
@@ -186,7 +188,7 @@ func (c *GoLanguageService) Judge(fileId string, limit questionBankBo.LanguageLi
 	return submits, sum, nil
 }
 
-func (c *GoLanguageService) Execute(fileId string, input string, programmLimit questionBankBo.LanguageLimit) (string, *oj.ExecuteSituation, error) {
+func (c *JavaService) Execute(fileId string, input string, programmLimit questionBankBo.LanguageLimit) (string, *oj.ExecuteSituation, error) {
 	cmd := c.makeCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{
@@ -205,7 +207,7 @@ func (c *GoLanguageService) Execute(fileId string, input string, programmLimit q
 	return out, executeSituation, nil
 }
 
-func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
+func (c *JavaService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
@@ -224,7 +226,7 @@ func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit q
 	}
 	cmd := &pb.Request_CmdType{
 		Env:  []string{"PATH=/usr/local/bin:/usr/bin:/bin"},
-		Args: []string{DEFAULT_FILE_NAME},
+		Args: []string{c.JAVA_PATH, DEFAULT_FILE_NAME},
 		Files: []*pb.Request_File{{
 			File: inputFile,
 		}, {
@@ -235,7 +237,7 @@ func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit q
 		},
 		ProcLimit: 50,
 		CopyIn: map[string]*pb.Request_File{
-			DEFAULT_FILE_NAME: {
+			DEFAULT_FILE_NAME + CLASS_SUFFIX: {
 				File: &pb.Request_File_Cached{
 					Cached: &pb.Request_CachedFile{
 						FileID: fileId,
@@ -257,7 +259,7 @@ func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit q
 	return cmd
 }
 
-func (c *GoLanguageService) cmdLimit(programmLimit questionBankBo.LanguageLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
+func (c *JavaService) cmdLimit(programmLimit questionBankBo.LanguageLimit, cmd *pb.Request_CmdType) *pb.Request_CmdType {
 	if programmLimit.CpuLimit != nil {
 		cmd.CpuTimeLimit = uint64(*programmLimit.CpuLimit)
 	} else {
