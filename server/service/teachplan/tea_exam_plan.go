@@ -93,6 +93,9 @@ func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.Ex
 	if info.Type != nil {
 		db = db.Where("type = ?", info.Type)
 	}
+	if info.TermId != nil {
+		db = db.Where("term_id = ?", info.TermId)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
