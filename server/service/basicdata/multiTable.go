@@ -10,6 +10,8 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/basicdata/request"
+	"github.com/prl26/exam-system/server/model/teachplan"
+	"github.com/prl26/exam-system/server/service"
 )
 
 type MultiTableService struct {
@@ -18,17 +20,25 @@ type MultiTableService struct {
 // InitTeachClassStudents 向教学班中 加入学生的关联（单一加入）
 func (multiTableService *MultiTableService) InitTeachClassStudents(info request.StuTeachClass) error {
 
+	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
 	var teachClass basicdata.TeachClass
+
 	teachClass.ID = info.TeachClassId
+	tid := int(info.TeachClassId)
 
 	n := len(info.StudentIds)
 	students := make([]basicdata.Student, n)
+	scoreStudents := make([]*teachplan.Score, n)
 
 	for i := 0; i < n; i++ {
+		id := int(info.StudentIds[i])
 		students[i].ID = info.StudentIds[i]
+		scoreStudents[i].StudentId = &id
+		scoreStudents[i].TeachClassId = &tid
 	}
 
 	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(students)
+	_ = scoreService.CreateScores(scoreStudents)
 
 	return err
 }
