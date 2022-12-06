@@ -134,6 +134,7 @@ func (s *DefaultCodes) Deserialization(str string) error {
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
@@ -161,6 +162,7 @@ func (s *DefaultCodes) DeserializationWithBrief(str string, brief string) error 
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
@@ -192,6 +194,7 @@ func (s *ReferenceAnswers) Deserialization(str string) error {
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
