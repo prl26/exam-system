@@ -191,7 +191,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	teachClassID := int(studentExcel.ClassId)
 	termID := int(studentExcel.TermId)
 	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
-	scoreStudents := make([]*teachplan.Score, 0, n)
+	newScoreStudents := make([]*teachplan.Score, 0, n)
 	NewStudents := make([]*basicdata.Student, 0, n)
 	//ExitStudents := make([]*basicdata.Student, 0, n)
 	rows = rows[1:]
@@ -222,7 +222,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		//} else {
 		//	student.Password = utils.BcryptHash(row[4])
 		//}
-		scoreStudents = append(scoreStudents, scoreStudent)
+
 		user := studentService.QueryStudentById(student.ID)
 		if user.ID != 0 {
 			// 学生已存在，直接关联
@@ -231,6 +231,13 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 			// 学生不存在
 			NewStudents = append(NewStudents, student)
 		}
+
+		score := scoreService.QueryScoreByStudent(scoreStudent)
+		if score.StudentId == nil && score.TeachClassId == nil {
+			// 不存在这个 数据 则创建索引
+			newScoreStudents = append(newScoreStudents, scoreStudent)
+		}
+
 	}
 
 	// 学生不存在 先创建学生
@@ -240,8 +247,8 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	}
 	err = multiTableService.AssociationStudents(NewStudents, studentExcel.ClassId)
 
-	// 所有学生创建 tea-score 数据
-	_ = scoreService.CreateScores(scoreStudents)
+	// 不存在的创建 tea-score 数据 创建索引
+	_ = scoreService.CreateScores(newScoreStudents)
 
 	if err != nil {
 		response.FailWithMessage("学生导入失败", c)

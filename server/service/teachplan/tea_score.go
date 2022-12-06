@@ -17,6 +17,12 @@ func (scoreService *ScoreService) CreateScore(score teachplan.Score) (err error)
 	return err
 }
 
+func (scoreService *ScoreService) QueryScoreByStudent(score *teachplan.Score) teachplan.Score {
+	var s teachplan.Score
+	global.GVA_DB.Where(&score).First(&s)
+	return s
+}
+
 // CreateScore 批量创建Score记录
 func (scoreService *ScoreService) CreateScores(score []*teachplan.Score) (err error) {
 	err = global.GVA_DB.Create(&score).Error
