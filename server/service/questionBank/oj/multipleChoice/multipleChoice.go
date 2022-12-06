@@ -38,10 +38,10 @@ func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (
 }
 
 func (c *MultipleChoiceService) check(question *po.MultipleChoice, answer []string) bool {
-	n := len(answer)
-	if n != question.MostOptions {
-		return false
-	}
+	//n := len(answer)
+	//if n != question.MostOptions {
+	//	return false
+	//}
 	// 前端需要做好的
 	//sort.Slice(answer, func(i, j int) bool {
 	//	return answer[i]<answer[j]
