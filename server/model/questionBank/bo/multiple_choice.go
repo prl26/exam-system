@@ -7,7 +7,7 @@ import (
 )
 
 type MultipleCriteria struct {
-	IsMultiple int
+	IsIndefinite int `form:"isIndefinite"`
 	questionBankPo.SimpleModel
 	questionBankPo.CourseSupport
 }

@@ -1,7 +1,6 @@
 package questionBank
 
 import (
-	"fmt"
 	testutils "github.com/prl26/exam-system/server/utils/test"
 	"testing"
 )
@@ -21,8 +20,3 @@ func TestMain(t *testing.M) {
 }
 
 var questionBankService QuestionBankService
-
-func TestFindQuestions(t *testing.T) {
-	questions := questionBankService.FindQuestions(2)
-	fmt.Println(questions)
-}
