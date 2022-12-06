@@ -165,9 +165,7 @@ func (c *GoLanguageService) Judge(fileId string, limit questionBankBo.LanguageLi
 	results := exec.GetResults()
 	var sum uint
 	for i, result := range results {
-		submits[i] = &ojResp.Submit{Name: cases[i].Name, Score: 0, ExecuteSituation: oj.ExecuteSituation{
-			ResultStatus: result.Status.String(), ExitStatus: int(result.ExitStatus), Time: uint(result.Time), Memory: uint(result.Memory), Runtime: uint(result.RunTime)},
-		}
+		var score uint
 		if result.Status == pb.Response_Result_Accepted {
 			standardAnswer := strings.ReplaceAll(string(result.Files[STDOUT]), "\r\n", "\n")
 			actualAnswer := strings.ReplaceAll(cases[i].Output, "\r\n", "\n")
@@ -178,9 +176,12 @@ func (c *GoLanguageService) Judge(fileId string, limit questionBankBo.LanguageLi
 					result.Status = pb.Response_Result_WrongAnswer
 				}
 			} else {
-				submits[i].Score = cases[i].Score
+				score = cases[i].Score
 				sum += cases[i].Score
 			}
+		}
+		submits[i] = &ojResp.Submit{Name: cases[i].Name, Score: score, ExecuteSituation: oj.ExecuteSituation{
+			ResultStatus: uint(result.Status), ExitStatus: int(result.ExitStatus), Time: uint(result.Time), Memory: uint(result.Memory), Runtime: uint(result.RunTime)},
 		}
 	}
 	return submits, sum, nil
@@ -198,7 +199,7 @@ func (c *GoLanguageService) Execute(fileId string, input string, programmLimit q
 	}
 	response := result.Results[0]
 	var out string
-	var executeSituation = &oj.ExecuteSituation{ResultStatus: response.Status.String(), ExitStatus: int(response.ExitStatus), Time: uint(response.Time), Memory: uint(response.Memory), Runtime: uint(response.RunTime)}
+	var executeSituation = &oj.ExecuteSituation{ResultStatus: uint(response.Status), ExitStatus: int(response.ExitStatus), Time: uint(response.Time), Memory: uint(response.Memory), Runtime: uint(response.RunTime)}
 	if response.Status == pb.Response_Result_Accepted {
 		out = string(response.Files[STDOUT])
 	}
