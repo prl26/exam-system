@@ -41,8 +41,8 @@ func (*TencentCOS) DeleteFile(key string) error {
 	name := global.GVA_CONFIG.TencentCOS.PathPrefix + "/" + key
 	_, err := client.Object.Delete(context.Background(), name)
 	if err != nil {
-		global.GVA_LOG.Error("function bucketManager.Delete() Filed", zap.Any("err", err.Error()))
-		return errors.New("function bucketManager.Delete() Filed, err:" + err.Error())
+		global.GVA_LOG.Error("function bucketManager.delete() Filed", zap.Any("err", err.Error()))
+		return errors.New("function bucketManager.delete() Filed, err:" + err.Error())
 	}
 	return nil
 }

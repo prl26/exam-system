@@ -3,36 +3,25 @@ package questionBank
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/model/common/response"
-	ojReq "github.com/prl26/exam-system/server/model/oj/request"
-	ojResp "github.com/prl26/exam-system/server/model/oj/response"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 )
 
-//
-//import (
-//	"github.com/gin-gonic/gin"
-//	"github.com/prl26/exam-system/server/model/common/response"
-//	ojReq "github.com/prl26/exam-system/server/model/oj/request"
-//	ojResp "github.com/prl26/exam-system/server/model/oj/response"
-//	"github.com/prl26/exam-system/server/service"
-//	"github.com/prl26/exam-system/server/utils"
-//)
-//
 type OjApi struct {
 }
 
 //
 var (
-	judgeService          = service.ServiceGroupApp.OjServiceServiceGroup.JudgeService
-	programService        = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
-	commonService         = &service.ServiceGroupApp.OjServiceServiceGroup.CommonService
-	supplyBlankService    = service.ServiceGroupApp.OjServiceServiceGroup.SupplyBlankService
-	multipleChoiceService = service.ServiceGroupApp.OjServiceServiceGroup.MultipleChoiceService
+	judgeService          = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.JudgeService
+	programService        = &service.ServiceGroupApp.QuestionBankServiceGroup.OjService.ProgramService
+	supplyBlankService    = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.SupplyBlankService
+	multipleChoiceService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.MultipleChoiceService
 )
 
 func (*OjApi) CheckJudge(c *gin.Context) {
-	var r ojReq.CheckJudge
+	var r questionBankReq.CheckJudge
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
@@ -51,7 +40,7 @@ func (*OjApi) CheckJudge(c *gin.Context) {
 }
 
 func (*OjApi) CheckProgram(c *gin.Context) {
-	var r ojReq.CheckProgramm
+	var r questionBankReq.CheckProgramm
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
 		"Id":         {utils.NotEmpty()},
@@ -59,13 +48,13 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 		"LanguageId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(r, verify); err != nil {
-		ojResp.ErrorHandle(c, err)
+		questionBankResp.ErrorHandle(c, err)
 		return
 	}
 
 	program, _, err := programService.CheckProgram(r.Id, r.Code, r.LanguageId)
 	if err != nil {
-		ojResp.ErrorHandle(c, err)
+		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
 		response.OkWithData(program, c)
@@ -73,7 +62,7 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 }
 
 func (*OjApi) CheckSupplyBlank(c *gin.Context) {
-	var r ojReq.CheckSupplyBlank
+	var r questionBankReq.CheckSupplyBlank
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
 		"Id":      {utils.NotEmpty()},
@@ -93,7 +82,7 @@ func (*OjApi) CheckSupplyBlank(c *gin.Context) {
 }
 
 func (*OjApi) CheckMultipleChoice(c *gin.Context) {
-	var r ojReq.CheckMultipleChoice
+	var r questionBankReq.CheckMultipleChoice
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
 		"Id":      {utils.NotEmpty()},

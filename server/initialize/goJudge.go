@@ -3,8 +3,10 @@ package initialize
 import (
 	"github.com/prl26/exam-system/server/config"
 	"github.com/prl26/exam-system/server/global"
+	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	"github.com/prl26/exam-system/server/pb"
 	"github.com/prl26/exam-system/server/service"
+	defaultImpl2 "github.com/prl26/exam-system/server/service/questionBank/oj/program/defaultImpl"
 	"google.golang.org/grpc"
 )
 
@@ -30,43 +32,46 @@ func GoJudge() {
 		}
 		// 依赖注入
 		if goJudgeConfig.CLanguage.Enable {
-			CLanguage(client, goJudgeConfig)
+			CLanguage(client, goJudgeConfig.CLanguage)
 		}
 		if goJudgeConfig.GoLanguage.Enable {
-			GoLanguage(client, goJudgeConfig)
+			GoLanguage(client, goJudgeConfig.GoLanguage)
 		}
 		if goJudgeConfig.JavaLanguage.Enable {
-			JavaLanguage(client, goJudgeConfig)
+			JavaLanguage(client, goJudgeConfig.JavaLanguage)
 		}
 	} else {
 		global.GVA_LOG.Sugar().Info("goJudge-enable 配置属性为false,将不会连接 goJudge")
 	}
 }
 
-func CLanguage(client pb.ExecutorClient, goJudgeConfig config.GoJudge) {
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.ExecutorClient = client
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.DEFAULT_COMPILE_CPU_TIME_LIMIT = goJudgeConfig.CLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.DEFAULT_JUDGE_CPU_TIME_LIMI = goJudgeConfig.CLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.DEFAULT_COMPILE_MEMORY_TIME_LIMIT = goJudgeConfig.CLanguage.DEFAULT_COMPILE_MEMORY_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.DEFAULT_JUDGE_MEMORY_LIMIT = goJudgeConfig.CLanguage.DEFAULT_JUDGE_MEMORY_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.CLanguageService.GCC_PATH = goJudgeConfig.CLanguage.GCC_PATH
+func CLanguage(client pb.ExecutorClient, cLanguageConfig config.CLanguage) {
+	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.C_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.CLanguageService{
+		GCC_PATH:                          cLanguageConfig.GCC_PATH,
+		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: cLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_COMPILE_CPU_TIME_LIMIT:    cLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_CPU_TIME_LIMI:       cLanguageConfig.DEFAULT_JUDGE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_MEMORY_LIMIT:        cLanguageConfig.DEFAULT_JUDGE_MEMORY_LIMIT,
+	}))
 }
 
-func GoLanguage(client pb.ExecutorClient, goJudgeConfig config.GoJudge) {
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.ExecutorClient = client
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.DEFAULT_COMPILE_CPU_TIME_LIMIT = goJudgeConfig.GoLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.DEFAULT_JUDGE_CPU_TIME_LIMI = goJudgeConfig.GoLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.DEFAULT_COMPILE_MEMORY_TIME_LIMIT = goJudgeConfig.GoLanguage.DEFAULT_COMPILE_MEMORY_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.DEFAULT_JUDGE_MEMORY_LIMIT = goJudgeConfig.GoLanguage.DEFAULT_JUDGE_MEMORY_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.GoLanguageService.GC_PATH = goJudgeConfig.GoLanguage.GC_PATH
+func GoLanguage(client pb.ExecutorClient, goLanguageConfig config.GoLanguage) {
+	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.GO_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.GoLanguageService{
+		GC_PATH:                           goLanguageConfig.GC_PATH,
+		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_COMPILE_CPU_TIME_LIMIT:    goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_CPU_TIME_LIMI:       goLanguageConfig.DEFAULT_JUDGE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_MEMORY_LIMIT:        goLanguageConfig.DEFAULT_JUDGE_MEMORY_LIMIT,
+	}))
 }
 
-func JavaLanguage(client pb.ExecutorClient, goJudgeConfig config.GoJudge) {
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.ExecutorClient = client
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.DEFAULT_COMPILE_CPU_TIME_LIMIT = goJudgeConfig.JavaLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.DEFAULT_JUDGE_CPU_TIME_LIMI = goJudgeConfig.JavaLanguage.DEFAULT_JUDGE_CPU_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.DEFAULT_COMPILE_MEMORY_TIME_LIMIT = goJudgeConfig.JavaLanguage.DEFAULT_COMPILE_MEMORY_TIME_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.DEFAULT_JUDGE_MEMORY_LIMIT = goJudgeConfig.JavaLanguage.DEFAULT_JUDGE_MEMORY_LIMIT
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.JAVAC_PATH = goJudgeConfig.JavaLanguage.JAVAC_PATH
-	service.ServiceGroupApp.OjServiceServiceGroup.JavaService.JAVA_PATH = goJudgeConfig.JavaLanguage.JAVA_PATH
+func JavaLanguage(client pb.ExecutorClient, goLanguageConfig config.JavaLanguage) {
+	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.JAVA, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.JavaService{
+		JAVA_PATH:                         goLanguageConfig.JAVA_PATH,
+		JAVAC_PATH:                        goLanguageConfig.JAVAC_PATH,
+		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_COMPILE_CPU_TIME_LIMIT:    goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_CPU_TIME_LIMI:       goLanguageConfig.DEFAULT_JUDGE_CPU_TIME_LIMIT,
+		DEFAULT_JUDGE_MEMORY_LIMIT:        goLanguageConfig.DEFAULT_JUDGE_MEMORY_LIMIT,
+	}))
 }

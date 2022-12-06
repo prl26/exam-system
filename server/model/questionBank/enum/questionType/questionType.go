@@ -10,8 +10,10 @@ package questionType
 
  **/
 
+type QuestionType uint
+
 const (
-	JUDGE = 1 + iota
+	JUDGE = QuestionType(1 + iota)
 	PROGRAM
 	SUPPLY_BLANK
 	SINGLE_CHOICE

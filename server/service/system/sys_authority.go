@@ -124,7 +124,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		if err != nil {
 			return
 		}
-		// err = db.Association("SysBaseMenus").Delete(&auth)
+		// err = db.Association("SysBaseMenus").delete(&auth)
 	} else {
 		err = db.Error
 		if err != nil {
