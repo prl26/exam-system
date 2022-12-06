@@ -23,18 +23,21 @@ const (
 )
 
 const (
-	c_language_name  = "c"
-	go_language_name = "go"
+	c_language_name    = "c"
+	go_language_name   = "go"
+	java_language_name = "java"
 )
 
 var languageNameToType map[string]LanguageType = map[string]LanguageType{
-	c_language_name:  C_LANGUAGE,
-	go_language_name: GO_LANGUAGE,
+	c_language_name:    C_LANGUAGE,
+	go_language_name:   GO_LANGUAGE,
+	java_language_name: JAVA,
 }
 
 var languageTypeToName map[LanguageType]string = map[LanguageType]string{
 	C_LANGUAGE:  c_language_name,
 	GO_LANGUAGE: go_language_name,
+	JAVA:        java_language_name,
 }
 
 func (t LanguageType) GetLanguageName() (string, error) {
