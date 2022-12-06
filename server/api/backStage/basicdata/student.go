@@ -163,6 +163,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		"File": {utils.NotEmpty()},
 		//"CollegeId": {utils.NotEmpty()},
 		//"ProfessionalId": {utils.NotEmpty()}, 专业和学院去掉
+		"TermId":  {utils.NotEmpty()},
 		"ClassId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(studentExcel, verify); err != nil {
@@ -188,6 +189,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	}
 
 	teachClassID := int(studentExcel.ClassId)
+	termID := int(studentExcel.TermId)
 	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
 	scoreStudents := make([]*teachplan.Score, 0, n)
 	NewStudents := make([]*basicdata.Student, 0, n)
@@ -210,6 +212,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		student.ID = uint(id)
 		scoreStudent.StudentId = &id
 		scoreStudent.TeachClassId = &teachClassID
+		scoreStudent.TermId = &termID
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]
@@ -223,7 +226,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		user := studentService.QueryStudentById(student.ID)
 		if user.ID != 0 {
 			// 学生已存在，直接关联
-			multiTableService.AssociationStudent(student, studentExcel.ClassId)
+			_ = multiTableService.AssociationStudent(student, studentExcel.ClassId)
 		} else {
 			// 学生不存在
 			NewStudents = append(NewStudents, student)
@@ -238,7 +241,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	err = multiTableService.AssociationStudents(NewStudents, studentExcel.ClassId)
 
 	// 所有学生创建 tea-score 数据
-	scoreService.CreateScores(scoreStudents)
+	_ = scoreService.CreateScores(scoreStudents)
 
 	if err != nil {
 		response.FailWithMessage("学生导入失败", c)
