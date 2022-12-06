@@ -158,16 +158,11 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	}
 	return
 }
-func (examService *ExamService) CommitProgram(program examManage.CommitProgram) (num int64, err error) {
-	err = global.GVA_DB.Table("exam_student_paper").Where("id = ? and answer is not null ", program.MergeId).Count(&num).Error
-	if err != nil || num != 0 {
-		return
-	} else {
-		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
-			Where("id = ?", program.MergeId).
-			Updates(&examManage.ExamStudentPaper{Answer: program.Code}).
-			Error
-	}
+func (examService *ExamService) CommitProgram(program examManage.CommitProgram) (err error) {
+	err = global.GVA_DB.Table("exam_student_paper").Select("answer").
+		Where("id = ?", program.MergeId).
+		Updates(&examManage.ExamStudentPaper{Answer: program.Code}).
+		Error
 	return
 }
 func (examService *ExamService) GetExamScore(studentId uint) (studentScore []teachplan.Score, err error) {

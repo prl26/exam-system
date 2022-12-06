@@ -26,7 +26,7 @@ var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusServi
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
 var programService = &service.ServiceGroupApp.OjServiceServiceGroup.ProgramService
 
-// FindExamPlans 查询该学生 某个教学班 下所有的教学计划
+// FindExamPlans 查询该学生 某个教学班 下所有的考试计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 	var teachClassId request2.GetByTeachClassId
 	_ = c.ShouldBindQuery(&teachClassId)
@@ -109,25 +109,27 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	}()
 	program.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(program.PlanId)
-	num, _ := examService.CommitProgram(program)
-	if time.Now().Unix() > PlanDetail.EndTime.Unix() {
-		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
-	} else if num != 0 {
-		response.FailWithMessageAndError(703, "你已经提交过了", c)
+	err = examService.CommitProgram(program)
+	if err != nil {
+		response.FailWithMessage("更新失败", c)
 	} else {
-		result := <-resp
-		if err != nil {
-			global.GVA_LOG.Error(err.Error())
-			ojResp.ErrorHandle(c, err)
-			return
+		if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
+		} else {
+			result := <-resp
+			if err != nil {
+				global.GVA_LOG.Error(err.Error())
+				ojResp.ErrorHandle(c, err)
+				return
+			}
+			err := utils.ExecProgram(program, result.Score)
+			if err != nil {
+				global.GVA_LOG.Error(err.Error())
+				response.Fail(c)
+				return
+			}
+			response.OkWithData(result.Score, c)
 		}
-		err := utils.ExecProgram(program, result.Score)
-		if err != nil {
-			global.GVA_LOG.Error(err.Error())
-			response.Fail(c)
-			return
-		}
-		response.OkWithData(result.Score, c)
 	}
 }
 
