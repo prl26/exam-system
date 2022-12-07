@@ -55,7 +55,7 @@ func (c *baseService) delete(id string) error {
 }
 
 func (c *baseService) Execute(fileId string, input string, programmLimit questionBankBo.LanguageLimit) (string, *questionBankBo.ExecuteSituation, error) {
-	cmd := c.makeCmd(fileId, input, programmLimit)
+	cmd := c.makeExecuteCmd(fileId, input, programmLimit)
 	result, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: []*pb.Request_CmdType{
 			cmd,
@@ -95,7 +95,7 @@ func (c *baseService) judge(fileId string, limit questionBankBo.LanguageLimit, c
 	submits := make([]*questionBankBo.Submit, n)
 	cmds := make([]*pb.Request_CmdType, n)
 	for i, programmCase := range cases {
-		cmds[i] = c.makeCmd(fileId, programmCase.Input, limit)
+		cmds[i] = c.makeExecuteCmd(fileId, programmCase.Input, limit)
 	}
 	exec, err := c.ExecutorClient.Exec(context.Background(), &pb.Request{
 		Cmd: cmds,

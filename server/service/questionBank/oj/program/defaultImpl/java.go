@@ -91,7 +91,7 @@ func (c *JavaService) compile(client pb.ExecutorClient, code string) (string, er
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_JAVA_FILE_NAME+CLASS_SUFFIX], nil
 }
 
-func (c *JavaService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
+func (c *JavaService) makeExecuteCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
