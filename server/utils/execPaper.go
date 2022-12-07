@@ -58,9 +58,11 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
 	if *PlanDetail.Type == examType.FinalExam {
-		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = (SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?) WHERE s.teach_class_id = 1", examPaperCommit.StudentId, examPaperCommit.PlanId)
+		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = (SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?),s.final_exam_name = ?,s.final_exam_id = ? "+
+			"WHERE s.teach_class_id = ? and student_id = ? ", examPaperCommit.StudentId, examPaperCommit.PlanId, PlanDetail.Name, PlanDetail.ID, PlanDetail.TeachClassId, examPaperCommit.StudentId)
 	} else if *PlanDetail.Type == examType.ProceduralExam {
-		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = s.exam_score+(SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?) WHERE s.teach_class_id = 1", examPaperCommit.StudentId, examPaperCommit.PlanId)
+		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = s.exam_score+(SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?),s.final_exam_name = ?,s.final_exam_id = ? "+
+			"WHERE s.teach_class_id = ? and student_id = ? ", examPaperCommit.StudentId, examPaperCommit.PlanId, PlanDetail.Name, PlanDetail.ID, PlanDetail.TeachClassId, examPaperCommit.StudentId)
 	}
 	return
 }

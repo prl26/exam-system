@@ -21,9 +21,11 @@ type Score struct {
 	ProcedureProportion      *float64 `json:"procedureProportion" form:"procedureProportion" gorm:"column:procedure_proportion;comment:过程化考核占比;size:8;"`
 	ExamScrore               *float64 `json:"examScore" form:"examScore" gorm:"column:exam_score;comment:期末考试成绩;size:8;"`
 	ExamProporation          *float64 `json:"examProporation" form:"examProporation" gorm:"column:exam_proporation;comment:期末考试占比;size:8;"`
-	PlanId                   *uint    `json:"planId" form:"planId" gorm:"column:plan_id"`
-	TermId                   *int     `json:"termId" form:"TermId" gorm:"column:term_id"`
-	TotalScore               *float64 `json:"totalScore" form:"totalScore" gorm:"column:total_score"`
+	//PlanId                   *uint    `json:"planId" form:"planId" gorm:"column:plan_id"`
+	TermId        *int     `json:"termId" form:"TermId" gorm:"column:term_id"`
+	FinalExamName string   `json:"finalExamName" gorm:"final_exam_name;comment:期末考试名字"`
+	FinalExamId   *int     `json:"finalExamId" gorm:"final_exam_id"`
+	TotalScore    *float64 `json:"totalScore" form:"totalScore" gorm:"column:total_score"`
 }
 
 // TableName Score 表名
@@ -40,5 +42,6 @@ type ScoreResponse struct {
 	LearnResourcesScore *float64 `json:"learnResourcesScore" form:"learnResourcesScore" gorm:"column:learn_resources_score;comment:学习资源得分;size:8;"`
 	ProcedureScore      *float64 `json:"procedureScore" form:"procedureScore" gorm:"column:procedure_score;comment:过程化考核得分;size:8;"`
 	ExamScrore          *float64 `json:"examScore" form:"examScore" gorm:"column:exam_score;comment:期末考试成绩;size:8;"`
+	FinalExamName       string   `json:"finalExamName" gorm:"finalExam_name"`
 	TotalScore          *float64 `json:"totalScore" form:"totalScore" gorm:"column:total_score"`
 }
