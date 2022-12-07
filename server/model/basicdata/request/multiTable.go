@@ -14,6 +14,7 @@ import (
 type StuTeachClass struct {
 	TeachClassId uint   `json:"teachClassId" from:"teachClassId"`
 	TermId       uint   `json:"termId" from:"termId"`
+	CourseId     uint   `json:"courseId" form:"courseId"`
 	StudentIds   []uint `json:"studentIds"`
 }
 

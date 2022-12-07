@@ -21,7 +21,7 @@ const (
 	DEFAULT_GO_CODE_NAME = "a.go"
 )
 
-func (c *GoLanguageService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
+func (c *GoLanguageService) makeExecuteCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
@@ -172,5 +172,5 @@ func (c *GoLanguageService) compile(client pb.ExecutorClient, code string) (stri
 		//此数应该打日志
 		return "", fmt.Errorf("compile:%s", string(result.Files[STDERR]))
 	}
-	return exec.GetResults()[0].GetFileIDs()[DEFAULT_GO_CODE_NAME], nil
+	return exec.GetResults()[0].GetFileIDs()[DEFAULT_GO_FILE_NAME], nil
 }
