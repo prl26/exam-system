@@ -145,7 +145,7 @@ func Routers() *gin.Engine {
 
 			questionBankGroup.InitOjRouter(PrivateGroup)
 			questionBankGroup.InitQuestionBankRouter(PrivateGroup)
-
+			systemRouter.InitSystemRouter(PrivateGroup)
 			examRouterGroup.InitFrontExamRouter(PrivateGroup)
 		}
 	}
