@@ -135,6 +135,8 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 
 //获取考试分数
 func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
+	var ScoreSearch request.ExamStudentScore
+	_ = c.ShouldBindJSON(&ScoreSearch)
 	StudentId := utils.GetStudentId(c)
 	if score, err := examService.GetExamScore(StudentId); err != nil {
 		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))

@@ -1,4 +1,4 @@
-package enum
+package examType
 
 const (
 	FinalExam = iota

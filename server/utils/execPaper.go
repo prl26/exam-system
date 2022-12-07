@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/enum/examType"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service/oj"
@@ -54,9 +55,13 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 	}
 	//总分
-	var sum uint
-	global.GVA_DB.Raw("SELECT SUM(score) FROM exam_student_paper where student_id = ? and plan_id = ? ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
-	global.GVA_DB.Model(&teachplan.Score{}).Where("student_id = ? and planId = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("exam_score", sum)
+	var PlanDetail teachplan.ExamPlan
+	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
+	if *PlanDetail.Type == examType.FinalExam {
+		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = (SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?) WHERE s.teach_class_id = 1", examPaperCommit.StudentId, examPaperCommit.PlanId)
+	} else if *PlanDetail.Type == examType.ProceduralExam {
+		global.GVA_DB.Raw("UPDATE tea_score as s SET s.exam_score = s.exam_score+(SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?) WHERE s.teach_class_id = 1", examPaperCommit.StudentId, examPaperCommit.PlanId)
+	}
 	return
 }
 
