@@ -39,11 +39,12 @@ func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context)
 
 	tid := int(stuClassReq.TeachClassId)
 	termId := int(stuClassReq.TermId)
+	courseId := int(stuClassReq.CourseId)
 
 	n := len(stuClassReq.StudentIds)
 	students := make([]*basicdata.Student, n)
 	scoreStudents := make([]*teachplan.Score, n)
-	new := make([]*teachplan.Score, n)
+	news := make([]*teachplan.Score, n)
 
 	for i := 0; i < n; i++ {
 		id := int(stuClassReq.StudentIds[i])
@@ -51,16 +52,17 @@ func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context)
 		scoreStudents[i].StudentId = &id
 		scoreStudents[i].TeachClassId = &tid
 		scoreStudents[i].TermId = &termId
+		scoreStudents[i].CourseId = &courseId
 
 		score := scoreService.QueryScoreByStudent(scoreStudents[i])
 		if score.StudentId == nil && score.TeachClassId == nil {
 			// 不存在这个 数据 则创建索引
-			new = append(new, scoreStudents[i])
+			news = append(news, scoreStudents[i])
 		}
 	}
 
 	err := multiTableService.InitTeachClassStudents(stuClassReq.TeachClassId, students)
-	_ = scoreService.CreateScores(new)
+	_ = scoreService.CreateScores(news)
 
 	if err != nil {
 		global.GVA_LOG.Error("添加学生失败", zap.Error(err))

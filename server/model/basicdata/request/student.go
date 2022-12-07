@@ -12,9 +12,10 @@ type StudentSearch struct {
 }
 
 type StudentExcel struct {
-	File    *multipart.FileHeader `json:"file" form:"file"`
-	ClassId uint                  `json:"classId" form:"classId"`
-	TermId  uint                  `json:"termId" form:"termId"`
+	File     *multipart.FileHeader `json:"file" form:"file"`
+	ClassId  uint                  `json:"classId" form:"classId"`
+	TermId   uint                  `json:"termId" form:"termId"`
+	CourseId uint                  `json:"courseId" form:"courseId"`
 	// 不要学院 专业了 学生基础管理只暴露 根据学号查询就行
 	//CollegeId      uint                  `json:"collegeId"  form:"collegeId"`
 	//ProfessionalId uint                  `json:"professionalId"  form:"professionalId"`
