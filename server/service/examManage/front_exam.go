@@ -171,10 +171,10 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	// 创建db
 	db := global.GVA_DB.Model(&teachplan.Score{})
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.TermId != nil {
+	if *info.TermId != 0 {
 		db = db.Where("term_id = ?", info.TermId)
 	}
-	if info.LessonId != nil {
+	if *info.LessonId != 0 {
 		db = db.Where("course_id = ?", info.LessonId)
 	}
 	if err != nil {

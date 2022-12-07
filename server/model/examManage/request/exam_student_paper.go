@@ -14,6 +14,6 @@ type ExamStudentScore struct {
 	request.PageInfo
 }
 type ScoreSearch struct {
-	LessonId *uint `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程id;size:32;"`
-	TermId   *uint `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
+	LessonId *int `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程id;size:32;"`
+	TermId   *int `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
