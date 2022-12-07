@@ -105,7 +105,7 @@ func (c *CLanguageService) compile(client pb.ExecutorClient, code string) (strin
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_C_FILE_NAME], nil
 }
 
-func (c *CLanguageService) makeCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
+func (c *CLanguageService) makeExecuteCmd(fileId string, input string, programmLimit questionBankBo.LanguageLimit) *pb.Request_CmdType {
 	inputFile := &pb.Request_File_Memory{
 		Memory: &pb.Request_MemoryFile{
 			Content: []byte(input),
