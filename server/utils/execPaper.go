@@ -3,8 +3,8 @@ package utils
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/enum/examType"
 	"github.com/prl26/exam-system/server/model/examManage"
+	"github.com/prl26/exam-system/server/model/examManage/examType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service/questionBank/oj"
 )

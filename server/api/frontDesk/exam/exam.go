@@ -136,12 +136,17 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 //获取考试分数
 func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 	var ScoreSearch request.ExamStudentScore
-	_ = c.ShouldBindJSON(&ScoreSearch)
+	_ = c.ShouldBindQuery(&ScoreSearch)
 	StudentId := utils.GetStudentId(c)
-	if score, err := examService.GetExamScore(StudentId); err != nil {
+	if scoreList, total, err := examService.GetExamScore(ScoreSearch, StudentId); err != nil {
 		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
 		response.FailWithMessage("查询成绩失败", c)
 	} else {
-		response.OkWithData(gin.H{"score": score}, c)
+		response.OkWithDetailed(response.PageResult{
+			List:     scoreList,
+			Total:    total,
+			Page:     ScoreSearch.Page,
+			PageSize: ScoreSearch.PageSize,
+		}, "获取成功", c)
 	}
 }

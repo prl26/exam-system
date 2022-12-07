@@ -49,3 +49,9 @@ func StringArrayToString(arr []string) (result string) {
 	}
 	return
 }
+
+//字符串fenge
+func StringToStringArray(strArr string, sep string) []string {
+	result := strings.Split(strArr, sep)
+	return result
+}

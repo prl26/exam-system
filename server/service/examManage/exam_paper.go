@@ -94,7 +94,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 				return
 			}
 			Choice.MergeId = Paper[i].ID
-			if Choice.Choice.MostOptions == 1 {
+			if Choice.Choice.IsIndefinite == 1 {
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = Paper[i].ID
 				singleChoiceCount++

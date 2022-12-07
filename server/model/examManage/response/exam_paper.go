@@ -1,7 +1,6 @@
 package response
 
 import (
-	"github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )
 
@@ -14,8 +13,8 @@ type ExamPaperResponse struct {
 	ProgramComponent      []ProgramComponent `json:"programComponent"`
 }
 type ChoiceComponent struct {
-	MergeId uint                                      `json:"mergeId"`
-	Choice  questionBankVoResp.MultipleChoicePractice `json:"choiceComponent"`
+	MergeId uint                                  `json:"mergeId"`
+	Choice  questionBankVoResp.MultipleChoiceExam `json:" choiceComponent"`
 }
 type JudgeComponent struct {
 	MergeId uint                             `json:"mergeId"`
@@ -28,9 +27,4 @@ type BlankComponent struct {
 type ProgramComponent struct {
 	MergeId uint                               `json:"mergeId"`
 	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
-}
-type ProgramExam struct {
-	po.BasicModel
-	LanguageSupports      string `json:"languageSupport"`
-	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }

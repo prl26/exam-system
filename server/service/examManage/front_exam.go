@@ -41,7 +41,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (ex
 				return
 			}
 			Choice.MergeId = studentPaper[i].ID
-			if Choice.Choice.MostOptions == 1 {
+			if Choice.Choice.IsIndefinite == 1 {
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
 				singleChoiceCount++
@@ -165,9 +165,24 @@ func (examService *ExamService) CommitProgram(program examManage.CommitProgram) 
 		Error
 	return
 }
-func (examService *ExamService) GetExamScore(studentId uint) (studentScore []teachplan.Score, err error) {
-	err = global.GVA_DB.Where("student_id = ?", studentId).Find(&studentScore).Error
-	return
+func (examService *ExamService) GetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []teachplan.Score, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&teachplan.Score{})
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.TermId != nil {
+		db = db.Where("term_id = ?", info.TermId)
+	}
+	if info.LessonId != nil {
+		db = db.Where("course_id = ?", info.LessonId)
+	}
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
+	return studentScore, total, err
 }
 func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
 	excel := excelize.NewFile()
