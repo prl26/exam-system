@@ -8,9 +8,8 @@ type ApiGroup struct {
 }
 
 var (
-	jwtService        = service.ServiceGroupApp.SystemServiceGroup.JwtService
-	userService       = service.ServiceGroupApp.SystemServiceGroup.UserService
-	teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
-	termService       = service.ServiceGroupApp.BasicdataApiGroup.TermService
-	lessonService     = service.ServiceGroupApp.BasicdataApiGroup.LessonService
+	jwtService         = service.ServiceGroupApp.SystemServiceGroup.JwtService
+	userService        = service.ServiceGroupApp.SystemServiceGroup.UserService
+	teachClassService  = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
+	FrontSystemService = service.ServiceGroupApp.SystemServiceGroup.FrontSystemService
 )

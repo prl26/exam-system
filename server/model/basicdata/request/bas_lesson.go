@@ -9,3 +9,6 @@ type LessonSearch struct {
 	basicdata.Lesson
 	request.PageInfo
 }
+type FrontLessonSearch struct {
+	basicdata.Lesson
+}

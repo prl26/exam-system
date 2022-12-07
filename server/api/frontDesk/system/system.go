@@ -11,9 +11,9 @@ import (
 type SystemApi struct{}
 
 func (s *SystemApi) GetTerms(c *gin.Context) {
-	var pageInfo basicdataReq.TermSearch
+	var pageInfo basicdataReq.FrontTermSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := termService.GetTermInfoList(pageInfo); err != nil {
+	if list, total, err := FrontSystemService.GetTermInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -24,9 +24,9 @@ func (s *SystemApi) GetTerms(c *gin.Context) {
 	}
 }
 func (lessonApi *SystemApi) GetLessons(c *gin.Context) {
-	var pageInfo basicdataReq.LessonSearch
+	var pageInfo basicdataReq.FrontLessonSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := lessonService.GetLessonInfoList(pageInfo); err != nil {
+	if list, total, err := FrontSystemService.GetLessonInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
