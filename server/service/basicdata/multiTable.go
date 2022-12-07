@@ -16,17 +16,11 @@ type MultiTableService struct {
 }
 
 // InitTeachClassStudents 向教学班中 加入学生的关联（单一加入）
-func (multiTableService *MultiTableService) InitTeachClassStudents(info request.StuTeachClass) error {
+func (multiTableService *MultiTableService) InitTeachClassStudents(TeachClassId uint, students []*basicdata.Student) error {
 
 	var teachClass basicdata.TeachClass
-	teachClass.ID = info.TeachClassId
 
-	n := len(info.StudentIds)
-	students := make([]basicdata.Student, n)
-
-	for i := 0; i < n; i++ {
-		students[i].ID = info.StudentIds[i]
-	}
+	teachClass.ID = TeachClassId
 
 	err := global.GVA_DB.Model(&teachClass).Association("Student").Append(students)
 

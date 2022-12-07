@@ -2,7 +2,7 @@ package bo
 
 import (
 	"encoding/json"
-	"github.com/prl26/exam-system/server/model/questionBank/enum"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	questionBankError "github.com/prl26/exam-system/server/model/questionBank/error"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	"strconv"
@@ -11,10 +11,10 @@ import (
 
 type PublicProgramMigration struct {
 	questionBankPo.CourseSupport
-	LanguageIds []enum.LanguageType `json:"languageIds"`
+	LanguageIds []languageType.LanguageType `json:"languageIds"`
 }
 type LanguageSupport struct {
-	LanguageId enum.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
+	LanguageId languageType.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
 	LanguageLimit
 }
 
@@ -37,13 +37,13 @@ type ProgramCase struct {
 }
 
 type DefaultCode struct {
-	LanguageId enum.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
-	Code       string            `json:"code"`
+	LanguageId languageType.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
+	Code       string                    `json:"code"`
 }
 
 type ReferenceAnswer struct {
-	LanguageId enum.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
-	Code       string            `json:"code"`
+	LanguageId languageType.LanguageType `json:"languageId" form:"languageId" gorm:"column:language_id;comment:;"`
+	Code       string                    `json:"code"`
 }
 
 type LanguageSupports []*LanguageSupport
@@ -51,7 +51,7 @@ type ProgramCases []*ProgramCase
 type DefaultCodes []*DefaultCode
 type ReferenceAnswers []*ReferenceAnswer
 
-func (s *LanguageSupport) Deserialize(languageSupport string, languageType enum.LanguageType) error {
+func (s *LanguageSupport) Deserialize(languageSupport string, languageType languageType.LanguageType) error {
 	name, err := languageType.GetLanguageName()
 	if err != nil {
 		return err
@@ -134,6 +134,7 @@ func (s *DefaultCodes) Deserialization(str string) error {
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
@@ -161,6 +162,7 @@ func (s *DefaultCodes) DeserializationWithBrief(str string, brief string) error 
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
@@ -192,6 +194,7 @@ func (s *ReferenceAnswers) Deserialization(str string) error {
 			return err
 		}
 		(*s)[i].Code = support
+		i++
 	}
 	return nil
 }
@@ -219,7 +222,7 @@ type PublicProgramSearchCriteria struct {
 	questionBankPo.SimpleModel
 }
 
-func (s *DefaultCodes) Filter(languageIds map[enum.LanguageType]bool) {
+func (s *DefaultCodes) Filter(languageIds map[languageType.LanguageType]bool) {
 	code := &DefaultCodes{}
 	for i := 0; i < len(*s); i++ {
 		this := (*s)[i]
@@ -230,7 +233,7 @@ func (s *DefaultCodes) Filter(languageIds map[enum.LanguageType]bool) {
 	*s = *code
 }
 
-func (s *LanguageSupports) Filter(languageIds map[enum.LanguageType]bool) {
+func (s *LanguageSupports) Filter(languageIds map[languageType.LanguageType]bool) {
 	code := &LanguageSupports{}
 	for i := 0; i < len(*s); i++ {
 		this := (*s)[i]
@@ -241,7 +244,7 @@ func (s *LanguageSupports) Filter(languageIds map[enum.LanguageType]bool) {
 	*s = *code
 }
 
-func (s *ReferenceAnswers) Filter(languageIds map[enum.LanguageType]bool) {
+func (s *ReferenceAnswers) Filter(languageIds map[languageType.LanguageType]bool) {
 	code := &ReferenceAnswers{}
 	for i := 0; i < len(*s); i++ {
 		this := (*s)[i]
@@ -254,7 +257,7 @@ func (s *ReferenceAnswers) Filter(languageIds map[enum.LanguageType]bool) {
 
 func (s *LanguageSupports) Brief() string {
 	str := []string{}
-	table := make(map[enum.LanguageType]bool)
+	table := make(map[languageType.LanguageType]bool)
 	for _, support := range *s {
 		table[support.LanguageId] = true
 	}

@@ -8,6 +8,7 @@ import (
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/xuri/excelize/v2"
@@ -162,6 +163,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		"File": {utils.NotEmpty()},
 		//"CollegeId": {utils.NotEmpty()},
 		//"ProfessionalId": {utils.NotEmpty()}, 专业和学院去掉
+		"TermId":  {utils.NotEmpty()},
 		"ClassId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(studentExcel, verify); err != nil {
@@ -186,6 +188,10 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		return
 	}
 
+	teachClassID := int(studentExcel.ClassId)
+	termID := int(studentExcel.TermId)
+	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
+	newScoreStudents := make([]*teachplan.Score, 0, n)
 	NewStudents := make([]*basicdata.Student, 0, n)
 	//ExitStudents := make([]*basicdata.Student, 0, n)
 	rows = rows[1:]
@@ -202,7 +208,11 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		}
 
 		student := &basicdata.Student{}
+		scoreStudent := &teachplan.Score{}
 		student.ID = uint(id)
+		scoreStudent.StudentId = &id
+		scoreStudent.TeachClassId = &teachClassID
+		scoreStudent.TermId = &termID
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]
@@ -216,11 +226,18 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		user := studentService.QueryStudentById(student.ID)
 		if user.ID != 0 {
 			// 学生已存在，直接关联
-			multiTableService.AssociationStudent(student, studentExcel.ClassId)
+			_ = multiTableService.AssociationStudent(student, studentExcel.ClassId)
 		} else {
 			// 学生不存在
 			NewStudents = append(NewStudents, student)
 		}
+
+		score := scoreService.QueryScoreByStudent(scoreStudent)
+		if score.StudentId == nil && score.TeachClassId == nil {
+			// 不存在这个 数据 则创建索引
+			newScoreStudents = append(newScoreStudents, scoreStudent)
+		}
+
 	}
 
 	// 学生不存在 先创建学生
@@ -229,6 +246,9 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		log.Printf(err.Error())
 	}
 	err = multiTableService.AssociationStudents(NewStudents, studentExcel.ClassId)
+
+	// 不存在的创建 tea-score 数据 创建索引
+	_ = scoreService.CreateScores(newScoreStudents)
 
 	if err != nil {
 		response.FailWithMessage("学生导入失败", c)

@@ -3,11 +3,11 @@ package examManage
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/enum/questionType"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/xuri/excelize/v2"

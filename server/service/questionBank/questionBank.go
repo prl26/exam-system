@@ -70,15 +70,15 @@ func (service *QuestionBankService) FindSupplyBlankList(criteria questionBankBo.
 	return list, total, err
 }
 
-func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isMultiSelect bool) (list []questionBankVoResp.MultipleChoicePractice, total int64, err error) {
+func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBankBo.MultiplePracticeCriteria, info request.PageInfo, isIndefinite bool) (list []questionBankVoResp.MultipleChoicePractice, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
-	if isMultiSelect {
-		db = db.Where("most_options>1")
+	if isIndefinite {
+		db = db.Where("is_indefinite=1")
 	} else {
-		db = db.Where("most_options= 1")
+		db = db.Where("is_indefinite=0")
 	}
 	db = db.Where("can_practice = ?", 1)
 	db = db.Where("chapter_id =?", criteria.ChapterId)
@@ -160,7 +160,7 @@ func (service *QuestionBankService) FindProgramList(criteria questionBankBo.Prog
 //}
 //
 //func (c *QuestionBankService) DeleteCourseSupport(ids []int) error {
-//	return global.GVA_DB.Delete(&[]questionBank.ChapterMerge{}, ids).Error
+//	return global.GVA_DB.delete(&[]questionBank.ChapterMerge{}, ids).Error
 //}
 //
 //func (c *QuestionBankService) AddCourseSupport(merges []questionBank.ChapterMerge) error {

@@ -86,7 +86,7 @@ func Init(Package string) {
 		{
 			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SService, Package), "enter.go"),
-			funcName:    "ServiceGroup",
+			funcName:    "OjService",
 			structNameF: "%sService",
 		},
 	}
@@ -97,7 +97,7 @@ func Init(Package string) {
 				global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
 			importCodeF:  "github.com/prl26/frontExam-system/server/%s/%s",
 			packageNameF: "%s",
-			groupName:    "ServiceGroup",
+			groupName:    "OjService",
 			structNameF:  "%sServiceGroup",
 		},
 		packageRouterName: {

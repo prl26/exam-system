@@ -1,5 +1,7 @@
 package po
 
+import "github.com/prl26/exam-system/server/model/questionBank/enum/problemType"
+
 /**
 
  * @Author: AloneAtWar
@@ -16,7 +18,7 @@ type BasicModel struct {
 }
 
 type SimpleModel struct {
-	ProblemType int `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:试卷难度;"`
+	ProblemType problemType.ProblemType `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:试卷难度;"`
 	PracticeExamSupport
 	Title string `json:"title" form:"title" gorm:"column:title;comment:;"`
 }

@@ -13,6 +13,7 @@ import (
 // 接收 教学班id 和学生id 的结构体
 type StuTeachClass struct {
 	TeachClassId uint   `json:"teachClassId" from:"teachClassId"`
+	TermId       uint   `json:"termId" from:"termId"`
 	StudentIds   []uint `json:"studentIds"`
 }
 

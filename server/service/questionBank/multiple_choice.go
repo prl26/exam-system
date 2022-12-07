@@ -34,10 +34,10 @@ func (a *MultipleChoiceService) FindList(criteria questionBankBo.MultipleCriteri
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
-	if criteria.IsMultiple == 1 {
-		db = db.Where("most_options > 1")
+	if criteria.IsIndefinite == 1 {
+		db = db.Where("is_indefinite = 1")
 	} else {
-		db = db.Where("most_options = 1")
+		db = db.Where("is_indefinite = 0")
 	}
 	if criteria.ProblemType != 0 {
 		db = db.Where("problem_type = ?", criteria.ProblemType)

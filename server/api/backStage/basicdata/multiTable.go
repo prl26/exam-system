@@ -10,8 +10,10 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
@@ -20,6 +22,7 @@ type MultiTableApi struct {
 }
 
 var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableService
+var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
 
 // InitTeachClassStudent 教学班中 添加学生
 // @Tags TeachClassStudent
@@ -33,7 +36,32 @@ var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableServ
 func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context) {
 	var stuClassReq basicdataReq.StuTeachClass
 	_ = c.ShouldBindJSON(&stuClassReq)
-	err := multiTableService.InitTeachClassStudents(stuClassReq)
+
+	tid := int(stuClassReq.TeachClassId)
+	termId := int(stuClassReq.TermId)
+
+	n := len(stuClassReq.StudentIds)
+	students := make([]*basicdata.Student, n)
+	scoreStudents := make([]*teachplan.Score, n)
+	new := make([]*teachplan.Score, n)
+
+	for i := 0; i < n; i++ {
+		id := int(stuClassReq.StudentIds[i])
+		students[i].ID = stuClassReq.StudentIds[i]
+		scoreStudents[i].StudentId = &id
+		scoreStudents[i].TeachClassId = &tid
+		scoreStudents[i].TermId = &termId
+
+		score := scoreService.QueryScoreByStudent(scoreStudents[i])
+		if score.StudentId == nil && score.TeachClassId == nil {
+			// 不存在这个 数据 则创建索引
+			new = append(new, scoreStudents[i])
+		}
+	}
+
+	err := multiTableService.InitTeachClassStudents(stuClassReq.TeachClassId, students)
+	_ = scoreService.CreateScores(new)
+
 	if err != nil {
 		global.GVA_LOG.Error("添加学生失败", zap.Error(err))
 		response.FailWithMessage("添加学生失败", c)
