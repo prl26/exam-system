@@ -165,7 +165,7 @@ func (examService *ExamService) CommitProgram(program examManage.CommitProgram) 
 		Error
 	return
 }
-func (examService *ExamService) GetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []teachplan.Score, total int64, err error) {
+func (examService *ExamService) GetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []teachplan.ScoreResponse, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -177,11 +177,10 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	if info.LessonId != nil {
 		db = db.Where("course_id = ?", info.LessonId)
 	}
-	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
+	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Count(&total).Error
 	return studentScore, total, err
 }
 func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
