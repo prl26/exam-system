@@ -137,7 +137,8 @@ func (PapertemplateApi *PaperTemplateApi) FindPaperTemplate(c *gin.Context) {
 func (PapertemplateApi *PaperTemplateApi) GetPaperTemplateList(c *gin.Context) {
 	var pageInfo examManageReq.PaperTemplateSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := PapertemplateService.GetPaperTemplateInfoList(pageInfo); err != nil {
+	userId := utils.GetUserID(c)
+	if list, total, err := PapertemplateService.GetPaperTemplateInfoList(pageInfo, userId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

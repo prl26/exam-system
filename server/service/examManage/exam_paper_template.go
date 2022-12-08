@@ -70,7 +70,7 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplate(id uint) (Pap
 
 // GetPaperTemplateInfoList 分页获取PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch) (list []examManage.PaperTemplate, total int64, err error) {
+func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch, userId uint) (list []examManage.PaperTemplate, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

@@ -68,13 +68,14 @@ func (examPlanService *ExamPlanService) GetExamPlan(id uint) (examPlan teachplan
 
 // GetExamPlanInfoList 分页获取ExamPlan记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.ExamPlanSearch) (list []teachplan.ExamPlan, total int64, err error) {
+func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.ExamPlanSearch, userId uint) (list []teachplan.ExamPlan, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&teachplan.ExamPlan{})
 	var examPlans []teachplan.ExamPlan
 	// 如果有条件搜索 下方会自动创建搜索语句
+	db = db.Where("user_id = ?", userId)
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}

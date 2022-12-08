@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -128,7 +129,8 @@ func (examPlanApi *ExamPlanApi) FindExamPlanById(c *gin.Context) {
 func (examPlanApi *ExamPlanApi) GetExamPlanList(c *gin.Context) {
 	var pageInfo teachplanReq.ExamPlanSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo); err != nil {
+	userId := utils.GetUserID(c)
+	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo, userId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

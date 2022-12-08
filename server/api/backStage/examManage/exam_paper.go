@@ -9,6 +9,7 @@ import (
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 	"strconv"
 	"strings"
@@ -153,7 +154,8 @@ func (examPaperApi *ExamPaperApi) FindExamPaper(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 	var pageInfo examManageReq.ExamPaperSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo); err != nil {
+	userId := utils.GetUserID(c)
+	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo, userId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

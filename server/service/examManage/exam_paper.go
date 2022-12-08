@@ -138,11 +138,12 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 
 // GetExamPaperInfoList 分页获取ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageReq.ExamPaperSearch) (list []examManage.ExamPaper, total int64, err error) {
+func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageReq.ExamPaperSearch, userId uint) (list []examManage.ExamPaper, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&examManage.ExamPaper{})
+	db = db.Where("user_id = ?", userId)
 	var examPapers []examManage.ExamPaper
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.PlanId != nil {
@@ -153,6 +154,12 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	}
 	if info.TemplateId != nil {
 		db = db.Where("template_id = ?", info.TemplateId)
+	}
+	if info.TermId != 0 {
+		db = db.Where("term_id = ?", info.TermId)
+	}
+	if info.CourseId != 0 {
+		db = db.Where("course_id = ?", info.CourseId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
