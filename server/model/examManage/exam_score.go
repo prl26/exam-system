@@ -7,6 +7,7 @@ import (
 
 type ExamScore struct {
 	global.GVA_MODEL
+	StudentId  *uint      `json:"studentId" form:"studentId"`
 	PlanId     *uint      `json:"planId" form:"planId" gorm:"column:plan_id;comment:考试计划id;size:32;"`
 	Name       string     `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
 	TermId     *uint      `json:"termId" from:"termId"`
@@ -20,4 +21,9 @@ type ExamScore struct {
 
 func (ExamScore) TableName() string {
 	return "exam_scores"
+}
+
+type Detail struct {
+	TermName   string `json:"termName"`
+	CourseName string `json:"courseName"`
 }
