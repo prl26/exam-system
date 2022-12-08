@@ -56,6 +56,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 	}
 	//总分
+	fmt.Println("进入统分")
 	var PlanDetail teachplan.ExamPlan
 	var ScoreDetail teachplan.Score
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
@@ -67,7 +68,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			"WHERE s.teach_class_id = ? and student_id = ? ", examPaperCommit.StudentId, examPaperCommit.PlanId, PlanDetail.TeachClassId, examPaperCommit.StudentId).Scan(&ScoreDetail)
 	}
 	var sum int
-	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?").Scan(&sum)
+	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and plan_id = ?", examPaperCommit.StudentId, &examPaperCommit).Scan(&sum)
 	var term basicdata.Term
 	global.GVA_DB.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
 	global.GVA_DB.Create(&examManage.ExamScore{

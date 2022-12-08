@@ -13,26 +13,28 @@ type ExamPlanService struct {
 
 // CreateExamPlan 创建ExamPlan记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.ExamPlanRq) (err error) {
+func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.ExamPlanRq, userId uint) (err error) {
 	startTime := utils.StringToTime(examPlan.StartTime)
 	endTime := utils.StringToTime(examPlan.EndTime)
 	time := int64(endTime.Sub(startTime).Minutes())
 	state := 0
 	ExamPlan := teachplan.ExamPlan{
-		GVA_MODEL:    global.GVA_MODEL{},
-		Name:         examPlan.Name,
-		TeachClassId: examPlan.TeachClassId,
-		Time:         &time,
-		StartTime:    &startTime,
-		EndTime:      &endTime,
-		CourseId:     examPlan.CourseId,
-		TemplateId:   examPlan.TemplateId,
-		State:        &state,
-		Audit:        examPlan.Audit,
-		Type:         examPlan.Type,
-		PassScore:    examPlan.PassScore,
-		Weight:       examPlan.Weight,
-		TermId:       examPlan.TermId,
+		GVA_MODEL:     global.GVA_MODEL{},
+		Name:          examPlan.Name,
+		TeachClassId:  examPlan.TeachClassId,
+		Time:          &time,
+		StartTime:     &startTime,
+		EndTime:       &endTime,
+		CourseId:      examPlan.CourseId,
+		TemplateId:    examPlan.TemplateId,
+		State:         &state,
+		Audit:         examPlan.Audit,
+		Type:          examPlan.Type,
+		PassScore:     examPlan.PassScore,
+		Weight:        examPlan.Weight,
+		TermId:        examPlan.TermId,
+		IsDistributed: false,
+		UserId:        &userId,
 	}
 	err = global.GVA_DB.Create(&ExamPlan).Error
 	return err

@@ -34,6 +34,8 @@ var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableServ
 // @Router /examPaper/createExamPaper [post]
 func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	var examPaper examManage.ExamPaper
+	userId := utils.GetUserID(c)
+	examPaper.UserId = &userId
 	_ = c.ShouldBindJSON(&examPaper)
 	numOfPapers := c.Query("numOfPapers")
 	n, _ := strconv.Atoi(numOfPapers)

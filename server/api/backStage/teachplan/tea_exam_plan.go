@@ -29,7 +29,8 @@ var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanServ
 func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq
 	_ = c.ShouldBindJSON(&examPlan)
-	if err := examPlanService.CreateExamPlan(examPlan); err != nil {
+	userId := utils.GetUserID(c)
+	if err := examPlanService.CreateExamPlan(examPlan, userId); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
