@@ -14,7 +14,7 @@ type ExamScore struct {
 	TermName   string     `json:"termName" form:"termName"`
 	CourseId   *int       `json:"courseId" form:"courseId"`
 	CourseName string     `json:"courseName" form:"courseName"`
-	Score      *int       `json:"score" form:"score"`
+	Score      *float64   `json:"score" form:"score"`
 	ExamType   *int       `json:"examType" form:"examType"`
 	StartTime  *time.Time `json:"startTime" form:"startTime"`
 }

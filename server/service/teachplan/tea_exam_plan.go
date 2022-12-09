@@ -29,7 +29,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 		TemplateId:    examPlan.TemplateId,
 		State:         &state,
 		Audit:         examPlan.Audit,
-		Type:          examPlan.Type,
+		Type:          *examPlan.Type,
 		PassScore:     examPlan.PassScore,
 		Weight:        examPlan.Weight,
 		TermId:        examPlan.TermId,
@@ -93,7 +93,7 @@ func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.Ex
 	if info.Audit != nil {
 		db = db.Where("audit = ?", info.Audit)
 	}
-	if info.Type != nil {
+	if &info.Type != nil {
 		db = db.Where("type = ?", info.Type)
 	}
 	if info.TermId != nil {

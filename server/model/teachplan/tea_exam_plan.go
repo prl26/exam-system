@@ -18,7 +18,7 @@ type ExamPlan struct {
 	TemplateId    *uint      `json:"templateId" form:"templateId" gorm:"column:template_id;comment:考试模板Id;size:32;"`
 	State         *int       `json:"state" form:"state" gorm:"column:state;comment:状态;size:8;"`
 	Audit         *int       `json:"audit" form:"audit" gorm:"column:audit;comment:是否审核;size:8;"`
-	Type          *int       `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
+	Type          int        `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore     *float64   `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	Weight        *float64   `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
 	TermId        *uint      `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
