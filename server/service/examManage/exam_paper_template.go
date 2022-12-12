@@ -6,8 +6,6 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type PaperTemplateService struct {
@@ -22,8 +20,14 @@ func (PapertemplateService *PaperTemplateService) CreatePaperTemplate(Papertempl
 
 // DeletePaperTemplate 删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
-	err = global.GVA_DB.Delete(&Papertemplate).Error
+func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Id uint) (err error) {
+	var paperTemplate examManage.PaperTemplate
+	var Item examManage.PaperTemplateItem
+	err = global.GVA_DB.Where("id = ?", Id).Delete(&paperTemplate).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Where("template_id = ?", Id).Delete(&Item).Error
 	return err
 }
 
@@ -40,20 +44,26 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids r
 
 // UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate, userId int) (err error) {
-	Papertemplate.UserId = &userId
-	paperTemplateItem := Papertemplate.PaperTemplateItems
-	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
-		err = tx.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "id"}},
-			UpdateAll: true,
-		}).Create(&paperTemplateItem).Error
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
+	//err = global.GVA_DB.Updates(&Papertemplate).Error
+	//Papertemplate.UserId = &userId
+	//paperTemplateItem := Papertemplate.PaperTemplateItems
+	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	//	err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
+	//	err = tx.Clauses(clause.OnConflict{
+	//		Columns:   []clause.Column{{Name: "id"}},
+	//		UpdateAll: true,
+	//	}).Create(&paperTemplateItem).Error
+	//	if err != nil {
+	//		return err
+	//	}
+	//	return nil
+	//})
+	err = PapertemplateService.DeletePaperTemplate(Papertemplate.ID)
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Create(&Papertemplate).Error
 	return err
 }
 

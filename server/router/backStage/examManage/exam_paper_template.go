@@ -16,7 +16,7 @@ func (s *PaperTemplateRouter) InitPaperTemplateRouter(Router *gin.RouterGroup) {
 	var PapertemplateApi = api.ApiGroupApp.BackStage.ExamManageApiGroup.PaperTemplateApi
 	{
 		PapertemplateRouter.POST("createPaperTemplate", PapertemplateApi.CreatePaperTemplate)             // 新建PaperTemplate
-		PapertemplateRouter.DELETE("deletePaperTemplate", PapertemplateApi.DeletePaperTemplate)           // 删除PaperTemplate
+		PapertemplateRouter.GET("deletePaperTemplate", PapertemplateApi.DeletePaperTemplate)              // 删除PaperTemplate
 		PapertemplateRouter.DELETE("deletePaperTemplateByIds", PapertemplateApi.DeletePaperTemplateByIds) // 批量删除PaperTemplate
 		PapertemplateRouter.PUT("updatePaperTemplate", PapertemplateApi.UpdatePaperTemplate)              // 更新PaperTemplate
 		PapertemplateRouter.GET("beforeTemplate", PapertemplateApi.BeforeTemplate)
