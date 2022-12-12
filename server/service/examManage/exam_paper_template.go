@@ -21,14 +21,12 @@ func (PapertemplateService *PaperTemplateService) CreatePaperTemplate(Papertempl
 // DeletePaperTemplate 删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Id uint) (err error) {
-	var paperTemplate examManage.PaperTemplate
-	var Item examManage.PaperTemplateItem
-	err = global.GVA_DB.Where("id = ?", Id).Delete(&paperTemplate).Error
+	err = global.GVA_DB.Raw("DELETE from exam_paper_template where id = ?", Id).Error
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Where("template_id = ?", Id).Delete(&Item).Error
-	return err
+	err = global.GVA_DB.Raw("DELETE from exam_paper_template_item where template_id = ?", Id).Error
+	return
 }
 
 // DeletePaperTemplateByIds 批量删除PaperTemplate记录
@@ -45,9 +43,7 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids r
 // UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
-	//err = global.GVA_DB.Updates(&Papertemplate).Error
-	//Papertemplate.UserId = &userId
-	//paperTemplateItem := Papertemplate.PaperTemplateItems
+
 	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 	//	err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
 	//	err = tx.Clauses(clause.OnConflict{
@@ -59,11 +55,8 @@ func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertempl
 	//	}
 	//	return nil
 	//})
-	err = PapertemplateService.DeletePaperTemplate(Papertemplate.ID)
-	if err != nil {
-		return
-	}
-	err = global.GVA_DB.Create(&Papertemplate).Error
+	//err = global.GVA_DB.Create(&Papertemplate).Error
+	err = global.GVA_DB.Updates(&Papertemplate).Error
 	return err
 }
 
