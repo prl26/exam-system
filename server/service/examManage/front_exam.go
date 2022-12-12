@@ -177,10 +177,11 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	if *info.LessonId != 0 {
 		db = db.Where("course_id = ?", info.LessonId)
 	}
+	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Count(&total).Error
+	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
 func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
