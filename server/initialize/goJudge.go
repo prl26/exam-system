@@ -5,7 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	questionBankEnum "github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	"github.com/prl26/exam-system/server/pb"
-	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/service/questionBank/oj/program"
 	defaultImpl2 "github.com/prl26/exam-system/server/service/questionBank/oj/program/defaultImpl"
 	"google.golang.org/grpc"
 )
@@ -46,7 +46,7 @@ func GoJudge() {
 }
 
 func CLanguage(client pb.ExecutorClient, cLanguageConfig config.CLanguage) {
-	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.C_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.CLanguageService{
+	program.Register(questionBankEnum.C_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.CLanguageService{
 		GCC_PATH:                          cLanguageConfig.GCC_PATH,
 		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: cLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
 		DEFAULT_COMPILE_CPU_TIME_LIMIT:    cLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
@@ -56,7 +56,7 @@ func CLanguage(client pb.ExecutorClient, cLanguageConfig config.CLanguage) {
 }
 
 func GoLanguage(client pb.ExecutorClient, goLanguageConfig config.GoLanguage) {
-	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.GO_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.GoLanguageService{
+	program.Register(questionBankEnum.GO_LANGUAGE, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.GoLanguageService{
 		GC_PATH:                           goLanguageConfig.GC_PATH,
 		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
 		DEFAULT_COMPILE_CPU_TIME_LIMIT:    goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,
@@ -66,7 +66,7 @@ func GoLanguage(client pb.ExecutorClient, goLanguageConfig config.GoLanguage) {
 }
 
 func JavaLanguage(client pb.ExecutorClient, goLanguageConfig config.JavaLanguage) {
-	service.ServiceGroupApp.QuestionBankServiceGroup.OjService.Register(questionBankEnum.JAVA, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.JavaService{
+	program.Register(questionBankEnum.JAVA, defaultImpl2.BuildDefaultImpl(client, &defaultImpl2.JavaService{
 		JAVA_PATH:                         goLanguageConfig.JAVA_PATH,
 		JAVAC_PATH:                        goLanguageConfig.JAVAC_PATH,
 		DEFAULT_COMPILE_MEMORY_TIME_LIMIT: goLanguageConfig.DEFAULT_COMPILE_CPU_TIME_LIMIT,

@@ -1,7 +1,6 @@
 package global
 
 import (
-	"github.com/prl26/exam-system/server/pb"
 	"github.com/songzhibin97/gkit/cache/singleflight"
 	"sync"
 
@@ -28,9 +27,8 @@ var (
 	GVA_Timer               timer.Timer = timer.NewTimerTask()
 	GVA_Concurrency_Control             = &singleflight.Group{}
 
-	BlackCache     local_cache.Cache
-	lock           sync.RWMutex
-	ExecutorClient pb.ExecutorClient
+	BlackCache local_cache.Cache
+	lock       sync.RWMutex
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

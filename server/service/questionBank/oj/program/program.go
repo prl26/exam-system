@@ -16,7 +16,7 @@ type ProgramService struct {
 
 var table = make(map[questionBankEnum.LanguageType]IProgramService)
 
-func (p *ProgramService) Register(languageType questionBankEnum.LanguageType, program IProgramService) {
+func Register(languageType questionBankEnum.LanguageType, program IProgramService) {
 	table[languageType] = program
 }
 
