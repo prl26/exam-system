@@ -45,7 +45,8 @@ func (api *SupplyBlankApi) Create(c *gin.Context) {
 	} else {
 		supplyBlank.Answer = a
 		supplyBlank.Proportion = b
-		supplyBlank.Num = len(req.Answers)
+		num := len(req.Answers)
+		supplyBlank.Num = &num
 	}
 	if err := supplyBlankService.Create(&supplyBlank); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -83,7 +84,8 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 	} else {
 		supplyBlank.Answer = a
 		supplyBlank.Proportion = b
-		supplyBlank.Num = len(req.Answers)
+		num := len(req.Answers)
+		supplyBlank.Num = &num
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))

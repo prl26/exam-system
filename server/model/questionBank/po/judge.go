@@ -11,7 +11,7 @@ type Judge struct {
 }
 
 type JudgeModel struct {
-	IsRight bool `json:"isRight" form:"isRight" gorm:"column:is_right;comment:是否正确;"`
+	IsRight *bool `json:"isRight" form:"isRight" gorm:"column:is_right;comment:是否正确;"`
 	BasicModel
 }
 

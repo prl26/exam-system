@@ -40,13 +40,13 @@ func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*po
 
 func (c *SupplyBlankService) check(question *po.SupplyBlank, checkAnswers []string) (boolList []bool, proportion int, err error) {
 	n := len(checkAnswers)
-	if n != question.Num {
+	if n != *question.Num {
 		return nil, 0, fmt.Errorf("应该要填入%d个空", n)
 	}
 	boolList = make([]bool, n)
 	answers := strings.Split(question.Answer, ",")
 	proportions := strings.Split(question.Proportion, ",")
-	if question.IsOrder == 0 {
+	if *question.IsOrder == 0 {
 		table := make(map[string]int)
 		var answerIndex [][]string
 		for i, a := range answers {

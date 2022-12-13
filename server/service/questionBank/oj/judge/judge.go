@@ -36,12 +36,12 @@ func (s *JudgeService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.Judge
 }
 
 func (s *JudgeService) check(question *po.Judge, checkAnswer bool) bool {
-	if question.IsRight {
+	if *question.IsRight {
 		return checkAnswer
 	} else {
 		return !checkAnswer
 	}
 }
 func (c *JudgeService) GetAnswer(question *po.Judge) bool {
-	return question.IsRight
+	return *question.IsRight
 }
