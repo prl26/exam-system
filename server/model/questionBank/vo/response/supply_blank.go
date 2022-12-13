@@ -14,9 +14,10 @@ type SupplyBlankSimple struct {
 
 type SupplyBlankDetail struct {
 	global.GVA_MODEL
-	Chapter   basicdata.Chapter
-	Knowledge basicdata.Knowledge
-	questionBankPo.BasicModel
+	Chapter   *basicdata.Chapter
+	Knowledge *basicdata.Knowledge
+	questionBankPo.SupplyBlankModel
+	Answers questionBankBo.SupplyBlankAnswers `json:"answers"`
 }
 type SupplyBlankPractice struct {
 	questionBankBo.PracticeModel

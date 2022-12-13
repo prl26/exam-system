@@ -57,9 +57,10 @@ type SupplyBlankAnswer struct {
 type SupplyBlankDetail struct {
 	global.GVA_MODEL
 	questionBankPo.CourseSupport
-	questionBankPo.JudgeModel
+	questionBankPo.SupplyBlankModel
+	Answer     string `json:"answer" form:"answer" gorm:"column:answer;comment:答案"`
+	Proportion string `json:"proportion"`
 	CourseSupportPtr
-	Answers SupplyBlankAnswers `json:"answers"`
 }
 
 type SupplyBlankPracticeCriteria struct {

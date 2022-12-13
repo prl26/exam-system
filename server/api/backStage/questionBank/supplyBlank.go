@@ -136,6 +136,16 @@ func (api *SupplyBlankApi) FindDetail(c *gin.Context) {
 			questionBankResp.NotFind(c)
 			return
 		}
-		questionBankResp.OkWithDetailed(data, "获取成功", c)
+		//global.GVA_MODEL
+		//	Chapter   basicdata.Chapter
+		//	Knowledge basicdata.Knowledge
+		//	questionBankPo.BasicModel
+		detail := questionBankResp.SupplyBlankDetail{}
+		detail.Answers.Deserialization(data.Answer, data.Proportion)
+		detail.GVA_MODEL = data.GVA_MODEL
+		detail.Chapter = data.Chapter
+		detail.Knowledge = data.Knowledge
+		detail.SupplyBlankModel = data.SupplyBlankModel
+		questionBankResp.OkWithDetailed(detail, "获取成功", c)
 	}
 }
