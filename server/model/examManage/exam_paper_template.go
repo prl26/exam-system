@@ -19,3 +19,7 @@ type PaperTemplate struct {
 func (PaperTemplate) TableName() string {
 	return "exam_paper_template"
 }
+
+type PaperTemplateId struct {
+	ID uint `json:"Id" form:"id"` // 主键ID
+}

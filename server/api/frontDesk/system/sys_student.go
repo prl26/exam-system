@@ -50,7 +50,6 @@ func (b *BaseApi) StudentLogin(c *gin.Context) {
 
 func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
-	Lessons, err := teachClassService.FindTeachClass(user.ID)
 	claims := j.CreateStudentClaims(systemReq.StudentBaseClaims{
 		ID:          user.ID,
 		Name:        user.Name,
@@ -69,8 +68,7 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 				Token:     token,
 				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 			},
-			"classAndlesson": Lessons,
-			"状态":             "登录成功",
+			"状态": "登录成功",
 		}, c)
 		return
 	}
@@ -86,8 +84,7 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 				Token:     token,
 				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 			},
-			"classAndlesson": Lessons,
-			"状态":             "登录成功",
+			"状态": "登录成功",
 		}, c)
 	} else if err != nil {
 		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
@@ -118,8 +115,18 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 				Token:     token,
 				ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 			},
-			"classAndlesson": Lessons,
-			"状态":             "登录成功",
+			"状态": "登录成功",
 		}, c)
+	}
+}
+
+//获取该学生所在的所有教学计划
+func (b *BaseApi) GetTeachPlans(c *gin.Context) {
+	StudentId := utils.GetStudentId(c)
+	Lessons, err := teachClassService.FindTeachClass(StudentId)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithData(Lessons, c)
 	}
 }

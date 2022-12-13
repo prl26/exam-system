@@ -55,8 +55,8 @@ func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
 // @Router /Papertemplate/deletePaperTemplate [delete]
 func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplate(c *gin.Context) {
 	var Papertemplate examManage.PaperTemplate
-	_ = c.ShouldBindJSON(&Papertemplate)
-	if err := PapertemplateService.DeletePaperTemplate(Papertemplate); err != nil {
+	_ = c.ShouldBindQuery(&Papertemplate)
+	if err := PapertemplateService.DeletePaperTemplate(Papertemplate.ID); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -96,8 +96,8 @@ func (PapertemplateApi *PaperTemplateApi) DeletePaperTemplateByIds(c *gin.Contex
 func (PapertemplateApi *PaperTemplateApi) UpdatePaperTemplate(c *gin.Context) {
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	userId := utils.GetUserID(c)
-	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate, int(userId)); err != nil {
+	//userId := utils.GetUserID(c)
+	if err := PapertemplateService.UpdatePaperTemplate(Papertemplate); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
@@ -137,7 +137,8 @@ func (PapertemplateApi *PaperTemplateApi) FindPaperTemplate(c *gin.Context) {
 func (PapertemplateApi *PaperTemplateApi) GetPaperTemplateList(c *gin.Context) {
 	var pageInfo examManageReq.PaperTemplateSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := PapertemplateService.GetPaperTemplateInfoList(pageInfo); err != nil {
+	userId := utils.GetUserID(c)
+	if list, total, err := PapertemplateService.GetPaperTemplateInfoList(pageInfo, userId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

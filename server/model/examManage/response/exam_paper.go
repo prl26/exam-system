@@ -14,7 +14,7 @@ type ExamPaperResponse struct {
 }
 type ChoiceComponent struct {
 	MergeId uint                                  `json:"mergeId"`
-	Choice  questionBankVoResp.MultipleChoiceExam `json:" choiceComponent"`
+	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
 }
 type JudgeComponent struct {
 	MergeId uint                             `json:"mergeId"`

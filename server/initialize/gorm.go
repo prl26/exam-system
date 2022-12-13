@@ -78,6 +78,7 @@ func RegisterTables(db *gorm.DB) {
 		examManage.PaperTemplate{},
 		examManage.ExamStudentPaper{},
 		examManage.StudentPaperStatus{},
+		examManage.ExamScore{},
 
 		basicdata.Student{},
 		basicdata.TeachClass{},

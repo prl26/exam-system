@@ -9,3 +9,6 @@ type TermSearch struct {
 	basicdata.Term
 	request.PageInfo
 }
+type FrontTermSearch struct {
+	basicdata.Term
+}

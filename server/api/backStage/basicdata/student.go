@@ -163,8 +163,9 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		"File": {utils.NotEmpty()},
 		//"CollegeId": {utils.NotEmpty()},
 		//"ProfessionalId": {utils.NotEmpty()}, 专业和学院去掉
-		"TermId":  {utils.NotEmpty()},
-		"ClassId": {utils.NotEmpty()},
+		"TermId":   {utils.NotEmpty()},
+		"CourseId": {utils.NotEmpty()},
+		"ClassId":  {utils.NotEmpty()},
 	}
 	if err := utils.Verify(studentExcel, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -190,6 +191,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 
 	teachClassID := int(studentExcel.ClassId)
 	termID := int(studentExcel.TermId)
+	courseId := int(studentExcel.CourseId)
 	var scoreService = service.ServiceGroupApp.TeachplanServiceGroup.ScoreService
 	newScoreStudents := make([]*teachplan.Score, 0, n)
 	NewStudents := make([]*basicdata.Student, 0, n)
@@ -213,6 +215,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		scoreStudent.StudentId = &id
 		scoreStudent.TeachClassId = &teachClassID
 		scoreStudent.TermId = &termID
+		scoreStudent.CourseId = &courseId
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]

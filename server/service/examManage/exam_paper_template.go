@@ -6,8 +6,6 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type PaperTemplateService struct {
@@ -22,9 +20,13 @@ func (PapertemplateService *PaperTemplateService) CreatePaperTemplate(Papertempl
 
 // DeletePaperTemplate 删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
-	err = global.GVA_DB.Delete(&Papertemplate).Error
-	return err
+func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Id uint) (err error) {
+	err = global.GVA_DB.Raw("DELETE from exam_paper_template where id = ?", Id).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Raw("DELETE from exam_paper_template_item where template_id = ?", Id).Error
+	return
 }
 
 // DeletePaperTemplateByIds 批量删除PaperTemplate记录
@@ -40,20 +42,35 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids r
 
 // UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate, userId int) (err error) {
-	Papertemplate.UserId = &userId
-	paperTemplateItem := Papertemplate.PaperTemplateItems
-	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
-		err = tx.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "id"}},
-			UpdateAll: true,
-		}).Create(&paperTemplateItem).Error
-		if err != nil {
-			return err
+func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
+	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	//	err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
+	//	err = tx.Clauses(clause.OnConflict{
+	//		Columns:   []clause.Column{{Name: "id"}},
+	//		UpdateAll: true,
+	//	}).Create(&paperTemplateItem).Error
+	//	if err != nil {
+	//		return err
+	//	}
+	//	return nil
+	//})
+	//err = global.GVA_DB.Create(&Papertemplate).Error
+	err = global.GVA_DB.Updates(&Papertemplate).Error
+	for i := 0; i < len(Papertemplate.PaperTemplateItems); i++ {
+		global.GVA_DB.Save(&Papertemplate.PaperTemplateItems[i])
+	}
+	var IdOfItems []uint
+	global.GVA_DB.Model(&examManage.PaperTemplateItem{}).Select("id").Where("template_id  = ?", Papertemplate.ID).Find(&IdOfItems)
+	set := make(map[uint]bool)
+	for _, v := range Papertemplate.PaperTemplateItems {
+		set[v.ID] = true
+	}
+	for _, v := range IdOfItems {
+		_, ok := set[v]
+		if !ok {
+			global.GVA_DB.Where("id = ?", v).Delete(&examManage.PaperTemplateItem{})
 		}
-		return nil
-	})
+	}
 	return err
 }
 
@@ -70,7 +87,7 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplate(id uint) (Pap
 
 // GetPaperTemplateInfoList 分页获取PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch) (list []examManage.PaperTemplate, total int64, err error) {
+func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch, userId uint) (list []examManage.PaperTemplate, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

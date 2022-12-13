@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -28,7 +29,8 @@ var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanServ
 func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq
 	_ = c.ShouldBindJSON(&examPlan)
-	if err := examPlanService.CreateExamPlan(examPlan); err != nil {
+	userId := utils.GetUserID(c)
+	if err := examPlanService.CreateExamPlan(examPlan, userId); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -128,7 +130,8 @@ func (examPlanApi *ExamPlanApi) FindExamPlanById(c *gin.Context) {
 func (examPlanApi *ExamPlanApi) GetExamPlanList(c *gin.Context) {
 	var pageInfo teachplanReq.ExamPlanSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo); err != nil {
+	userId := utils.GetUserID(c)
+	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo, userId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
