@@ -16,8 +16,8 @@ type SupplyBlank struct {
 
 type SupplyBlankModel struct {
 	BasicModel
-	IsOrder *int `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
-	Num     *int `json:"num" form:"num" gorm:"column:num;comment:可填项;"`
+	IsOrder *bool `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
+	Num     *int  `json:"num" form:"num" gorm:"column:num;comment:可填项;"`
 }
 
 // TableName QuestionBankSupplyBlank 表名

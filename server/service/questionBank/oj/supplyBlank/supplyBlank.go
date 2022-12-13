@@ -46,7 +46,7 @@ func (c *SupplyBlankService) check(question *po.SupplyBlank, checkAnswers []stri
 	boolList = make([]bool, n)
 	answers := strings.Split(question.Answer, ",")
 	proportions := strings.Split(question.Proportion, ",")
-	if *question.IsOrder == 0 {
+	if *question.IsOrder {
 		table := make(map[string]int)
 		var answerIndex [][]string
 		for i, a := range answers {
