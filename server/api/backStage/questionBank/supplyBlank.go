@@ -37,15 +37,17 @@ func (api *SupplyBlankApi) Create(c *gin.Context) {
 	}
 	supplyBlank := questionBankPo.SupplyBlank{}
 	supplyBlank.BasicModel = req.BasicModel
-	supplyBlank.IsOrder = req.IsOrder
 	supplyBlank.SupplyBlankModel = req.SupplyBlankModel
+	supplyBlank.CourseSupport = req.CourseSupport
+
 	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
 	} else {
 		supplyBlank.Answer = a
 		supplyBlank.Proportion = b
-		supplyBlank.Num = len(req.Answers)
+		num := len(req.Answers)
+		supplyBlank.Num = &num
 	}
 	if err := supplyBlankService.Create(&supplyBlank); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -83,7 +85,8 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 	} else {
 		supplyBlank.Answer = a
 		supplyBlank.Proportion = b
-		supplyBlank.Num = len(req.Answers)
+		num := len(req.Answers)
+		supplyBlank.Num = &num
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
@@ -134,6 +137,15 @@ func (api *SupplyBlankApi) FindDetail(c *gin.Context) {
 			questionBankResp.NotFind(c)
 			return
 		}
-		questionBankResp.OkWithDetailed(data, "获取成功", c)
+		//global.GVA_MODEL
+		//	Chapter   basicdata.Chapter
+		//	Knowledge basicdata.Knowledge
+		//	questionBankPo.BasicModel
+		detail := questionBankResp.SupplyBlankDetail{}
+		detail.Answers.Deserialization(data.Answer, data.Proportion)
+		detail.GVA_MODEL = data.GVA_MODEL
+		detail.CourseSupportPtr = data.CourseSupportPtr
+		detail.SupplyBlankModel = data.SupplyBlankModel
+		questionBankResp.OkWithDetailed(detail, "获取成功", c)
 	}
 }

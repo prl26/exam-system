@@ -14,7 +14,6 @@ type QuestionBankSupplyBlankSearch struct {
 type SupplyBlankCreate struct {
 	questionBankPo.SupplyBlankModel
 	questionBankPo.CourseSupport
-	IsOrder int                               `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
 	Answers questionBankBo.SupplyBlankAnswers `json:"answers"`
 }
 

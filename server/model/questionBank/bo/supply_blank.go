@@ -33,17 +33,19 @@ func (this SupplyBlankAnswers) GetAnswersAndProportions() (answer string, propor
 }
 
 func (this *SupplyBlankAnswers) Deserialization(answer string, proportion string) error {
-	answers := strings.Split(answer, ",")
-	proportions := strings.Split(proportion, ",")
-	*this = make([]*SupplyBlankAnswer, len(answers))
-	for i, s := range answers {
-		atoi, err := strconv.Atoi(proportions[i])
-		if err != nil {
-			return err
-		}
-		(*this)[i] = &SupplyBlankAnswer{
-			Answer:     s,
-			Proportion: atoi,
+	if answer != "" {
+		answers := strings.Split(answer, ",")
+		proportions := strings.Split(proportion, ",")
+		*this = make([]*SupplyBlankAnswer, len(answers))
+		for i, s := range answers {
+			atoi, err := strconv.Atoi(proportions[i])
+			if err != nil {
+				return err
+			}
+			(*this)[i] = &SupplyBlankAnswer{
+				Answer:     s,
+				Proportion: atoi,
+			}
 		}
 	}
 	return nil
@@ -57,9 +59,10 @@ type SupplyBlankAnswer struct {
 type SupplyBlankDetail struct {
 	global.GVA_MODEL
 	questionBankPo.CourseSupport
-	questionBankPo.JudgeModel
+	questionBankPo.SupplyBlankModel
+	Answer     string `json:"answer" form:"answer" gorm:"column:answer;comment:答案"`
+	Proportion string `json:"proportion"`
 	CourseSupportPtr
-	Answers SupplyBlankAnswers `json:"answers"`
 }
 
 type SupplyBlankPracticeCriteria struct {

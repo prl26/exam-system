@@ -63,8 +63,8 @@ func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSup
 	return list, total, err
 }
 
-func (service *SupplyBlankService) FindDetail(id uint) (j *questionBankBo.JudgeDetail, err error) {
-	j = &questionBankBo.JudgeDetail{}
+func (service *SupplyBlankService) FindDetail(id uint) (j *questionBankBo.SupplyBlankDetail, err error) {
+	j = &questionBankBo.SupplyBlankDetail{}
 	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.SupplyBlank{}).First(j, id).Error
 	return
 }
