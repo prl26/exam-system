@@ -21,7 +21,7 @@ var wg sync.WaitGroup
 
 // CreateExamPaper 创建ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper, num int) (err error) {
+func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		tx.Create(&examPaper)
 		templateItems, err := examPaperService.GetTemplate(examPaper)
@@ -146,14 +146,8 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	db = db.Where("user_id = ?", userId)
 	var examPapers []examManage.ExamPaper
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.PlanId != nil {
-		db = db.Where("plan_id = ?", info.PlanId)
-	}
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
-	}
-	if info.TemplateId != nil {
-		db = db.Where("template_id = ?", info.TemplateId)
 	}
 	if info.TermId != 0 {
 		db = db.Where("term_id = ?", info.TermId)

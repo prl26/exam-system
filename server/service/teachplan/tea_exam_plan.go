@@ -81,9 +81,6 @@ func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.Ex
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
-	if info.TeachClassId != nil {
-		db = db.Where("teach_class_id = ?", info.TeachClassId)
-	}
 	if info.CourseId != nil {
 		db = db.Where("course_id = ?", info.CourseId)
 	}

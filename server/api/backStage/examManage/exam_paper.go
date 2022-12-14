@@ -43,7 +43,7 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 		response.FailWithMessage("试卷份数不能为0", c)
 	}
 	for i := 0; i < n; i++ {
-		if err := examPaperService.CreateExamPaper(examPaper, n); err != nil {
+		if err := examPaperService.CreateExamPaper(examPaper); err != nil {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
 			response.FailWithMessage("试卷创建失败", c)
 		}
@@ -112,7 +112,7 @@ func (examPaperApi *ExamPaperApi) UpdateExamPaper(c *gin.Context) {
 			if err != nil {
 				response.FailWithMessage("删除失败", c)
 			}
-			err = examPaperService.CreateExamPaper(examPaper, 1)
+			err = examPaperService.CreateExamPaper(examPaper)
 			if err != nil {
 				response.FailWithMessage("更新试卷失败", c)
 			}
