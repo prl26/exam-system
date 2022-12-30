@@ -18,4 +18,5 @@ type RouterGroup struct {
 	ProgramRouter
 	PublicProgramRouter
 	OjRouter
+	TargetRouter
 }

@@ -7,4 +7,5 @@ type ApiGroup struct {
 	JudgeApi
 	MultipleChoiceApi
 	OjApi
+	TargetApi
 }

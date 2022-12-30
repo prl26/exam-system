@@ -8,49 +8,49 @@ import (
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 )
 
-type JudgeService struct {
+type TargetService struct {
 }
 
-// Create 创建QuestionBankJudge记录
+// Create 创建QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) Create(judge *questionBank.Judge) error {
-	return global.GVA_DB.Create(judge).Error
+func (service *TargetService) Create(RangTopic *questionBank.Target) error {
+	return global.GVA_DB.Create(RangTopic).Error
 }
 
-// DeleteQuestionBankJudge 删除QuestionBankJudge记录
+// DeleteQuestionBankRangTopic 删除QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) DeleteQuestionBankJudge(judge questionBank.Judge) (err error) {
-	err = global.GVA_DB.Delete(&judge).Error
+func (service *TargetService) DeleteQuestionBankRangTopic(RangTopic questionBank.Target) (err error) {
+	err = global.GVA_DB.Delete(&RangTopic).Error
 	return err
 }
 
-// Delete 批量删除QuestionBankJudge记录
+// Delete 批量删除QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) Delete(ids request.IdsReq) error {
-	return global.GVA_DB.Delete(&[]questionBank.Judge{}, "id in ?", ids.Ids).Error
+func (service *TargetService) Delete(ids request.IdsReq) error {
+	return global.GVA_DB.Delete(&[]questionBank.Target{}, "id in ?", ids.Ids).Error
 }
 
-// Update 更新QuestionBankJudge记录
+// Update 更新QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) Update(judge questionBank.Judge) (err error) {
-	err = global.GVA_DB.Updates(&judge).Error
+func (service *TargetService) Update(RangTopic questionBank.Target) (err error) {
+	err = global.GVA_DB.Updates(&RangTopic).Error
 	return err
 }
 
-// GetQuestionBankJudge 根据id获取QuestionBankJudge记录
+// GetQuestionBankRangTopic 根据id获取QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) GetQuestionBankJudge(id uint) (judge questionBank.Judge, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&judge).Error
+func (service *TargetService) GetQuestionBankRangTopic(id uint) (RangTopic questionBank.Target, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&RangTopic).Error
 	return
 }
 
-// FindJudgeList 分页获取QuestionBankJudge记录
+// FindTargetList 分页获取QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *JudgeService) FindJudgeList(criteria questionBankBo.JudgeSearchCriteria, info request.PageInfo) (list []questionBankVoResp.JudgeSimple, total int64, err error) {
+func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.RangTopicSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&questionBank.Judge{})
+	db := global.GVA_DB.Model(&questionBank.Target{})
 	if criteria.LessonId != 0 {
 		db = db.Where("lesson_id=?", criteria.LessonId)
 	}
@@ -83,8 +83,8 @@ func (service *JudgeService) FindJudgeList(criteria questionBankBo.JudgeSearchCr
 	return list, total, err
 }
 
-func (service *JudgeService) FindDetail(id uint) (judge *questionBankBo.JudgeDetail, err error) {
-	judge = &questionBankBo.JudgeDetail{}
-	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Judge{}).First(judge, id).Error
+func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.TargetDetail, err error) {
+	RangTopic = &questionBankBo.TargetDetail{}
+	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Target{}).First(RangTopic, id).Error
 	return
 }

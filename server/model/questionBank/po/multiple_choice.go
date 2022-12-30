@@ -15,7 +15,7 @@ type MultipleChoice struct {
 type MultipleChoiceModel struct {
 	BasicModel
 	Answer       string `json:"answer" form:"answer" gorm:"column:answer;comment:"`
-	MostOptions  int    `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
+	MostOptions  *int   `json:"mostOptions" form:"mostOptions" gorm:"column:most_options;comment:最多可选项;"`
 	IsIndefinite *int   `json:"isIndefinite" form:"isIndefinite" gorm:"column:is_indefinite"`
 }
 

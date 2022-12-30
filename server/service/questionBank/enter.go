@@ -10,4 +10,5 @@ type ServiceGroup struct {
 	MultipleChoiceService
 	QuestionBankService
 	oj.OjService
+	TargetService
 }

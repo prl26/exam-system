@@ -45,6 +45,7 @@ func (service *QuestionBankService) FindJudgeList(criteria questionBankBo.JudgeP
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.Judge{})
+	db = db.Where("is_check", 1)
 	db = db.Where("can_practice = ?", 1)
 	db = db.Where("chapter_id =?", criteria.ChapterId)
 	err = db.Count(&total).Error
@@ -60,6 +61,7 @@ func (service *QuestionBankService) FindSupplyBlankList(criteria questionBankBo.
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.SupplyBlank{})
+	db = db.Where("is_check", 1)
 	db = db.Where("can_practice = ?", 1)
 	db = db.Where("chapter_id =?", criteria.ChapterId)
 	err = db.Count(&total).Error
@@ -75,6 +77,7 @@ func (service *QuestionBankService) FindMultipleChoiceList(criteria questionBank
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.MultipleChoice{})
+	db = db.Where("is_check", 1)
 	if isIndefinite {
 		db = db.Where("is_indefinite=1")
 	} else {
@@ -95,6 +98,7 @@ func (service *QuestionBankService) FindProgramList(criteria questionBankBo.Prog
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.Program{})
+	db = db.Where("is_check", 1)
 	db = db.Where("can_practice = ?", 1)
 	db = db.Where("chapter_id =?", criteria.ChapterId)
 	err = db.Count(&total).Error

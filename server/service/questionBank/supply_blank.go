@@ -35,8 +35,15 @@ func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSup
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
+
 	db := global.GVA_DB.Model(&questionBank.SupplyBlank{})
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.LessonId != 0 {
+		db = db.Where("lesson_id=?", info.LessonId)
+	}
+	if info.IsCheck != nil {
+		db = db.Where("is_check=?", *info.IsCheck)
+	}
 	if info.Title != "" {
 		db = db.Where("title LIKE ?", "%"+info.Title+"%")
 	}

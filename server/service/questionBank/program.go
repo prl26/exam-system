@@ -22,6 +22,12 @@ func (p *ProgramService) FindList(criteria questionBankBo.ProgramSearchCriteria,
 	// 创建db
 	db := global.GVA_DB.Model(&po.Program{})
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if criteria.LessonId != 0 {
+		db = db.Where("lesson_id=?", criteria.LessonId)
+	}
+	if criteria.IsCheck != nil {
+		db = db.Where("is_check=?", *criteria.IsCheck)
+	}
 	if criteria.Title != "" {
 		db = db.Where("title LIKE ?", "%"+criteria.Title+"%")
 	}

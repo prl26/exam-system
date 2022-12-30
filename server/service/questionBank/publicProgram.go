@@ -22,6 +22,11 @@ func (p *PublicProgramService) FindList(criteria questionBankBo.PublicProgramSea
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBankPo.PublicProgram{})
+
+	if criteria.IsCheck != nil {
+		db = db.Where("is_check=?", *criteria.IsCheck)
+	}
+
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if criteria.Title != "" {
 		db = db.Where("title LIKE ?", "%"+criteria.Title+"%")

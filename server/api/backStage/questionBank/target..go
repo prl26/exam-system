@@ -15,14 +15,14 @@ import (
 	"go.uber.org/zap"
 )
 
-type JudgeApi struct {
+type TargetApi struct {
 }
 
-var judgeService = service.ServiceGroupApp.QuestionBankServiceGroup.JudgeService
+var TargetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetService
 
-// Create 创建判断题
-func (api *JudgeApi) Create(c *gin.Context) {
-	var req questionBankReq.JudgeCreate
+// Create 创建靶场题
+func (api *TargetApi) Create(c *gin.Context) {
+	var req questionBankReq.TargetCreate
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
 		"ProblemType": {utils.NotEmpty()},
@@ -30,14 +30,13 @@ func (api *JudgeApi) Create(c *gin.Context) {
 		"CanExam":     {utils.NotEmpty()},
 		"Title":       {utils.NotEmpty()},
 		"Describe":    {utils.NotEmpty()},
-		"IsRight":     {utils.NotEmpty()},
+		"ByteCode":    {utils.NotEmpty()},
 	}
-
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)
 		return
 	}
-	if err := judgeService.Create(&req.Judge); err != nil {
+	if err := TargetService.Create(&req.Target); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("创建失败:%s", err.Error()))
 	} else {
@@ -45,11 +44,11 @@ func (api *JudgeApi) Create(c *gin.Context) {
 	}
 }
 
-// Delete 删除判断题
-func (api *JudgeApi) Delete(c *gin.Context) {
+// Delete 删除靶场题
+func (api *TargetApi) Delete(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
-	if err := judgeService.Delete(IDS); err != nil {
+	if err := TargetService.Delete(IDS); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("批量删除失败:%s", err.Error()))
 	} else {
@@ -57,9 +56,9 @@ func (api *JudgeApi) Delete(c *gin.Context) {
 	}
 }
 
-// Update 更新判断题
-func (api *JudgeApi) Update(c *gin.Context) {
-	var req questionBankPo.Judge
+// Update 更新靶场题
+func (api *TargetApi) Update(c *gin.Context) {
+	var req questionBankPo.Target
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
 		"Id": {utils.NotEmpty()},
@@ -68,7 +67,7 @@ func (api *JudgeApi) Update(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := judgeService.Update(req); err != nil {
+	if err := TargetService.Update(req); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("更新失败:%s", err.Error()))
 	} else {
@@ -76,11 +75,11 @@ func (api *JudgeApi) Update(c *gin.Context) {
 	}
 }
 
-// FindList  分页查找判断题
-func (api *JudgeApi) FindJudgeList(c *gin.Context) {
-	var pageInfo questionBankReq.QuestionBankJudgeSearch
+// FindList  分页查找靶场题
+func (api *TargetApi) FindList(c *gin.Context) {
+	var pageInfo questionBankReq.TargetSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if list, total, err := judgeService.FindJudgeList(pageInfo.JudgeSearchCriteria, pageInfo.PageInfo); err != nil {
+	if list, total, err := TargetService.FindTargetList(pageInfo.TargetSearchCriteria, pageInfo.PageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 	} else {
@@ -93,8 +92,8 @@ func (api *JudgeApi) FindJudgeList(c *gin.Context) {
 	}
 }
 
-// FindDetail  获取判断题详细
-func (api *JudgeApi) FindDetail(c *gin.Context) {
+// FindDetail  获取靶场题详细
+func (api *TargetApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
 	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
@@ -105,11 +104,11 @@ func (api *JudgeApi) FindDetail(c *gin.Context) {
 		return
 	}
 
-	if judge, err := judgeService.FindDetail(req.Id); err != nil {
+	if Target, err := TargetService.FindDetail(req.Id); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 		return
 	} else {
-		questionBankResp.OkWithDetailed(judge, "获取成功", c)
+		questionBankResp.OkWithDetailed(Target, "获取成功", c)
 	}
 }
