@@ -79,14 +79,16 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 	supplyBlank := questionBankPo.SupplyBlank{}
 	supplyBlank.ID = req.Id
 	supplyBlank.SupplyBlankModel = req.SupplyBlankModel
-	if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
-		questionBankResp.ErrorHandle(c, err)
-		return
-	} else {
-		supplyBlank.Answer = a
-		supplyBlank.Proportion = b
-		num := len(req.Answers)
-		supplyBlank.Num = &num
+	if req.Answers != nil {
+		if a, b, err := req.Answers.GetAnswersAndProportions(); err != nil {
+			questionBankResp.ErrorHandle(c, err)
+			return
+		} else {
+			supplyBlank.Answer = a
+			supplyBlank.Proportion = b
+			num := len(req.Answers)
+			supplyBlank.Num = &num
+		}
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))

@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
+	"gorm.io/gorm"
 )
 
 type LessonService struct {
@@ -41,7 +42,9 @@ func (lessonService *LessonService) UpdateLesson(lesson basicdata.Lesson) (err e
 // GetLesson 根据id获取Lesson记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (lessonService *LessonService) GetLesson(id uint) (lesson basicdata.Lesson, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&lesson).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("Chapters", func(db *gorm.DB) *gorm.DB {
+		return db.Order("`order` ASC")
+	}).First(&lesson).Error
 	return
 }
 

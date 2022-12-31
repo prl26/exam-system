@@ -57,7 +57,7 @@ func (chapterService *ChapterService) GetChapterInfoList(info basicdataReq.Chapt
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
-	if info.LessonId != "" {
+	if info.LessonId != nil {
 		db = db.Where("lesson_id = ?", info.LessonId)
 	}
 	if info.Order != nil {
