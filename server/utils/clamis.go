@@ -30,6 +30,18 @@ func GetUserID(c *gin.Context) uint {
 		return waitUse.ID
 	}
 }
+func GetUserAuthorityID(c *gin.Context) uint {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return 0
+		} else {
+			return cl.ID
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.AuthorityId
+	}
+}
 func GetStudentClaims(c *gin.Context) (*systemReq.StudentCustomClaims, error) {
 	token := c.Request.Header.Get("x-token")
 	j := NewJWT()

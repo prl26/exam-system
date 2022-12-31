@@ -23,7 +23,8 @@ type ExamPlan struct {
 	Weight        *float64   `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
 	TermId        *uint      `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 	IsDistributed bool       `json:"isDistributed" gorm:"is_distributed"`
-	UserId        *uint      `json:"user_id" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
+	UserId        *uint      `json:"userId" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
+	PrePlanId     string     `json:"prePlanId" form:"prePlanId" gorm:"pre_plan_id"`
 }
 
 //type ExamPlan

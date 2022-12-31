@@ -157,7 +157,8 @@ func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 	var pageInfo examManageReq.ExamPaperSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	userId := utils.GetUserID(c)
-	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo, userId); err != nil {
+	authorityId := utils.GetUserAuthorityID(c)
+	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo, userId, authorityId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

@@ -131,7 +131,8 @@ func (examPlanApi *ExamPlanApi) GetExamPlanList(c *gin.Context) {
 	var pageInfo teachplanReq.ExamPlanSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	userId := utils.GetUserID(c)
-	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo, userId); err != nil {
+	authorityId := utils.GetUserAuthorityID(c)
+	if list, total, err := examPlanService.GetExamPlanInfoList(pageInfo, userId, authorityId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
