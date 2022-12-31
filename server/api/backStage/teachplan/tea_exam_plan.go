@@ -16,6 +16,7 @@ type ExamPlanApi struct {
 }
 
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
+var lessonService = service.ServiceGroupApp.BasicdataApiGroup.LessonService
 
 // CreateExamPlan 创建ExamPlan
 // @Tags ExamPlan
@@ -35,6 +36,16 @@ func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
+	}
+}
+func (examPlanApi *ExamPlanApi) ChoosePrePlan(c *gin.Context) {
+	var IDS request.PrePlanReq
+	_ = c.ShouldBindJSON(&IDS)
+	if err := examPlanService.UpdatePrePlan(IDS); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("设置成功", c)
 	}
 }
 
@@ -136,11 +147,32 @@ func (examPlanApi *ExamPlanApi) GetExamPlanList(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
+		result := examPlanService.GetExamPlanDetail(list)
 		response.OkWithDetailed(response.PageResult{
-			List:     list,
+			List:     result,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+func (examPlanApi *ExamPlanApi) ChangeAudit(c *gin.Context) {
+	var planId teachplanReq.ExamPlanAudit
+	_ = c.ShouldBindQuery(&planId)
+	if err := examPlanService.ChangeAudit(planId.PlanId, planId.Value); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
+func (examPlanApi *ExamPlanApi) ChangeStatus(c *gin.Context) {
+	var planId teachplanReq.ExamPlan
+	_ = c.ShouldBindQuery(&planId)
+	if err := examPlanService.ChangeStatus(planId.PlanId); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
 	}
 }

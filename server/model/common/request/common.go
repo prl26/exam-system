@@ -25,7 +25,10 @@ func (r *GetById) Uint() uint {
 type IdsReq struct {
 	Ids []uint `json:"ids" form:"ids"`
 }
-
+type PrePlanReq struct {
+	PlanId uint     `json:"planId"`
+	Ids    []string `json:"ids" form:"ids"`
+}
 type IdReq struct {
 	Id int `json:"id" form:"id"`
 }

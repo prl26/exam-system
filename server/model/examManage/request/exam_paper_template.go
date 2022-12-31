@@ -2,10 +2,13 @@ package request
 
 import (
 	"github.com/prl26/exam-system/server/model/common/request"
-	"github.com/prl26/exam-system/server/model/examManage"
 )
 
 type PaperTemplateSearch struct {
-	examManage.PaperTemplate
+	PtSearch
 	request.PageInfo
+}
+type PtSearch struct {
+	LessonId int    `json:"lessonId" form:"lessonId"`
+	Name     string `json:"name" form:"name"`
 }
