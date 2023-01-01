@@ -8,6 +8,7 @@ import (
 	"github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/utils"
 	"strings"
+	"time"
 )
 
 type ExamPlanService struct {
@@ -59,8 +60,28 @@ func (examPlanService *ExamPlanService) DeleteExamPlanByIds(ids request.IdsReq) 
 
 // UpdateExamPlan 更新ExamPlan记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (examPlanService *ExamPlanService) UpdateExamPlan(examPlan teachplan.ExamPlan) (err error) {
-	err = global.GVA_DB.Updates(&examPlan).Error
+func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.ExamPlanRq1) (err error) {
+	startTime := utils.StringToTime(examPlanRq.StartTime)
+	endTime := utils.StringToTime(examPlanRq.EndTime)
+	Time := int64(endTime.Sub(startTime).Minutes())
+	examPlanRq.UpdatedAt = time.Now()
+	examPlan := teachplan.ExamPlan{
+		GVA_MODEL:    examPlanRq.GVA_MODEL,
+		Name:         examPlanRq.Name,
+		TeachClassId: &examPlanRq.TeachClassId,
+		Time:         &Time,
+		StartTime:    &startTime,
+		EndTime:      &endTime,
+		LessonId:     &examPlanRq.LessonId,
+		TemplateId:   &examPlanRq.TemplateId,
+		State:        &examPlanRq.State,
+		Audit:        &examPlanRq.Audit,
+		Type:         examPlanRq.Type,
+		PassScore:    &examPlanRq.PassScore,
+		TermId:       examPlanRq.TermId,
+	}
+	err = global.GVA_DB.Omit("is_distributed", "term_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
+
 	return err
 }
 func (examPlanService *ExamPlanService) UpdatePrePlan(info request.PrePlanReq) (err error) {

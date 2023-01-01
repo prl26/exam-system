@@ -99,7 +99,7 @@ func (examPlanApi *ExamPlanApi) DeleteExamPlanByIds(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /examPlan/updateExamPlan [put]
 func (examPlanApi *ExamPlanApi) UpdateExamPlan(c *gin.Context) {
-	var examPlan teachplan.ExamPlan
+	var examPlan teachplanReq.ExamPlanRq1
 	_ = c.ShouldBindJSON(&examPlan)
 	if err := examPlanService.UpdateExamPlan(examPlan); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
