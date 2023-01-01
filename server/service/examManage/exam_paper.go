@@ -154,8 +154,8 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	if info.TermId != 0 {
 		db = db.Where("term_id = ?", info.TermId)
 	}
-	if info.CourseId != 0 {
-		db = db.Where("course_id = ?", info.CourseId)
+	if info.LessonId != 0 {
+		db = db.Where("lesson_id = ?", info.LessonId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
