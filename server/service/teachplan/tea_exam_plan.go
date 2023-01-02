@@ -3,10 +3,12 @@ package teachplan
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
+	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/utils"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -166,4 +168,22 @@ func (examPlanService *ExamPlanService) ChangeStatus(planId uint) (err error) {
 func (examPlanService *ExamPlanService) ChangeAudit(planId uint, value uint) (err error) {
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Update("audit", value).Error
 	return
+}
+func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
+	var examPlan teachplan.ExamPlan
+	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&examPlan)
+	preExamIds = strings.Split(examPlan.PrePlanId, ",")
+	for _, v := range preExamIds {
+		preExamId, _ := strconv.Atoi(v)
+		var examRecords examManage.ExamScore
+		var count int64
+		err = global.GVA_DB.Where("plan_id = ? and student_id = ?", preExamId, studentId).Find(&examRecords).Count(&count).Error
+		if err != nil {
+			return false, err, preExamIds
+		}
+		if count == 0 {
+			return false, nil, preExamIds
+		}
+	}
+	return true, err, preExamIds
 }

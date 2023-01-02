@@ -43,6 +43,11 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	var planId request3.ExamPlan
 	_ = c.ShouldBindQuery(&planId)
 	studentId := utils.GetStudentId(c)
+	if isFinishPreExam, err, preExamIds := examPlanService.IsFinishPreExam(planId.PlanId, studentId); err != nil {
+		response.FailWithMessage("前置计划查询出错", c)
+	} else if isFinishPreExam == false {
+		response.FailWithDetailed(preExamIds, "请先完成前置计划", c)
+	}
 	var examComing = request.ExamComing{
 		StudentId: studentId,
 		PlanId:    planId.PlanId,

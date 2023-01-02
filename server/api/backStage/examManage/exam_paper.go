@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -158,6 +159,7 @@ func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 	_ = c.ShouldBindQuery(&pageInfo)
 	userId := utils.GetUserID(c)
 	authorityId := utils.GetUserAuthorityID(c)
+	fmt.Println(pageInfo)
 	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo, userId, authorityId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
