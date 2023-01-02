@@ -27,7 +27,7 @@ type ExamPlanRq struct {
 	Audit        int     `json:"audit" form:"audit" gorm:"column:audit;comment:是否审核;size:8;"`
 	Type         int     `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
-	TermId       *uint   `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
+	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
 
 type ExamPlanRq1 struct {
@@ -42,5 +42,5 @@ type ExamPlanRq1 struct {
 	Audit        int     `json:"audit" form:"audit" gorm:"column:audit;comment:是否审核;size:8;"`
 	Type         int     `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
-	TermId       *uint   `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
+	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }

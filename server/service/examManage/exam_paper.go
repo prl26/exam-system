@@ -9,6 +9,7 @@ import (
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"gorm.io/gorm"
 	"math/rand"
 	"sync"
@@ -24,6 +25,11 @@ var wg sync.WaitGroup
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var examPlan teachplan.ExamPlan
+		err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
+		examPaper.TermId = *examPlan.TermId
+		lessonId := *examPlan.LessonId
+		examPaper.LessonId = uint(lessonId)
 		tx.Create(&examPaper)
 		templateItems, err := examPaperService.GetTemplate(examPaper)
 		if err != nil {
@@ -34,7 +40,6 @@ func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.E
 		}
 		return err
 	})
-
 	return nil
 }
 

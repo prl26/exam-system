@@ -35,7 +35,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 		Audit:         &audit,
 		Type:          examPlan.Type,
 		PassScore:     &examPlan.PassScore,
-		TermId:        examPlan.TermId,
+		TermId:        &examPlan.TermId,
 		IsDistributed: false,
 		UserId:        &userId,
 		PrePlanId:     "0",
@@ -78,9 +78,9 @@ func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.E
 		Audit:        &examPlanRq.Audit,
 		Type:         examPlanRq.Type,
 		PassScore:    &examPlanRq.PassScore,
-		TermId:       examPlanRq.TermId,
+		TermId:       &examPlanRq.TermId,
 	}
-	err = global.GVA_DB.Omit("is_distributed", "term_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
+	err = global.GVA_DB.Omit("is_distributed", "user_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
 
 	return err
 }
@@ -124,7 +124,7 @@ func (examPlanService *ExamPlanService) GetExamPlanInfoList(info teachplanReq.Ex
 	if info.Type != 0 {
 		db = db.Where("type = ?", info.Type)
 	}
-	if info.TermId != nil {
+	if info.TermId != 0 {
 		db = db.Where("term_id = ?", info.TermId)
 	}
 	err = db.Count(&total).Error
