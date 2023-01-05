@@ -129,7 +129,11 @@ func (termApi *TermApi) FindTerm(c *gin.Context) {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"reterm": reterm}, c)
+		termNow, _ := termService.GetTermNow()
+		response.OkWithData(gin.H{
+			"reterm":  reterm,
+			"termNow": termNow,
+		}, c)
 	}
 }
 

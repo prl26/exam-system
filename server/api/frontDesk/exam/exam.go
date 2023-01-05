@@ -149,9 +149,7 @@ func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
 		response.FailWithMessage("查询成绩失败", c)
 	} else {
-		termNow, _ := termService.GetTermNow()
-		response.OkWithDetailed(response.PageResultAndTerm{
-			TermNow:  termNow,
+		response.OkWithDetailed(response.PageResult{
 			List:     scoreList,
 			Total:    total,
 			Page:     ScoreSearch.Page,

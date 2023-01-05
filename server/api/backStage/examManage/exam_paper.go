@@ -211,7 +211,8 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		return
 	}
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	err := examService.ExportPaperScore(excelInfo.InfoList, filePath)
+	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	err := examService.ExportPaperScore(infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)

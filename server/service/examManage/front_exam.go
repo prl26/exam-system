@@ -175,7 +175,7 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 		db = db.Where("term_id = ?", info.TermId)
 	}
 	if *info.LessonId != 0 {
-		db = db.Where("course_id = ?", info.LessonId)
+		db = db.Where("lesson_id = ?", info.LessonId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -207,4 +207,8 @@ func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, fil
 	}
 	err := excel.SaveAs(filePath)
 	return err
+}
+func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
+	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
 }
