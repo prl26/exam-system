@@ -75,9 +75,6 @@ func (teachClassService *TeachClassService) GetTeachClassInfoList(info basicdata
 		db = db.Where("teacher_id = ?", info.TeacherId)
 	}
 	err = db.Count(&total).Error
-	if err != nil {
-		return
-	}
 	err = db.Limit(limit).Offset(offset).Find(&teachClasss).Error
 	return teachClasss, total, err
 }
