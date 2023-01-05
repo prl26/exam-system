@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
@@ -10,7 +11,9 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/utils"
+	"github.com/tealeg/xlsx"
 	"github.com/xuri/excelize/v2"
+	"io"
 	"strconv"
 	"strings"
 	"time"
@@ -210,5 +213,45 @@ func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, fil
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
 	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (content io.ReadSeeker, err error) {
+	file := xlsx.NewFile()
+	// 添加sheet页
+	sheet, _ := file.AddSheet("Sheet1")
+	// 插入表头
+	titleList := []string{"学号", "课程名称", "教学班名称", "考勤得分", "考勤占比", "学习资源得分", "学习资源占比",
+		"过程化考核得分", "过程化考核占比", "期末考试成绩", "期末考试占比", "总分",
+	}
+	titleRow := sheet.AddRow()
+	for _, v := range titleList {
+		cell := titleRow.AddCell()
+		cell.Value = v
+	}
+	// 插入内容
+	var dataList []interface{}
+	for _, role := range infoList {
+		dataList = append(dataList, &teachplan.Score{
+			StudentId:                role.StudentId,
+			CourseName:               role.CourseName,
+			TeachClassName:           role.TeachClassName,
+			AttendanceProportion:     role.AttendanceProportion,
+			AttendanceScore:          role.AttendanceScore,
+			LearnResourcesProportion: role.LearnResourcesProportion,
+			LearnResourcesScore:      role.LearnResourcesScore,
+			ProcedureScore:           role.ProcedureScore,
+			ProcedureProportion:      role.ProcedureProportion,
+			ExamScrore:               role.ExamScrore,
+			ExamProporation:          role.ExamProporation,
+			TotalScore:               role.TotalScore,
+		})
+	}
+	for _, v := range dataList {
+		row := sheet.AddRow()
+		row.WriteStruct(v, -1)
+	}
+	var buffer bytes.Buffer
+	_ = file.Write(&buffer)
+	content = bytes.NewReader(buffer.Bytes())
 	return
 }
