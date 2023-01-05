@@ -175,6 +175,9 @@ func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId u
 	preExamIds = strings.Split(examPlan.PrePlanId, ",")
 	for _, v := range preExamIds {
 		preExamId, _ := strconv.Atoi(v)
+		if preExamId == 0 {
+			break
+		}
 		var examRecords examManage.ExamScore
 		var count int64
 		err = global.GVA_DB.Where("plan_id = ? and student_id = ?", preExamId, studentId).Find(&examRecords).Count(&count).Error
