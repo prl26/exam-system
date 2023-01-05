@@ -42,26 +42,40 @@ func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context)
 	courseId := int(stuClassReq.CourseId)
 
 	n := len(stuClassReq.StudentIds)
-	students := make([]*basicdata.Student, n)
-	scoreStudents := make([]*teachplan.Score, n)
-	news := make([]*teachplan.Score, n)
+	students := make([]*basicdata.Student, 0, n)
+	news := make([]*teachplan.Score, 0, n)
 
 	for i := 0; i < n; i++ {
-		id := int(stuClassReq.StudentIds[i])
-		students[i].ID = stuClassReq.StudentIds[i]
-		scoreStudents[i].StudentId = &id
-		scoreStudents[i].TeachClassId = &tid
-		scoreStudents[i].TermId = &termId
-		scoreStudents[i].CourseId = &courseId
+		student := &basicdata.Student{}
+		scoreStudent := &teachplan.Score{}
 
-		score := scoreService.QueryScoreByStudent(scoreStudents[i])
-		if score.StudentId == nil && score.TeachClassId == nil {
-			// 不存在这个 数据 则创建索引
-			news = append(news, scoreStudents[i])
+		student.ID = stuClassReq.StudentIds[i]
+		id := int(stuClassReq.StudentIds[i])
+		// 先添加学生
+		students = append(students, student)
+
+		// 判断学生是否存在
+		user := studentService.QueryStudentById(student.ID)
+
+		if user.ID != 0 {
+			scoreStudent.StudentId = &id
+			scoreStudent.TeachClassId = &tid
+			scoreStudent.TermId = &termId
+			scoreStudent.CourseId = &courseId
+
+			score := scoreService.QueryScoreByStudent(scoreStudent)
+			if score.ID == 0 {
+				// 不存在这个 数据 则创建索引
+				news = append(news, scoreStudent)
+			}
+		} else {
+			response.FailWithMessage("学生不存在，请先创建学生", c)
+			return
 		}
+
 	}
 
-	err := multiTableService.InitTeachClassStudents(stuClassReq.TeachClassId, students)
+	err := multiTableService.AssociationStudents(students, stuClassReq.TeachClassId)
 	_ = scoreService.CreateScores(news)
 
 	if err != nil {
