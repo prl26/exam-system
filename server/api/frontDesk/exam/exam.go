@@ -25,6 +25,7 @@ var examService = service.ServiceGroupApp.ExammanageServiceGroup.ExamService
 var statuServie = service.ServiceGroupApp.ExammanageServiceGroup.ExamStatusService
 var examPlanService = service.ServiceGroupApp.TeachplanServiceGroup.ExamPlanService
 var programService = &service.ServiceGroupApp.QuestionBankServiceGroup.OjService.ProgramService
+var termService = service.ServiceGroupApp.BasicdataApiGroup.TermService
 
 // FindExamPlans 查询该学生 某个教学班 下所有的考试计划
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
@@ -47,26 +48,27 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 		response.FailWithMessage("前置计划查询出错", c)
 	} else if isFinishPreExam == false {
 		response.FailWithDetailed(preExamIds, "请先完成前置计划", c)
-	}
-	var examComing = request.ExamComing{
-		StudentId: studentId,
-		PlanId:    planId.PlanId,
-	}
-	PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
-	if PlanDetail.StartTime.Unix() > time.Now().Unix() {
-		response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
-	} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
-		response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-	} else if examPaper, status, err := examService.GetExamPapers(examComing); err != nil {
-		global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
-		response.FailWithMessage("查询考试试卷失败", c)
-	} else if status.IsCommit {
-		response.FailWithMessageAndError(703, "你已经提交过了", c)
 	} else {
-		response.OkWithData(gin.H{
-			"examPaper": examPaper,
-			"enterTime": status.EnterTime,
-		}, c)
+		var examComing = request.ExamComing{
+			StudentId: studentId,
+			PlanId:    planId.PlanId,
+		}
+		PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
+		if PlanDetail.StartTime.Unix() > time.Now().Unix() {
+			response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
+		} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
+			response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
+		} else if examPaper, status, err := examService.GetExamPapers(examComing); err != nil {
+			global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+			response.FailWithMessage("查询考试试卷失败", c)
+		} else if status.IsCommit {
+			response.FailWithMessageAndError(703, "你已经提交过了", c)
+		} else {
+			response.OkWithData(gin.H{
+				"examPaper": examPaper,
+				"enterTime": status.EnterTime,
+			}, c)
+		}
 	}
 }
 
@@ -147,7 +149,9 @@ func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
 		response.FailWithMessage("查询成绩失败", c)
 	} else {
-		response.OkWithDetailed(response.PageResult{
+		termNow, _ := termService.GetTermNow()
+		response.OkWithDetailed(response.PageResultAndTerm{
+			TermNow:  termNow,
 			List:     scoreList,
 			Total:    total,
 			Page:     ScoreSearch.Page,

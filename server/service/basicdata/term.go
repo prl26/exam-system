@@ -64,3 +64,7 @@ func (termService *TermService) GetTermInfoList(info basicdataReq.TermSearch) (l
 	err = db.Limit(limit).Offset(offset).Find(&terms).Error
 	return terms, total, err
 }
+func (termService *TermService) GetTermNow() (term basicdata.Term, err error) {
+	err = global.GVA_DB.Raw("SELECT * FROM bas_term WHERE start_time < NOW() and end_time > NOW()").Find(&term).Error
+	return
+}
