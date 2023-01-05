@@ -184,7 +184,7 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
-func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) error {
+func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) (err error) {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",
 		"期末考试成绩", "期末考试占比", "过程化考核得分", "过程化考核占比",
@@ -205,7 +205,7 @@ func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, fil
 			paper.LearnResourcesProportion,
 		})
 	}
-	err := excel.SaveAs(filePath)
+	//err := excel.SaveAs(filePath)
 	return err
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
