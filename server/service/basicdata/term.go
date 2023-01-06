@@ -61,7 +61,7 @@ func (termService *TermService) GetTermInfoList(info basicdataReq.TermSearch) (l
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&terms).Error
+	err = db.Limit(limit).Offset(offset).Order("start_time desc").Find(&terms).Error
 	return terms, total, err
 }
 func (termService *TermService) GetTermNow() (term basicdata.Term, err error) {
