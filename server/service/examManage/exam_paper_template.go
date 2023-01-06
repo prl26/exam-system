@@ -21,11 +21,11 @@ func (PapertemplateService *PaperTemplateService) CreatePaperTemplate(Papertempl
 // DeletePaperTemplate 删除PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) DeletePaperTemplate(Id uint) (err error) {
-	err = global.GVA_DB.Raw("DELETE from exam_paper_template where id = ?", Id).Error
+	err = global.GVA_DB.Where("id = ?", Id).Delete(&examManage.PaperTemplate{}).Error
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Raw("DELETE from exam_paper_template_item where template_id = ?", Id).Error
+	err = global.GVA_DB.Where("template_id = ?", Id).Delete(&examManage.PaperTemplateItem{}).Error
 	return
 }
 
@@ -87,18 +87,18 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplate(id uint) (Pap
 
 // GetPaperTemplateInfoList 分页获取PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch, userId uint) (list []examManage.PaperTemplate, total int64, err error) {
+func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info examManageReq.PaperTemplateSearch, userId int, authorityId uint) (list []examManage.PaperTemplate, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&examManage.PaperTemplate{})
 	var Papertemplates []examManage.PaperTemplate
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.LessonId != nil {
-		db = db.Where("course_id = ?", info.LessonId)
+	if info.LessonId != 0 {
+		db = db.Where("lesson_id = ?", info.LessonId)
 	}
-	if info.UserId != nil {
-		db = db.Where("user_id = ?", info.UserId)
+	if authorityId != 888 {
+		db = db.Where("user_id = ?", userId)
 	}
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")

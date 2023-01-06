@@ -6,8 +6,10 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"gorm.io/gorm"
 	"math/rand"
 	"sync"
@@ -23,6 +25,11 @@ var wg sync.WaitGroup
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var examPlan teachplan.ExamPlan
+		err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
+		examPaper.TermId = *examPlan.TermId
+		lessonId := *examPlan.LessonId
+		examPaper.LessonId = uint(lessonId)
 		tx.Create(&examPaper)
 		templateItems, err := examPaperService.GetTemplate(examPaper)
 		if err != nil {
@@ -33,7 +40,6 @@ func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.E
 		}
 		return err
 	})
-
 	return nil
 }
 
@@ -84,7 +90,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 	examPaper.JudgeComponent = make([]response.JudgeComponent, 0)
 	examPaper.ProgramComponent = make([]response.ProgramComponent, 0)
 	var Paper []examManage.PaperQuestionMerge
-	err = global.GVA_DB.Where("paper_id = ?", id).Find(&Paper).Error
+	err = global.GVA_DB.Table("exam_paper_question_merge").Where("paper_id = ?", id).Find(&Paper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
 	for i := 0; i < len(Paper); i++ {
 		if *Paper[i].QuestionType == questionType.SINGLE_CHOICE {
@@ -123,10 +129,12 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 			blankCount++
 		} else if *Paper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent
-			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", Paper[i].QuestionId).Find(&Program.Program).Error
+			var program questionBankBo.ProgramPractice
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", Paper[i].QuestionId).Find(&program).Error
 			if err != nil {
 				return
 			}
+			Program.Program.Convert(&program)
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = Paper[i].ID
 			programCount++
@@ -154,8 +162,8 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	if info.TermId != 0 {
 		db = db.Where("term_id = ?", info.TermId)
 	}
-	if info.CourseId != 0 {
-		db = db.Where("course_id = ?", info.CourseId)
+	if info.LessonId != 0 {
+		db = db.Where("lesson_id = ?", info.LessonId)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -191,12 +199,12 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err er
 		}
 		return nil
 	})
-
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < len(studentList); i++ {
 		a := rand.Intn(len(number))
 		var result examManage.ExamPaper
-		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ?", number[a], studentList[i], PlanId).Scan(&result)
+		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ? GROUP BY student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id", number[a], studentList[i], PlanId).Scan(&result)
+		global.GVA_DB.Raw("UPDATE exam_student_paper SET got_score = 0 where student_id = ? and plan_id = ?", studentList[i], PlanId)
 	}
 	return
 }

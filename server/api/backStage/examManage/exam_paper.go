@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -11,8 +12,10 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type ExamPaperApi struct {
@@ -158,6 +161,7 @@ func (examPaperApi *ExamPaperApi) GetExamPaperList(c *gin.Context) {
 	_ = c.ShouldBindQuery(&pageInfo)
 	userId := utils.GetUserID(c)
 	authorityId := utils.GetUserAuthorityID(c)
+	fmt.Println(pageInfo)
 	if list, total, err := examPaperService.GetExamPaperInfoList(pageInfo, userId, authorityId); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -203,18 +207,37 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 //导出成绩表
 func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	var excelInfo request3.Excel
+	//_ = c.ShouldBindJSON(&excelInfo)
+	//if strings.Index(excelInfo.FileName, "..") > -1 {
+	//	response.FailWithMessage("包含非法字符", c)
+	//	return
+	//}
+	//filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
+	//infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	//err := examService.ExportPaperScore(infoList, filePath)
+	//if err != nil {
+	//	global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+	//	response.FailWithMessage("转换Excel失败", c)
+	//	return
+	//}
+	//c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
+	//c.File(filePath)
+
 	_ = c.ShouldBindJSON(&excelInfo)
 	if strings.Index(excelInfo.FileName, "..") > -1 {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	err := examService.ExportPaperScore(excelInfo.InfoList, filePath)
+	//filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
+	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	content, err := examService.ExportPaperScore1(infoList)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)
 		return
 	}
-	c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
-	c.File(filePath)
+	fileName := fmt.Sprintf("%s.xlsx", excelInfo.FileName)
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
+	c.Writer.Header().Add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
 }

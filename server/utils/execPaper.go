@@ -88,14 +88,14 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		var lesson basicdata.Lesson
 
 		tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
-		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.CourseId).Find(&lesson)
+		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
 		tx.Create(&examManage.ExamScore{
 			StudentId:  &examPaperCommit.StudentId,
 			PlanId:     &PlanDetail.ID,
 			Name:       PlanDetail.Name,
 			TermId:     PlanDetail.TermId,
 			TermName:   term.Name,
-			CourseId:   PlanDetail.CourseId,
+			LessonId:   PlanDetail.LessonId,
 			CourseName: lesson.Name,
 			Score:      &sum,
 			ExamType:   &PlanDetail.Type,

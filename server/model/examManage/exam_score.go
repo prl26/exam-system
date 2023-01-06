@@ -12,7 +12,7 @@ type ExamScore struct {
 	Name       string     `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
 	TermId     *uint      `json:"termId" from:"termId"`
 	TermName   string     `json:"termName" form:"termName"`
-	CourseId   *int       `json:"courseId" form:"courseId"`
+	LessonId   *int       `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程Id;size:32;"`
 	CourseName string     `json:"courseName" form:"courseName"`
 	Score      *float64   `json:"score" form:"score"`
 	ExamType   *int       `json:"examType" form:"examType"`

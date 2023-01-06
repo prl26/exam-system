@@ -10,6 +10,6 @@ type ScoreSearch struct {
 	request.PageInfo
 }
 type Excel struct {
-	FileName string            `json:"fileName"`
-	InfoList []teachplan.Score `json:"infoList"`
+	FileName     string `json:"fileName"`
+	TeachClassId uint   `json:"teachClassId"`
 }
