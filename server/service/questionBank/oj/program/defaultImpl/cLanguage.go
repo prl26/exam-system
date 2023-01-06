@@ -2,8 +2,8 @@ package defaultImpl
 
 import (
 	"context"
-	"fmt"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	exception "github.com/prl26/exam-system/server/model/questionBank/error"
 	"github.com/prl26/exam-system/server/pb"
 	"strconv"
 	"strings"
@@ -94,13 +94,13 @@ func (c *CLanguageService) compile(client pb.ExecutorClient, code string) (strin
 		},
 	})
 	if err != nil {
-		return "", err
+		return "", exception.SandboxError
 	}
 	result := exec.GetResults()[0]
 	if result.Status != pb.Response_Result_Accepted {
 		//说明出现了错误
 		//此数应该打日志
-		return "", fmt.Errorf(string(result.Files[STDERR]))
+		return "", exception.CompileError{Msg: string(result.Files[STDERR])}
 	}
 	return exec.GetResults()[0].GetFileIDs()[DEFAULT_C_FILE_NAME], nil
 }
