@@ -12,10 +12,8 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
-	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type ExamPaperApi struct {
@@ -195,11 +193,15 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 	} else if status {
 		response.FailWithMessage("试卷已经分发了", c)
 	} else {
-		err := examPaperService.PaperDistribution(planId.PlanId)
-		if err != nil {
-			response.FailWithMessage("试卷分发失败", c)
+		if number, err := examPaperService.GetPaperNum(planId.PlanId); err != nil {
+			response.FailWithMessageAndError(602, "需要先为计划生成试卷", c)
 		} else {
-			response.OkWithMessage("试卷分发成功", c)
+			err = examPaperService.PaperDistribution(planId.PlanId, number)
+			if err != nil {
+				response.FailWithMessage("试卷分发失败", c)
+			} else {
+				response.OkWithMessage("试卷分发成功", c)
+			}
 		}
 	}
 }
@@ -207,37 +209,37 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 //导出成绩表
 func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	var excelInfo request3.Excel
+	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
+	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
+	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	err := examService.ExportPaperScore(infoList, filePath)
+	if err != nil {
+		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+		response.FailWithMessage("转换Excel失败", c)
+		return
+	}
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
+	c.File(filePath)
+
 	//_ = c.ShouldBindJSON(&excelInfo)
 	//if strings.Index(excelInfo.FileName, "..") > -1 {
 	//	response.FailWithMessage("包含非法字符", c)
 	//	return
 	//}
 	//filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	//infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
-	//err := examService.ExportPaperScore(infoList, filePath)
-	//if err != nil {
-	//	global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-	//	response.FailWithMessage("转换Excel失败", c)
-	//	return
-	//}
-	//c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
-	//c.File(filePath)
-
-	_ = c.ShouldBindJSON(&excelInfo)
-	if strings.Index(excelInfo.FileName, "..") > -1 {
-		response.FailWithMessage("包含非法字符", c)
-		return
-	}
-	//filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
-	content, err := examService.ExportPaperScore1(infoList)
-	if err != nil {
-		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-		response.FailWithMessage("转换Excel失败", c)
-		return
-	}
-	fileName := fmt.Sprintf("%s.xlsx", excelInfo.FileName)
-	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
-	c.Writer.Header().Add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
+	//	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	//	content, err := examService.ExportPaperScore1(infoList)
+	//	if err != nil {
+	//		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+	//		response.FailWithMessage("转换Excel失败", c)
+	//		return
+	//	}
+	//	fileName := fmt.Sprintf("%s.xlsx", excelInfo.FileName)
+	//	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, fileName))
+	//	c.Writer.Header().Add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	//	http.ServeContent(c.Writer, c.Request, fileName, time.Now(), content)
 }

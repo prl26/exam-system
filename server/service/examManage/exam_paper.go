@@ -182,16 +182,17 @@ func (examPaperService *ExamPaperService) GetPlanStatus(PlanId uint) (status boo
 	err = global.GVA_DB.Table("tea_examplan").Select("is_distributed").Where("id = ?", PlanId).Scan(&status).Error
 	return
 }
-
-func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint) (err error) {
-	var number []int64
+func (examPaperService *ExamPaperService) GetPaperNum(PlanId uint) (number []int64, err error) {
+	err = global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint, number []int64) (err error) {
 	var studentList []int64
 	global.GVA_DB.Table("tea_examplan").Where("id = ?", PlanId).Update("is_distributed", 1)
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number).Error
-		if err != nil {
-			return err
-		}
 		err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes join tea_examplan on  tea_examplan.teach_class_id = bas_student_teach_classes.teach_class_id and tea_examplan.id = ?  GROUP BY student_id ", PlanId).
 			Scan(&studentList).Error
 		if err != nil {

@@ -208,7 +208,7 @@ func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, fil
 			paper.LearnResourcesProportion,
 		})
 	}
-	//err := excel.SaveAs(filePath)
+	err = excel.SaveAs(filePath)
 	return err
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
