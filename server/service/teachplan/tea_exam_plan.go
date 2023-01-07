@@ -20,15 +20,10 @@ type ExamPlanService struct {
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.ExamPlanRq, userId uint) (err error) {
 	startTime := utils.StringToTime(examPlan.StartTime)
-	//endTime := utils.StringToTime(examPlan.EndTime)
-	s1 := examPlan.Time + "m"
-	t1, _ := time.ParseDuration(s1)
-	endTime := startTime.Add(t1)
-	//time := int64(endTime.Sub(startTime).Minutes())
-	temp, _ := strconv.Atoi(examPlan.Time)
-	time := int64(temp)
+	endTime := utils.StringToTime(examPlan.EndTime)
 	audit := 1
 	state := 1
+	time := int64(examPlan.Time)
 	ExamPlan := teachplan.ExamPlan{
 		GVA_MODEL:     global.GVA_MODEL{},
 		Name:          examPlan.Name,
@@ -70,7 +65,7 @@ func (examPlanService *ExamPlanService) DeleteExamPlanByIds(ids request.IdsReq) 
 func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.ExamPlanRq1) (err error) {
 	startTime := utils.StringToTime(examPlanRq.StartTime)
 	endTime := utils.StringToTime(examPlanRq.EndTime)
-	Time := int64(endTime.Sub(startTime).Minutes())
+	Time := int64(examPlanRq.Time)
 	examPlanRq.UpdatedAt = time.Now()
 	examPlan := teachplan.ExamPlan{
 		GVA_MODEL:    examPlanRq.GVA_MODEL,

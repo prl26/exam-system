@@ -20,7 +20,8 @@ type ExamPlanRq struct {
 	Name         string  `json:"name" form:"name" gorm:"column:name;comment:考试名称;size:32;"`
 	TeachClassId uint    `json:"teachClassId" form:"teachClassId" gorm:"column:teach_class_id;comment:教学班id;size:32;"`
 	StartTime    string  `json:"startTime" form:"startTime" gorm:"column:start_time;comment:考试时间;"`
-	Time         string  `json:"Time" form:"Time" gorm:"column:time;comment:考试时长;"`
+	Time         int     `json:"Time" form:"Time" gorm:"column:time;comment:考试时长;"`
+	EndTime      string  `json:"endTime" form:"endTime" gorm:"column:end_time;comment:结束时间;"`
 	LessonId     int     `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程Id;size:32;"`
 	TemplateId   uint    `json:"templateId" form:"templateId" gorm:"column:template_id;comment:考试模板Id;size:32;"`
 	State        int     `json:"state" form:"state" gorm:"column:state;comment:状态;size:8;"`
@@ -36,6 +37,7 @@ type ExamPlanRq1 struct {
 	TeachClassId uint    `json:"teachClassId" form:"teachClassId" gorm:"column:teach_class_id;comment:教学班id;size:32;"`
 	StartTime    string  `json:"startTime" form:"startTime" gorm:"column:start_time;comment:考试时间;"`
 	EndTime      string  `json:"endTime" form:"endTime" gorm:"column:end_time;comment:结束时间;"`
+	Time         int     `json:"time" form:"time" gorm:"column:time;comment:考试时长;"`
 	LessonId     int     `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程Id;size:32;"`
 	TemplateId   uint    `json:"templateId" form:"templateId" gorm:"column:template_id;comment:考试模板Id;size:32;"`
 	State        int     `json:"state" form:"state" gorm:"column:state;comment:状态;size:8;"`
