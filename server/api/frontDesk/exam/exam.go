@@ -109,9 +109,10 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	program.StudentId = utils.GetStudentId(c)
 	resp := make(chan response2.SubmitResponse)
 	var err error
+	errChan := make(chan error)
 	go func() {
 		checkProgram, score, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
-		err = e
+		errChan <- e
 		resp <- response2.SubmitResponse{Submit: checkProgram, Score: score}
 	}()
 	program.StudentId = utils.GetStudentId(c)
@@ -123,6 +124,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 		if time.Now().Unix() > PlanDetail.EndTime.Unix() {
 			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 		} else {
+			err = <-errChan
 			result := <-resp
 			if err != nil {
 				global.GVA_LOG.Error(err.Error())

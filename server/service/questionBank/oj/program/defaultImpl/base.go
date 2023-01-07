@@ -31,7 +31,7 @@ const FILE_FAILED_DURATION time.Duration = 3 * time.Minute
 func (c *baseService) Compile(code string) (string, *time.Time, error) {
 	fileID, err := c.compile(c.ExecutorClient, code)
 	if err != nil {
-		return "", nil, exception.CompileError{Msg: err.Error()}
+		return "", nil, err
 	}
 	failedTime := time.Now().Add(FILE_FAILED_DURATION)
 	go func() {
@@ -62,7 +62,7 @@ func (c *baseService) Execute(fileId string, input string, programmLimit questio
 		},
 	})
 	if err != nil {
-		return "", nil, err
+		return "", nil, exception.SandboxError
 	}
 	response := result.Results[0]
 	var out string
@@ -76,7 +76,7 @@ func (c *baseService) Execute(fileId string, input string, programmLimit questio
 func (c *baseService) Check(code string, limit questionBankBo.LanguageLimit, cases questionBankBo.ProgramCases) ([]*questionBankBo.Submit, uint, error) {
 	fileID, err := c.compile(c.ExecutorClient, code)
 	if err != nil {
-		return nil, 0, exception.CompileError{Msg: err.Error()}
+		return nil, 0, err
 	}
 	go func() {
 		after := time.After(FILE_FAILED_DURATION)

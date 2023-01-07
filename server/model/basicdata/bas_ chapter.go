@@ -9,7 +9,7 @@ import (
 type Chapter struct {
 	global.GVA_MODEL
 	Name       string       `json:"name" form:"name" gorm:"column:name;comment:章节名称;size:32;"`
-	LessonId   string       `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:所属课程id;size:32;"`
+	LessonId   *int         `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:所属课程id;size:32;"`
 	Order      *int         `json:"order" form:"order" gorm:"column:order;comment:用于排序的字段;size:32;"`
 	Knowledges []*Knowledge `json:"knowledges" gorm:"foreignKey:ChapterId"`
 }

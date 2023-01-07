@@ -19,6 +19,7 @@ const (
 	ClientError      = 400
 	ServiceError     = 500
 	compilationError = 10000
+	sandboxError     = 10001
 )
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {
@@ -43,6 +44,8 @@ func ErrorHandle(c *gin.Context, err error) {
 		Result(ClientError, nil, err.Error(), c)
 	case questionBankError.NotLanguageSupportError:
 		Result(ClientError, nil, err.Error(), c)
+	case questionBankError.SandboxError:
+		Result(sandboxError, nil, err.Error(), c)
 	default:
 		if e, ok := err.(questionBankError.CompileError); ok {
 			Result(compilationError, nil, e.Error(), c)

@@ -30,8 +30,8 @@ func (termApi *TermApi) CreateTerm(c *gin.Context) {
 	var term basicdata.Term
 	_ = c.ShouldBindJSON(&term)
 	verify := utils.Rules{
-		"Name":       {utils.NotEmpty()},
-		"Start_time": {utils.NotEmpty()},
+		"Name":      {utils.NotEmpty()},
+		"StartTime": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(term, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -154,8 +154,10 @@ func (termApi *TermApi) GetTermList(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
-			List:  list,
-			Total: total,
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
 }
