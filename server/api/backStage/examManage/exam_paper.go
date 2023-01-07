@@ -194,6 +194,8 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 		response.FailWithMessage("试卷已经分发了", c)
 	} else {
 		if number, err := examPaperService.GetPaperNum(planId.PlanId); err != nil {
+			response.FailWithMessage("试卷分发失败", c)
+		} else if len(number) == 0 {
 			response.FailWithMessageAndError(602, "需要先为计划生成试卷", c)
 		} else {
 			err = examPaperService.PaperDistribution(planId.PlanId, number)
