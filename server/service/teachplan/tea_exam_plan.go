@@ -20,8 +20,13 @@ type ExamPlanService struct {
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.ExamPlanRq, userId uint) (err error) {
 	startTime := utils.StringToTime(examPlan.StartTime)
-	endTime := utils.StringToTime(examPlan.EndTime)
-	time := int64(endTime.Sub(startTime).Minutes())
+	//endTime := utils.StringToTime(examPlan.EndTime)
+	s1 := examPlan.Time + "m"
+	t1, _ := time.ParseDuration(s1)
+	endTime := startTime.Add(t1)
+	//time := int64(endTime.Sub(startTime).Minutes())
+	temp, _ := strconv.Atoi(examPlan.Time)
+	time := int64(temp)
 	audit := 1
 	state := 1
 	ExamPlan := teachplan.ExamPlan{
