@@ -36,22 +36,26 @@ func (s *ProgramService) Execute(languageId questionBankEnum.LanguageType, fileI
 	}
 }
 
-func (s *ProgramService) CheckProgram(id uint, code string, languageId questionBankEnum.LanguageType) ([]*questionBankBo.Submit, uint, error) {
+func (s *ProgramService) CheckProgram(id uint, code string, languageId questionBankEnum.LanguageType) ([]*questionBankBo.Submit, uint, uint, error) {
 	program, err := s.findOjHelper(id)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, 0, err
 	}
 	support := questionBankBo.LanguageSupport{}
 	err = support.Deserialize(program.LanguageSupports, languageId)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, 0, err
 	}
 	cases := questionBankBo.ProgramCases{}
 	err = cases.Deserialize(program.ProgramCases)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, 0, err
 	}
-	return table[languageId].Check(code, support.LanguageLimit, cases)
+	submits, score, err := table[languageId].Check(code, support.LanguageLimit, cases)
+	if err != nil {
+		return nil, 0, 0, err
+	}
+	return submits, score, program.LessonId, nil
 }
 
 // 寻找题目所对应的 Oj支持   (测试用例与语言限制)

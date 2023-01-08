@@ -20,12 +20,12 @@ import (
 
 type MultipleChoiceService struct{}
 
-func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []string) (bool, error) {
+func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []string) (bool, uint, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
-		return false, err
+		return false, 0, err
 	}
-	return c.check(question, answer), nil
+	return c.check(question, answer), 0, err
 }
 
 func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.MultipleChoice, error) {

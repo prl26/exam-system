@@ -13,6 +13,7 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 	var questionApi = v1.ApiGroupApp.FrontDesk.QuestionBankGroup.QuestionBankApi
 	{
 		questionRouter.GET("findQuestionsByChapterId", questionApi.FindQuestionsByChapterId)
+		questionRouter.POST("beginPractice", questionApi.BeginPractice)
 	}
 
 }

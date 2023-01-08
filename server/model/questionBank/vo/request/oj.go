@@ -36,4 +36,5 @@ type CheckProgramm struct {
 	Id         uint                          `json:"id"`
 	Code       string                        `json:"code"`
 	LanguageId questionBankEnum.LanguageType `json:"languageId"`
+	RecordId   uint                          `json:"recordId"`
 }

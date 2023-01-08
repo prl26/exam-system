@@ -17,7 +17,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	//判断题处理
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {
-			if Bool, err := ojService.JudgeService.Check(examPaperCommit.JudgeCommit[i].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
+			if Bool, _, err := ojService.JudgeService.Check(examPaperCommit.JudgeCommit[i].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
 				return err
 			} else {
 				if Bool == true {
@@ -31,7 +31,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 		//选择题处理
 		for i := 0; i < len(examPaperCommit.MultipleChoiceCommit); i++ {
-			if Bool, err := ojService.MultipleChoiceService.Check(examPaperCommit.MultipleChoiceCommit[i].QuestionId, examPaperCommit.MultipleChoiceCommit[i].Answer); err != nil {
+			if Bool, _, err := ojService.MultipleChoiceService.Check(examPaperCommit.MultipleChoiceCommit[i].QuestionId, examPaperCommit.MultipleChoiceCommit[i].Answer); err != nil {
 				return err
 			} else {
 				if Bool == true {
@@ -45,7 +45,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 		//填空题处理
 		for i := 0; i < len(examPaperCommit.BlankCommit); i++ {
-			if _, num, err := ojService.SupplyBlankService.Check(examPaperCommit.BlankCommit[i].QuestionId, examPaperCommit.BlankCommit[i].Answer); err != nil {
+			if _, num, _, err := ojService.SupplyBlankService.Check(examPaperCommit.BlankCommit[i].QuestionId, examPaperCommit.BlankCommit[i].Answer); err != nil {
 				return err
 			} else {
 				if num != 0 {

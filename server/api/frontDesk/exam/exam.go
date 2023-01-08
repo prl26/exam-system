@@ -111,7 +111,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	var err error
 	errChan := make(chan error)
 	go func() {
-		checkProgram, score, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
+		checkProgram, score, _, e := programService.CheckProgram(program.QuestionId, program.Code, program.LanguageId)
 		errChan <- e
 		resp <- response2.SubmitResponse{Submit: checkProgram, Score: score}
 	}()
@@ -142,7 +142,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	}
 }
 
-//获取考试分数
+// 获取考试分数
 func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 	var ScoreSearch request.ExamStudentScore
 	_ = c.ShouldBindQuery(&ScoreSearch)
