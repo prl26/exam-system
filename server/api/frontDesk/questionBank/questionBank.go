@@ -94,7 +94,7 @@ func (*QuestionBankApi) BeginPractice(c *gin.Context) {
 		return
 	}
 	lessonId := uint(idInt)
-	detail, err := lessonService.FindLessonDetail(lessonId)
+	detail, err := lessonService.FindLessonDetail(lessonId, false)
 
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)

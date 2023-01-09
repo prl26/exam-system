@@ -14,7 +14,7 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 	{
 		questionRouter.GET("findQuestionsByChapterId", questionApi.FindQuestionsByChapterId)
 		questionRouter.POST("beginPractice", questionApi.BeginPractice)
-		questionRouter.GET("findHistory", questionApi.FindHistoryAnswer)
+		questionRouter.POST("findHistory", questionApi.FindHistoryAnswer)
 	}
 
 }

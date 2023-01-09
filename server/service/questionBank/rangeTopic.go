@@ -46,7 +46,7 @@ func (service *TargetService) GetQuestionBankRangTopic(id uint) (RangTopic quest
 
 // FindTargetList 分页获取QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.RangTopicSimple, total int64, err error) {
+func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.TargetSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
