@@ -6,9 +6,13 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage/response"
 )
 
-func (t *TeachClassService) FindTeachClass(id uint) (teachClassAndLessons []response.TeachAndLessons, err error) {
-	var teachClassIds []basicdata.StudentAndTeachClass
-	err = global.GVA_DB.Table("bas_student_teach_classes").Where("student_id = ?", id).Find(&teachClassIds).Error
+func (t *TeachClassService) FindTeachClass(id uint, termId int) (teachClassAndLessons []response.TeachAndLessons, err error) {
+	var teachClassIds []basicdata.StudentAndTeachClassAndTerm
+	if termId != 0 {
+		err = global.GVA_DB.Raw("SELECT s.teach_class_id,s.student_id,t.term_id FROM `bas_student_teach_classes` as s,bas_teach_class as t  WHERE student_id = ? and term_id =? GROUP BY teach_class_id", id, termId).Find(&teachClassIds).Error
+	} else {
+		err = global.GVA_DB.Raw("SELECT s.teach_class_id,s.student_id,t.term_id FROM `bas_student_teach_classes` as s,bas_teach_class as t  WHERE student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
+	}
 	if err != nil {
 		return
 	}

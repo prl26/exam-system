@@ -226,7 +226,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		return
 	} else {
 		c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
-		c.File(filePath)
+		//c.File(filePath)
 		response.OkWithData(gin.H{
 			"filepath": filePath,
 		}, c)

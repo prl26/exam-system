@@ -11,6 +11,7 @@ import (
 	systemRes "github.com/prl26/exam-system/server/model/system/response"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 // @Tags Base
@@ -122,8 +123,10 @@ func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
 
 //获取该学生所在的所有教学计划
 func (b *BaseApi) GetTeachPlans(c *gin.Context) {
+	termId := c.Query("termId")
+	termID, _ := strconv.Atoi(termId)
 	StudentId := utils.GetStudentId(c)
-	Lessons, err := teachClassService.FindTeachClass(StudentId)
+	Lessons, err := teachClassService.FindTeachClass(StudentId, termID)
 	if err != nil {
 		response.FailWithMessage("获取失败", c)
 	} else {
