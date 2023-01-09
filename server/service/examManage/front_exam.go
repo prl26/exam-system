@@ -181,7 +181,7 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	if *info.LessonId != 0 {
 		db = db.Where("lesson_id = ?", info.LessonId)
 	}
-	err = db.Count(&total).Error
+	err = db.Where("student_id = ?", studentId).Count(&total).Error
 	if err != nil {
 		return
 	}
