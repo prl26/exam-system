@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
@@ -187,7 +188,7 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
-func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, filePath string) (err error) {
+func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath string) (err error) {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",
 		"期末考试成绩", "期末考试占比", "过程化考核得分", "过程化考核占比",
@@ -211,8 +212,33 @@ func (ExamService *ExamService) ExportPaperScore(infoList []teachplan.Score, fil
 	err = excel.SaveAs(filePath)
 	return err
 }
+func (ExamService *ExamService) ExportPaperScore(infoList []examManage.ExamScore, filePath string) (err error) {
+	excel := excelize.NewFile()
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "姓名", "考试名称", "学期", "课程名", "分数"})
+	for i, paper := range infoList {
+		axis := fmt.Sprintf("A%d", i+2)
+		studentId := strconv.Itoa(int(*paper.StudentId))
+		score := strconv.Itoa(int(*paper.Score))
+		var studentInfo basicdata.Student
+		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", paper.StudentId).Find(&studentInfo)
+		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
+			studentId,
+			studentInfo.Name,
+			paper.Name,
+			paper.TermName,
+			paper.CourseName,
+			score,
+		})
+	}
+	err = excel.SaveAs(filePath)
+	return err
+}
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
 	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
+	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (content io.ReadSeeker, err error) {

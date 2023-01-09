@@ -216,9 +216,10 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	//timeStr := time.Now().Format("2006-01-02 15:04:05")
+	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
+	respath := "/static/" + excelInfo.FileName
+	infoList, _ := examService.GetExamScoreToExcel(excelInfo.TeachClassId)
 	err := examService.ExportPaperScore(infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
@@ -228,7 +229,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
 		//c.File(filePath)
 		response.OkWithData(gin.H{
-			"filepath": filePath,
+			"filepath": respath,
 		}, c)
 	}
 
