@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/lessondata"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/po"
 	"gorm.io/driver/mysql"
@@ -142,15 +142,15 @@ func getKnowledgeId(knowledgeBh string, knowledgeTable map[string]uint, from, to
 		if k.KnowledgeName == "" {
 			return 0
 		}
-		knowledge := basicdata.Knowledge{}
+		knowledge := lessondata.Knowledge{}
 		knowledge.Name = k.KnowledgeName
 		knowledge.ChapterId = uint(k.Stage1)
 		knowledge.Description = k.Description
 		if err := to.Create(&knowledge).Error; err != nil {
 			panic(err)
 		}
-		knowledgeTable[knowledgeBh] = knowledge.Id
-		return knowledge.Id
+		knowledgeTable[knowledgeBh] = knowledge.ID
+		return knowledge.ID
 	}
 }
 

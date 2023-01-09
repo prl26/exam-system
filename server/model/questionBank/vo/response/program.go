@@ -3,6 +3,7 @@ package response
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/lessondata"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 )
@@ -10,7 +11,7 @@ import (
 type ProgramDetail struct {
 	global.GVA_MODEL
 	Chapter   *basicdata.Chapter
-	Knowledge *basicdata.Knowledge
+	Knowledge *lessondata.Knowledge
 	questionBankBo.ProgramOjSupport
 	questionBank.BasicModel
 }

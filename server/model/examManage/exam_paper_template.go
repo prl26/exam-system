@@ -21,5 +21,5 @@ func (PaperTemplate) TableName() string {
 }
 
 type PaperTemplateId struct {
-	ID uint `json:"Id" form:"id"` // 主键ID
+	ID uint `json:"ID" form:"id"` // 主键ID
 }

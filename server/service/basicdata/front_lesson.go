@@ -3,6 +3,7 @@ package basicdata
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/lessondata"
 )
 
 func (lessonService *LessonService) FindLessonDetail(id uint, all bool) (*basicdata.Lesson, error) {
@@ -21,8 +22,8 @@ func (lessonService *LessonService) FindLessonDetail(id uint, all bool) (*basicd
 	return &lesson, nil
 }
 
-func (lessonService *LessonService) FindKnowledge(idUint uint) ([]*basicdata.Knowledge, error) {
-	var chapters []*basicdata.Knowledge
+func (lessonService *LessonService) FindKnowledge(idUint uint) ([]*lessondata.Knowledge, error) {
+	var chapters []*lessondata.Knowledge
 	if err := global.GVA_DB.Where("chapter_id=?", idUint).Find(&chapters).Error; err != nil {
 		return nil, err
 	}

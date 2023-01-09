@@ -57,8 +57,8 @@ func (*TargetApi) FindTargetByKnowledgeId(c *gin.Context) {
 	//	response.FailWithMessage(err.Error(), c)
 	//	return
 	//}
-	////knowledgeId := uint(idInt)
-	////targetService.FindTargetByKnowledgeId(knowledgeId)
+	//knowledgeId := uint(idInt)
+	//targetService.FindTargetByKnowledgeId(knowledgeId)
 }
 
 func (*TargetApi) FindTargetDetail(c *gin.Context) {

@@ -74,7 +74,7 @@ func (api *SupplyBlankApi) Update(c *gin.Context) {
 	var req questionBankReq.SupplyBlankUpdate
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	supplyBlank := questionBankPo.SupplyBlank{}
 	supplyBlank.ID = req.Id
@@ -124,7 +124,7 @@ func (api *SupplyBlankApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
 	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)
