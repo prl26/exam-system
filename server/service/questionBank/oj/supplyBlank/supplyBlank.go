@@ -30,7 +30,7 @@ func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bo
 	return list, proportion, question.LessonId, err
 }
 func (c *SupplyBlankService) ExamCheck(choiceQuestionId uint, answer []string) ([]bool, int, error) {
-	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
+	question, err := c.FindCanExamQuestion(choiceQuestionId)
 	if err != nil {
 		return nil, 0, err
 	}
