@@ -120,14 +120,18 @@ func (*OjApi) CheckMultipleChoice(c *gin.Context) {
 		response.FailWithMessage("找不到该题目", c)
 		return
 	}
+	t := questionType.SINGLE_CHOICE
+	if len(r.Answers) > 1 {
+		t = questionType.MULTIPLE_CHOICE
+	}
 	studentId := utils.GetStudentId(c)
 	go func() {
 		var score uint = 0
 		if result {
 			score = 100
 		}
-		practiceService.CreatePracticeItem(questionType.MULTIPLE_CHOICE, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(questionType.MULTIPLE_CHOICE, r.Id, studentId, score)
+		practiceService.CreatePracticeItem(t, r.Id, lessonId, studentId, score)
+		practiceService.UpdatePracticeAnswer(t, r.Id, studentId, score)
 	}()
 	response.OkWithData(result, c)
 	return

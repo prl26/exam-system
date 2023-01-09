@@ -46,7 +46,7 @@ func (service *TargetService) GetQuestionBankRangTopic(id uint) (RangTopic quest
 
 // FindTargetList 分页获取QuestionBankRangTopic记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.RangTopicSimple, total int64, err error) {
+func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.TargetSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -87,4 +87,11 @@ func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.Tar
 	RangTopic = &questionBankBo.TargetDetail{}
 	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Target{}).First(RangTopic, id).Error
 	return
+}
+
+func (service *TargetService) FindTargetByKnowledgeId(knowledge uint, info request.PageInfo) (q []*questionBank.BasicModel) {
+	db := global.GVA_DB.Model(&questionBank.Target{})
+	db = db.Where("is_check=?", 1)
+	db = db.Where("")
+	return nil
 }
