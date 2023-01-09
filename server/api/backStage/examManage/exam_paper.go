@@ -224,7 +224,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		response.FailWithMessage("转换Excel失败", c)
 		return
 	}
-	c.Writer.Header().Add("Content-Disposition", "attachment; filename="+excelInfo.FileName)
+	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
 	c.File(filePath)
 
 	//_ = c.ShouldBindJSON(&excelInfo)

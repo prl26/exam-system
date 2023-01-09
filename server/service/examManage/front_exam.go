@@ -23,7 +23,7 @@ type ExamService struct {
 }
 
 func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []teachplan.ExamPlan, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ? and state = 1 and audit =1", teachClassId).Order("created_at desc,updated_at desc ").Find(&examPlans).Error
+	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc ").Find(&examPlans).Error
 	return
 }
 
