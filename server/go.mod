@@ -41,7 +41,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.8.4
-	github.com/tealeg/xlsx v1.0.5 // indirect
+	github.com/tealeg/xlsx v1.0.5
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
 	github.com/unrolled/secure v1.0.7
 	github.com/xuri/excelize/v2 v2.6.1
