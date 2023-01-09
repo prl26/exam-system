@@ -89,7 +89,7 @@ func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.Tar
 	return
 }
 
-func (service *TargetService) FindTargetPracticeList(knowledge questionBankBo.TargetPracticeCriteria, info request.PageInfo) (list []*questionBank.BasicModel, total int64, err error) {
+func (service *TargetService) FindTargetPracticeList(knowledge questionBankBo.TargetPracticeCriteria, info request.PageInfo) (list []*questionBankVoResp.TargetSimplePractice, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&questionBank.Target{})

@@ -16,3 +16,8 @@ type TargetDetail struct {
 	IsGenerateAddress bool
 	Address           string
 }
+
+type TargetSimplePractice struct {
+	global.GVA_MODEL
+	questionBank.BasicModel
+}
