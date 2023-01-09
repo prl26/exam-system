@@ -61,7 +61,7 @@ func (api *TargetApi) Update(c *gin.Context) {
 	var req questionBankPo.Target
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -97,7 +97,7 @@ func (api *TargetApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
 	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)

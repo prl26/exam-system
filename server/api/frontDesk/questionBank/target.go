@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/response"
+	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
@@ -51,14 +52,29 @@ func (*TargetApi) BeginPractice(c *gin.Context) {
 }
 
 func (*TargetApi) FindTargetByKnowledgeId(c *gin.Context) {
-	//query := c.Query("id")
-	//idInt, err := strconv.Atoi(query)
-	//if err != nil {
-	//	response.FailWithMessage(err.Error(), c)
-	//	return
-	//}
-	////knowledgeId := uint(idInt)
-	////targetService.FindTargetByKnowledgeId(knowledgeId)
+	search := questionBankReq.TargetPracticeSearch{}
+	_ = c.ShouldBindQuery(&search)
+	verify := utils.Rules{
+		"Page":     {utils.NotEmpty()},
+		"PageSize": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(search, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	list, total, err := targetService.FindTargetPracticeList(search.TargetPracticeCriteria, search.PageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     search.Page,
+			PageSize: search.PageSize,
+		}, "获取成功", c)
+	}
 }
 
 func (*TargetApi) FindTargetDetail(c *gin.Context) {

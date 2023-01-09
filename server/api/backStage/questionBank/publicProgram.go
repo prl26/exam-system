@@ -205,7 +205,7 @@ func (api *PublicProgramApi) Migrate(c *gin.Context) {
 	var req questionBankReq.PublicProgramMigration
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id":        {utils.NotEmpty()},
+		"ID":        {utils.NotEmpty()},
 		"ChapterId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {

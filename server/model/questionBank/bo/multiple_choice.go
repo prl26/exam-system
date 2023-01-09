@@ -3,6 +3,7 @@ package bo
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/lessondata"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
@@ -17,7 +18,7 @@ type MultipleDetail struct {
 	questionBankPo.CourseSupport
 	questionBankPo.MultipleChoiceModel
 	Chapter   *basicdata.Chapter
-	Knowledge *basicdata.Knowledge
+	Knowledge *lessondata.Knowledge
 }
 
 type MultiplePracticeCriteria struct {

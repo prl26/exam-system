@@ -62,7 +62,7 @@ func (api *JudgeApi) Update(c *gin.Context) {
 	var req questionBankPo.Judge
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -98,7 +98,7 @@ func (api *JudgeApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
 	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)

@@ -7,7 +7,7 @@ type OjHelper struct {
 }
 
 type Submit struct {
-	//Id string `json:"id"`		// 用例ID
+	//ID string `json:"id"`		// 用例ID
 	Name  string `json:"name"`  // 用例名称
 	Score uint   `json:"score"` // 用例得分
 	ExecuteSituation

@@ -15,6 +15,7 @@ import "github.com/prl26/exam-system/server/service"
 type ApiGroup struct {
 	QuestionBankApi
 	OjApi
+	TargetApi
 }
 
 var (

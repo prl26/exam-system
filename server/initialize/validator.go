@@ -11,7 +11,7 @@ func init() {
 	)
 	_ = utils.RegisterRule("IdVerify",
 		utils.Rules{
-			"Id": {utils.NotEmpty()},
+			"ID": {utils.NotEmpty()},
 		},
 	)
 	_ = utils.RegisterRule("AuthorityIdVerify",

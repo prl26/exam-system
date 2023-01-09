@@ -77,7 +77,7 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetSysDictionary
 //@description: 根据id或者type获取字典单条数据
-//@param: Type string, Id uint
+//@param: Type string, ID uint
 //@return: err error, sysDictionary model.SysDictionary
 
 func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint, status *bool) (sysDictionary system.SysDictionary, err error) {

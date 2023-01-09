@@ -58,7 +58,7 @@ func (choiceApi *MultipleChoiceApi) Update(c *gin.Context) {
 	var req questionBankReq.MultipleChoiceUpdate
 	_ = c.ShouldBindJSON(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -78,7 +78,7 @@ func (choiceApi *MultipleChoiceApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.DetailFind
 	_ = c.ShouldBindQuery(&req)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)

@@ -3,11 +3,12 @@ package bo
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
+	"github.com/prl26/exam-system/server/model/lessondata"
 )
 
 type CourseSupportPtr struct {
 	Chapter   *basicdata.Chapter
-	Knowledge *basicdata.Knowledge
+	Knowledge *lessondata.Knowledge
 }
 
 type PracticeModel struct {

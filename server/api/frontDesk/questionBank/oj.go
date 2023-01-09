@@ -24,7 +24,7 @@ func (*OjApi) CheckJudge(c *gin.Context) {
 	var r questionBankReq.CheckJudge
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
-		"Id": {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(r, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -54,7 +54,7 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 	var r questionBankReq.CheckProgramm
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
-		"Id":         {utils.NotEmpty()},
+		"ID":         {utils.NotEmpty()},
 		"Code":       {utils.NotEmpty()},
 		"LanguageId": {utils.NotEmpty()},
 	}
@@ -82,7 +82,7 @@ func (*OjApi) CheckSupplyBlank(c *gin.Context) {
 	var r questionBankReq.CheckSupplyBlank
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
-		"Id":      {utils.NotEmpty()},
+		"ID":      {utils.NotEmpty()},
 		"Answers": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(r, verify); err != nil {
@@ -108,7 +108,7 @@ func (*OjApi) CheckMultipleChoice(c *gin.Context) {
 	var r questionBankReq.CheckMultipleChoice
 	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
-		"Id":      {utils.NotEmpty()},
+		"ID":      {utils.NotEmpty()},
 		"Answers": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(r, verify); err != nil {
