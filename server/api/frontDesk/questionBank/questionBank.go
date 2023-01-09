@@ -9,6 +9,7 @@ import (
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
+	request2 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -218,3 +219,19 @@ func (q *QuestionBankApi) FindProgram(c *gin.Context) {
 }
 
 //{"c":"#include \u003cstdio.h\u003e\n\nint main() {\n   printf(\"Hello World!\\n\");\n   return 0;\n}\n//更多请阅读：https://www.yiibai.com/c_examples/hello_world_program_in_c.html\n\n"}
+
+func (*QuestionBankApi) FindHistoryAnswer(c *gin.Context) {
+	var r request2.History
+	_ = c.ShouldBindJSON(&r)
+	verify := utils.Rules{
+		"QuestionType": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(r, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	studentId := utils.GetStudentId(c)
+	answer := practiceService.FindHistoryAnswer(r, studentId)
+	response.OkWithData(answer, c)
+	return
+}
