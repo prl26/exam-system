@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/questionBank/po"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -56,9 +57,9 @@ func (c *MultipleChoiceService) check(question *po.MultipleChoice, answer []stri
 	//	return false
 	//}
 	// 前端需要做好的
-	//sort.Slice(answer, func(i, j int) bool {
-	//	return answer[i]<answer[j]
-	//})
+	sort.Slice(answer, func(i, j int) bool {
+		return answer[i] < answer[j]
+	})
 	checkAnswer := strings.Join(answer, ",")
 	return checkAnswer == question.Answer
 }

@@ -21,3 +21,8 @@ type TargetSimplePractice struct {
 	global.GVA_MODEL
 	questionBank.BasicModel
 }
+
+type TargetGenerateInstance struct {
+	ByteCode string
+	Salt     string
+}

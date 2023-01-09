@@ -1,51 +1,42 @@
 package questionBank
 
 import (
+	"context"
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
+	"time"
 )
 
 type TargetService struct {
 }
 
-// Create 创建QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) Create(RangTopic *questionBank.Target) error {
 	return global.GVA_DB.Create(RangTopic).Error
 }
 
-// DeleteQuestionBankRangTopic 删除QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) DeleteQuestionBankRangTopic(RangTopic questionBank.Target) (err error) {
 	err = global.GVA_DB.Delete(&RangTopic).Error
 	return err
 }
 
-// Delete 批量删除QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) Delete(ids request.IdsReq) error {
 	return global.GVA_DB.Delete(&[]questionBank.Target{}, "id in ?", ids.Ids).Error
 }
 
-// Update 更新QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) Update(RangTopic questionBank.Target) (err error) {
 	err = global.GVA_DB.Updates(&RangTopic).Error
 	return err
 }
 
-// GetQuestionBankRangTopic 根据id获取QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) GetQuestionBankRangTopic(id uint) (RangTopic questionBank.Target, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&RangTopic).Error
 	return
 }
 
-// FindTargetList 分页获取QuestionBankRangTopic记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearchCriteria, info request.PageInfo) (list []questionBankVoResp.TargetSimple, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -104,4 +95,17 @@ func (service *TargetService) FindTargetPracticeList(knowledge questionBankBo.Ta
 	}
 	err = db.Limit(limit).Offset(offset).Find(&list).Error
 	return list, total, err
+}
+
+func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCode {
+	code := questionBankBo.TargetByteCode{}
+	global.GVA_DB.Model(&questionBank.Target{}).Where("id=?", id).First(&code)
+	if code.Id == 0 {
+		return nil
+	}
+	return &code
+}
+
+func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
 }
