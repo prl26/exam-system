@@ -196,7 +196,7 @@ func (service *QuestionBankService) FindProgramList(criteria questionBankBo.Prog
 //	if req.Title != "" {
 //		db.Where("title Like ?", "%"+req.Title+"%")
 //	}
-//	err = db.Count(&total).Error
+//	err = db.QuestionCount(&total).Error
 //	if err != nil {
 //		return
 //	}

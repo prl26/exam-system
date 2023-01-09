@@ -3,6 +3,7 @@ package questionBank
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
@@ -12,7 +13,6 @@ import (
 type OjApi struct {
 }
 
-//
 var (
 	judgeService          = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.JudgeService
 	programService        = &service.ServiceGroupApp.QuestionBankServiceGroup.OjService.ProgramService
@@ -30,11 +30,22 @@ func (*OjApi) CheckJudge(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	result, err := judgeService.Check(r.Id, r.Answer)
+	result, lessonId, err := judgeService.Check(r.Id, r.Answer)
 	if err != nil {
 		response.FailWithMessage("找不到该题目", c)
 		return
 	}
+
+	studentId := utils.GetStudentId(c)
+	go func() {
+		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
+		var score uint = 0
+		if result {
+			score = 100
+		}
+		practiceService.CreatePracticeItem(questionType.JUDGE, r.Id, lessonId, studentId, score)
+		practiceService.UpdatePracticeAnswer(questionType.JUDGE, r.Id, studentId, score)
+	}()
 	response.OkWithData(result, c)
 	return
 }
@@ -52,7 +63,13 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 		return
 	}
 
-	program, _, err := programService.CheckProgram(r.Id, r.Code, r.LanguageId)
+	program, score, lessonId, err := programService.CheckProgram(r.Id, r.Code, r.LanguageId)
+	studentId := utils.GetStudentId(c)
+	go func() {
+		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
+		practiceService.CreatePracticeItem(questionType.PROGRAM, r.Id, lessonId, studentId, score)
+		practiceService.UpdatePracticeAnswer(questionType.PROGRAM, r.Id, studentId, score)
+	}()
 	if err != nil {
 		questionBankResp.ErrorHandle(c, err)
 		return
@@ -72,11 +89,17 @@ func (*OjApi) CheckSupplyBlank(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	result, _, err := supplyBlankService.Check(r.Id, r.Answers)
+	result, score, lessonId, err := supplyBlankService.Check(r.Id, r.Answers)
 	if err != nil {
 		response.FailWithMessage("找不到该题目", c)
 		return
 	}
+	studentId := utils.GetStudentId(c)
+	go func() {
+		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
+		practiceService.CreatePracticeItem(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score))
+		practiceService.UpdatePracticeAnswer(questionType.SUPPLY_BLANK, r.Id, studentId, uint(score))
+	}()
 	response.OkWithData(result, c)
 	return
 }
@@ -92,11 +115,20 @@ func (*OjApi) CheckMultipleChoice(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	result, err := multipleChoiceService.Check(r.Id, r.Answers)
+	result, lessonId, err := multipleChoiceService.Check(r.Id, r.Answers)
 	if err != nil {
 		response.FailWithMessage("找不到该题目", c)
 		return
 	}
+	studentId := utils.GetStudentId(c)
+	go func() {
+		var score uint = 0
+		if result {
+			score = 100
+		}
+		practiceService.CreatePracticeItem(questionType.MULTIPLE_CHOICE, r.Id, lessonId, studentId, score)
+		practiceService.UpdatePracticeAnswer(questionType.MULTIPLE_CHOICE, r.Id, studentId, score)
+	}()
 	response.OkWithData(result, c)
 	return
 }

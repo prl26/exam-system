@@ -18,12 +18,13 @@ import (
 
 type JudgeService struct{}
 
-func (s *JudgeService) Check(questionId uint, answer bool) (bool, error) {
+func (s *JudgeService) Check(questionId uint, answer bool) (bool, uint, error) {
 	question, err := s.FindCanPracticeQuestion(questionId)
 	if err != nil {
-		return false, exception.NotFoundError
+		return false, 0, exception.NotFoundError
 	}
-	return s.check(question, answer), nil
+
+	return s.check(question, answer), question.LessonId, nil
 }
 func (s *JudgeService) ExamCheck(questionId uint, answer bool) (bool, error) {
 	question, err := s.FindCanExamQuestion(questionId)

@@ -21,12 +21,13 @@ import (
 type SupplyBlankService struct {
 }
 
-func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bool, int, error) {
+func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bool, int, uint, error) {
 	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
 	if err != nil {
-		return nil, 0, err
+		return nil, 0, 0, err
 	}
-	return c.check(question, answer)
+	list, proportion, err := c.check(question, answer)
+	return list, proportion, question.LessonId, err
 }
 func (c *SupplyBlankService) ExamCheck(choiceQuestionId uint, answer []string) ([]bool, int, error) {
 	question, err := c.FindCanExamQuestion(choiceQuestionId)

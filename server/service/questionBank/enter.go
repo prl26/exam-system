@@ -11,4 +11,5 @@ type ServiceGroup struct {
 	QuestionBankService
 	oj.OjService
 	TargetService
+	PracticeService
 }

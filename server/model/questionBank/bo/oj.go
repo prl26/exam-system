@@ -1,6 +1,7 @@
 package bo
 
 type OjHelper struct {
+	LessonId         uint   `json:"LessonId"`
 	ProgramCases     string `json:"programCases"`
 	LanguageSupports string `json:"languageSupport"`
 }
