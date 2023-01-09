@@ -88,9 +88,8 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
 			response.FailWithMessage("试卷提交试卷失败", c)
 		} else {
-			response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
 			go func() {
-				fmt.Println("start")
+				fmt.Println("start,开始处理试卷")
 				time.AfterFunc(time.Second*5, func() {
 					wg.Add(1)
 					utils.ExecPapers(ExamCommit)
@@ -98,6 +97,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 				})
 				wg.Wait()
 			}()
+			response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
 		}
 	}
 }

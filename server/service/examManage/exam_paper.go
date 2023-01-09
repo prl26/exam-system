@@ -214,7 +214,7 @@ func (examPaperService *ExamPaperService) SetPaperChoiceQuestion(info examManage
 	var list []questionBank.MultipleChoice
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_multiple_choice ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_multiple_choice where problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ORDER BY RAND()", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -244,7 +244,7 @@ func (examPaperService *ExamPaperService) SetPaperJudgeQuestion(info examManage.
 	var list []questionBank.Judge
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_judge ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_judge  where problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ORDER BY RAND()", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -274,7 +274,7 @@ func (examPaperService *ExamPaperService) SetPaperBlankQuestion(info examManage.
 	var list []questionBank.SupplyBlank
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_supply_blank ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_supply_blank  where problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ORDER BY RAND()", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {
@@ -304,7 +304,7 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 	var list []questionBank.Program
 	num := info.Num
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		err = tx.Raw("SELECT * FROM les_questionbank_programm ORDER BY RAND()").Where("problem_type = ? and can_exam = ? and chapter_id =?", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
+		err = tx.Raw("SELECT * FROM les_questionbank_programm  where problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ORDER BY RAND()", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
 		if err != nil {
 			return err
 		} else {

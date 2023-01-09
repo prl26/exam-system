@@ -1,6 +1,6 @@
 package examType
 
 const (
-	FinalExam = iota
+	FinalExam = iota + 1
 	ProceduralExam
 )

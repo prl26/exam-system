@@ -29,7 +29,13 @@ func (c *SupplyBlankService) Check(choiceQuestionId uint, answer []string) ([]bo
 	list, proportion, err := c.check(question, answer)
 	return list, proportion, question.LessonId, err
 }
-
+func (c *SupplyBlankService) ExamCheck(choiceQuestionId uint, answer []string) ([]bool, int, error) {
+	question, err := c.FindCanPracticeQuestion(choiceQuestionId)
+	if err != nil {
+		return nil, 0, err
+	}
+	return c.check(question, answer)
+}
 func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.SupplyBlank, error) {
 	var question po.SupplyBlank
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
@@ -38,7 +44,14 @@ func (c *SupplyBlankService) FindCanPracticeQuestion(choiceQuestionId uint) (*po
 	}
 	return &question, nil
 }
-
+func (c *SupplyBlankService) FindCanExamQuestion(choiceQuestionId uint) (*po.SupplyBlank, error) {
+	var question po.SupplyBlank
+	result := global.GVA_DB.Where("id=? and can_exam=?", choiceQuestionId, 1).First(&question)
+	if result.Error != nil {
+		return nil, fmt.Errorf("找不到该题目")
+	}
+	return &question, nil
+}
 func (c *SupplyBlankService) check(question *po.SupplyBlank, checkAnswers []string) (boolList []bool, proportion int, err error) {
 	n := len(checkAnswers)
 	if n != *question.Num {
