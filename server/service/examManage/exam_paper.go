@@ -339,7 +339,6 @@ func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.Pap
 		} else if *v.QuestionType == questionType.JUDGE {
 			wg.Add(1)
 			go examPaperService.SetPaperJudgeQuestion(v, Id)
-
 		} else if *v.QuestionType == questionType.SUPPLY_BLANK {
 			wg.Add(1)
 			go examPaperService.SetPaperBlankQuestion(v, Id)
