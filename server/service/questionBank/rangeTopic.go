@@ -89,9 +89,19 @@ func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.Tar
 	return
 }
 
-func (service *TargetService) FindTargetByKnowledgeId(knowledge uint, info request.PageInfo) (q []*questionBank.BasicModel) {
+func (service *TargetService) FindTargetPracticeList(knowledge questionBankBo.TargetPracticeCriteria, info request.PageInfo) (list []*questionBank.BasicModel, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&questionBank.Target{})
 	db = db.Where("is_check=?", 1)
-	db = db.Where("")
-	return nil
+	db = db.Where("can_practice=?", 1)
+	if knowledge.KnowledgeId != 0 {
+		db = db.Where("knowledge_id=?", knowledge.KnowledgeId)
+	}
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Limit(limit).Offset(offset).Find(&list).Error
+	return list, total, err
 }

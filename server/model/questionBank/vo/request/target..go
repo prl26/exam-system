@@ -14,3 +14,8 @@ type TargetSearch struct {
 	questionBankBo.TargetSearchCriteria
 	request.PageInfo
 }
+
+type TargetPracticeSearch struct {
+	questionBankBo.TargetPracticeCriteria
+	request.PageInfo
+}

@@ -3,14 +3,17 @@ package basicdata
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
+	commonError "github.com/prl26/exam-system/server/model/common/error"
 	"github.com/prl26/exam-system/server/model/lessondata"
 )
 
 func (lessonService *LessonService) FindLessonDetail(id uint, all bool) (*basicdata.Lesson, error) {
 	var lesson basicdata.Lesson
-	lesson.ID = id
-	if err := global.GVA_DB.Model(&lesson).Preload("Chapters").Find(&lesson).Error; err != nil {
+	if err := global.GVA_DB.Model(&lesson).Where("id=?", id).Preload("Chapters").Find(&lesson).Error; err != nil {
 		return nil, err
+	}
+	if lesson.ID == 0 {
+		return nil, commonError.NotFoundError
 	}
 	if all {
 		for _, chapter := range lesson.Chapters {

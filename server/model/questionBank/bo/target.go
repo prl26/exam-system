@@ -16,3 +16,7 @@ type TargetDetail struct {
 	questionBankPo.TargetModel
 	CourseSupportPtr
 }
+
+type TargetPracticeCriteria struct {
+	questionBankPo.CourseSupport
+}

@@ -16,5 +16,11 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 		questionRouter.POST("beginPractice", questionApi.BeginPractice)
 		questionRouter.POST("findHistory", questionApi.FindHistoryAnswer)
 	}
-
+	target := Router.Group("target")
+	targetApi := v1.ApiGroupApp.FrontDesk.QuestionBankGroup.TargetApi
+	{
+		target.POST("beginPractice", targetApi.BeginPractice)
+		target.GET("findPractice", targetApi.FindTargetByKnowledgeId)
+		target.GET("findPracticeDetail", targetApi.FindTargetDetail)
+	}
 }
