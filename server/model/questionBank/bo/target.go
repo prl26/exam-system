@@ -20,3 +20,8 @@ type TargetDetail struct {
 type TargetPracticeCriteria struct {
 	questionBankPo.CourseSupport
 }
+
+type TargetByteCode struct {
+	Id       uint
+	ByteCode string
+}

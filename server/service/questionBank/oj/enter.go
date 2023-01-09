@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/service/questionBank/oj/multipleChoice"
 	"github.com/prl26/exam-system/server/service/questionBank/oj/program"
 	"github.com/prl26/exam-system/server/service/questionBank/oj/supplyBlank"
+	"github.com/prl26/exam-system/server/service/questionBank/oj/target"
 )
 
 /**
@@ -22,4 +23,5 @@ type OjService struct {
 	judge.JudgeService
 	multipleChoice.MultipleChoiceService
 	program.ProgramService
+	target.TargetService
 }

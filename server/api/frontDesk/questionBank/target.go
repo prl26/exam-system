@@ -19,6 +19,7 @@ type TargetApi struct {
 }
 
 var targetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetService
+var targetOjService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.TargetService
 
 func (*TargetApi) BeginPractice(c *gin.Context) {
 	query := c.Query("lessonId")
@@ -99,5 +100,30 @@ func (*TargetApi) FindTargetDetail(c *gin.Context) {
 		questionBankResp.OkWithDetailed(q, "获取成功", c)
 		return
 	}
+}
 
+func (*TargetApi) PracticeGenerateInstance(c *gin.Context) {
+	query := c.Query("id")
+	idInt, err := strconv.Atoi(query)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	targetId := uint(idInt)
+	byteCodeModel := targetService.GetByteCode(targetId)
+	if byteCodeModel == nil {
+		questionBankResp.NotFind(c)
+		return
+	}
+	salt, address, err := targetOjService.GenerateInstance(byteCodeModel.ByteCode)
+	if err != nil {
+		questionBankResp.ErrorHandle(c, fmt.Errorf("该题生成实例错误，请联系管理员检测"))
+		return
+	}
+	studentId := utils.GetStudentId(c)
+	targetService.PracticeRecord(studentId, targetId, address)
+	questionBankResp.OkWithDetailed(questionBankResp.TargetGenerateInstance{
+		ByteCode: byteCodeModel.ByteCode,
+		Salt:     salt,
+	}, "生成成功", c)
 }
