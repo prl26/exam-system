@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
@@ -213,13 +214,16 @@ func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath
 }
 func (ExamService *ExamService) ExportPaperScore(infoList []examManage.ExamScore, filePath string) (err error) {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "考试名称", "学期", "课程名", "分数"})
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "姓名", "考试名称", "学期", "课程名", "分数"})
 	for i, paper := range infoList {
 		axis := fmt.Sprintf("A%d", i+2)
 		studentId := strconv.Itoa(int(*paper.StudentId))
 		score := strconv.Itoa(int(*paper.Score))
+		var studentInfo basicdata.Student
+		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", paper.StudentId).Find(&studentInfo)
 		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
 			studentId,
+			studentInfo.Name,
 			paper.Name,
 			paper.TermName,
 			paper.CourseName,
