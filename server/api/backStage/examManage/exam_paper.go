@@ -224,9 +224,13 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)
 		return
+	} else {
+		c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
+		c.File(filePath)
+		response.OkWithData(gin.H{
+			"filepath": filePath,
+		}, c)
 	}
-	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
-	c.File(filePath)
 
 	//_ = c.ShouldBindJSON(&excelInfo)
 	//if strings.Index(excelInfo.FileName, "..") > -1 {
