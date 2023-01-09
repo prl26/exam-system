@@ -88,3 +88,10 @@ func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.Tar
 	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Target{}).First(RangTopic, id).Error
 	return
 }
+
+func (service *TargetService) FindTargetByKnowledgeId(knowledge uint, info request.PageInfo) (q []*questionBank.BasicModel) {
+	db := global.GVA_DB.Model(&questionBank.Target{})
+	db = db.Where("is_check=?", 1)
+	db = db.Where("")
+	return nil
+}
