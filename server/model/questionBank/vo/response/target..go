@@ -23,6 +23,7 @@ type TargetSimplePractice struct {
 }
 
 type TargetGenerateInstance struct {
-	ByteCode string
-	Salt     string
+	DeployAddress string
+	Address       string
+	Salt          string
 }
