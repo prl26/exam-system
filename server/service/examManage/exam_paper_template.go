@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 )
 
 type PaperTemplateService struct {
@@ -113,28 +114,101 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info 
 
 //查找该课程下有哪些章节,章节下面各题目难度的题目数目
 func (PapertemplateService *PaperTemplateService) GetDetails(lessonId uint) (templates response.Template, err error) {
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_multiple_choice as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_multiple_choice as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Choice).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_judge as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_judge as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Judge).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_supply_blank as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_supply_blank as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Blank).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_programm as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_programm as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Program).Error
 	if err != nil {
 		return
 	}
 	return
+}
+func (PapertemplateService *PaperTemplateService) CheckPaperTemplate(info []examManage.PaperTemplateItem) (IsOk bool, err error) {
+	for _, v := range info {
+		if *v.QuestionType == questionType.JUDGE {
+			if IsOk, err = PapertemplateService.CheckPaperJudgeTemplate(v); err != nil {
+				return false, err
+			} else if IsOk != true {
+				return false, err
+			}
+		}
+		if *v.QuestionType == questionType.SUPPLY_BLANK {
+			if IsOk, err = PapertemplateService.CheckPaperBlankTemplate(v); err != nil {
+				return false, err
+			} else if IsOk != true {
+				return false, err
+			}
+		}
+		if *v.QuestionType == questionType.PROGRAM {
+			if IsOk, err = PapertemplateService.CheckPaperProgramTemplate(v); err != nil {
+				return false, err
+			} else if IsOk != true {
+				return false, err
+			}
+		}
+		if *v.QuestionType == questionType.SINGLE_CHOICE {
+			if IsOk, err = PapertemplateService.CheckPaperChoiceTemplate(v); err != nil {
+				return false, err
+			} else if IsOk != true {
+				return false, err
+			}
+		}
+	}
+	return true, err
+}
+func (PapertemplateService *PaperTemplateService) CheckPaperJudgeTemplate(info examManage.PaperTemplateItem) (IsOk bool, err error) {
+	var count int64
+	err = global.GVA_DB.Table("les_questionbank_judge").Where("problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ", info.ProblemType, 1, info.ChapterId).Count(&count).Error
+	temp := int(count)
+	if temp < *info.Num {
+		IsOk = false
+		return
+	}
+	return true, err
+}
+func (PapertemplateService *PaperTemplateService) CheckPaperBlankTemplate(info examManage.PaperTemplateItem) (IsOk bool, err error) {
+	var count int64
+	err = global.GVA_DB.Table("les_questionbank_supply_blank").Where("problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ", info.ProblemType, 1, info.ChapterId).Count(&count).Error
+	temp := int(count)
+	if temp < *info.Num {
+		IsOk = false
+		return
+	}
+	return true, err
+}
+func (PapertemplateService *PaperTemplateService) CheckPaperProgramTemplate(info examManage.PaperTemplateItem) (IsOk bool, err error) {
+	var count int64
+	err = global.GVA_DB.Table("les_questionbank_programm").Where("problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null", info.ProblemType, 1, info.ChapterId).Count(&count).Error
+	temp := int(count)
+	if temp < *info.Num {
+		IsOk = false
+		return
+	}
+	return true, err
+}
+func (PapertemplateService *PaperTemplateService) CheckPaperChoiceTemplate(info examManage.PaperTemplateItem) (IsOk bool, err error) {
+	var count int64
+	err = global.GVA_DB.Table("les_questionbank_multiple_choice").Where("problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null", info.ProblemType, 1, info.ChapterId).Count(&count).Error
+	temp := int(count)
+	if temp < *info.Num {
+		IsOk = false
+		return
+	}
+	return true, err
 }
