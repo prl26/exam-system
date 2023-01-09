@@ -27,7 +27,13 @@ func (c *MultipleChoiceService) Check(choiceQuestionId uint, answer []string) (b
 	}
 	return c.check(question, answer), nil
 }
-
+func (c *MultipleChoiceService) ExamCheck(choiceQuestionId uint, answer []string) (bool, error) {
+	question, err := c.FindCanExamQuestion(choiceQuestionId)
+	if err != nil {
+		return false, err
+	}
+	return c.check(question, answer), nil
+}
 func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (*po.MultipleChoice, error) {
 	var question po.MultipleChoice
 	result := global.GVA_DB.Where("id=? and can_practice=?", choiceQuestionId, 1).First(&question)
@@ -36,7 +42,14 @@ func (c *MultipleChoiceService) FindCanPracticeQuestion(choiceQuestionId uint) (
 	}
 	return &question, nil
 }
-
+func (c *MultipleChoiceService) FindCanExamQuestion(choiceQuestionId uint) (*po.MultipleChoice, error) {
+	var question po.MultipleChoice
+	result := global.GVA_DB.Where("id=? and can_exam=?", choiceQuestionId, 1).First(&question)
+	if result.Error != nil {
+		return nil, fmt.Errorf("找不到该题目")
+	}
+	return &question, nil
+}
 func (c *MultipleChoiceService) check(question *po.MultipleChoice, answer []string) bool {
 	//n := len(answer)
 	//if n != question.MostOptions {
