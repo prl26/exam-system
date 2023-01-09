@@ -14,7 +14,6 @@ import (
 	"go.uber.org/zap"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type ExamPaperApi struct {
@@ -217,9 +216,8 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	timeStr := time.Now().Format("2006-01-02 15:04:05")
-	fmt.Println(timeStr) //打印结果：2017-04-11 13:24:04
-	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName + timeStr
+	//timeStr := time.Now().Format("2006-01-02 15:04:05")
+	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	infoList, _ := examService.GetTeachScore(excelInfo.TeachClassId)
 	err := examService.ExportPaperScore(infoList, filePath)
 	if err != nil {
