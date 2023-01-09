@@ -70,20 +70,10 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 				FinalExamName: PlanDetail.Name,
 				FinalExamId:   &planId,
 			})
-			//global.GVA_DB.Raw("UPDATE tea_score as s SET s.procedure_score = s.procedure_score+(SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?)", examPaperCommit.StudentId, examPaperCommit.PlanId).
-			//	Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
-			//tx.Raw(fmt.Sprintf("UPDATE tea_score SET exam_score = %d,final_exam_name = %s,final_exam_id = %d", sum, PlanDetail.Name, PlanDetail.ID)).
-			//	Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
-			//tx.Raw("UPDATE tea_score SET exam_score = ?,final_exam_name = ?,final_exam_id = ?", sum, PlanDetail.Name, PlanDetail.ID).
-			//	Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		} else if PlanDetail.Type == examType.ProceduralExam {
 			fmt.Println("过程化统分统分")
-			global.GVA_DB.Raw("UPDATE tea_score as s SET s.procedure_score = s.procedure_score+(SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?)", examPaperCommit.StudentId, examPaperCommit.PlanId).
-				Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*? where )", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
-
-		//var detail examManage.Detail
-		//tx.Raw("SELECT b.`name` ,c.`name` from bas_term as b,bas_lesson as c where b.id = ? and  c.id =? ", PlanDetail.TermId, PlanDetail.CourseId).Scan(&detail)
 		var term basicdata.Term
 		var lesson basicdata.Lesson
 
