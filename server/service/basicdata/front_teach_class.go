@@ -9,7 +9,7 @@ import (
 func (t *TeachClassService) FindTeachClass(id uint, termId int) (teachClassAndLessons []response.TeachAndLessons, err error) {
 	var teachClassIds []basicdata.StudentAndTeachClassAndTerm
 	if termId != 0 {
-		err = global.GVA_DB.Raw("SELECT s.teach_class_id,s.student_id,t.term_id FROM `bas_student_teach_classes` as s,bas_teach_class as t  WHERE student_id = ? and term_id =? GROUP BY teach_class_id", id, termId).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
 	} else {
 		err = global.GVA_DB.Raw("SELECT s.teach_class_id,s.student_id,t.term_id FROM `bas_student_teach_classes` as s,bas_teach_class as t  WHERE student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
 	}
