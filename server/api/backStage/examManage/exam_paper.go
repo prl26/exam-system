@@ -219,7 +219,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/" + excelInfo.FileName
-	infoList, _ := examService.GetExamScoreToExcel(excelInfo.TeachClassId)
+	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	err := examService.ExportPaperScore(infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
@@ -242,7 +242,7 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	}
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/" + excelInfo.FileName
-	infoList, _ := examService.GetExamScoreToExcel(excelInfo.TeachClassId)
+	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	err := examService.ExportPaperScore(infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
