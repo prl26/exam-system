@@ -29,4 +29,7 @@ type Server struct {
 
 	// Judge
 	GoJudge GoJudge `mapstructure:"goJudge" json:"goJudge" yaml:"goJudge"`
+
+	//靶场设置
+	TargetConfig TargetConfig `mapstructure:"target"`
 }

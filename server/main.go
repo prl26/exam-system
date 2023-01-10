@@ -35,7 +35,8 @@ func main() {
 	zap.ReplaceGlobals(global.GVA_LOG)
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	initialize.GoJudge()
-	//initialize.Redis()
+	initialize.Target()
+	initialize.Redis()
 	//initialize.Timer()
 	//initialize.DBList()
 

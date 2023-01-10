@@ -104,7 +104,7 @@ func (api *TargetApi) FindDetail(c *gin.Context) {
 		return
 	}
 
-	if Target, err := TargetService.FindDetail(req.Id); err != nil {
+	if Target, err := TargetService.FindDetail(req.Id, true); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 		return

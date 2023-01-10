@@ -86,16 +86,18 @@ func (*TargetApi) FindTargetDetail(c *gin.Context) {
 		return
 	}
 	targetId := uint(idInt)
-	detail, err := targetService.FindDetail(targetId)
+	detail, err := targetService.FindDetail(targetId, false)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
 		return
 	} else {
+		studentId := utils.GetStudentId(c)
+		address, isGenerateAddress := targetService.QueryPracticeRecord(studentId, targetId)
 		q := &questionBankResp.TargetDetail{
 			TargetDetail:      detail,
-			IsGenerateAddress: false,
-			Address:           "",
+			IsGenerateAddress: isGenerateAddress,
+			Address:           address,
 		}
 		questionBankResp.OkWithDetailed(q, "获取成功", c)
 		return
@@ -115,7 +117,7 @@ func (*TargetApi) PracticeGenerateInstance(c *gin.Context) {
 		questionBankResp.NotFind(c)
 		return
 	}
-	salt, address, err := targetOjService.GenerateInstance(byteCodeModel.ByteCode)
+	salt, address, deployAddress, err := targetOjService.GenerateInstance(byteCodeModel.ByteCode)
 	if err != nil {
 		questionBankResp.ErrorHandle(c, fmt.Errorf("该题生成实例错误，请联系管理员检测"))
 		return
@@ -123,7 +125,31 @@ func (*TargetApi) PracticeGenerateInstance(c *gin.Context) {
 	studentId := utils.GetStudentId(c)
 	targetService.PracticeRecord(studentId, targetId, address)
 	questionBankResp.OkWithDetailed(questionBankResp.TargetGenerateInstance{
-		ByteCode: byteCodeModel.ByteCode,
-		Salt:     salt,
+		Address: address,
+		//ByteCode: byteCodeModel.ByteCode,
+		DeployAddress: deployAddress,
+		Salt:          salt,
 	}, "生成成功", c)
+}
+
+func (*TargetApi) PracticeScore(c *gin.Context) {
+	query := c.Query("id")
+	idInt, err := strconv.Atoi(query)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	targetId := uint(idInt)
+	studentId := utils.GetStudentId(c)
+	address, isGenerateAddress := targetService.QueryPracticeRecord(studentId, targetId)
+	if !isGenerateAddress {
+		questionBankResp.CheckHandle(c, fmt.Errorf("暂未生成实例地址", err.Error()))
+		return
+	}
+	score, err := targetOjService.QueryScore(address)
+	if err != nil {
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取分数错误，请联系管理员或重新生成实例"))
+		return
+	}
+	questionBankResp.OkWithDetailed(score, "获取成功", c)
 }

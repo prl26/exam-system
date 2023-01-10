@@ -74,9 +74,13 @@ func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearc
 	return list, total, err
 }
 
-func (service *TargetService) FindDetail(id uint) (RangTopic *questionBankBo.TargetDetail, err error) {
+func (service *TargetService) FindDetail(id uint, more bool) (RangTopic *questionBankBo.TargetDetail, err error) {
 	RangTopic = &questionBankBo.TargetDetail{}
-	err = global.GVA_DB.Preload("Chapter").Preload("Knowledge").Model(&questionBank.Target{}).First(RangTopic, id).Error
+	db := global.GVA_DB
+	if more {
+		db = db.Preload("Chapter").Preload("Knowledge")
+	}
+	err = db.Model(&questionBank.Target{}).First(RangTopic, id).Error
 	return
 }
 
@@ -108,4 +112,12 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
 	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
+}
+
+func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool) {
+	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)).Result()
+	if err != nil {
+		return "", false
+	}
+	return address, true
 }
