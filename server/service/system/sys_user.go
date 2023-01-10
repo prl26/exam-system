@@ -138,7 +138,8 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
+	//err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
+	err = db.Limit(limit).Offset(offset).Find(&userList).Error
 	return userList, total, err
 }
 
@@ -220,30 +221,31 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 //@param: uuid uuid.UUID
 //@return: err error, user system.SysUser
 
-func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser, err error) {
+func (userService *UserService) GetUserInfo(uid uint) (user system.SysUser, err error) {
 	var reqUser system.SysUser
-	err = global.GVA_DB.Preload("Authorities").Preload("Authority").Find(&reqUser, "uuid = ?", uuid).Error
-	if err != nil {
-		return reqUser, err
-	}
-
-	var SysAuthorityMenus []system.SysAuthorityMenu
-	err = global.GVA_DB.Where("sys_authority_authority_id = ?", reqUser.AuthorityId).Find(&SysAuthorityMenus).Error
-	if err != nil {
-		return
-	}
-
-	var MenuIds []string
-
-	for i := range SysAuthorityMenus {
-		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
-	}
-
-	var am system.SysBaseMenu
-	ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", reqUser.Authority.DefaultRouter, MenuIds).Error
-	if errors.Is(ferr, gorm.ErrRecordNotFound) {
-		reqUser.Authority.DefaultRouter = "404"
-	}
+	err = global.GVA_DB.Where("id = ?", uid).Find(&reqUser).Error
+	//err = global.GVA_DB.Preload("Authorities").Preload("Authority").Find(&reqUser, "uuid = ?", uuid).Error
+	//if err != nil {
+	//	return reqUser, err
+	//}
+	//
+	//var SysAuthorityMenus []system.SysAuthorityMenu
+	//err = global.GVA_DB.Where("sys_authority_authority_id = ?", reqUser.AuthorityId).Find(&SysAuthorityMenus).Error
+	//if err != nil {
+	//	return
+	//}
+	//
+	//var MenuIds []string
+	//
+	//for i := range SysAuthorityMenus {
+	//	MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+	//}
+	//
+	//var am system.SysBaseMenu
+	//ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", reqUser.Authority.DefaultRouter, MenuIds).Error
+	//if errors.Is(ferr, gorm.ErrRecordNotFound) {
+	//	reqUser.Authority.DefaultRouter = "404"
+	//}
 	return reqUser, err
 }
 

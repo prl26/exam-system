@@ -222,25 +222,6 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 }
 
 // @Tags SysUser
-// @Summary 设置用户权限
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body systemReq.SetUserAuthorities true "用户UUID, 角色ID"
-// @Success 200 {object} response.Response{msg=string} "设置用户权限"
-// @Router /user/setUserAuthorities [post]
-func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
-	var sua systemReq.SetUserAuthorities
-	_ = c.ShouldBindJSON(&sua)
-	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
-		global.GVA_LOG.Error("修改失败!", zap.Error(err))
-		response.FailWithMessage("修改失败", c)
-	} else {
-		response.OkWithMessage("修改成功", c)
-	}
-}
-
-// @Tags SysUser
 // @Summary 删除用户
 // @Security ApiKeyAuth
 // @accept application/json
@@ -277,27 +258,29 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/setUserInfo [put]
 func (b *BaseApi) SetUserInfo(c *gin.Context) {
-	var user systemReq.ChangeUserInfo
+	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-
-	if len(user.AuthorityIds) != 0 {
-		err := userService.SetUserAuthorities(user.ID, user.AuthorityIds)
-		if err != nil {
-			global.GVA_LOG.Error("设置失败!", zap.Error(err))
-			response.FailWithMessage("设置失败", c)
-			return
-		}
-	}
-
+	//if len(user.AuthorityIds) != 0 {
+	//	err := userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+	//	if err != nil {
+	//		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+	//		response.FailWithMessage("设置失败", c)
+	//		return
+	//	}
+	//}
 	if err := userService.SetUserInfo(system.SysUser{
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
-		NickName: user.NickName,
+		Username:    user.Username,
+		AuthorityId: user.AuthorityId,
+		Phone:       user.Phone,
+		Email:       user.Email,
+		NickName:    user.NickName,
 	}); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
@@ -315,15 +298,18 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/SetSelfInfo [put]
 func (b *BaseApi) SetSelfInfo(c *gin.Context) {
-	var user systemReq.ChangeUserInfo
+	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
 	user.ID = utils.GetUserID(c)
 	if err := userService.SetUserInfo(system.SysUser{
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
-		NickName: user.NickName,
-	}); err != nil {
+		Username:    user.Username,
+		AuthorityId: user.AuthorityId,
+		Phone:       user.Phone,
+		Email:       user.Email,
+		NickName:    user.NickName}); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
@@ -339,8 +325,8 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取用户信息"
 // @Router /user/getUserInfo [get]
 func (b *BaseApi) GetUserInfo(c *gin.Context) {
-	uuid := utils.GetUserUuid(c)
-	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
+	uid := utils.GetUserID(c)
+	if ReqUser, err := userService.GetUserInfo(uid); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -363,5 +349,24 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 		response.FailWithMessage("重置失败"+err.Error(), c)
 	} else {
 		response.OkWithMessage("重置成功", c)
+	}
+}
+
+// @Tags SysUser
+// @Summary 设置用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body systemReq.SetUserAuthorities true "用户UUID, 角色ID"
+// @Success 200 {object} response.Response{msg=string} "设置用户权限"
+// @Router /user/setUserAuthorities [post]
+func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
+	var sua systemReq.SetUserAuthorities
+	_ = c.ShouldBindJSON(&sua)
+	if err := userService.SetUserAuthorities(sua.ID, sua.AuthorityIds); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+	} else {
+		response.OkWithMessage("修改成功", c)
 	}
 }
