@@ -26,7 +26,7 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 		return userInter, errors.New("用户名已注册")
 	}
 	// 否则 附加uuid 密码hash加密 注册
-	//u.Password = utils.BcryptHash(u.Password)
+	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.NewV4()
 	err = global.GVA_DB.Create(&u).Error
 	return u, err
@@ -45,16 +45,16 @@ func (userService *UserService) StudentLogin(u *basicdata.Student) (userInter *b
 	var user basicdata.Student
 	err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error
 	if err == nil {
-		//if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
-		if u.Password != user.Password {
+		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
+			//if u.Password != user.Password {
 			return nil, errors.New("密码错误")
 		}
 
-		var SysAuthorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.Where("sys_authority_authority_id = ?", 8888).Find(&SysAuthorityMenus).Error
-		if err != nil {
-			return
-		}
+		//var SysAuthorityMenus []system.SysAuthorityMenu
+		//err = global.GVA_DB.Where("sys_authority_authority_id = ?", 8888).Find(&SysAuthorityMenus).Error
+		//if err != nil {
+		//	return
+		//}
 		//var MenuIds []string
 		//
 		//for i := range SysAuthorityMenus {
@@ -73,31 +73,30 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 	if nil == global.GVA_DB {
 		return nil, fmt.Errorf("db not init")
 	}
-
 	var user system.SysUser
 	err = global.GVA_DB.Where("username = ?", u.Username).Preload("Authority").First(&user).Error
 	if err == nil {
-		//if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
-		if u.Password != user.Password {
+		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")
-		}
-
-		var SysAuthorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.Where("sys_authority_authority_id = ?", user.AuthorityId).Find(&SysAuthorityMenus).Error
-		if err != nil {
-			return
-		}
-
-		var MenuIds []string
-
-		for i := range SysAuthorityMenus {
-			MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
-		}
-
-		var am system.SysBaseMenu
-		ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
-		if errors.Is(ferr, gorm.ErrRecordNotFound) {
-			user.Authority.DefaultRouter = "404"
+			//if u.Password != user.Password {
+			//}
+			//var SysAuthorityMenus []system.SysAuthorityMenu
+			//err = global.GVA_DB.Where("sys_authority_authority_id = ?", user.AuthorityId).Find(&SysAuthorityMenus).Error
+			//if err != nil {
+			//	return
+			//}
+			//
+			//var MenuIds []string
+			//
+			//for i := range SysAuthorityMenus {
+			//	MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+			//}
+			//
+			//var am system.SysBaseMenu
+			//ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
+			//if errors.Is(ferr, gorm.ErrRecordNotFound) {
+			//	user.Authority.DefaultRouter = "404"
+			//}
 		}
 	}
 	return &user, err
@@ -117,8 +116,8 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 		return nil, errors.New("原密码错误")
 	}
-	//user.Password = utils.BcryptHash(newPassword)
-	user.Password = newPassword
+	user.Password = utils.BcryptHash(newPassword)
+	//user.Password = newPassword
 	err = global.GVA_DB.Save(&user).Error
 	return &user, err
 
@@ -283,7 +282,7 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 //@return: err error
 
 func (userService *UserService) ResetPassword(ID uint) (err error) {
-	//err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", "123456").Error
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
+	//err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", "123456").Error
 	return err
 }

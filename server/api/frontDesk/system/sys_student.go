@@ -23,30 +23,30 @@ import (
 func (b *BaseApi) StudentLogin(c *gin.Context) {
 	var l systemReq.StudentLogin
 	_ = c.ShouldBindJSON(&l)
-	//if err := utils.Verify(l, utils.LoginVerify); err != nil {
-	//	response.FailWithMessage(err.Error(), c)
-	//	return
-	//}
-	//if store.Verify(l.CaptchaId, l.Captcha, true) {
-	u := &basicdata.Student{
-		GVA_MODEL: global.GVA_MODEL{ID: l.ID},
-		Password:  l.Password,
+	if err := utils.Verify(l, utils.LoginVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
 	}
-	if user, err := userService.StudentLogin(u); err != nil {
-		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-		response.FailWithMessage("用户名不存在或者密码错误", c)
+	if store.Verify(l.CaptchaId, l.Captcha, true) {
+		u := &basicdata.Student{
+			GVA_MODEL: global.GVA_MODEL{ID: l.ID},
+			Password:  l.Password,
+		}
+		if user, err := userService.StudentLogin(u); err != nil {
+			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
+			response.FailWithMessage("用户名不存在或者密码错误", c)
+		} else {
+			//如需要冻结功能,可自加字段
+			//if user.Enable != 1 {
+			//	global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+			//	response.FailWithMessage("用户被禁止登录", c)
+			//	return
+			//}
+			b.StudentTokenNext(c, *user)
+		}
 	} else {
-		//如需要冻结功能,可自加字段
-		//if user.Enable != 1 {
-		//	global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
-		//	response.FailWithMessage("用户被禁止登录", c)
-		//	return
-		//}
-		b.StudentTokenNext(c, *user)
+		response.FailWithMessage("验证码错误", c)
 	}
-	//} else {
-	//	response.FailWithMessage("验证码错误", c)
-	//}
 }
 
 func (b *BaseApi) StudentTokenNext(c *gin.Context, user basicdata.Student) {
