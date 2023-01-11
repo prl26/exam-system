@@ -1,6 +1,7 @@
 package basicdata
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
@@ -57,6 +58,8 @@ func (professionalService *ProfessionalService) GetProfessionalInfoList(info bas
 	if info.Name != "" {
 		db = db.Where("name LIKE ?", "%"+info.Name+"%")
 	}
+
+	fmt.Println(info.CollegeId)
 	if info.CollegeId != nil {
 		db = db.Where("college_id = ?", info.CollegeId)
 	}

@@ -7,6 +7,7 @@ import (
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/system"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -42,6 +43,19 @@ func (professionalApi *ProfessionalApi) CreateProfessional(c *gin.Context) {
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
+		y := true
+		var pageInfo = basicdataReq.ProfessionalSearch{}
+		pageInfo.Name = professional.Name
+		list, _, _ := professionalService.GetProfessionalInfoList(pageInfo)
+		var sysDictionaryDetail = system.SysDictionaryDetail{
+			GVA_MODEL:       global.GVA_MODEL{},
+			Label:           professional.Name,
+			Value:           int(list[0].ID),
+			Status:          &y,
+			Sort:            1,
+			SysDictionaryID: 18,
+		}
+		_ = dictionaryDetailService.CreateSysDictionaryDetail(sysDictionaryDetail)
 	}
 }
 
