@@ -34,6 +34,13 @@ var studentService = service.ServiceGroupApp.BasicdataApiGroup.StudentService
 func (studentApi *StudentApi) CreateStudent(c *gin.Context) {
 	var student basicdata.Student
 	_ = c.ShouldBindJSON(&student)
+	verify := utils.Rules{
+		"Name": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(student, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := studentService.CreateStudent(student); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -199,7 +206,7 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 	rows = rows[1:]
 	for i, row := range rows {
 		length := len(rows[i])
-		if length < 4 {
+		if length < 6 {
 			response.FailWithMessage(fmt.Sprintf("表格格式有误!第%d行只有%d个数据", i+1, length), c)
 			return
 		}
@@ -219,6 +226,8 @@ func (studentApi *StudentApi) AddStudentsByExcel(c *gin.Context) {
 		student.IdCard = row[1]
 		student.Name = row[2]
 		student.Sex = row[3]
+		student.ProfessionalName = row[4]
+		student.CollegeName = row[5]
 		student.Password = utils.BcryptHash(row[0]) //密码默认为学号
 		//if length <= 5 || row[4] == "" {
 		//	student.Password = utils.BcryptHash(row[0])

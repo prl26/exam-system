@@ -62,11 +62,11 @@ func (studentService *StudentService) GetStudentInfoList(info basicdataReq.Stude
 	if info.IdCard != "" {
 		db = db.Where("id_card LIKE ?", "%d"+info.IdCard+"%d")
 	}
-	if info.CollegeId != 0 {
-		db = db.Where("college_id = ?", info.CollegeId)
+	if info.CollegeName != "" {
+		db = db.Where("college_name = ?", info.CollegeName)
 	}
-	if info.ProfessionalId != 0 {
-		db = db.Where("professional_id = ?", info.ProfessionalId)
+	if info.ProfessionalName != "" {
+		db = db.Where("professional_name = ?", info.ProfessionalName)
 	}
 	if info.ClassId != 0 {
 		db = db.Where("class_id = ?", info.ClassId)
