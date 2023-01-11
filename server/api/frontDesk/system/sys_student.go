@@ -133,3 +133,15 @@ func (b *BaseApi) GetTeachPlans(c *gin.Context) {
 		response.OkWithData(Lessons, c)
 	}
 }
+func (b *BaseApi) StudentChangePassword(c *gin.Context) {
+	var req systemReq.ChangePasswordReq
+	_ = c.ShouldBindJSON(&req)
+	uid := utils.GetStudentId(c)
+	u := &basicdata.Student{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
+	if _, err := userService.ChangeStudetnPassword(u, req.NewPassword); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
+	} else {
+		response.OkWithMessage("修改成功", c)
+	}
+}

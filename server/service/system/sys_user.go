@@ -122,6 +122,20 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 	return &user, err
 
 }
+func (userService *UserService) ChangeStudetnPassword(u *basicdata.Student, newPassword string) (userInter *basicdata.Student, err error) {
+	var user basicdata.Student
+	if err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
+		return nil, err
+	}
+	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
+		return nil, errors.New("原密码错误")
+	}
+	user.Password = utils.BcryptHash(newPassword)
+	//user.Password = newPassword
+	err = global.GVA_DB.Save(&user).Error
+	return &user, err
+
+}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetUserInfoList
