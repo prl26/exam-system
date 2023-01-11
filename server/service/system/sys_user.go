@@ -117,7 +117,7 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 		return nil, errors.New("原密码错误")
 	}
-	user.Password = utils.BcryptHash(newPassword)
+	//user.Password = utils.BcryptHash(newPassword)
 	err = global.GVA_DB.Save(&user).Error
 	return &user, err
 
