@@ -27,17 +27,25 @@ var termService = service.ServiceGroupApp.BasicdataApiGroup.TermService
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /term/createTerm [post]
 func (termApi *TermApi) CreateTerm(c *gin.Context) {
-	var term basicdata.Term
+	var term basicdata.TermReq
 	_ = c.ShouldBindJSON(&term)
 	verify := utils.Rules{
 		"Name":      {utils.NotEmpty()},
 		"StartTime": {utils.NotEmpty()},
+		"EndTime":   {utils.NotEmpty()},
 	}
 	if err := utils.Verify(term, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := termService.CreateTerm(term); err != nil {
+
+	newTerm := basicdata.Term{
+		GVA_MODEL: term.GVA_MODEL,
+		Name:      term.Name,
+		StartTime: utils.StringToTime(term.StartTime),
+		EndTime:   utils.StringToTime(term.EndTime),
+	}
+	if err := termService.CreateTerm(newTerm); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -95,17 +103,25 @@ func (termApi *TermApi) DeleteTermByIds(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /term/updateTerm [put]
 func (termApi *TermApi) UpdateTerm(c *gin.Context) {
-	var term basicdata.Term
+	var term basicdata.TermReq
 	_ = c.ShouldBindJSON(&term)
 	verify := utils.Rules{
-		"Name":       {utils.NotEmpty()},
-		"Start_time": {utils.NotEmpty()},
+		"Name":      {utils.NotEmpty()},
+		"StartTime": {utils.NotEmpty()},
+		"EndTime":   {utils.NotEmpty()},
+	}
+
+	updateTerm := basicdata.Term{
+		GVA_MODEL: term.GVA_MODEL,
+		Name:      term.Name,
+		StartTime: utils.StringToTime(term.StartTime),
+		EndTime:   utils.StringToTime(term.EndTime),
 	}
 	if err := utils.Verify(term, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := termService.UpdateTerm(term); err != nil {
+	if err := termService.UpdateTerm(updateTerm); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
