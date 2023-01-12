@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var ojService oj.OjService
+var ojService = oj.OjService{}
 
 func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	//判断题处理
@@ -76,7 +76,6 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		}
 		var term basicdata.Term
 		var lesson basicdata.Lesson
-
 		tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
 		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
 		tx.Create(&examManage.ExamScore{
@@ -102,7 +101,4 @@ func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
 	}
 	return err
-}
-func ExecTarget() {
-
 }

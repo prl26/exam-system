@@ -21,6 +21,27 @@ type ExamPaperService struct {
 
 var wg sync.WaitGroup
 
+func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf) (err error) {
+	var examPlan teachplan.ExamPlan
+	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
+	if err != nil {
+		return
+	}
+	lessonId := *examPlan.LessonId
+	paper := examManage.ExamPaper1{
+		GVA_MODEL:  global.GVA_MODEL{},
+		PlanId:     examPaper.PlanId,
+		Name:       examPaper.Name,
+		TemplateId: nil,
+		TermId:     *examPlan.TermId,
+		LessonId:   uint(lessonId),
+		UserId:     examPaper.UserId,
+		PaperItem:  examPaper.PaperItem,
+	}
+	global.GVA_DB.Create(&paper)
+	return nil
+}
+
 // CreateExamPaper 创建ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {

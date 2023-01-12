@@ -109,7 +109,6 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 	}
 	return &code
 }
-
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
 	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
 }
