@@ -15,6 +15,7 @@ func (c *ExamRouter) InitTargetExamRouter(Router *gin.RouterGroup) {
 	{
 		FrontExamRouterWithoutRecord.GET("getTargetExamPapers", targetExamApi.GetTargetExamPaper)
 		FrontExamRouterWithoutRecord.POST("commitTargetExamPaper", targetExamApi.CommitTargetExamPaper)
+		FrontExamRouterWithoutRecord.POST("examGenerateInstance", targetExamApi.ExamGenerateInstance)
 
 	}
 }

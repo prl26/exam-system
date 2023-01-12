@@ -19,7 +19,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		Target := examPaperCommit.TargetComponent
 		for _, v := range Target {
-			address, isGenerateAddress := targetService.QueryPracticeRecord(examPaperCommit.StudentId, v.QuestionId)
+			address, isGenerateAddress := targetService.QueryExamRecord(examPaperCommit.StudentId, v.QuestionId, examPaperCommit.PlanId)
 			if !isGenerateAddress {
 				return fmt.Errorf("暂未生成实例地址", err.Error())
 			}

@@ -11,3 +11,7 @@ type TargetComponent struct {
 	QuestionId uint   `json:"questionId" form:"questionId"`
 	Answer     string `json:"answer" form:"answer"`
 }
+type TargetInstance struct {
+	Id     uint `json:"id" form:"id"`
+	PlanId uint `json:"planId" form:"planId"`
+}
