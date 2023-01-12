@@ -112,7 +112,16 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
 	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
 }
-
+func (service *TargetService) ExamRecord(studentId uint, targetId uint, address string, planId uint) {
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d:%d", studentId, targetId, planId), address, 7*24*time.Hour)
+}
+func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, planId uint) (string, bool) {
+	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetPractice:%d:%d:%d", studentId, targetId, planId)).Result()
+	if err != nil {
+		return "", false
+	}
+	return address, true
+}
 func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool) {
 	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)).Result()
 	if err != nil {

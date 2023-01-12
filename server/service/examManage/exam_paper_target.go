@@ -45,16 +45,6 @@ func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing 
 }
 
 func (targetExamService *TargetExamPaperService) CommitTargetExamPapers(examPaperCommit request.CommitTargetExamPaper) (err error) {
-	var target = examPaperCommit.TargetComponent
-	for j := 0; j < len(target); j++ {
-		err = global.GVA_DB.Table("exam_student_paper").Select("answer").
-			Where("id = ?", target[j].MergeId).
-			Updates(&examManage.ExamStudentPaper{Answer: target[j].Answer}).
-			Error
-		if err != nil {
-			return
-		}
-	}
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("is_commit", 1).Error
 	if err != nil {
 		return

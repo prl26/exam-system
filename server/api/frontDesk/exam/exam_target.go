@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage/request"
+	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
@@ -53,6 +54,28 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 		}
 	}
 }
+func (targetExamApi *TargetExamApi) ExamGenerateInstance(c *gin.Context) {
+	var Instance request.TargetInstance
+	_ = c.ShouldBindQuery(&Instance)
+	byteCodeModel := targetService.GetByteCode(Instance.Id)
+	if byteCodeModel == nil {
+		questionBankResp.NotFind(c)
+		return
+	}
+	salt, address, deployAddress, err := targetOjService.GenerateInstance(byteCodeModel.ByteCode)
+	if err != nil {
+		questionBankResp.ErrorHandle(c, fmt.Errorf("该题生成实例错误，请联系管理员检测"))
+		return
+	}
+	studentId := utils.GetStudentId(c)
+	targetService.ExamRecord(studentId, Instance.Id, address, Instance.PlanId)
+	questionBankResp.OkWithDetailed(questionBankResp.TargetGenerateInstance{
+		Address: address,
+		//ByteCode: byteCodeModel.ByteCode,
+		DeployAddress: deployAddress,
+		Salt:          salt,
+	}, "生成成功", c)
+}
 
 // CommitExamPaper 提交试卷内容
 func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
@@ -72,7 +95,7 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 		} else {
 			go func() {
 				fmt.Println("start,开始处理试卷")
-				time.AfterFunc(time.Second*5, func() {
+				time.AfterFunc(time.Minute*2, func() {
 					wg.Add(1)
 					utils1.ExecTarget(ExamCommit)
 					defer wg.Done()
