@@ -56,7 +56,7 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 }
 func (targetExamApi *TargetExamApi) ExamGenerateInstance(c *gin.Context) {
 	var Instance request.TargetInstance
-	_ = c.ShouldBindQuery(&Instance)
+	_ = c.ShouldBindJSON(&Instance)
 	byteCodeModel := targetService.GetByteCode(Instance.Id)
 	if byteCodeModel == nil {
 		questionBankResp.NotFind(c)
