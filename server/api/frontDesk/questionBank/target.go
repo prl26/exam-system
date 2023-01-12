@@ -143,7 +143,7 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 	studentId := utils.GetStudentId(c)
 	address, isGenerateAddress := targetService.QueryPracticeRecord(studentId, targetId)
 	if !isGenerateAddress {
-		questionBankResp.CheckHandle(c, fmt.Errorf("暂未生成实例地址", err.Error()))
+		questionBankResp.CheckHandle(c, fmt.Errorf("暂未生成实例地址"))
 		return
 	}
 	score, err := targetOjService.QueryScore(address)
