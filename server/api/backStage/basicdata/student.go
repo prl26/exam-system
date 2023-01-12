@@ -42,6 +42,12 @@ func (studentApi *StudentApi) CreateStudent(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
+	getStudent, _ := studentService.GetStudent(student.ID)
+	if getStudent.ID != 0 {
+		response.FailWithMessage("创建失败，学号已存在", c)
+		return
+	}
 	student.Password = utils.BcryptHash(strconv.Itoa(int(student.ID)))
 	if err := studentService.CreateStudent(student); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
