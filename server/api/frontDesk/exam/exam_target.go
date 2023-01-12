@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	request2 "github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
@@ -19,6 +20,17 @@ type TargetExamApi struct {
 var targetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetService
 var targetOjService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.TargetService
 var targetExamService = service.ServiceGroupApp.ExammanageServiceGroup.TargetExamPaperService
+
+func (examApi *ExamApi) FindTargetExamPlans(c *gin.Context) {
+	var teachClassId request2.GetByTeachClassId
+	_ = c.ShouldBindQuery(&teachClassId)
+	if examPlans, err := examService.FindExamPlans(teachClassId.TeachClassId); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(gin.H{"examPlans": examPlans}, c)
+	}
+}
 
 // GetExamPaper 学生进入考试时获取试卷内容
 func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {

@@ -147,11 +147,11 @@ func Routers() *gin.Engine {
 		PrivateGroup.Use(middleware.StudentJWTAuth())
 		{
 			basicRouterGroup.InitLessonRouter(PrivateGroup)
-
 			questionBankGroup.InitOjRouter(PrivateGroup)
 			questionBankGroup.InitQuestionBankRouter(PrivateGroup)
 			systemRouter.InitSystemRouter(PrivateGroup)
 			examRouterGroup.InitFrontExamRouter(PrivateGroup)
+			examRouterGroup.InitTargetExamRouter(PrivateGroup)
 		}
 	}
 	InstallPlugin(Router) // 安装插件

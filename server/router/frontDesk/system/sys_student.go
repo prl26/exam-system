@@ -16,6 +16,7 @@ func (c *BaseRouter) InitBaseRouter(Router *gin.RouterGroup) {
 		CommonRouterWithoutRecord.POST("studentLogin", baseApi.StudentLogin)
 		CommonRouterWithoutRecord.GET("getTeachPlans", baseApi.GetTeachPlans)
 		CommonRouterWithoutRecord.POST("changePasswd", baseApi.StudentChangePassword)
+		CommonRouterWithoutRecord.GET("getTargetTeachPlans", baseApi.GetTargetTeachPlans)
 	}
 	//{
 	//	BaseRouter.GET("findLessons", baseApi.FindLessons)
