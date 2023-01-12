@@ -65,6 +65,6 @@ func (termService *TermService) GetTermInfoList(info basicdataReq.TermSearch) (l
 	return terms, total, err
 }
 func (termService *TermService) GetTermNow() (term basicdata.Term, err error) {
-	err = global.GVA_DB.Raw("SELECT * FROM bas_term WHERE start_time < NOW() and end_time > NOW()").Find(&term).Error
+	err = global.GVA_DB.Raw("SELECT * FROM bas_term WHERE start_time < NOW() and end_time > NOW() and deleted_at is null").Find(&term).Error
 	return
 }

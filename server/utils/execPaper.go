@@ -72,7 +72,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			})
 		} else if PlanDetail.Type == examType.ProceduralExam {
 			fmt.Println("过程化统分统分")
-			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*? where )", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		var term basicdata.Term
 		var lesson basicdata.Lesson
@@ -102,4 +102,7 @@ func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
 	}
 	return err
+}
+func ExecTarget() {
+
 }
