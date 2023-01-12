@@ -35,12 +35,14 @@ func (studentApi *StudentApi) CreateStudent(c *gin.Context) {
 	var student basicdata.Student
 	_ = c.ShouldBindJSON(&student)
 	verify := utils.Rules{
+		"ID":   {utils.NotEmpty()},
 		"Name": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(student, verify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	student.Password = utils.BcryptHash(strconv.Itoa(int(student.ID)))
 	if err := studentService.CreateStudent(student); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
