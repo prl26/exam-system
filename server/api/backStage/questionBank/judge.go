@@ -32,7 +32,6 @@ func (api *JudgeApi) Create(c *gin.Context) {
 		"Describe":    {utils.NotEmpty()},
 		"IsRight":     {utils.NotEmpty()},
 	}
-
 	if err := utils.Verify(req, verify); err != nil {
 		questionBankResp.CheckHandle(c, err)
 		return

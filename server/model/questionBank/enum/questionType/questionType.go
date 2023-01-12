@@ -18,5 +18,5 @@ const (
 	SUPPLY_BLANK
 	SINGLE_CHOICE
 	MULTIPLE_CHOICE
-	TARGET
+	Target //靶场题目
 )

@@ -21,6 +21,27 @@ type ExamPaperService struct {
 
 var wg sync.WaitGroup
 
+func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf) (err error) {
+	var examPlan teachplan.ExamPlan
+	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
+	if err != nil {
+		return
+	}
+	lessonId := *examPlan.LessonId
+	paper := examManage.ExamPaper1{
+		GVA_MODEL:  global.GVA_MODEL{},
+		PlanId:     examPaper.PlanId,
+		Name:       examPaper.Name,
+		TemplateId: nil,
+		TermId:     *examPlan.TermId,
+		LessonId:   uint(lessonId),
+		UserId:     examPaper.UserId,
+		PaperItem:  examPaper.PaperItem,
+	}
+	global.GVA_DB.Create(&paper)
+	return nil
+}
+
 // CreateExamPaper 创建ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.ExamPaper) (err error) {
@@ -330,6 +351,36 @@ func (examPaperService *ExamPaperService) SetPaperProgramQuestion(info examManag
 	wg.Done()
 	return
 }
+func (examPaperService *ExamPaperService) SetPaperTargetQuestion(info examManage.PaperTemplateItem, Id uint) (err error) {
+	var list []questionBank.Program
+	num := info.Num
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		err = tx.Raw("SELECT * FROM les_questionbank_target  where problem_type = ? and can_exam = ? and chapter_id =? and deleted_at is null ORDER BY RAND()", info.ProblemType, 1, info.ChapterId).Limit(*num).Find(&list).Error
+		if err != nil {
+			return err
+		} else {
+			if len(list) > 0 {
+				for j := 0; j < *num; j++ {
+					questionMerge := examManage.PaperQuestionMerge{
+						GVA_MODEL:    global.GVA_MODEL{},
+						PaperId:      &Id,
+						QuestionId:   &list[j].ID,
+						Score:        info.Score,
+						QuestionType: info.QuestionType,
+						ProblemType:  info.ProblemType,
+					}
+					err = global.GVA_DB.Create(&questionMerge).Error
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+		return nil
+	})
+	wg.Done()
+	return
+}
 
 func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.PaperTemplateItem, Id uint) (err error) {
 	for _, v := range info {
@@ -346,7 +397,9 @@ func (examPaperService *ExamPaperService) SetPaperQuestion(info []examManage.Pap
 		} else if *v.QuestionType == questionType.PROGRAM {
 			wg.Add(1)
 			go examPaperService.SetPaperProgramQuestion(v, Id)
-
+		} else if *v.QuestionType == questionType.Target {
+			wg.Add(1)
+			go examPaperService.SetPaperTargetQuestion(v, Id)
 		}
 	}
 	wg.Wait()

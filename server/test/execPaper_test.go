@@ -3,7 +3,7 @@ package test
 import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
-	"github.com/prl26/exam-system/server/utils"
+	examManage2 "github.com/prl26/exam-system/server/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"testing"
@@ -50,6 +50,6 @@ func TestExecPapers(t *testing.T) {
 		JudgeCommit:          judge,
 		BlankCommit:          blank,
 	}
-	utils.ExecPapers(examCommit)
+	examManage2.ExecPapers(examCommit)
 
 }
