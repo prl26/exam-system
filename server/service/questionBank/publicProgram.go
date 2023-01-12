@@ -77,9 +77,6 @@ func (p *PublicProgramService) Migrate(ids []uint, migration questionBankBo.Publ
 		if err := global.GVA_DB.Model(&questionBankPo.PublicProgram{}).Select("*").Where("id in ?", ids).Find(&programs).Error; err != nil {
 			return err
 		}
-		if len(programs) != len(ids) {
-
-		}
 	}
 	for _, program := range programs {
 		program.GVA_MODEL = global.GVA_MODEL{}
@@ -89,6 +86,7 @@ func (p *PublicProgramService) Migrate(ids []uint, migration questionBankBo.Publ
 			return err
 		}
 	}
+
 	if err := global.GVA_DB.Create(&programs).Error; err != nil {
 		return err
 	}

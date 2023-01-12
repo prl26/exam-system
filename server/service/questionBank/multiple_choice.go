@@ -37,8 +37,12 @@ func (a *MultipleChoiceService) FindList(criteria questionBankBo.MultipleCriteri
 	if criteria.IsCheck != nil {
 		db = db.Where("is_check=?", *criteria.IsCheck)
 	}
-	if criteria.LessonId != 0 {
-		db = db.Where("lesson_id=?", criteria.LessonId)
+	if criteria.ChapterId != 0 {
+		db = db.Where("chapter_id =?", criteria.ChapterId)
+	} else {
+		if criteria.LessonId != 0 {
+			db = db.Where("lesson_id=?", criteria.LessonId)
+		}
 	}
 	if criteria.IsIndefinite == 1 {
 		db = db.Where("is_indefinite = 1")
@@ -56,9 +60,6 @@ func (a *MultipleChoiceService) FindList(criteria questionBankBo.MultipleCriteri
 	}
 	if criteria.CanPractice != nil {
 		db = db.Where("can_practice = ?", criteria.CanPractice)
-	}
-	if criteria.ChapterId != 0 {
-		db = db.Where("chapter_id =?", criteria.ChapterId)
 	}
 	if criteria.KnowledgeId != 0 {
 		db = db.Where("knowledge_id=?", criteria.KnowledgeId)

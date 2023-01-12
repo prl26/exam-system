@@ -231,7 +231,7 @@ func (*QuestionBankApi) FindHistoryAnswer(c *gin.Context) {
 		return
 	}
 	studentId := utils.GetStudentId(c)
-	answer := practiceService.FindHistoryAnswer(r, studentId)
+	answer := practiceService.FindHistoryAnswer(r.QuestionType, r.Ids, studentId)
 	response.OkWithData(answer, c)
 	return
 }

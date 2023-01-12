@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
@@ -65,6 +66,16 @@ func (*TargetApi) FindTargetByKnowledgeId(c *gin.Context) {
 	}
 
 	list, total, err := targetService.FindTargetPracticeList(search.TargetPracticeCriteria, search.PageInfo)
+	uints := make([]uint, len(list))
+	for i, practice := range list {
+		uints[i] = practice.ID
+	}
+	studentId := utils.GetStudentId(c)
+	answer := practiceService.FindHistoryAnswer(questionType.Target, uints, studentId)
+	for _, practice := range list {
+		practice.IsDone = answer.History[practice.ID].Exist
+		practice.HistoryScore = answer.History[practice.ID].Score
+	}
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
@@ -98,6 +109,11 @@ func (*TargetApi) FindTargetDetail(c *gin.Context) {
 			TargetDetail:      detail,
 			IsGenerateAddress: isGenerateAddress,
 			Address:           address,
+		}
+		history, isDone := targetService.QueryHistory(studentId, targetId)
+		q.HistoryScore = history
+		if isDone {
+			q.IsDone = true
 		}
 		questionBankResp.OkWithDetailed(q, "获取成功", c)
 		return
@@ -151,5 +167,10 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 		questionBankResp.ErrorHandle(c, fmt.Errorf("获取分数错误，请联系管理员或重新生成实例"))
 		return
 	}
+	go func() {
+		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
+		practiceService.CreatePracticeItem(questionType.Target, targetId, 25, studentId, uint(score))
+		practiceService.UpdatePracticeAnswer(questionType.Target, targetId, studentId, uint(score))
+	}()
 	questionBankResp.OkWithDetailed(score, "获取成功", c)
 }

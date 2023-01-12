@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"time"
@@ -42,8 +43,12 @@ func (service *TargetService) FindTargetList(criteria questionBankBo.TargetSearc
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&questionBank.Target{})
-	if criteria.LessonId != 0 {
-		db = db.Where("lesson_id=?", criteria.LessonId)
+	if criteria.ChapterId != 0 {
+		db = db.Where("chapter_id =?", criteria.ChapterId)
+	} else {
+		if criteria.LessonId != 0 {
+			db = db.Where("lesson_id=?", criteria.LessonId)
+		}
 	}
 	if criteria.IsCheck != nil {
 		db = db.Where("is_check=?", criteria.IsCheck)
@@ -119,4 +124,12 @@ func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint)
 		return "", false
 	}
 	return address, true
+}
+
+func (service *TargetService) QueryHistory(studentId uint, targetId uint) (int, bool) {
+	score := new(int)
+	if global.GVA_DB.Raw("SELECT score FROM `tea_practice_answer` where student_id=? and question_type=? and question_id=? LIMIT 1", studentId, questionType.Target, targetId).Scan(score).RowsAffected == 0 {
+		return 0, false
+	}
+	return *score, true
 }

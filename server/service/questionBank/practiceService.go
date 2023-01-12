@@ -4,7 +4,6 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
-	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
 )
 
@@ -59,9 +58,9 @@ func (p PracticeService) UpdatePracticeAnswer(questionType questionType.Question
 	return
 }
 
-func (p PracticeService) FindHistoryAnswer(r teachplanReq.History, studentId uint) *teachplanResp.History {
+func (p PracticeService) FindHistoryAnswer(questionType questionType.QuestionType, ids []uint, studentId uint) *teachplanResp.History {
 	histories := []teachplan.PracticeAnswer{}
-	global.GVA_DB.Where("student_id=? and question_type=? and question_id in ?", studentId, r.QuestionType, r.Ids).Find(&histories)
+	global.GVA_DB.Where("student_id=? and question_type=? and question_id in ?", studentId, questionType, ids).Find(&histories)
 	history := teachplanResp.History{History: map[uint]*teachplanResp.HistoryItem{}}
 	for _, t := range histories {
 		item := teachplanResp.HistoryItem{
@@ -70,7 +69,7 @@ func (p PracticeService) FindHistoryAnswer(r teachplanReq.History, studentId uin
 		}
 		history.History[t.QuestionId] = &item
 	}
-	for _, id := range r.Ids {
+	for _, id := range ids {
 		if history.History[id] == nil {
 			item := teachplanResp.HistoryItem{
 				Exist: false,
