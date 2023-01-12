@@ -7,6 +7,7 @@ import (
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/system"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
@@ -16,6 +17,7 @@ type CollegeApi struct {
 }
 
 var collegeService = service.ServiceGroupApp.BasicdataApiGroup.CollegeService
+var dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 
 // CreateCollege 创建College
 // @Tags College
@@ -41,6 +43,19 @@ func (collegeApi *CollegeApi) CreateCollege(c *gin.Context) {
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
+		y := true
+		var pageInfo = basicdataReq.CollegeSearch{}
+		pageInfo.Name = college.Name
+		list, _, _ := collegeService.GetCollegeInfoList(pageInfo)
+		var sysDictionaryDetail = system.SysDictionaryDetail{
+			GVA_MODEL:       global.GVA_MODEL{},
+			Label:           college.Name,
+			Value:           int(list[0].ID),
+			Status:          &y,
+			Sort:            1,
+			SysDictionaryID: 17,
+		}
+		_ = dictionaryDetailService.CreateSysDictionaryDetail(sysDictionaryDetail)
 	}
 }
 
