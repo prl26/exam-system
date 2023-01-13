@@ -43,6 +43,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 			IsDistributed: false,
 			UserId:        &userId,
 			PrePlanId:     "0",
+			Weight:        &examPlan.Weight,
 		}
 		err = global.GVA_DB.Create(&ExamPlan).Error
 	}

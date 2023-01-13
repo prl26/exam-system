@@ -29,7 +29,7 @@ type ExamPlanRq struct {
 	Type         int     `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
-	Weight       uint    `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
+	Weight       int     `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
 }
 
 type ExamPlanRq1 struct {
