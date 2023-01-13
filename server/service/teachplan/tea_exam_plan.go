@@ -85,6 +85,7 @@ func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.E
 		Type:         examPlanRq.Type,
 		PassScore:    &examPlanRq.PassScore,
 		TermId:       &examPlanRq.TermId,
+		Weight:       &examPlanRq.Weight,
 	}
 	err = global.GVA_DB.Omit("is_distributed", "user_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
 
