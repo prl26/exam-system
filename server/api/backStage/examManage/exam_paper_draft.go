@@ -18,7 +18,7 @@ type DraftPaperApi struct {
 
 var DraftPaperService = service.ServiceGroupApp.ExammanageServiceGroup.DraftPaperService
 
-func (draftPaperApi *DraftPaperApi) CreateExamPaperDraft(c *gin.Context) {
+func (draftPaperApi *DraftPaperApi) CreatePaperDraft(c *gin.Context) {
 	var examPaper examManage.ExamPaperDraft
 	_ = c.ShouldBindJSON(&examPaper)
 	userId := utils.GetUserID(c)
@@ -43,7 +43,7 @@ func (draftPaperApi *DraftPaperApi) DeleteExamPaperDraft(c *gin.Context) {
 		questionBankResp.OkWithMessage("批量删除成功", c)
 	}
 }
-func (PapertemplateApi *PaperTemplateApi) UpdateExamPaperDraft(c *gin.Context) {
+func (draftPaperApi *DraftPaperApi) UpdateExamPaperDraft(c *gin.Context) {
 	var examPaper examManage.ExamPaperDraft
 	_ = c.ShouldBindJSON(&examPaper)
 	if err := DraftPaperService.UpdateExamPaperDraft(examPaper); err != nil {
@@ -53,7 +53,7 @@ func (PapertemplateApi *PaperTemplateApi) UpdateExamPaperDraft(c *gin.Context) {
 		response.OkWithMessage("更新成功", c)
 	}
 }
-func (examPaperApi *ExamPaperApi) FindExamPaperDraft(c *gin.Context) {
+func (draftPaperApi *DraftPaperApi) FindExamPaperDraft(c *gin.Context) {
 	var examPaper examManage.ExamPaperDraft
 	_ = c.ShouldBindQuery(&examPaper)
 	if reexamPaper, err := DraftPaperService.GetExamPaperDraft(examPaper.ID); err != nil {
@@ -65,7 +65,24 @@ func (examPaperApi *ExamPaperApi) FindExamPaperDraft(c *gin.Context) {
 		}, c)
 	}
 }
-
+func (draftPaperApi *DraftPaperApi) GetExamPaperDraftList(c *gin.Context) {
+	var pageInfo request.DraftPaperSearch
+	_ = c.ShouldBindQuery(&pageInfo)
+	userId := utils.GetUserID(c)
+	authorityId := utils.GetUserAuthorityID(c)
+	fmt.Println(pageInfo)
+	if list, total, err := DraftPaperService.GetPaperDraftInfoList(pageInfo, userId, authorityId); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
 func (draftPaperApi *DraftPaperApi) ConvertDraftToPaper(c *gin.Context) {
 	var info request.ConvertDraft
 	_ = c.ShouldBindJSON(&info)

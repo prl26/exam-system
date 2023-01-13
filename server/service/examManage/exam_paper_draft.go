@@ -14,15 +14,19 @@ type DraftPaperService struct {
 }
 
 func (draftPaperService *DraftPaperService) CreateExamPaperDraft(examPaper examManage.ExamPaperDraft) (err error) {
-	global.GVA_DB.Create(&examPaper)
+	err = global.GVA_DB.Create(&examPaper).Error
 	return err
 }
 func (draftPaperService *DraftPaperService) DeleteExamPaperDraft(ids request.IdsReq) (err error) {
-	return global.GVA_DB.Delete(&[]examManage.ExamPaperDraft{}, "id in ?", ids.Ids).Error
-
+	err = global.GVA_DB.Delete(&[]examManage.ExamPaperDraft{}, "id in ?", ids.Ids).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Delete(&[]examManage.DraftPaperQuestionMerge{}, "draft_paper_id in ?", ids.Ids).Error
+	return err
 }
 func (draftPaperService *DraftPaperService) UpdateExamPaperDraft(examPaper examManage.ExamPaperDraft) (err error) {
-	err = global.GVA_DB.Updates(&examPaper).Error
+	err = global.GVA_DB.Where("id = ?", examPaper.ID).Updates(&examPaper).Error
 	for i := 0; i < len(examPaper.PaperItem); i++ {
 		global.GVA_DB.Save(&examPaper.PaperItem[i])
 	}
@@ -46,9 +50,10 @@ func (draftPaperService *DraftPaperService) GetExamPaperDraft(id uint) (examPape
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
 	examPaper.JudgeComponent = make([]response.JudgeComponent, 0)
 	examPaper.ProgramComponent = make([]response.ProgramComponent, 0)
+	examPaper.TargetComponent = make([]response.TargetComponent, 0)
 	var Paper []examManage.PaperQuestionMerge
-	err = global.GVA_DB.Table("exam_paper_question_merge").Where("paper_id = ?", id).Find(&Paper).Error
-	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
+	err = global.GVA_DB.Table("exam_draft_paper_merge").Where("draft_paper_id = ?", id).Find(&Paper).Error
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount, targetCount uint
 	for i := 0; i < len(Paper); i++ {
 		if *Paper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent
@@ -57,7 +62,7 @@ func (draftPaperService *DraftPaperService) GetExamPaperDraft(id uint) (examPape
 				return
 			}
 			Choice.MergeId = Paper[i].ID
-			if Choice.Choice.IsIndefinite == 1 {
+			if Choice.Choice.IsIndefinite == 0 {
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = Paper[i].ID
 				singleChoiceCount++
@@ -95,12 +100,41 @@ func (draftPaperService *DraftPaperService) GetExamPaperDraft(id uint) (examPape
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = Paper[i].ID
 			programCount++
+		} else if *Paper[i].QuestionType == questionType.Target {
+			var Target response.TargetComponent
+			err = global.GVA_DB.Table("les_questionbank_target").Where("id = ?", Paper[i].QuestionId).Find(&Target.Target).Error
+			if err != nil {
+				return
+			}
+			examPaper.TargetComponent = append(examPaper.TargetComponent, Target)
+			examPaper.TargetComponent[targetCount].MergeId = Paper[i].ID
+			targetCount++
 		}
 	}
 	examPaper.PaperId = id
 	return
 }
-
+func (draftPaperService *DraftPaperService) GetPaperDraftInfoList(info request.DraftPaperSearch, userId uint, authorityID uint) (list []examManage.ExamPaperDraft1, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&examManage.ExamPaperDraft1{})
+	db = db.Where("user_id = ?", userId)
+	var examPapers []examManage.ExamPaperDraft1
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.Name != "" {
+		db = db.Where("name LIKE ?", "%"+info.Name+"%")
+	}
+	if info.LessonId != 0 {
+		db = db.Where("lesson_id = ?", info.LessonId)
+	}
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&examPapers).Error
+	return examPapers, total, err
+}
 func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.ConvertDraft, userId uint) (PaperID uint, err error) {
 	var planDetail teachplan.ExamPlan
 	err = global.GVA_DB.Where("id = ?", info.PlanId).Find(&planDetail).Error
@@ -108,7 +142,7 @@ func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.Con
 		return
 	}
 	var items []examManage.PaperQuestionMerge
-	err = global.GVA_DB.Where("draft_paper_id = ?", info.DraftPaperId).Find(&items).Error
+	err = global.GVA_DB.Table("exam_draft_paper_merge").Where("draft_paper_id = ?", info.DraftPaperId).Find(&items).Error
 	if err != nil {
 		return
 	}
@@ -122,5 +156,6 @@ func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.Con
 		UserId:     &userId,
 		PaperItem:  items,
 	}
+	global.GVA_DB.Create(&examPaper)
 	return examPaper.ID, err
 }

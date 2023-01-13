@@ -7,12 +7,21 @@ import (
 
 type ExamPaperDraft struct {
 	global.GVA_MODEL
-	Name      string               `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
-	LessonId  uint                 `json:"lessonId" form:"lessonId"`
-	UserId    *uint                `json:"user_id" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
-	PaperItem []PaperQuestionMerge `json:"paperItem" gorm:"foreignKey:paper_id"`
+	Name      string                    `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
+	LessonId  uint                      `json:"lessonId" form:"lessonId"`
+	UserId    *uint                     `json:"userId" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
+	PaperItem []DraftPaperQuestionMerge `json:"paperItem" gorm:"foreignKey:DraftPaperId"`
+}
+type ExamPaperDraft1 struct {
+	global.GVA_MODEL
+	Name     string `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
+	LessonId uint   `json:"lessonId" form:"lessonId"`
+	UserId   *uint  `json:"userId" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
 }
 
+func (ExamPaperDraft1) TableName() string {
+	return "exam_paper_draft"
+}
 func (ExamPaperDraft) TableName() string {
 	return "exam_paper_draft"
 }
