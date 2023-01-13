@@ -15,11 +15,15 @@ type TargetDetail struct {
 	*questionBankBo.TargetDetail
 	IsGenerateAddress bool
 	Address           string
+	IsDone            bool
+	HistoryScore      int
 }
 
 type TargetSimplePractice struct {
 	global.GVA_MODEL
-	questionBank.BasicModel
+	questionBank.SimpleModel
+	IsDone       bool `gorm:"-"`
+	HistoryScore uint `gorm:"-"`
 }
 
 type TargetGenerateInstance struct {

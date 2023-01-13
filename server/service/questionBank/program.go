@@ -22,8 +22,12 @@ func (p *ProgramService) FindList(criteria questionBankBo.ProgramSearchCriteria,
 	// 创建db
 	db := global.GVA_DB.Model(&po.Program{})
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if criteria.LessonId != 0 {
-		db = db.Where("lesson_id=?", criteria.LessonId)
+	if criteria.ChapterId != 0 {
+		db = db.Where("chapter_id =?", criteria.ChapterId)
+	} else {
+		if criteria.LessonId != 0 {
+			db = db.Where("lesson_id=?", criteria.LessonId)
+		}
 	}
 	if criteria.IsCheck != nil {
 		db = db.Where("is_check=?", *criteria.IsCheck)
@@ -40,9 +44,7 @@ func (p *ProgramService) FindList(criteria questionBankBo.ProgramSearchCriteria,
 	if criteria.ProblemType != 0 {
 		db = db.Where("problem_type =?", criteria.ProblemType)
 	}
-	if criteria.ChapterId != 0 {
-		db = db.Where("chapter_id =?", criteria.ChapterId)
-	}
+
 	if criteria.KnowledgeId != 0 {
 		db = db.Where("knowledge_id=?", criteria.KnowledgeId)
 	}

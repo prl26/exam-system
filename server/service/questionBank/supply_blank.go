@@ -38,8 +38,12 @@ func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSup
 
 	db := global.GVA_DB.Model(&questionBank.SupplyBlank{})
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.LessonId != 0 {
-		db = db.Where("lesson_id=?", info.LessonId)
+	if info.ChapterId != 0 {
+		db = db.Where("chapter_id =?", info.ChapterId)
+	} else {
+		if info.LessonId != 0 {
+			db = db.Where("lesson_id=?", info.LessonId)
+		}
 	}
 	if info.IsCheck != nil {
 		db = db.Where("is_check=?", *info.IsCheck)
@@ -55,9 +59,6 @@ func (service *SupplyBlankService) FindList(info questionBankReq.QuestionBankSup
 	}
 	if info.ProblemType != 0 {
 		db = db.Where("problem_type= ?", info.ProblemType)
-	}
-	if info.ChapterId != 0 {
-		db = db.Where("chapter_id =?", info.ChapterId)
 	}
 	if info.KnowledgeId != 0 {
 		db = db.Where("knowledge_id=?", info.KnowledgeId)
