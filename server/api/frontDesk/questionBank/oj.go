@@ -44,7 +44,7 @@ func (*OjApi) CheckJudge(c *gin.Context) {
 			score = 100
 		}
 		practiceService.CreatePracticeItem(questionType.JUDGE, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(questionType.JUDGE, r.Id, studentId, score)
+		practiceService.UpdatePracticeAnswer(questionType.JUDGE, r.Id, lessonId, studentId, score)
 	}()
 	response.OkWithData(result, c)
 	return
@@ -68,7 +68,7 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 	go func() {
 		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
 		practiceService.CreatePracticeItem(questionType.PROGRAM, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(questionType.PROGRAM, r.Id, studentId, score)
+		practiceService.UpdatePracticeAnswer(questionType.PROGRAM, r.Id, lessonId, studentId, score)
 	}()
 	if err != nil {
 		questionBankResp.ErrorHandle(c, err)
@@ -98,7 +98,7 @@ func (*OjApi) CheckSupplyBlank(c *gin.Context) {
 	go func() {
 		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
 		practiceService.CreatePracticeItem(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score))
-		practiceService.UpdatePracticeAnswer(questionType.SUPPLY_BLANK, r.Id, studentId, uint(score))
+		practiceService.UpdatePracticeAnswer(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score))
 	}()
 	response.OkWithData(result, c)
 	return
@@ -131,7 +131,7 @@ func (*OjApi) CheckMultipleChoice(c *gin.Context) {
 			score = 100
 		}
 		practiceService.CreatePracticeItem(t, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(t, r.Id, studentId, score)
+		practiceService.UpdatePracticeAnswer(t, r.Id, lessonId, studentId, score)
 	}()
 	response.OkWithData(result, c)
 	return
