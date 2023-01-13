@@ -11,6 +11,7 @@ type ExamPaperResponse struct {
 	JudgeComponent        []JudgeComponent   `json:"judgeComponent"`
 	BlankComponent        []BlankComponent   `json:"blankComponent"`
 	ProgramComponent      []ProgramComponent `json:"programComponent"`
+	TargetComponent       []TargetComponent  `json:"targetComponent"`
 }
 type ChoiceComponent struct {
 	MergeId uint                                  `json:"mergeId"`

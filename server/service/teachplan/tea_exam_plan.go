@@ -24,25 +24,29 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 	audit := 1
 	state := 1
 	time := int64(examPlan.Time)
-	ExamPlan := teachplan.ExamPlan{
-		GVA_MODEL:     global.GVA_MODEL{},
-		Name:          examPlan.Name,
-		TeachClassId:  &examPlan.TeachClassId,
-		Time:          &time,
-		StartTime:     &startTime,
-		EndTime:       &endTime,
-		LessonId:      &examPlan.LessonId,
-		TemplateId:    &examPlan.TemplateId,
-		State:         &state,
-		Audit:         &audit,
-		Type:          examPlan.Type,
-		PassScore:     &examPlan.PassScore,
-		TermId:        &examPlan.TermId,
-		IsDistributed: false,
-		UserId:        &userId,
-		PrePlanId:     "0",
+	teachClassIds := examPlan.TeachClassId
+	for _, v := range teachClassIds {
+		ExamPlan := teachplan.ExamPlan{
+			GVA_MODEL:     global.GVA_MODEL{},
+			Name:          examPlan.Name,
+			TeachClassId:  &v,
+			Time:          &time,
+			StartTime:     &startTime,
+			EndTime:       &endTime,
+			LessonId:      &examPlan.LessonId,
+			TemplateId:    &examPlan.TemplateId,
+			State:         &state,
+			Audit:         &audit,
+			Type:          examPlan.Type,
+			PassScore:     &examPlan.PassScore,
+			TermId:        &examPlan.TermId,
+			IsDistributed: false,
+			UserId:        &userId,
+			PrePlanId:     "0",
+			Weight:        &examPlan.Weight,
+		}
+		err = global.GVA_DB.Create(&ExamPlan).Error
 	}
-	err = global.GVA_DB.Create(&ExamPlan).Error
 	return err
 }
 
@@ -81,6 +85,7 @@ func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.E
 		Type:         examPlanRq.Type,
 		PassScore:    &examPlanRq.PassScore,
 		TermId:       &examPlanRq.TermId,
+		Weight:       &examPlanRq.Weight,
 	}
 	err = global.GVA_DB.Omit("is_distributed", "user_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
 

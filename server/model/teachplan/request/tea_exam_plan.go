@@ -18,7 +18,7 @@ type ExamPlanAudit struct {
 }
 type ExamPlanRq struct {
 	Name         string  `json:"name" form:"name" gorm:"column:name;comment:考试名称;size:32;"`
-	TeachClassId uint    `json:"teachClassId" form:"teachClassId" gorm:"column:teach_class_id;comment:教学班id;size:32;"`
+	TeachClassId []uint  `json:"teachClassId" form:"teachClassId" gorm:"column:teach_class_id;comment:教学班id;size:32;"`
 	StartTime    string  `json:"startTime" form:"startTime" gorm:"column:start_time;comment:考试时间;"`
 	Time         int     `json:"Time" form:"Time" gorm:"column:time;comment:考试时长;"`
 	EndTime      string  `json:"endTime" form:"endTime" gorm:"column:end_time;comment:结束时间;"`
@@ -29,6 +29,7 @@ type ExamPlanRq struct {
 	Type         int     `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
+	Weight       int     `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
 }
 
 type ExamPlanRq1 struct {
@@ -45,4 +46,5 @@ type ExamPlanRq1 struct {
 	Type         int     `json:"type" form:"type" gorm:"column:type;comment:考试类型;size:8;"`
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
+	Weight       int     `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
 }

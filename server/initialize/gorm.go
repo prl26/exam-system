@@ -65,7 +65,7 @@ func RegisterTables(db *gorm.DB) {
 		//	teachplan.TeachAttendance{},
 		//	teachplan.TeachAttendanceRecord{},
 		//	teachplan.Score{},
-		//	teachplan.ExamPlan{},
+		teachplan.ExamPlan{},
 		//
 		//	examManage.PaperQuestionMerge{},
 		//	examManage.ExamPaper{},
@@ -74,7 +74,8 @@ func RegisterTables(db *gorm.DB) {
 		//	examManage.ExamStudentPaper{},
 		//	examManage.StudentPaperStatus{},
 		//	examManage.ExamScore{},
-		//
+		//examManage.ExamPaperDraft{},
+		//examManage.DraftPaperQuestionMerge{},
 		//	basicdata.Student{},
 		//	basicdata.TeachClass{},
 		//	//questionBank.ProgrammLanguageMerge{},

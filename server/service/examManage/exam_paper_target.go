@@ -51,6 +51,24 @@ func (targetExamService *TargetExamPaperService) CommitTargetExamPapers(examPape
 	}
 	return
 }
+func (targetExamService *TargetExamPaperService) GetTargetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []response.ExamScoreResponse, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&examManage.ExamScore{})
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if *info.TermId != 0 {
+		db = db.Where("term_id = ?", info.TermId)
+	}
+	db = db.Where("lesson_id = 25")
+
+	err = db.Where("student_id = ?", studentId).Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
+	return studentScore, total, err
+}
 func (targetExamService *TargetExamPaperService) CreateStatus(examComing request.ExamComing) (status examManage.StudentPaperStatus, err error) {
 	var num int64
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error

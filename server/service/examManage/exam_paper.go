@@ -21,26 +21,15 @@ type ExamPaperService struct {
 
 var wg sync.WaitGroup
 
-func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf) (err error) {
-	var examPlan teachplan.ExamPlan
-	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
-	if err != nil {
-		return
-	}
-	lessonId := *examPlan.LessonId
-	paper := examManage.ExamPaper1{
-		GVA_MODEL:  global.GVA_MODEL{},
-		PlanId:     examPaper.PlanId,
-		Name:       examPaper.Name,
-		TemplateId: nil,
-		TermId:     *examPlan.TermId,
-		LessonId:   uint(lessonId),
-		UserId:     examPaper.UserId,
-		PaperItem:  examPaper.PaperItem,
-	}
-	global.GVA_DB.Create(&paper)
-	return nil
-}
+//func (examPaperService *ExamPaperService) FindPlanDetail(examPaper examManage.ExamPaperDraft) (examPlan teachplan.ExamPlan, err error, count int64) {
+//	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Count(&count).Error
+//	if err != nil {
+//		return
+//	} else if count == 0 {
+//		return examPlan, err, count
+//	}
+//	return
+//}
 
 // CreateExamPaper 创建ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
@@ -104,7 +93,7 @@ func (examPaperService *ExamPaperService) DeletePaperMerge(examPaper examManage.
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper response.ExamPaperResponse, PaperTitle examManage.ExamPaper, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&PaperTitle).Error
-
+	examPaper.TargetComponent = make([]response.TargetComponent, 0)
 	examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -112,7 +101,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 	examPaper.ProgramComponent = make([]response.ProgramComponent, 0)
 	var Paper []examManage.PaperQuestionMerge
 	err = global.GVA_DB.Table("exam_paper_question_merge").Where("paper_id = ?", id).Find(&Paper).Error
-	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount, targetCount uint
 	for i := 0; i < len(Paper); i++ {
 		if *Paper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent
@@ -121,7 +110,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 				return
 			}
 			Choice.MergeId = Paper[i].ID
-			if Choice.Choice.IsIndefinite == 1 {
+			if Choice.Choice.IsIndefinite == 0 {
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = Paper[i].ID
 				singleChoiceCount++
@@ -159,6 +148,15 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = Paper[i].ID
 			programCount++
+		} else if *Paper[i].QuestionType == questionType.Target {
+			var Target response.TargetComponent
+			err = global.GVA_DB.Table("les_questionbank_target").Where("id = ?", Paper[i].QuestionId).Find(&Target.Target).Error
+			if err != nil {
+				return
+			}
+			examPaper.TargetComponent = append(examPaper.TargetComponent, Target)
+			examPaper.TargetComponent[targetCount].MergeId = Paper[i].ID
+			targetCount++
 		}
 	}
 	examPaper.PaperId = id

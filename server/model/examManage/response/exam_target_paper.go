@@ -8,12 +8,13 @@ type TargetExamPaperResponse struct {
 }
 
 type TargetComponent struct {
-	MergeId uint     `json:"mergeId"`
-	Target  []Target `json:"target"`
+	MergeId uint   `json:"mergeId"`
+	Target  Target `json:"target"`
 }
 type Target struct {
 	global.GVA_MODEL
 	Title    string `json:"title" form:"title" gorm:"column:title;comment:;"`
 	Describe string `json:"describe" form:"describe" gorm:"column:describe;comment:;"`
 	Code     string `json:"code" form:"code" gorm:"code"`
+	ByteCode string `json:"byteCode" form:"byteCode"`
 }

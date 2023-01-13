@@ -28,7 +28,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 				return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
 			}
 			var result examManage.ExamStudentPaper
-			err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", v.MergeId).Scan(&result).Error
+			err = tx.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result).Error
 			if err != nil {
 				return err
 			}

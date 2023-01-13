@@ -106,3 +106,19 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 		}
 	}
 }
+func (targetExamApi *TargetExamApi) GetTargetExamScore(c *gin.Context) {
+	var ScoreSearch request.ExamStudentScore
+	_ = c.ShouldBindQuery(&ScoreSearch)
+	StudentId := utils.GetStudentId(c)
+	if scoreList, total, err := targetExamService.GetTargetExamScore(ScoreSearch, StudentId); err != nil {
+		global.GVA_LOG.Error("查询成绩失败", zap.Error(err))
+		response.FailWithMessage("查询成绩失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     scoreList,
+			Total:    total,
+			Page:     ScoreSearch.Page,
+			PageSize: ScoreSearch.PageSize,
+		}, "获取成功", c)
+	}
+}
