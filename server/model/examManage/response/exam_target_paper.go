@@ -16,4 +16,5 @@ type Target struct {
 	Title    string `json:"title" form:"title" gorm:"column:title;comment:;"`
 	Describe string `json:"describe" form:"describe" gorm:"column:describe;comment:;"`
 	Code     string `json:"code" form:"code" gorm:"code"`
+	ByteCode string `json:"byteCode" form:"byteCode"`
 }
