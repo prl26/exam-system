@@ -44,18 +44,6 @@ func (PapertemplateService *PaperTemplateService) DeletePaperTemplateByIds(ids r
 // UpdatePaperTemplate 更新PaperTemplate记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (PapertemplateService *PaperTemplateService) UpdatePaperTemplate(Papertemplate examManage.PaperTemplate) (err error) {
-	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-	//	err = global.GVA_DB.Table("exam_paper_template").Where("id = ?", Papertemplate.ID).Updates(&Papertemplate).Error
-	//	err = tx.Clauses(clause.OnConflict{
-	//		Columns:   []clause.Column{{Name: "id"}},
-	//		UpdateAll: true,
-	//	}).Create(&paperTemplateItem).Error
-	//	if err != nil {
-	//		return err
-	//	}
-	//	return nil
-	//})
-	//err = global.GVA_DB.Create(&Papertemplate).Error
 	err = global.GVA_DB.Updates(&Papertemplate).Error
 	for i := 0; i < len(Papertemplate.PaperTemplateItems); i++ {
 		global.GVA_DB.Save(&Papertemplate.PaperTemplateItems[i])

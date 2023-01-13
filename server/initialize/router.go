@@ -90,7 +90,7 @@ func Routers() *gin.Engine {
 			examManageRouter.InitExamPaperRouter(PrivateGroup)
 			examManageRouter.InitPaperTemplateRouter(PrivateGroup)
 			examManageRouter.InitPaperQuestionMergeRouter(PrivateGroup)
-
+			examManageRouter.InitDraftPaperRouter(PrivateGroup)
 			examManageRouter.InitPaperTemplateItemRouter(PrivateGroup)
 			examManageRouter.InitExamStudentPaperRouter(PrivateGroup)
 

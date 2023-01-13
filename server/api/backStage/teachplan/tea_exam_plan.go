@@ -31,11 +31,15 @@ func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq
 	_ = c.ShouldBindJSON(&examPlan)
 	userId := utils.GetUserID(c)
-	if err := examPlanService.CreateExamPlan(examPlan, userId); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+	if examPlan.Type == 1 && examPlan.Weight != 100 {
+		response.FailWithMessage("期末考试比重应为100%", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		if err := examPlanService.CreateExamPlan(examPlan, userId); err != nil {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("创建失败", c)
+		} else {
+			response.OkWithMessage("创建成功", c)
+		}
 	}
 }
 func (examPlanApi *ExamPlanApi) ChoosePrePlan(c *gin.Context) {

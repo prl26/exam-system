@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"os"
 
@@ -65,7 +66,7 @@ func RegisterTables(db *gorm.DB) {
 		//	teachplan.TeachAttendance{},
 		//	teachplan.TeachAttendanceRecord{},
 		//	teachplan.Score{},
-		//	teachplan.ExamPlan{},
+		//teachplan.ExamPlan{},
 		//
 		//	examManage.PaperQuestionMerge{},
 		//	examManage.ExamPaper{},
@@ -74,7 +75,8 @@ func RegisterTables(db *gorm.DB) {
 		//	examManage.ExamStudentPaper{},
 		//	examManage.StudentPaperStatus{},
 		//	examManage.ExamScore{},
-		//
+		examManage.ExamPaperDraft{},
+		examManage.DraftPaperQuestionMerge{},
 		//	basicdata.Student{},
 		//	basicdata.TeachClass{},
 		//	//questionBank.ProgrammLanguageMerge{},

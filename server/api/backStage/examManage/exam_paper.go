@@ -51,25 +51,6 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	}
 	response.OkWithMessage("创建成功", c)
 }
-func (examPaperApi *ExamPaperApi) CreateExamPaperBySelf(c *gin.Context) {
-	var examPaper examManageReq.ExamPaperBySelf
-	userId := utils.GetUserID(c)
-	examPaper.UserId = &userId
-	_ = c.ShouldBindJSON(&examPaper)
-	if plandetail, _, num := examPaperService.FindPlanDetail(examPaper); num == 0 {
-		response.FailWithMessage("查询考试计划错误", c)
-	} else {
-		if err, paper := examPaperService.CreateExamPaperBySelf(examPaper, plandetail); err != nil {
-			global.GVA_LOG.Error("创建失败!", zap.Error(err))
-			response.FailWithMessage("试卷创建失败", c)
-		} else {
-			response.OkWithData(gin.H{
-				"status":  "创建成功",
-				"paperId": paper.ID,
-			}, c)
-		}
-	}
-}
 
 // DeleteExamPaper 删除ExamPaper
 // @Tags ExamPaper
