@@ -170,7 +170,7 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 	go func() {
 		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
 		practiceService.CreatePracticeItem(questionType.Target, targetId, 25, studentId, uint(score))
-		practiceService.UpdatePracticeAnswer(questionType.Target, targetId, studentId, uint(score))
+		practiceService.UpdatePracticeAnswer(questionType.Target, targetId, 25, studentId, uint(score))
 	}()
 	questionBankResp.OkWithDetailed(score, "获取成功", c)
 }

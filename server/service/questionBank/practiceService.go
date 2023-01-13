@@ -1,10 +1,13 @@
 package questionBank
 
 import (
+	"context"
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
+	"time"
 )
 
 type PracticeService struct {
@@ -53,8 +56,8 @@ func (p PracticeService) CreatePracticeItem(questionType questionType.QuestionTy
 	}
 }
 
-func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, studentId uint, score uint) {
-	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, score)\nVALUES ( ?, ?, ?, ?)\nON DUPLICATE KEY UPDATE score = ?", studentId, questionType, questionId, score, score).Scan(nil)
+func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint) {
+	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = ?", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
 	return
 }
 
@@ -79,4 +82,15 @@ func (p PracticeService) FindHistoryAnswer(questionType questionType.QuestionTyp
 		}
 	}
 	return &history
+}
+
+func (p PracticeService) CanNewPracticeRecord(lessonId uint, studentId uint) bool {
+	str := fmt.Sprintf("newPracticeRecord:%d:%d", studentId, lessonId)
+	_, err := global.GVA_REDIS.Get(context.Background(), str).Result()
+	if err == nil {
+		return false
+	} else {
+		global.GVA_REDIS.Set(context.Background(), str, true, 20*time.Minute)
+		return true
+	}
 }
