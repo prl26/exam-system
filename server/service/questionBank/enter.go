@@ -12,4 +12,5 @@ type ServiceGroup struct {
 	oj.OjService
 	TargetService
 	PracticeService
+	SituationService
 }

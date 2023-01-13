@@ -1,5 +1,10 @@
 package questionBank
 
+import (
+	"github.com/gin-gonic/gin"
+	v1 "github.com/prl26/exam-system/server/api"
+)
+
 /**
 
  * @Author: AloneAtWar
@@ -19,4 +24,19 @@ type RouterGroup struct {
 	PublicProgramRouter
 	OjRouter
 	TargetRouter
+	SituationRouter
+}
+
+type SituationRouter struct {
+}
+
+func (g SituationRouter) InitSituation(Router *gin.RouterGroup) {
+	var publicProgramApi = v1.ApiGroupApp.BackStage.QuestionBankApiGroup.SituationApi
+	programWithoutRecordRouter := Router.Group("situation")
+	{
+		programWithoutRecordRouter.GET("byTeachClass", publicProgramApi.FindTeachClassSituation)
+		programWithoutRecordRouter.GET("byStudent", publicProgramApi.FindStudentSituation)
+		programWithoutRecordRouter.GET("findDetail", publicProgramApi.FindDetail)
+	}
+
 }

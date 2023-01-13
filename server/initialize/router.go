@@ -123,6 +123,7 @@ func Routers() *gin.Engine {
 			questionBankRouter.InitPublicProgram(questionGroup)
 			questionBankRouter.InitBackgroundOjRouter(questionGroup)
 			questionBankRouter.InitTargetRouter(questionGroup)
+			questionBankRouter.InitSituation(questionGroup)
 		}
 		//TestGroup := Router.Group("") // 此处测试接口不需要分配权限
 		//{
