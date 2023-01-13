@@ -11,4 +11,5 @@ type Template struct {
 	Judge   []TemplateDetail `json:"judge"`
 	Blank   []TemplateDetail `json:"blank"`
 	Program []TemplateDetail `json:"program"`
+	Target  []TemplateDetail `json:"target"`
 }

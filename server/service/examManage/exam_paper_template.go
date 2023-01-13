@@ -137,6 +137,8 @@ func (PapertemplateService *PaperTemplateService) GetDetails(lessonId uint) (tem
 	if err != nil {
 		return
 	}
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_target as j\nWHERE  b.lesson_id = 25 and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n").
+		Scan(&templates.Target).Error
 	return
 }
 func (PapertemplateService *PaperTemplateService) CheckPaperTemplate(info []examManage.PaperTemplateItem) (IsOk bool, err error) {

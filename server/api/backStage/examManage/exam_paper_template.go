@@ -169,6 +169,7 @@ func (PapertemplateApi *PaperTemplateApi) BeforeTemplate(c *gin.Context) {
 			"判断题": details.Judge,
 			"填空题": details.Blank,
 			"编程题": details.Program,
+			"靶场题": details.Target,
 		}, c)
 	}
 }
