@@ -78,3 +78,25 @@ func (teachClassService *TeachClassService) GetTeachClassInfoList(info basicdata
 	err = db.Limit(limit).Offset(offset).Find(&teachClasss).Error
 	return teachClasss, total, err
 }
+
+func (teachClassService *TeachClassService) GetTeachAllClassInfoList(info basicdataReq.TeachClassSearch) (list []basicdata.TeachClass, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&basicdata.TeachClass{})
+	var teachClasss []basicdata.TeachClass
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.CourseId != nil {
+		db = db.Where("course_id = ?", info.CourseId)
+	}
+	if info.TermId != nil {
+		db = db.Where("term_id = ?", info.TermId)
+	}
+	if info.Name != "" {
+		db = db.Where("name = ?", info.Name)
+	}
+
+	err = db.Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Find(&teachClasss).Error
+	return teachClasss, total, err
+}
