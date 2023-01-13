@@ -21,12 +21,7 @@ type ExamPaperService struct {
 
 var wg sync.WaitGroup
 
-func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf) (err error) {
-	var examPlan teachplan.ExamPlan
-	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Error
-	if err != nil {
-		return
-	}
+func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf, examPlan teachplan.ExamPlan) (err error) {
 	lessonId := *examPlan.LessonId
 	paper := examManage.ExamPaper1{
 		GVA_MODEL:  global.GVA_MODEL{},
@@ -39,7 +34,16 @@ func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examMa
 		PaperItem:  examPaper.PaperItem,
 	}
 	global.GVA_DB.Create(&paper)
-	return nil
+	return
+}
+func (examPaperService *ExamPaperService) FindPlanDetail(examPaper examManageReq.ExamPaperBySelf) (examPlan teachplan.ExamPlan, err error, count int64) {
+	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Count(&count).Error
+	if err != nil {
+		return
+	} else if count == 0 {
+		return examPlan, err, count
+	}
+	return
 }
 
 // CreateExamPaper 创建ExamPaper记录

@@ -1,8 +1,8 @@
 package system
 
 import (
-	"strconv"
-
+	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
@@ -10,10 +10,8 @@ import (
 	systemReq "github.com/prl26/exam-system/server/model/system/request"
 	systemRes "github.com/prl26/exam-system/server/model/system/response"
 	"github.com/prl26/exam-system/server/utils"
-
-	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 // @Tags Base
@@ -29,23 +27,23 @@ func (b *BaseApi) Login(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if store.Verify(l.CaptchaId, l.Captcha, true) {
-		u := &system.SysUser{Username: l.Username, Password: l.Password}
-		if user, err := userService.Login(u); err != nil {
-			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-			response.FailWithMessage("用户名不存在或者密码错误", c)
-		} else {
-			//如需要冻结功能,可自加字段
-			//if user.Enable != 1 {
-			//	global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
-			//	response.FailWithMessage("用户被禁止登录", c)
-			//	return
-			//}
-			b.TokenNext(c, *user)
-		}
+	//if store.Verify(l.CaptchaId, l.Captcha, true) {
+	u := &system.SysUser{Username: l.Username, Password: l.Password}
+	if user, err := userService.Login(u); err != nil {
+		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
+		response.FailWithMessage("用户名不存在或者密码错误", c)
 	} else {
-		response.FailWithMessage("验证码错误", c)
+		//如需要冻结功能,可自加字段
+		//if user.Enable != 1 {
+		//	global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+		//	response.FailWithMessage("用户被禁止登录", c)
+		//	return
+		//}
+		b.TokenNext(c, *user)
 	}
+	//} else {
+	//	response.FailWithMessage("验证码错误", c)
+	//}
 }
 
 // 登录以后签发jwt
