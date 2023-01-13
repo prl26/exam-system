@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
@@ -21,7 +22,7 @@ type ExamPaperService struct {
 
 var wg sync.WaitGroup
 
-func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf, examPlan teachplan.ExamPlan) (err error) {
+func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examManageReq.ExamPaperBySelf, examPlan teachplan.ExamPlan) (err error, paper1 examManage.ExamPaper1) {
 	lessonId := *examPlan.LessonId
 	paper := examManage.ExamPaper1{
 		GVA_MODEL:  global.GVA_MODEL{},
@@ -33,8 +34,9 @@ func (examPaperService *ExamPaperService) CreateExamPaperBySelf(examPaper examMa
 		UserId:     examPaper.UserId,
 		PaperItem:  examPaper.PaperItem,
 	}
+	fmt.Println("进入创建")
 	global.GVA_DB.Create(&paper)
-	return
+	return err, paper
 }
 func (examPaperService *ExamPaperService) FindPlanDetail(examPaper examManageReq.ExamPaperBySelf) (examPlan teachplan.ExamPlan, err error, count int64) {
 	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Count(&count).Error
