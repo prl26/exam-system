@@ -87,7 +87,7 @@ func (p PracticeService) FindHistoryAnswer(questionType questionType.QuestionTyp
 func (p PracticeService) CanNewPracticeRecord(lessonId uint, studentId uint) bool {
 	str := fmt.Sprintf("newPracticeRecord:%d:%d", studentId, lessonId)
 	_, err := global.GVA_REDIS.Get(context.Background(), str).Result()
-	if err != nil {
+	if err == nil {
 		return false
 	} else {
 		global.GVA_REDIS.Set(context.Background(), str, true, 20*time.Minute)
