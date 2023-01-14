@@ -164,3 +164,14 @@ func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.Con
 	global.GVA_DB.Create(&examPaper)
 	return examPaper.ID, err
 }
+func (draftPaperService *DraftPaperService) ConvertDraftCheck(info request.ConvertDraft) (IsOk bool, err error) {
+	var totalScore int64
+	err = global.GVA_DB.Raw("SELECT COUNT(score) FROM `exam_draft_paper_merge` where draft_paper_id = ? and deleted_at is null", info.DraftPaperId).Scan(&totalScore).Error
+	if err != nil {
+		return false, err
+	}
+	if totalScore != 100 {
+		return true, nil
+	}
+	return
+}
