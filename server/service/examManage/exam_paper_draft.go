@@ -170,8 +170,8 @@ func (draftPaperService *DraftPaperService) ConvertDraftCheck(info request.Conve
 	if err != nil {
 		return false, err
 	}
-	if totalScore != 100 {
+	if totalScore == 100 {
 		return true, nil
 	}
-	return
+	return false, err
 }
