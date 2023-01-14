@@ -11,6 +11,11 @@ type TargetComponent struct {
 	MergeId uint   `json:"mergeId"`
 	Target  Target `json:"target"`
 }
+type TargetComponent1 struct {
+	MergeId uint   `json:"mergeId"`
+	Target  Target `json:"target"`
+	Score   *int   `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
+}
 type Target struct {
 	global.GVA_MODEL
 	Title    string `json:"title" form:"title" gorm:"column:title;comment:;"`
