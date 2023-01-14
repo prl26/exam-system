@@ -87,12 +87,18 @@ func (draftPaperApi *DraftPaperApi) ConvertDraftToPaper(c *gin.Context) {
 	var info request.ConvertDraft
 	_ = c.ShouldBindJSON(&info)
 	userId := utils.GetUserID(c)
-	if paperId, err := DraftPaperService.ConvertDraftToPaper(info, userId); err != nil {
-		response.FailWithMessage("通过草稿生成试卷失败", c)
+	if IsOk, err := DraftPaperService.ConvertDraftCheck(info); err != nil {
+		response.FailWithMessage("统计分数出错了", c)
+	} else if IsOk == false {
+		response.FailWithMessage("试卷总分应该为100分", c)
 	} else {
-		response.OkWithData(gin.H{
-			"status":  "创建成功",
-			"paperId": paperId,
-		}, c)
+		if paperId, err := DraftPaperService.ConvertDraftToPaper(info, userId); err != nil {
+			response.FailWithMessage("通过草稿生成试卷失败", c)
+		} else {
+			response.OkWithData(gin.H{
+				"status":  "创建成功",
+				"paperId": paperId,
+			}, c)
+		}
 	}
 }

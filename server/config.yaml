@@ -115,10 +115,10 @@ qiniu:
   access-key: ""
   secret-key: ""
   use-cdn-domains: false
-redis:
-  db: 0
-  addr: 47.108.150.32:6379
-  password: ""
+#redis:
+#  db: 0
+#  addr: 47.108.150.32:6379
+#  password: ""
 system:
   env: public
   addr: 8888
