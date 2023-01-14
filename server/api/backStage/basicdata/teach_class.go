@@ -7,6 +7,7 @@ import (
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/system"
 	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
@@ -128,6 +129,27 @@ func (teachClassApi *TeachClassApi) FindTeachClass(c *gin.Context) {
 func (teachClassApi *TeachClassApi) GetTeachClassList(c *gin.Context) {
 	var pageInfo basicdataReq.TeachClassSearch
 	_ = c.ShouldBindQuery(&pageInfo)
+
+	//var tid int
+	//tid = *pageInfo.TeacherId
+	var user system.SysUser
+	//user.ID = uint(tid)
+	global.GVA_DB.Table("sys_users").Where("id = ?", pageInfo.TeacherId).Find(&user)
+	if user.AuthorityId == 888 {
+		if list, total, err := teachClassService.GetTeachAllClassInfoList(pageInfo); err != nil {
+			global.GVA_LOG.Error("获取失败!", zap.Error(err))
+			response.FailWithMessage("获取失败", c)
+		} else {
+			response.OkWithDetailed(response.PageResult{
+				List:     list,
+				Total:    total,
+				Page:     pageInfo.Page,
+				PageSize: pageInfo.PageSize,
+			}, "获取成功", c)
+		}
+		return
+	}
+
 	if list, total, err := teachClassService.GetTeachClassInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
