@@ -4,17 +4,17 @@ import "github.com/prl26/exam-system/server/model/common/request"
 
 type TeachClassSituation struct {
 	request.PageInfo
-	LessonId     uint
-	TeachClassId uint
+	LessonId     uint `form:"lessonId"`
+	TeachClassId uint `form:"teachClassId"`
 }
 
 type StudentSituation struct {
 	request.PageInfo
-	LessonId  uint
-	StudentId uint
+	LessonId  uint `form:"lessonId"`
+	StudentId uint `form:"studentId"`
 }
 
 type SituationDetail struct {
 	request.PageInfo
-	RecordId uint
+	RecordId uint `form:"recordId"`
 }

@@ -18,7 +18,7 @@ var situationService = service.ServiceGroupApp.QuestionBankServiceGroup.Situatio
 
 func (a SituationApi) FindTeachClassSituation(c *gin.Context) {
 	var req questionBankReq.TeachClassSituation
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBind(&req)
 	verify := utils.Rules{
 		"Page":         {utils.NotEmpty()},
 		"PageSize":     {utils.NotEmpty()},
@@ -44,7 +44,7 @@ func (a SituationApi) FindTeachClassSituation(c *gin.Context) {
 
 func (a SituationApi) FindStudentSituation(c *gin.Context) {
 	var req questionBankReq.StudentSituation
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBind(&req)
 	verify := utils.Rules{
 		"Page":      {utils.NotEmpty()},
 		"PageSize":  {utils.NotEmpty()},
@@ -71,7 +71,7 @@ func (a SituationApi) FindStudentSituation(c *gin.Context) {
 
 func (a SituationApi) FindDetail(c *gin.Context) {
 	var req questionBankReq.SituationDetail
-	_ = c.ShouldBindJSON(&req)
+	_ = c.ShouldBind(&req)
 	verify := utils.Rules{
 		"Page":     {utils.NotEmpty()},
 		"PageSize": {utils.NotEmpty()},
