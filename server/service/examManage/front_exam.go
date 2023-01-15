@@ -24,29 +24,35 @@ import (
 type ExamService struct {
 }
 
-func (examService *ExamService) FindExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
+func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []teachplan.ExamPlan, err error) {
+	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
+	return
+}
+func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
 	var examPlans []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
 	for i := 0; i < len(examPlans); i++ {
 		var plan response2.ExamPlanRp1
+		plan.Plan = examPlans[i]
 		if examPlans[i].StartTime.Unix() > time.Now().Unix() {
-			plan.IsBegin = 0
+			plan.Status.IsBegin = 0
 		} else if examPlans[i].EndTime.Unix() < time.Now().Unix() {
-			plan.IsBegin = 2
+			plan.Status.IsBegin = 2
 		} else {
-			plan.IsBegin = 1
+			plan.Status.IsBegin = 1
 		}
 		if commit, err := examService.GetPlanStatus(examPlans[i].ID, sId); err != nil {
 			return nil, err
 		} else if commit == true {
-			plan.IsCommit = 1
+			plan.Status.IsCommit = 1
 		} else {
-			plan.IsCommit = 0
+			plan.Status.IsCommit = 0
 		}
 		planAndStatus = append(planAndStatus, plan)
 	}
 	return
 }
+
 func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit bool, err error) {
 	var status examManage.StudentPaperStatus
 	var num int64

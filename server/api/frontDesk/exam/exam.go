@@ -31,8 +31,18 @@ var termService = service.ServiceGroupApp.BasicdataApiGroup.TermService
 func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 	var teachClassId request2.GetByTeachClassId
 	_ = c.ShouldBindQuery(&teachClassId)
+	if examPlans, err := examService.FindExamPlans(teachClassId.TeachClassId); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(gin.H{"examPlans": examPlans}, c)
+	}
+}
+func (examApi *ExamApi) FindTargetExamPlans(c *gin.Context) {
+	var teachClassId request2.GetByTeachClassId
+	_ = c.ShouldBindQuery(&teachClassId)
 	sId := utils.GetStudentId(c)
-	if examPlans, err := examService.FindExamPlans(teachClassId.TeachClassId, sId); err != nil {
+	if examPlans, err := examService.FindTargetExamPlans(teachClassId.TeachClassId, sId); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {

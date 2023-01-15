@@ -12,8 +12,8 @@ type ItemName struct {
 	TeachClassName string `json:"teachClassName" form:"teachClassName"`
 }
 type ExamPlanRp1 struct {
-	teachplan.ExamPlan
-	PlanStatus
+	Plan   teachplan.ExamPlan `json:"plan"`
+	Status PlanStatus         `json:"status"`
 }
 type PlanStatus struct {
 	IsBegin  int `json:"isBegin" form:"isBegin"`
