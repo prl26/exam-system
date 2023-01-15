@@ -181,7 +181,7 @@ func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId u
 	for _, v := range preExamIds {
 		preExamId, _ := strconv.Atoi(v)
 		if preExamId == 0 {
-			break
+			continue
 		}
 		var examRecords examManage.ExamScore
 		var count int64

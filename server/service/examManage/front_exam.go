@@ -11,6 +11,7 @@ import (
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
+	response2 "github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/tealeg/xlsx"
 	"github.com/xuri/excelize/v2"
@@ -23,9 +24,39 @@ import (
 type ExamService struct {
 }
 
-func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []teachplan.ExamPlan, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc ").Find(&examPlans).Error
+func (examService *ExamService) FindExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
+	var examPlans []teachplan.ExamPlan
+	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
+	for i := 0; i < len(examPlans); i++ {
+		var plan response2.ExamPlanRp1
+		if examPlans[i].StartTime.Unix() > time.Now().Unix() {
+			plan.IsBegin = 0
+		} else if examPlans[i].EndTime.Unix() < time.Now().Unix() {
+			plan.IsBegin = 2
+		} else {
+			plan.IsBegin = 1
+		}
+		if commit, err := examService.GetPlanStatus(examPlans[i].ID, sId); err != nil {
+			return nil, err
+		} else if commit == true {
+			plan.IsCommit = 1
+		} else {
+			plan.IsCommit = 0
+		}
+		planAndStatus = append(planAndStatus, plan)
+	}
 	return
+}
+func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit bool, err error) {
+	var status examManage.StudentPaperStatus
+	var num int64
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", sId, planId).Find(&status).Count(&num).Error
+	if err != nil {
+		return false, err
+	} else if num == 0 || status.IsCommit == false {
+		return false, nil
+	}
+	return true, nil
 }
 
 func (examService *ExamService) GetExamPapers(examComing request.ExamComing) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, err error) {
