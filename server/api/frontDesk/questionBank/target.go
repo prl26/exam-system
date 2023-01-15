@@ -39,16 +39,18 @@ func (*TargetApi) BeginPractice(c *gin.Context) {
 
 	studentId := utils.GetStudentId(c)
 	go func() {
-		practiceService.UpdatePracticeRecord(lessonId, studentId)
-		now := time.Now()
-		ip := c.ClientIP()
-		r := &teachplan.PracticeRecord{
-			LessonId:  lessonId,
-			StudentId: studentId,
-			BeginTime: now,
-			BeginIp:   ip,
+		if practiceService.CanNewPracticeRecord(lessonId, studentId) {
+			practiceService.UpdatePracticeRecord(lessonId, studentId)
+			now := time.Now()
+			ip := c.ClientIP()
+			r := &teachplan.PracticeRecord{
+				LessonId:  lessonId,
+				StudentId: studentId,
+				BeginTime: now,
+				BeginIp:   ip,
+			}
+			practiceService.CreatePracticeRecord(r)
 		}
-		practiceService.CreatePracticeRecord(r)
 	}()
 	response.OkWithData(detail, c)
 }

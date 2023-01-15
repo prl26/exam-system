@@ -5,7 +5,6 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	questionBankError "github.com/prl26/exam-system/server/model/questionBank/error"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
-	"strconv"
 	"strings"
 )
 
@@ -261,8 +260,10 @@ func (s *LanguageSupports) Brief() string {
 	for _, support := range *s {
 		table[support.LanguageId] = true
 	}
+
 	for k, _ := range table {
-		str = append(str, strconv.Itoa(int(k)))
+		name, _ := k.GetLanguageName()
+		str = append(str, name)
 	}
 	return strings.Join(str, ",")
 }

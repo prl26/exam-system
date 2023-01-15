@@ -75,7 +75,7 @@ func (api *JudgeApi) Update(c *gin.Context) {
 	}
 }
 
-// FindList  分页查找判断题
+// FindTeachClassSituation  分页查找判断题
 func (api *JudgeApi) FindJudgeList(c *gin.Context) {
 	var pageInfo questionBankReq.QuestionBankJudgeSearch
 	_ = c.ShouldBindQuery(&pageInfo)

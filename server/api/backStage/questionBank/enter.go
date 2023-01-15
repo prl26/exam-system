@@ -8,4 +8,5 @@ type ApiGroup struct {
 	MultipleChoiceApi
 	OjApi
 	TargetApi
+	SituationApi
 }

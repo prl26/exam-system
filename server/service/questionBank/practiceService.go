@@ -15,7 +15,7 @@ type PracticeService struct {
 
 func (p PracticeService) FindTheLatestRecord(lessonId, studentId uint) *teachplan.PracticeRecord {
 	t := teachplan.PracticeRecord{}
-	global.GVA_DB.Where("lesson_id=? and student_id=?", lessonId, studentId).First(&t)
+	global.GVA_DB.Where("lesson_id=? and student_id=?", lessonId, studentId).Order("begin_time desc").First(&t)
 	return &t
 }
 

@@ -39,7 +39,7 @@ func (*PublicProgramRouter) InitPublicProgram(Router *gin.RouterGroup) {
 	//programWithoutRecordRouter := Router.Group("program")
 	//{
 	//	programWithoutRecordRouter.GET("findDetail", programApi.FindDetail)
-	//	programWithoutRecordRouter.GET("findList", programApi.FindList)
+	//	programWithoutRecordRouter.GET("findList", programApi.FindTeachClassSituation)
 	//	programWithoutRecordRouter.GET("findCase", programApi.FindProgramCases)
 	//}
 }

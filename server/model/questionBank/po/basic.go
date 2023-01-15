@@ -1,6 +1,9 @@
 package po
 
-import "github.com/prl26/exam-system/server/model/questionBank/enum/problemType"
+import (
+	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/problemType"
+)
 
 /**
 
@@ -17,6 +20,10 @@ type BasicModel struct {
 	Describe string `json:"describe" form:"describe" gorm:"column:describe;comment:;"`
 }
 
+type BasicModelWith struct {
+	global.GVA_MODEL
+	SimpleModel
+}
 type SimpleModel struct {
 	SerNo       string                  `json:"serNo" form:"serNo"`
 	ProblemType problemType.ProblemType `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:试卷难度;"`

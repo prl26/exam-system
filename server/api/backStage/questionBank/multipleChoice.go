@@ -119,7 +119,7 @@ func (choiceApi *MultipleChoiceApi) FindSingleChoice(c *gin.Context) {
 //func (choiceApi *MultipleChoiceApi) FindMultipleChoice(c *gin.Context) {
 //	var pageInfo request2.MultipleChoiceList
 //	_ = c.ShouldBindQuery(&pageInfo)
-//	if list, total, err := multipleChoiceService.FindList(pageInfo, true); err != nil {
+//	if list, total, err := multipleChoiceService.FindTeachClassSituation(pageInfo, true); err != nil {
 //		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 //		response.FailWithMessage("获取失败", c)
 //	} else {
