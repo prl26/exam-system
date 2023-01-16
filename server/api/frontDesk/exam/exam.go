@@ -38,6 +38,17 @@ func (examApi *ExamApi) FindExamPlans(c *gin.Context) {
 		response.OkWithData(gin.H{"examPlans": examPlans}, c)
 	}
 }
+func (examApi *ExamApi) FindTargetExamPlans(c *gin.Context) {
+	var teachClassId request2.GetByTeachClassId
+	_ = c.ShouldBindQuery(&teachClassId)
+	sId := utils.GetStudentId(c)
+	if examPlans, err := examService.FindTargetExamPlans(teachClassId.TeachClassId, sId); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(gin.H{"examPlans": examPlans}, c)
+	}
+}
 
 // GetExamPaper 学生进入考试时获取试卷内容
 func (examApi *ExamApi) GetExamPaper(c *gin.Context) {

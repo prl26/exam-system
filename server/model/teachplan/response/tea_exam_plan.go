@@ -11,3 +11,11 @@ type ItemName struct {
 	LessonName     string `json:"lessonName" form:"lessonName"`
 	TeachClassName string `json:"teachClassName" form:"teachClassName"`
 }
+type ExamPlanRp1 struct {
+	Plan   teachplan.ExamPlan `json:"plan"`
+	Status PlanStatus         `json:"status"`
+}
+type PlanStatus struct {
+	IsBegin  int `json:"isBegin" form:"isBegin"`
+	IsCommit int `json:"isCommit" form:"isCommit"`
+}
