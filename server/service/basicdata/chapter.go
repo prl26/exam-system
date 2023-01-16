@@ -60,9 +60,6 @@ func (chapterService *ChapterService) GetChapterInfoList(info basicdataReq.Chapt
 	if info.LessonId != nil {
 		db = db.Where("lesson_id = ?", info.LessonId)
 	}
-	if info.Order != nil {
-		db = db.Where("order = ?", info.Order)
-	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

@@ -22,7 +22,7 @@ type ExamPaperService struct {
 var wg sync.WaitGroup
 
 //func (examPaperService *ExamPaperService) FindPlanDetail(examPaper examManage.ExamPaperDraft) (examPlan teachplan.ExamPlan, err error, count int64) {
-//	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).Count(&count).Error
+//	err = global.GVA_DB.Where("id = ?", examPaper.PlanId).Find(&examPlan).QuestionCount(&count).Error
 //	if err != nil {
 //		return
 //	} else if count == 0 {
@@ -196,7 +196,7 @@ func (examPaperService *ExamPaperService) GetTemplate(info examManage.ExamPaper)
 	return
 }
 
-//该考试计划是否已经分发试卷
+// 该考试计划是否已经分发试卷
 func (examPaperService *ExamPaperService) GetPlanStatus(PlanId uint) (status bool, err error) {
 	err = global.GVA_DB.Table("tea_examplan").Select("is_distributed").Where("id = ?", PlanId).Scan(&status).Error
 	return

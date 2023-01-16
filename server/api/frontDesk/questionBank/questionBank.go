@@ -94,14 +94,14 @@ func (*QuestionBankApi) BeginPractice(c *gin.Context) {
 		return
 	}
 	lessonId := uint(idInt)
-	detail, err := lessonService.FindLessonDetail(lessonId, false)
+	studentId := utils.GetStudentId(c)
+	detail, err := lessonService.FindLessonDetail(lessonId, false, studentId)
 
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	studentId := utils.GetStudentId(c)
 	go func() {
 		if practiceService.CanNewPracticeRecord(lessonId, studentId) {
 			practiceService.UpdatePracticeRecord(lessonId, studentId)
