@@ -55,3 +55,6 @@ func FailWithMessageAndError(err int, message string, c *gin.Context) {
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 	Result(ERROR, data, message, c)
 }
+func FailWithDetailedAndError(code int, data interface{}, message string, c *gin.Context) {
+	Result(code, data, message, c)
+}

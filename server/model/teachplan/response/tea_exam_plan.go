@@ -16,6 +16,7 @@ type ExamPlanRp1 struct {
 	Status PlanStatus         `json:"status"`
 }
 type PlanStatus struct {
-	IsBegin  int `json:"isBegin" form:"isBegin"`
-	IsCommit int `json:"isCommit" form:"isCommit"`
+	IsBegin          int `json:"isBegin" form:"isBegin"`
+	IsCommit         int `json:"isCommit" form:"isCommit"`
+	IsFinishPreExams int `json:"isFinishPreExams"`
 }
