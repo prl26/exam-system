@@ -48,9 +48,37 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 		} else {
 			plan.Status.IsCommit = 0
 		}
+		if isFinishPreExam, err, _ := examService.IsFinishPreExam(examPlans[i].ID, sId); err != nil {
+			return nil, err
+		} else if isFinishPreExam == true {
+			plan.Status.IsFinishPreExams = 1
+		} else {
+			plan.Status.IsFinishPreExams = 0
+		}
 		planAndStatus = append(planAndStatus, plan)
 	}
 	return
+}
+func (examService *ExamService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
+	var examPlan teachplan.ExamPlan
+	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&examPlan)
+	preExamIds = strings.Split(examPlan.PrePlanId, ",")
+	for _, v := range preExamIds {
+		preExamId, _ := strconv.Atoi(v)
+		if preExamId == 0 {
+			continue
+		}
+		var examRecords examManage.ExamScore
+		var count int64
+		err = global.GVA_DB.Where("plan_id = ? and student_id = ?", preExamId, studentId).Find(&examRecords).Count(&count).Error
+		if err != nil {
+			return false, err, preExamIds
+		}
+		if count == 0 {
+			return false, nil, preExamIds
+		}
+	}
+	return true, err, preExamIds
 }
 
 func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit bool, err error) {
