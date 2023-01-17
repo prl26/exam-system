@@ -30,14 +30,14 @@ func (*TargetApi) BeginPractice(c *gin.Context) {
 		return
 	}
 	lessonId := uint(idInt)
-	detail, err := lessonService.FindLessonDetail(lessonId, true)
+	studentId := utils.GetStudentId(c)
+	detail, err := lessonService.FindLessonDetail(lessonId, true, studentId)
 
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	studentId := utils.GetStudentId(c)
 	go func() {
 		if practiceService.CanNewPracticeRecord(lessonId, studentId) {
 			practiceService.UpdatePracticeRecord(lessonId, studentId)
