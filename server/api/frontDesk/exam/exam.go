@@ -100,7 +100,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 		} else {
 			go func() {
 				global.GVA_LOG.Info("start,开始处理试卷")
-				time.AfterFunc(time.Minute*1, func() {
+				time.AfterFunc(time.Second*30, func() {
 					wg.Add(1)
 					if err = examService.UpdateExamPapers(ExamCommit); err != nil {
 						global.GVA_LOG.Error("更新试卷记录失败失败", zap.Error(err))
