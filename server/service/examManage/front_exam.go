@@ -2,6 +2,8 @@ package examManage
 
 import (
 	"bytes"
+	"context"
+	"errors"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
@@ -186,8 +188,87 @@ func (examService *ExamService) CreateStatus(examComing request.ExamComing) (sta
 	}
 	return
 }
-
 func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
+	var optionCommit = examPaperCommit.MultipleChoiceCommit
+	var JudgeCommit = examPaperCommit.JudgeCommit
+	var BlankCommit = examPaperCommit.BlankCommit
+	for j := 0; j < len(optionCommit); j++ {
+		answers := strings.Join(optionCommit[j].Answer, ",")
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
+	}
+	for j := 0; j < len(JudgeCommit); j++ {
+		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
+	}
+	for j := 0; j < len(BlankCommit); j++ {
+		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
+	}
+	return
+}
+
+func (examService *ExamService) QueryExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
+	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", studentId, planId, mergeId)).Result()
+	if err != nil {
+		return "", false
+	}
+	return address, true
+}
+func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
+	var optionCommit = examPaperCommit.MultipleChoiceCommit
+	var JudgeCommit = examPaperCommit.JudgeCommit
+	var BlankCommit = examPaperCommit.BlankCommit
+	for j := 0; j < len(optionCommit); j++ {
+		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId)
+		if isCommit == false {
+			return errors.New("找不到答题记录")
+		} else {
+			err = global.GVA_DB.Table("exam_student_paper").Select("answer").
+				Where("id = ?", optionCommit[j].MergeId).
+				Updates(&examManage.ExamStudentPaper{Answer: answers}).
+				Error
+			if err != nil {
+				return
+			}
+		}
+	}
+	for j := 0; j < len(JudgeCommit); j++ {
+		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId)
+		if isCommit == false {
+			return errors.New("找不到答题记录")
+		} else {
+			err = global.GVA_DB.Table("exam_student_paper").Select("answer").
+				Where("id = ?", JudgeCommit[j].MergeId).
+				Updates(&examManage.ExamStudentPaper{Answer: answers}).
+				Error
+			if err != nil {
+				return
+			}
+		}
+	}
+	for j := 0; j < len(BlankCommit); j++ {
+		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId)
+		if isCommit == false {
+			return errors.New("找不到答题记录")
+		} else {
+			err = global.GVA_DB.Table("exam_student_paper").Select("answer").
+				Where("id = ?", BlankCommit[j].MergeId).
+				Updates(&examManage.ExamStudentPaper{Answer: answers}).
+				Error
+			if err != nil {
+				return
+			}
+		}
+	}
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("is_commit", 1).Error
+	if err != nil {
+		return
+	}
+	return
+}
+
+//已废弃
+func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit

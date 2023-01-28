@@ -58,20 +58,21 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			}
 		}
 		//总分
-		fmt.Println("进入统分")
+		global.GVA_LOG.Info("进入统分")
 		var sum float64
 		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
 		var PlanDetail teachplan.ExamPlan
 		tx.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
 		planId := int(PlanDetail.ID)
 		if PlanDetail.Type == examType.FinalExam {
+			global.GVA_LOG.Info("期末统分")
 			tx.Select("exam_score", "final_exam_name", "final_exam_id").Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId).Updates(teachplan.Score{
 				ExamScrore:    &sum,
 				FinalExamName: PlanDetail.Name,
 				FinalExamId:   &planId,
 			})
 		} else if PlanDetail.Type == examType.ProceduralExam {
-			fmt.Println("过程化统分统分")
+			global.GVA_LOG.Info("过程化统分")
 			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		var term basicdata.Term

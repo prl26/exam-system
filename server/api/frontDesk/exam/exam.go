@@ -1,7 +1,6 @@
 package exam
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	request2 "github.com/prl26/exam-system/server/model/common/request"
@@ -100,9 +99,12 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 			response.FailWithMessage("试卷提交试卷失败", c)
 		} else {
 			go func() {
-				fmt.Println("start,开始处理试卷")
-				time.AfterFunc(time.Second*5, func() {
+				global.GVA_LOG.Info("start,开始处理试卷")
+				time.AfterFunc(time.Minute*1, func() {
 					wg.Add(1)
+					if err = examService.UpdateExamPapers(ExamCommit); err != nil {
+						global.GVA_LOG.Error("更新试卷记录失败失败", zap.Error(err))
+					}
 					utils.ExecPapers(ExamCommit)
 					defer wg.Done()
 				})
