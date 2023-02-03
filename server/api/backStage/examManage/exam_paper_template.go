@@ -28,21 +28,30 @@ var PapertemplateService = service.ServiceGroupApp.ExammanageServiceGroup.PaperT
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /Papertemplate/createPaperTemplate [post]
 func (PapertemplateApi *PaperTemplateApi) CreatePaperTemplate(c *gin.Context) {
-	uid := int(utils.GetUserID(c))
 	var Papertemplate examManage.PaperTemplate
 	_ = c.ShouldBindJSON(&Papertemplate)
-	Papertemplate.UserId = &uid
-	if bool := utils.Check(Papertemplate.PaperTemplateItems); bool == false {
-		response.FailWithMessage("试卷分数应为100分,请重新配置", c)
+	verify := utils.Rules{
+		"Name":     {utils.NotEmpty()},
+		"LessonId": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(Papertemplate, verify); err != nil {
+		response.CheckHandle(c, err)
+		return
 	} else {
-		if bool, _ := PapertemplateService.CheckPaperTemplate(Papertemplate.PaperTemplateItems); bool == false {
-			response.FailWithMessage("试卷配置项出错", c)
+		uid := int(utils.GetUserID(c))
+		Papertemplate.UserId = &uid
+		if bool := utils.Check(Papertemplate.PaperTemplateItems); bool == false {
+			response.FailWithMessage("试卷分数应为100分,请重新配置", c)
 		} else {
-			if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
-				global.GVA_LOG.Error("创建失败!", zap.Error(err))
-				response.FailWithMessage("创建失败", c)
+			if bool, _ := PapertemplateService.CheckPaperTemplate(Papertemplate.PaperTemplateItems); bool == false {
+				response.FailWithMessage("试卷配置项出错", c)
 			} else {
-				response.OkWithMessage("创建成功", c)
+				if err := PapertemplateService.CreatePaperTemplate(Papertemplate); err != nil {
+					global.GVA_LOG.Error("创建失败!", zap.Error(err))
+					response.FailWithMessage("创建失败", c)
+				} else {
+					response.OkWithMessage("创建成功", c)
+				}
 			}
 		}
 	}

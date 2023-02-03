@@ -36,6 +36,15 @@ var multiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableServ
 func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	userId := utils.GetUserID(c)
+	verify := utils.Rules{
+		"Name":       {utils.NotEmpty()},
+		"PlanId":     {utils.NotEmpty()},
+		"TemplateId": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(examPaper, verify); err != nil {
+		response.CheckHandle(c, err)
+		return
+	}
 	examPaper.UserId = &userId
 	_ = c.ShouldBindJSON(&examPaper)
 	numOfPapers := c.Query("numOfPapers")

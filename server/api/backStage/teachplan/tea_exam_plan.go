@@ -30,6 +30,23 @@ var lessonService = service.ServiceGroupApp.BasicdataApiGroup.LessonService
 func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq
 	_ = c.ShouldBindJSON(&examPlan)
+	verify := utils.Rules{
+		"Name":         {utils.NotEmpty()},
+		"TeachClassId": {utils.NotEmpty()},
+		"StartTime":    {utils.NotEmpty()},
+		"Time":         {utils.NotEmpty()},
+		"EndTime":      {utils.NotEmpty()},
+		"LessonId":     {utils.NotEmpty()},
+		"TemplateId":   {utils.NotEmpty()},
+		"Type":         {utils.NotEmpty()},
+		"PassScore":    {utils.NotEmpty()},
+		"TermId":       {utils.NotEmpty()},
+		"Weight":       {utils.NotEmpty()},
+	}
+	if err := utils.Verify(examPlan, verify); err != nil {
+		response.CheckHandle(c, err)
+		return
+	}
 	userId := utils.GetUserID(c)
 	if examPlan.Type == 1 && examPlan.Weight != 100 {
 		response.FailWithMessage("期末考试比重应为100%", c)
