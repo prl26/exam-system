@@ -37,7 +37,6 @@ func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 		"Time":         {utils.NotEmpty()},
 		"EndTime":      {utils.NotEmpty()},
 		"LessonId":     {utils.NotEmpty()},
-		"TemplateId":   {utils.NotEmpty()},
 		"Type":         {utils.NotEmpty()},
 		"PassScore":    {utils.NotEmpty()},
 		"TermId":       {utils.NotEmpty()},
