@@ -13,3 +13,7 @@ type Excel struct {
 	FileName string `json:"fileName"`
 	PlanId   uint   `json:"planId"`
 }
+type MultiExcel struct {
+	FileName    string `json:"fileName"`
+	TeachPlanId uint   `json:"teachPlanId"`
+}

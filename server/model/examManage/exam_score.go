@@ -17,6 +17,7 @@ type ExamScore struct {
 	Score      *float64   `json:"score" form:"score"`
 	ExamType   *int       `json:"examType" form:"examType"`
 	StartTime  *time.Time `json:"startTime" form:"startTime"`
+	Weight     *int       `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
 }
 
 func (ExamScore) TableName() string {

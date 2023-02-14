@@ -65,6 +65,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			Score:      &sum,
 			ExamType:   &PlanDetail.Type,
 			StartTime:  PlanDetail.StartTime,
+			Weight:     PlanDetail.Weight,
 		})
 		return err
 	})

@@ -90,6 +90,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			Score:      &sum,
 			ExamType:   &PlanDetail.Type,
 			StartTime:  PlanDetail.StartTime,
+			Weight:     PlanDetail.Weight,
 		})
 		return nil
 	})
