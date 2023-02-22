@@ -145,6 +145,8 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetExamStudentPaperList(c *gin.C
 		}, "获取成功", c)
 	}
 }
+
+//状态监测
 func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 	var pageInfo examManageReq.StatusMonitor
 	_ = c.ShouldBindJSON(&pageInfo)

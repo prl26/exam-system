@@ -152,10 +152,13 @@ func (examstudentPaperService *ExamStudentPaperService) StudentPaperStatus(info 
 	err = db.Limit(limit).Offset(offset).Find(&score).Error
 	for _, v := range score {
 		var name string
+		var isReport bool
+		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("is_report").Where("student_id = ? and plan_id =?", v.StudentId, info.PlanId).Find(&isReport)
 		global.GVA_DB.Model(basicdata.Student{}).Select("name").Where("id = ?", v.StudentId).Find(&name)
 		temp := response.PaperStatus{
 			Name:               name,
 			StudentPaperStatus: v,
+			IsReport:           isReport,
 		}
 		scores = append(scores, temp)
 	}
