@@ -273,6 +273,7 @@ func (examService *ExamService) CreateStatus(examComing request.ExamComing, IP s
 			StudentId: examComing.StudentId,
 			PlanId:    examComing.PlanId,
 			EnterTime: time.Now(),
+			EndTime:   time.Now(),
 			IsCommit:  false,
 			Ip:        IP,
 		}
@@ -323,7 +324,6 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
 	}
-
 	return
 }
 

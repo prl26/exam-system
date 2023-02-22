@@ -37,6 +37,8 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 			StudentId: studentId,
 			PlanId:    planId.PlanId,
 		}
+		fmt.Println("查看examComing")
+		fmt.Println(examComing)
 		PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
 		if PlanDetail.StartTime.Unix() > time.Now().Unix() {
 			response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
@@ -50,7 +52,7 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 		} else {
 			response.OkWithData(gin.H{
 				"examPaper": examPaper,
-				"enterTime": status.EnterTime,
+				"enterTime": status,
 			}, c)
 		}
 	}
@@ -100,7 +102,7 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 		} else {
 			go func() {
 				fmt.Println("start,开始处理试卷")
-				time.AfterFunc(time.Second*1, func() {
+				time.AfterFunc(time.Second*5, func() {
 					wg.Add(1)
 					utils1.ExecTarget(ExamCommit)
 					defer wg.Done()

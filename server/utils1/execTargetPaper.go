@@ -16,24 +16,25 @@ var targetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetServi
 var targetOjService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.TargetService
 
 func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
-	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		Target := examPaperCommit.TargetComponent
-		for _, v := range Target {
-			address, isGenerateAddress := targetService.QueryExamRecord(examPaperCommit.StudentId, v.QuestionId, examPaperCommit.PlanId)
-			if !isGenerateAddress {
-				return fmt.Errorf("暂未生成实例地址", err.Error())
-			}
-			score, err := targetOjService.QueryScore(address)
-			if err != nil {
-				return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
-			}
-			var result examManage.ExamStudentPaper
-			err = tx.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result).Error
-			if err != nil {
-				return err
-			}
+	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	Target := examPaperCommit.TargetComponent
+	for _, v := range Target {
+		address, _ := targetService.QueryExamRecord(examPaperCommit.StudentId, v.QuestionId, examPaperCommit.PlanId)
+		//if !isGenerateAddress {
+		//	return fmt.Errorf("暂未生成实例地址", err.Error())
+		//}
+		score, err := targetOjService.QueryScore(address)
+		if err != nil {
+			return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
 		}
-		//总分
+		var result examManage.ExamStudentPaper
+		err = global.GVA_DB.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result).Error
+		if err != nil {
+			return err
+		}
+	}
+	//总分
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		fmt.Println("进入统分")
 		var sum float64
 		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
@@ -48,7 +49,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			})
 		} else if PlanDetail.Type == examType.ProceduralExam {
 			fmt.Println("过程化统分统分")
-			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+			tx.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		var term basicdata.Term
 		var lesson basicdata.Lesson

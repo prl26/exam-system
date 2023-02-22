@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
@@ -38,6 +39,7 @@ func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing 
 	}
 	examPaper.PaperId = uint(PaperId)
 	status, err = targetExamService.CreateStatus(examComing, ip)
+	fmt.Println(status)
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
 	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
@@ -80,11 +82,14 @@ func (targetExamService *TargetExamPaperService) CreateStatus(examComing request
 	if err != nil {
 		return
 	} else if num == 0 {
+		fmt.Println(examComing)
+		fmt.Println("创建了status")
 		status = examManage.StudentPaperStatus{
 			GVA_MODEL: global.GVA_MODEL{},
 			StudentId: examComing.StudentId,
 			PlanId:    examComing.PlanId,
 			EnterTime: time.Now(),
+			EndTime:   time.Now(),
 			IsCommit:  false,
 			Ip:        IP,
 		}
