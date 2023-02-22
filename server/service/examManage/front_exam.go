@@ -194,6 +194,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
 				examPaper.SingleChoiceComponent[singleChoiceCount].Score = studentPaper[i].Score
+				examPaper.SingleChoiceComponent[singleChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.SingleChoiceComponent[singleChoiceCount].GotScore = studentPaper[i].GotScore
 				singleChoiceCount++
 			} else {
@@ -211,6 +212,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
 			examPaper.JudgeComponent[judgeCount].Score = studentPaper[i].Score
 			examPaper.JudgeComponent[judgeCount].GotScore = studentPaper[i].GotScore
+			examPaper.JudgeComponent[judgeCount].Answer = studentPaper[i].Answer
 			judgeCount++
 		} else if *studentPaper[i].QuestionType == questionType.SUPPLY_BLANK {
 			var Blank response.BlankComponent2
@@ -222,6 +224,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.BlankComponent[blankCount].MergeId = studentPaper[i].ID
 			examPaper.BlankComponent[blankCount].Score = studentPaper[i].Score
 			examPaper.BlankComponent[blankCount].GotScore = studentPaper[i].GotScore
+			examPaper.BlankComponent[blankCount].Answer = studentPaper[i].Answer
 			blankCount++
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent2
@@ -234,6 +237,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
 			examPaper.ProgramComponent[programCount].Score = studentPaper[i].Score
+			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
 			programCount++
 		}
