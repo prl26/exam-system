@@ -1,19 +1,20 @@
 package examManage
 
 import (
-	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
+	"github.com/prl26/exam-system/server/model/teachplan"
+	"github.com/prl26/exam-system/server/utils"
 	"time"
 )
 
 type TargetExamPaperService struct {
 }
 
-func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing request.ExamComing) (examPaper response.TargetExamPaperResponse, status examManage.StudentPaperStatus, err error) {
+func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing request.ExamComing, ip string) (examPaper response.TargetExamPaperResponse, status examManage.StudentPaperStatus, err error) {
 	examPaper.TargetComponent = make([]response.TargetComponent, 0)
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
@@ -36,14 +37,18 @@ func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing 
 		return
 	}
 	examPaper.PaperId = uint(PaperId)
-	status, err = targetExamService.CreateStatus(examComing)
-	fmt.Println(status)
+	status, err = targetExamService.CreateStatus(examComing, ip)
+	var PlanDetail teachplan.ExamPlan
+	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
+	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
+	if err != nil {
+		return
+	}
 	if err != nil {
 		return
 	}
 	return
 }
-
 func (targetExamService *TargetExamPaperService) CommitTargetExamPapers(examPaperCommit request.CommitTargetExamPaper) (err error) {
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("is_commit", 1).Error
 	if err != nil {
@@ -69,7 +74,7 @@ func (targetExamService *TargetExamPaperService) GetTargetExamScore(info request
 	err = db.Where("student_id = ?", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
-func (targetExamService *TargetExamPaperService) CreateStatus(examComing request.ExamComing) (status examManage.StudentPaperStatus, err error) {
+func (targetExamService *TargetExamPaperService) CreateStatus(examComing request.ExamComing, IP string) (status examManage.StudentPaperStatus, err error) {
 	var num int64
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
 	if err != nil {
@@ -81,6 +86,7 @@ func (targetExamService *TargetExamPaperService) CreateStatus(examComing request
 			PlanId:    examComing.PlanId,
 			EnterTime: time.Now(),
 			IsCommit:  false,
+			Ip:        IP,
 		}
 		global.GVA_DB.Create(&status)
 	}
