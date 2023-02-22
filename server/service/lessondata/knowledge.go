@@ -70,3 +70,21 @@ func (knowledgeService *KnowledgeService) GetKnowledgeInfoList(info lessondataRe
 	err = db.Limit(limit).Offset(offset).Find(&knowledges).Error
 	return knowledges, total, err
 }
+
+// AccessOrCreateByName 查询chapter阶段下是否有名称为name的知识点  若有返回知识点ID 若无创建后返回知识点ID
+func (knowledgeService *KnowledgeService) AccessOrCreateByName(name string, chapterId uint) (uint, error) {
+	knowledge := lessondata.Knowledge{}
+	err := global.GVA_DB.Where("chapter_id=? and name=?", chapterId, name).Find(&knowledge).Error
+	if err != nil {
+		return 0, err
+	}
+	if knowledge.ID != 0 {
+		return knowledge.ID, nil
+	}
+	knowledge.ChapterId = uint(chapterId)
+	knowledge.Name = name
+	if err = global.GVA_DB.Create(&knowledge).Error; err != nil {
+		return 0, err
+	}
+	return knowledge.ID, nil
+}

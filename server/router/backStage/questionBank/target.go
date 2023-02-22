@@ -9,18 +9,21 @@ import (
 type TargetRouter struct {
 }
 
-//// InitQuestionBankSupplyBlankRouter 初始化 QuestionBankSupplyBlank 路由信息
+// // InitQuestionBankSupplyBlankRouter 初始化 QuestionBankSupplyBlank 路由信息
 func (s *TargetRouter) InitTargetRouter(Router *gin.RouterGroup) {
-	supplyBlankRouter := Router.Group("target").Use(middleware.OperationRecord())
-	supplyBlankRouterWithoutRecord := Router.Group("target")
+	targetRouter := Router.Group("target").Use(middleware.OperationRecord())
+	targetWithoutRecord := Router.Group("target")
 	var api = api.ApiGroupApp.BackStage.QuestionBankApiGroup.TargetApi
 	{
-		supplyBlankRouter.POST("create", api.Create)   // 新建QuestionBankSupplyBlank
-		supplyBlankRouter.DELETE("delete", api.Delete) // 删除QuestionBankSupplyBlank
-		supplyBlankRouter.PUT("update", api.Update)    // 更新QuestionBankSupplyBlank
+		targetRouter.POST("create", api.Create)   // 新建QuestionBankSupplyBlank
+		targetRouter.DELETE("delete", api.Delete) // 删除QuestionBankSupplyBlank
+		targetRouter.PUT("update", api.Update)    // 更新QuestionBankSupplyBlank
+		targetRouter.StaticFile("excel", "./static/TargetImport.xlsx")
 	}
 	{
-		supplyBlankRouterWithoutRecord.GET("findDetail", api.FindDetail) // 根据ID获取QuestionBankSupplyBlank
-		supplyBlankRouterWithoutRecord.GET("findList", api.FindList)     // 获取QuestionBankSupplyBlank列表
+		targetWithoutRecord.GET("findDetail", api.FindDetail) // 根据ID获取QuestionBankSupplyBlank
+		targetWithoutRecord.GET("findList", api.FindList)     // 获取QuestionBankSupplyBlank列表
+		targetWithoutRecord.POST("importExcel", api.Import)   // 获取QuestionBankSupplyBlank列表
+
 	}
 }

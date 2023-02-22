@@ -142,3 +142,11 @@ func (service *TargetService) QueryHistory(studentId uint, targetId uint) (int, 
 	}
 	return *score, true
 }
+
+func (service *TargetService) CreateList(list []*questionBank.Target) (int64, error) {
+	tx := global.GVA_DB.Create(&list)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	return tx.RowsAffected, nil
+}
