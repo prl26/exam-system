@@ -3,7 +3,6 @@ package utils1
 import (
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/examType"
 	"github.com/prl26/exam-system/server/model/examManage/request"
@@ -35,9 +34,9 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 	}
 	//总分
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		fmt.Println("进入统分")
 		var sum float64
 		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
+		global.GVA_LOG.Info(fmt.Sprintf("进入统分 %v", sum))
 		var PlanDetail teachplan.ExamPlan
 		tx.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
 		planId := int(PlanDetail.ID)
@@ -51,23 +50,24 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			fmt.Println("过程化统分统分")
 			tx.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
-		var term basicdata.Term
-		var lesson basicdata.Lesson
-		tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
-		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
-		tx.Create(&examManage.ExamScore{
-			StudentId:  &examPaperCommit.StudentId,
-			PlanId:     &PlanDetail.ID,
-			Name:       PlanDetail.Name,
-			TermId:     PlanDetail.TermId,
-			TermName:   term.Name,
-			LessonId:   PlanDetail.LessonId,
-			CourseName: lesson.Name,
-			Score:      &sum,
-			ExamType:   &PlanDetail.Type,
-			StartTime:  PlanDetail.StartTime,
-			Weight:     PlanDetail.Weight,
-		})
+		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
+		//var term basicdata.Term
+		//var lesson basicdata.Lesson
+		//tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
+		//tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
+		//tx.Create(&examManage.ExamScore{
+		//	StudentId:  &examPaperCommit.StudentId,
+		//	PlanId:     &PlanDetail.ID,
+		//	Name:       PlanDetail.Name,
+		//	TermId:     PlanDetail.TermId,
+		//	TermName:   term.Name,
+		//	LessonId:   PlanDetail.LessonId,
+		//	CourseName: lesson.Name,
+		//	Score:      &sum,
+		//	ExamType:   &PlanDetail.Type,
+		//	StartTime:  PlanDetail.StartTime,
+		//	Weight:     PlanDetail.Weight,
+		//})
 		return err
 	})
 	return
