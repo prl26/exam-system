@@ -73,11 +73,15 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) DeleteExamPaper(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindJSON(&examPaper)
-	if err := examPaperService.DeleteExamPaper(examPaper); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+	if count := examPaperService.CheckPaperIsUsed(examPaper.ID); count != 0 {
+		response.FailWithMessage("该试卷已被使用,删除失败", c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		if err := examPaperService.DeleteExamPaper(examPaper); err != nil {
+			global.GVA_LOG.Error("删除失败!", zap.Error(err))
+			response.FailWithMessage("删除失败", c)
+		} else {
+			response.OkWithMessage("删除成功", c)
+		}
 	}
 }
 
@@ -93,6 +97,11 @@ func (examPaperApi *ExamPaperApi) DeleteExamPaper(c *gin.Context) {
 func (examPaperApi *ExamPaperApi) DeleteExamPaperByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
+	for _, v := range IDS.Ids {
+		if count := examPaperService.CheckPaperIsUsed(v); count != 0 {
+			response.FailWithMessage(fmt.Sprintf("id为%d 的试卷已经被使用", v), c)
+		}
+	}
 	if err := examPaperService.DeleteExamPaperByIds(IDS); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)

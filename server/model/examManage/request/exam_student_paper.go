@@ -17,3 +17,21 @@ type ScoreSearch struct {
 	LessonId *int `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程id;size:32;"`
 	TermId   *int `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
+type PaperReview struct {
+	examManage.ExamScore
+	request.PageInfo
+}
+type PaperCheating struct {
+	StudentId      uint             `json:"studentId"`
+	PlanId         uint             `json:"planId"`
+	AnswerCheating []AnswerCheating `json:"answerCheating"`
+}
+type AnswerCheating struct {
+	MergeId  uint    `json:"mergeId"`
+	Answer   string  `json:"answer"`
+	GotScore float64 `json:"gotScore"`
+}
+type StatusMonitor struct {
+	examManage.StudentPaperStatus
+	request.PageInfo
+}

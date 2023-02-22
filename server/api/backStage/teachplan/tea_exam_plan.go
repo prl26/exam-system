@@ -58,6 +58,8 @@ func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 		}
 	}
 }
+
+//设置前置计划
 func (examPlanApi *ExamPlanApi) ChoosePrePlan(c *gin.Context) {
 	var IDS request.PrePlanReq
 	_ = c.ShouldBindJSON(&IDS)

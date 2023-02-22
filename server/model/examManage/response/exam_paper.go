@@ -22,6 +22,20 @@ type ExamPaperResponse struct {
 	ProgramComponent      []ProgramComponent `json:"programComponent"`
 	TargetComponent       []TargetComponent  `json:"targetComponent"`
 }
+type ExamPaperResponse2 struct {
+	PaperId               uint                `json:"paperId"`
+	SingleChoiceComponent []ChoiceComponent2  `json:"singleChoiceComponent"`
+	MultiChoiceComponent  []ChoiceComponent2  `json:"multiChoiceComponent"`
+	JudgeComponent        []JudgeComponent2   `json:"judgeComponent"`
+	BlankComponent        []BlankComponent2   `json:"blankComponent"`
+	ProgramComponent      []ProgramComponent2 `json:"programComponent"`
+	TargetComponent       []TargetComponent2  `json:"targetComponent"`
+}
+type ScoreStruct struct {
+	Score    *float64 `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
+	GotScore *float64 `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
+	Answer   string   `json:"answer" form:"answer" gorm:"column:answer;comment:该生题目答案;size:16000;"`
+}
 type ChoiceComponent struct {
 	MergeId uint                                  `json:"mergeId"`
 	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
@@ -30,6 +44,11 @@ type ChoiceComponent1 struct {
 	MergeId uint                                  `json:"mergeId"`
 	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
 	Score   *int                                  `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
+}
+type ChoiceComponent2 struct {
+	MergeId uint                                  `json:"mergeId"`
+	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
+	ScoreStruct
 }
 type JudgeComponent struct {
 	MergeId uint                             `json:"mergeId"`
@@ -40,6 +59,11 @@ type JudgeComponent1 struct {
 	Judge   questionBankVoResp.JudgePractice `json:"judgeComponent"`
 	Score   *int                             `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
 }
+type JudgeComponent2 struct {
+	MergeId uint                             `json:"mergeId"`
+	Judge   questionBankVoResp.JudgePractice `json:"judgeComponent"`
+	ScoreStruct
+}
 type BlankComponent struct {
 	MergeId uint                                   `json:"mergeId"`
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
@@ -49,6 +73,11 @@ type BlankComponent1 struct {
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
 	Score   *int                                   `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
 }
+type BlankComponent2 struct {
+	MergeId uint                                   `json:"mergeId"`
+	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
+	ScoreStruct
+}
 type ProgramComponent struct {
 	MergeId uint                               `json:"mergeId"`
 	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
@@ -57,4 +86,9 @@ type ProgramComponent1 struct {
 	MergeId uint                               `json:"mergeId"`
 	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
 	Score   *int                               `json:"score" form:"score" gorm:"column:score;comment:所占分值;size:8;"`
+}
+type ProgramComponent2 struct {
+	MergeId uint                               `json:"mergeId"`
+	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
+	ScoreStruct
 }

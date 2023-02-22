@@ -54,6 +54,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	var planId request3.ExamPlan
 	_ = c.ShouldBindQuery(&planId)
 	studentId := utils.GetStudentId(c)
+	ip := c.ClientIP()
 	if isFinishPreExam, err, preExamIds := examPlanService.IsFinishPreExam(planId.PlanId, studentId); err != nil {
 		response.FailWithMessage("前置计划查询出错", c)
 	} else if isFinishPreExam == false {
@@ -68,7 +69,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 			response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
 		} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
 			response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-		} else if examPaper, status, err := examService.GetExamPapers(examComing); err != nil {
+		} else if examPaper, status, err := examService.GetExamPapers(examComing, ip); err != nil {
 			global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 			response.FailWithMessage("查询考试试卷失败", c)
 		} else if status.IsCommit {
@@ -82,6 +83,29 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	}
 }
 
+//保存试卷内容
+func (examApi *ExamApi) SaveExamPaper(c *gin.Context) {
+	var ExamCommit examManage.CommitExamPaper
+	_ = c.ShouldBindJSON(&ExamCommit)
+	ExamCommit.StudentId = utils.GetStudentId(c)
+	PlanDetail, _ := examPlanService.GetExamPlan(ExamCommit.PlanId)
+	status, _ := statuServie.GetStatus(ExamCommit.StudentId, ExamCommit.PlanId)
+	minutes := *PlanDetail.Time
+	unix1 := status.EnterTime.Add(time.Duration(minutes) * time.Minute)
+	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+		response.FailWithMessageAndError(704, "超出考试时间", c)
+	} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
+	} else if status.IsCommit {
+		response.FailWithMessage("你已经提交过了", c)
+	} else {
+		if err := examService.SaveExamPapers(ExamCommit); err != nil {
+			global.GVA_LOG.Error("试卷保存失败", zap.Error(err))
+			response.FailWithMessage("试卷提交失败", c)
+		}
+	}
+}
+
 // CommitExamPaper 提交试卷内容
 func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
@@ -89,18 +113,22 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	ExamCommit.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(ExamCommit.PlanId)
 	status, _ := statuServie.GetStatus(ExamCommit.StudentId, ExamCommit.PlanId)
-	if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+	minutes := *PlanDetail.Time
+	unix1 := status.EnterTime.Add(time.Duration(minutes) * time.Minute)
+	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+		response.FailWithMessageAndError(704, "超出考试时间", c)
+	} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
 		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 	} else if status.IsCommit {
 		response.FailWithMessage("你已经提交过了", c)
 	} else {
 		if err := examService.CommitExamPapers(ExamCommit); err != nil {
 			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
-			response.FailWithMessage("试卷提交试卷失败", c)
+			response.FailWithMessage("试卷提交失败", c)
 		} else {
 			go func() {
 				global.GVA_LOG.Info("start,开始处理试卷")
-				time.AfterFunc(time.Second*30, func() {
+				time.AfterFunc(time.Second*5, func() {
 					wg.Add(1)
 					if err = examService.UpdateExamPapers(ExamCommit); err != nil {
 						global.GVA_LOG.Error("更新试卷记录失败失败", zap.Error(err))

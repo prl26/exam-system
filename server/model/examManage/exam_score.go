@@ -18,6 +18,7 @@ type ExamScore struct {
 	ExamType   *int       `json:"examType" form:"examType"`
 	StartTime  *time.Time `json:"startTime" form:"startTime"`
 	Weight     *int       `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
+	IsReport   bool       `json:"isReport" form:"isReport" gorm:"is_report;comment:是否上报"`
 }
 
 func (ExamScore) TableName() string {

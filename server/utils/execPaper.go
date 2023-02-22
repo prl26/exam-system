@@ -75,12 +75,31 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			global.GVA_LOG.Info("过程化统分")
 			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
+		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
+		//CreateExamScore(PlanDetail,sum,examPaperCommit.StudentId)
+		return nil
+	})
+	return
+}
+
+func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
+	var result examManage.ExamStudentPaper
+	if score != 0 {
+		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
+	}
+	var sum float64
+	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", program.StudentId, program.PlanId).Scan(&sum)
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", program.StudentId, program.PlanId).Update("score", sum).Error
+	return err
+}
+func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint) (err error) {
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var term basicdata.Term
 		var lesson basicdata.Lesson
 		tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
 		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
 		tx.Create(&examManage.ExamScore{
-			StudentId:  &examPaperCommit.StudentId,
+			StudentId:  &studentId,
 			PlanId:     &PlanDetail.ID,
 			Name:       PlanDetail.Name,
 			TermId:     PlanDetail.TermId,
@@ -95,12 +114,4 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		return nil
 	})
 	return
-}
-
-func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
-	var result examManage.ExamStudentPaper
-	if score != 0 {
-		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
-	}
-	return err
 }

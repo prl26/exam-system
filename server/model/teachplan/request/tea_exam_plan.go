@@ -30,6 +30,7 @@ type ExamPlanRq struct {
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 	Weight       int     `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
+	IsLimitTime  bool    `json:"isLimitTime" form:"isLimitTime" gorm:"is_limit_time;comment:是否限制考试时长"`
 }
 
 type ExamPlanRq1 struct {
@@ -47,4 +48,5 @@ type ExamPlanRq1 struct {
 	PassScore    float64 `json:"passScore" form:"passScore" gorm:"column:pass_score;comment:通过分数;size:8;"`
 	TermId       uint    `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 	Weight       int     `json:"weight" form:"weight" gorm:"column:weight;comment:占比"`
+	IsLimitTime  bool    `json:"isLimitTime" form:"isLimitTime" gorm:"is_limit_time;comment:是否限制考试时长"`
 }

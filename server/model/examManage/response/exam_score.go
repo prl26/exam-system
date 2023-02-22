@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/examManage"
 	"time"
 )
 
@@ -14,4 +15,9 @@ type ExamScoreResponse struct {
 	Score      *int       `json:"score" form:"score"`
 	ExamType   *int       `json:"examType" form:"examType"`
 	StartTime  *time.Time `json:"startTime" form:"startTime"`
+}
+
+type ExamScoreResponse1 struct {
+	StudentName          string `json:"studentName"`
+	examManage.ExamScore `json:"examScore"`
 }

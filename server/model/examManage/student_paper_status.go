@@ -10,7 +10,9 @@ type StudentPaperStatus struct {
 	StudentId uint `json:"studentId"`
 	PlanId    uint `json:"planId"`
 	EnterTime time.Time
-	IsCommit  bool
+	EndTime   time.Time
+	IsCommit  bool   `json:"isCommit"` //是否提交
+	Ip        string `json:"ip"`       //学生ip
 }
 
 // TableName ExamStudentPaper 表名

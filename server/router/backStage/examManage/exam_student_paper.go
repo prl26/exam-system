@@ -19,6 +19,11 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.DELETE("deleteExamStudentPaper", examstudentPaperApi.DeleteExamStudentPaper)           // 删除ExamStudentPaper
 		examstudentPaperRouter.DELETE("deleteExamStudentPaperByIds", examstudentPaperApi.DeleteExamStudentPaperByIds) // 批量删除ExamStudentPaper
 		examstudentPaperRouter.PUT("updateExamStudentPaper", examstudentPaperApi.UpdateExamStudentPaper)              // 更新ExamStudentPaper
+		examstudentPaperRouter.POST("recoverPower", examstudentPaperApi.RecoverPower)                                 //恢复考试资格
+		examstudentPaperRouter.POST("reportScore", examstudentPaperApi.ReportScore)                                   //上报成绩
+		examstudentPaperRouter.POST("paperCheating", examstudentPaperApi.PaperCheating)                               //答案修正
+		examstudentPaperRouter.POST("paperReview", examstudentPaperApi.PaperReview)                                   //分页查看学生成绩-试卷批阅
+		examstudentPaperRouter.POST("statusMonitor", examstudentPaperApi.StatusMonitor)                               //状态检测
 	}
 	{
 		examstudentPaperRouterWithoutRecord.GET("findExamStudentPaper", examstudentPaperApi.FindExamStudentPaper)       // 根据ID获取ExamStudentPaper

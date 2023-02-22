@@ -1,12 +1,14 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"go.uber.org/zap"
 )
@@ -111,7 +113,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) UpdateExamStudentPaper(c *gin.Co
 func (examstudentPaperApi *ExamStudentPaperApi) FindExamStudentPaper(c *gin.Context) {
 	var examstudentPaper examManageReq.ExamComing
 	_ = c.ShouldBindQuery(&examstudentPaper)
-	if reexamstudentPaper, _, err := examService.GetExamPapers(examstudentPaper); err != nil {
+	if reexamstudentPaper, _, err := examService.GetExamPapersAndScores(examstudentPaper, ""); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
@@ -141,5 +143,76 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetExamStudentPaperList(c *gin.C
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
+	var pageInfo examManageReq.StatusMonitor
+	_ = c.ShouldBindJSON(&pageInfo)
+	if list, total, err := examstudentPaperService.StudentPaperStatus(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+//恢复学生考试资格
+func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
+	var plan teachplan.CoverRq
+	_ = c.ShouldBindJSON(&plan)
+	if err := examstudentPaperService.RecoverStudentPower(plan.StudentId, plan.PlanId); err != nil {
+		response.FailWithMessage("恢复失败", c)
+	} else {
+		response.OkWithMessage("恢复成功", c)
+	}
+}
+
+//上报学生分数
+func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
+	var plan teachplan.ExamPlan
+	_ = c.ShouldBindJSON(&plan)
+	if err := examstudentPaperService.ReportScore(plan.ID); err != nil {
+		global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
+		response.FailWithMessage("上报失败", c)
+	} else {
+		response.OkWithMessage("上报成功", c)
+	}
+}
+
+//试卷批阅
+func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
+	var pageInfo examManageReq.PaperReview
+	_ = c.ShouldBindJSON(&pageInfo)
+	if list, total, err := examstudentPaperService.ReviewScore(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+//成绩及答案的修正
+func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
+	var cheating examManageReq.PaperCheating
+	_ = c.ShouldBindJSON(&cheating)
+	fmt.Println(cheating.AnswerCheating[0].GotScore)
+	if err := examstudentPaperService.PaperCheating(cheating); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+	} else {
+		response.OkWithData(gin.H{
+			"修改数据":    cheating.AnswerCheating,
+			"message": "修改成功",
+		}, c)
 	}
 }
