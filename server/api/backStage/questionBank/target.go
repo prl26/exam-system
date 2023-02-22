@@ -141,7 +141,7 @@ func (api *TargetApi) Import(c *gin.Context) {
 	}
 	rows, err := reader.GetRows("Sheet1")
 	n := len(rows) - 1
-	if err != nil || n <= 0 {
+	if err != nil {
 		questionBankResp.CheckHandle(c, err)
 		return
 	}
