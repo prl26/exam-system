@@ -18,6 +18,7 @@ type ExamScoreResponse struct {
 }
 
 type ExamScoreResponse1 struct {
-	StudentName          string `json:"studentName"`
-	examManage.ExamScore `json:"examScore"`
+	StudentName                   string `json:"studentName"`
+	examManage.ReviewScore        `json:"examScore"`
+	examManage.StudentPaperStatus `json:"status"`
 }

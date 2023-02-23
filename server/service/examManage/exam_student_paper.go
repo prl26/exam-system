@@ -126,10 +126,17 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 	err = db.Limit(limit).Offset(offset).Order("score desc").Find(&scores).Error
 	for _, v := range scores {
 		var sName string
+		var status examManage.StudentPaperStatus
 		global.GVA_DB.Model(basicdata.Student{}).Select("name").Where("id = ?", v.StudentId).Find(&sName)
+		global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id = ?", v.StudentId, v.PlanId).Find(&status)
 		temp := response.ExamScoreResponse1{
 			StudentName: sName,
-			ExamScore:   v,
+			ReviewScore: examManage.ReviewScore{
+				UpdatedAt: v.UpdatedAt,
+				Score:     v.Score,
+				IsReport:  v.IsReport,
+			},
+			StudentPaperStatus: status,
 		}
 		score = append(score, temp)
 	}
