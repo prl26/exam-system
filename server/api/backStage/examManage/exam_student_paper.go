@@ -189,7 +189,8 @@ func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 //试卷批阅
 func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 	var pageInfo examManageReq.PaperReview
-	_ = c.ShouldBindJSON(&pageInfo)
+	_ = c.ShouldBindQuery(&pageInfo)
+	fmt.Println(pageInfo)
 	if list, total, err := examstudentPaperService.ReviewScore(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

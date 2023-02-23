@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -124,6 +125,7 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Order("score desc").Find(&scores).Error
+	fmt.Println()
 	for _, v := range scores {
 		var sName string
 		var status examManage.StudentPaperStatus
