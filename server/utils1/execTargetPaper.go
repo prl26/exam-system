@@ -15,25 +15,24 @@ var targetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetServi
 var targetOjService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.TargetService
 
 func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
-	//global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-	Target := examPaperCommit.TargetComponent
-	for _, v := range Target {
-		address, _ := targetService.QueryExamRecord(examPaperCommit.StudentId, v.QuestionId, examPaperCommit.PlanId)
-		//if !isGenerateAddress {
-		//	return fmt.Errorf("暂未生成实例地址", err.Error())
-		//}
-		score, err := targetOjService.QueryScore(address)
-		if err != nil {
-			return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
-		}
-		var result examManage.ExamStudentPaper
-		err = global.GVA_DB.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result).Error
-		if err != nil {
-			return err
-		}
-	}
-	//总分
+	fmt.Println("进入处理")
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		Target := examPaperCommit.TargetComponent
+		for _, v := range Target {
+			address, _ := targetService.QueryExamRecord(examPaperCommit.StudentId, v.QuestionId, examPaperCommit.PlanId)
+			//if !isGenerateAddress {
+			//	return fmt.Errorf("暂未生成实例地址", err.Error())
+			//}
+			score, _ := targetOjService.QueryScore(address)
+			//fmt.Println(score)
+			//if err != nil {
+			//	return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
+			//}
+			var result examManage.ExamStudentPaper
+			tx.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result)
+		}
+		//总分
+		fmt.Println("进入算分")
 		var sum float64
 		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
 		global.GVA_LOG.Info(fmt.Sprintf("进入统分 %v", sum))
