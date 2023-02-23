@@ -149,7 +149,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetExamStudentPaperList(c *gin.C
 //状态监测
 func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 	var pageInfo examManageReq.StatusMonitor
-	_ = c.ShouldBindJSON(&pageInfo)
+	_ = c.ShouldBindQuery(&pageInfo)
 	if list, total, err := examstudentPaperService.StudentPaperStatus(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
