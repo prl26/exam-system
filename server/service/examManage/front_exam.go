@@ -450,6 +450,52 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	err = db.Where("student_id = ? and is_report = 1", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
+func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, err error) {
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("id").Where("student_id =? and plan_id = ?", sId, id).Find(&infoList).Error
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []uint) (list []response.SaveExamPaper, err error) {
+	for _, v := range infoList {
+		ans, isCommit := examService.QueryExamPapers(sId, pId, v)
+		if isCommit == false {
+			temp := response.SaveExamPaper{
+				Id:     v,
+				Answer: "",
+			}
+			fmt.Println("nil")
+			list = append(list, temp)
+		} else {
+			temp := response.SaveExamPaper{
+				Id:     v,
+				Answer: ans,
+			}
+			list = append(list, temp)
+			fmt.Println(ans)
+		}
+	}
+	return
+}
+
+func (ExamService *ExamService) GetMultiExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
+	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error) {
+	err = global.GVA_DB.Model(&teachplan.ExamPlan{}).Select("id").Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
+}
+
+func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
+	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
+	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
+	return
+}
 func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath string) (err error) {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",
@@ -495,12 +541,44 @@ func (ExamService *ExamService) ExportPaperScore(infoList []examManage.ExamScore
 	err = excel.SaveAs(filePath)
 	return err
 }
-func (ExamService *ExamService) GetMultiExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
-	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
-	return
-}
-func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error) {
-	err = global.GVA_DB.Model(&teachplan.ExamPlan{}).Select("id").Where("teach_class_id = ?", id).Find(&infoList).Error
+func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (content io.ReadSeeker, err error) {
+	file := xlsx.NewFile()
+	// 添加sheet页
+	sheet, _ := file.AddSheet("Sheet1")
+	// 插入表头
+	titleList := []string{"学号", "课程名称", "教学班名称", "考勤得分", "考勤占比", "学习资源得分", "学习资源占比",
+		"过程化考核得分", "过程化考核占比", "期末考试成绩", "期末考试占比", "总分",
+	}
+	titleRow := sheet.AddRow()
+	for _, v := range titleList {
+		cell := titleRow.AddCell()
+		cell.Value = v
+	}
+	// 插入内容
+	var dataList []interface{}
+	for _, role := range infoList {
+		dataList = append(dataList, &teachplan.Score{
+			StudentId:                role.StudentId,
+			CourseName:               role.CourseName,
+			TeachClassName:           role.TeachClassName,
+			AttendanceProportion:     role.AttendanceProportion,
+			AttendanceScore:          role.AttendanceScore,
+			LearnResourcesProportion: role.LearnResourcesProportion,
+			LearnResourcesScore:      role.LearnResourcesScore,
+			ProcedureScore:           role.ProcedureScore,
+			ProcedureProportion:      role.ProcedureProportion,
+			ExamScrore:               role.ExamScrore,
+			ExamProporation:          role.ExamProporation,
+			TotalScore:               role.TotalScore,
+		})
+	}
+	for _, v := range dataList {
+		row := sheet.AddRow()
+		row.WriteStruct(v, -1)
+	}
+	var buffer bytes.Buffer
+	_ = file.Write(&buffer)
+	content = bytes.NewReader(buffer.Bytes())
 	return
 }
 func (ExamService *ExamService) ExportMultiPaperScore(planList []uint, filePath string) (err error) {
@@ -549,52 +627,4 @@ func (ExamService *ExamService) ExportMultiPaperScore(planList []uint, filePath 
 	}
 	err = excel.SaveAs(filePath)
 	return err
-}
-func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
-	return
-}
-func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
-	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
-	return
-}
-func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (content io.ReadSeeker, err error) {
-	file := xlsx.NewFile()
-	// 添加sheet页
-	sheet, _ := file.AddSheet("Sheet1")
-	// 插入表头
-	titleList := []string{"学号", "课程名称", "教学班名称", "考勤得分", "考勤占比", "学习资源得分", "学习资源占比",
-		"过程化考核得分", "过程化考核占比", "期末考试成绩", "期末考试占比", "总分",
-	}
-	titleRow := sheet.AddRow()
-	for _, v := range titleList {
-		cell := titleRow.AddCell()
-		cell.Value = v
-	}
-	// 插入内容
-	var dataList []interface{}
-	for _, role := range infoList {
-		dataList = append(dataList, &teachplan.Score{
-			StudentId:                role.StudentId,
-			CourseName:               role.CourseName,
-			TeachClassName:           role.TeachClassName,
-			AttendanceProportion:     role.AttendanceProportion,
-			AttendanceScore:          role.AttendanceScore,
-			LearnResourcesProportion: role.LearnResourcesProportion,
-			LearnResourcesScore:      role.LearnResourcesScore,
-			ProcedureScore:           role.ProcedureScore,
-			ProcedureProportion:      role.ProcedureProportion,
-			ExamScrore:               role.ExamScrore,
-			ExamProporation:          role.ExamProporation,
-			TotalScore:               role.TotalScore,
-		})
-	}
-	for _, v := range dataList {
-		row := sheet.AddRow()
-		row.WriteStruct(v, -1)
-	}
-	var buffer bytes.Buffer
-	_ = file.Write(&buffer)
-	content = bytes.NewReader(buffer.Bytes())
-	return
 }
