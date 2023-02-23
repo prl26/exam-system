@@ -457,26 +457,48 @@ func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, 
 	}
 	return
 }
-func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []uint) (list []response.SaveExamPaper, err error) {
+func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []uint) (list1 response.SaveAllPaperMerge, err error) {
+	list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
+	list1.JudgeAnswer = make([]response.SaveExamPaper, 0)
+	list1.BlankAnswer = make([]response.SaveExamPaper, 0)
+	list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
 	for _, v := range infoList {
 		ans, isCommit := examService.QueryExamPapers(sId, pId, v)
-		if isCommit == false {
-			temp := response.SaveExamPaper{
-				Id:     v,
-				Answer: "",
-			}
-			list = append(list, temp)
-		} else {
-			temp := response.SaveExamPaper{
-				Id:     v,
-				Answer: ans,
-			}
-			list = append(list, temp)
+		var quesType examManage.ExamStudentPaper
+		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("question_type").Where("id = ?", v).Find(&quesType)
+		if *quesType.QuestionType == questionType.SINGLE_CHOICE {
+			temp := examService.SaveAnswer(ans, isCommit, v)
+			list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
+		} else if *quesType.QuestionType == questionType.JUDGE {
+			temp := examService.SaveAnswer(ans, isCommit, v)
+			list1.JudgeAnswer = append(list1.JudgeAnswer, temp)
+		} else if *quesType.QuestionType == questionType.SUPPLY_BLANK {
+			temp := examService.SaveAnswer(ans, isCommit, v)
+			list1.BlankAnswer = append(list1.BlankAnswer, temp)
+		} else if *quesType.QuestionType == questionType.PROGRAM {
+			temp := examService.SaveAnswer(ans, isCommit, v)
+			list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
 		}
 	}
 	return
 }
-
+func (examService *ExamService) SaveAnswer(ans string, isCommit bool, v uint) (list response.SaveExamPaper) {
+	if isCommit == false {
+		temp := response.SaveExamPaper{
+			Id:     v,
+			Answer: "",
+		}
+		return temp
+		//list = append(list, temp)
+	} else {
+		temp := response.SaveExamPaper{
+			Id:     v,
+			Answer: ans,
+		}
+		return temp
+		//list = append(list, temp)
+	}
+}
 func (ExamService *ExamService) GetMultiExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
 	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
 	return
@@ -498,6 +520,7 @@ func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examMan
 	err = global.GVA_DB.Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
 	return
 }
+
 func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath string) (err error) {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",

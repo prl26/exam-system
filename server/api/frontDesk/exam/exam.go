@@ -1,6 +1,7 @@
 package exam
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
@@ -117,12 +118,13 @@ func (examApi *ExamApi) FindSaveExamPaper(c *gin.Context) {
 		response.FailWithMessage("试卷提交失败", c)
 	} else {
 		fmt.Println(AllMergeId)
-		if AllQuesAnswer, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId, AllMergeId); err != nil {
+		if Answer, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId, AllMergeId); err != nil {
 			global.GVA_LOG.Error("获取保存的试卷失败", zap.Error(err))
 			response.FailWithMessage("获取保存的试卷失败", c)
 		} else {
+			answer, _ := json.Marshal(Answer)
 			response.OkWithData(gin.H{
-				"data":    AllQuesAnswer,
+				"Answer":  string(answer),
 				"message": "获取成功",
 			}, c)
 		}

@@ -9,3 +9,9 @@ type SaveExamPaper struct {
 	Id     uint   `json:"id"`
 	Answer string `json:"answer"`
 }
+type SaveAllPaperMerge struct {
+	ChoiceAnswer  []SaveExamPaper `json:"choiceAnswer"`
+	JudgeAnswer   []SaveExamPaper `json:"judgeAnswer"`
+	BlankAnswer   []SaveExamPaper `json:"blankAnswer"`
+	ProgramAnswer []SaveExamPaper `json:"programAnswer"`
+}
