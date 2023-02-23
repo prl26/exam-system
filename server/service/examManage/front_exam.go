@@ -461,7 +461,7 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []
 	list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
 	list1.JudgeAnswer = make([]response.SaveExamPaper, 0)
 	list1.BlankAnswer = make([]response.SaveExamPaper, 0)
-	list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
+	list1.ProgramAnswer = make([]response.SaveExamPaper, 0)
 	for _, v := range infoList {
 		ans, isCommit := examService.QueryExamPapers(sId, pId, v)
 		var quesType examManage.ExamStudentPaper
