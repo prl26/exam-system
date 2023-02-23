@@ -465,7 +465,6 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []
 				Id:     v,
 				Answer: "",
 			}
-			fmt.Println("nil")
 			list = append(list, temp)
 		} else {
 			temp := response.SaveExamPaper{
@@ -473,7 +472,6 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []
 				Answer: ans,
 			}
 			list = append(list, temp)
-			fmt.Println(ans)
 		}
 	}
 	return
@@ -487,13 +485,17 @@ func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error
 	err = global.GVA_DB.Model(&teachplan.ExamPlan{}).Select("id").Where("teach_class_id = ?", id).Find(&infoList).Error
 	return
 }
+func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
+	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ?", id).Scan(&infoList).Error
+	return
+}
 
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
 	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
-	err = global.GVA_DB.Where("plan_id = ?", id).Find(&infoList).Error
+	err = global.GVA_DB.Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath string) (err error) {
@@ -520,9 +522,9 @@ func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath
 	err = excel.SaveAs(filePath)
 	return err
 }
-func (ExamService *ExamService) ExportPaperScore(infoList []examManage.ExamScore, filePath string) (err error) {
+func (ExamService *ExamService) ExportPaperScore(studentList []uint, infoList []examManage.ExamScore, filePath string) (err error) {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "姓名", "考试名称", "学期", "课程名", "分数"})
+	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"})
 	for i, paper := range infoList {
 		axis := fmt.Sprintf("A%d", i+2)
 		studentId := strconv.Itoa(int(*paper.StudentId))

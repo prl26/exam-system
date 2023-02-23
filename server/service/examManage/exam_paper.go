@@ -40,6 +40,8 @@ func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.E
 		examPaper.TermId = *examPlan.TermId
 		lessonId := *examPlan.LessonId
 		examPaper.LessonId = uint(lessonId)
+		tId := int(*examPlan.TemplateId)
+		examPaper.TemplateId = &tId
 		tx.Create(&examPaper)
 		templateItems, err := examPaperService.GetTemplate(examPaper)
 		if err != nil {
