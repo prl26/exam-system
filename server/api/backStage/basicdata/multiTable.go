@@ -15,7 +15,9 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"strconv"
 )
 
 type MultiTableApi struct {
@@ -50,27 +52,31 @@ func (multiTableServiceApi *MultiTableApi) InitTeachClassStudent(c *gin.Context)
 		scoreStudent := &teachplan.Score{}
 
 		student.ID = stuClassReq.StudentIds[i]
+		student.Name = stuClassReq.StudentName
+
 		id := int(stuClassReq.StudentIds[i])
 		// 先添加学生
 		students = append(students, student)
+
+		scoreStudent.StudentId = &id
+		scoreStudent.TeachClassId = &tid
+		scoreStudent.TermId = &termId
+		scoreStudent.CourseId = &courseId
 
 		// 判断学生是否存在
 		user := studentService.QueryStudentById(student.ID)
 
 		if user.ID != 0 {
-			scoreStudent.StudentId = &id
-			scoreStudent.TeachClassId = &tid
-			scoreStudent.TermId = &termId
-			scoreStudent.CourseId = &courseId
-
 			score := scoreService.QueryScoreByStudent(scoreStudent)
 			if score.ID == 0 {
-				// 不存在这个 数据 则创建索引
+				// 不存在这个 数据 则创建成绩索引
 				news = append(news, scoreStudent)
 			}
 		} else {
-			response.FailWithMessage("学生不存在，请先创建学生", c)
-			return
+			//response.FailWithMessage("学生不存在，请先创建学生", c)
+			student.Password = utils.BcryptHash(strconv.Itoa(int(student.ID)))
+			_ = studentService.CreateStudentX(student)
+			news = append(news, scoreStudent)
 		}
 
 	}

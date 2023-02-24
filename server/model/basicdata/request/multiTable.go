@@ -16,6 +16,7 @@ type StuTeachClass struct {
 	TermId       uint   `json:"termId" from:"termId"`
 	CourseId     uint   `json:"courseId" form:"courseId"`
 	StudentIds   []uint `json:"studentIds"`
+	StudentName  string `json:"studentName"`
 }
 
 type AddStudentByClass struct {
