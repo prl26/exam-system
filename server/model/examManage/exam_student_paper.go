@@ -58,3 +58,11 @@ type CommitProgram struct {
 	Code       string                        `json:"code"`
 	LanguageId questionBankEnum.LanguageType `json:"languageId"`
 }
+type QuesNum struct {
+	StudentId uint `json:"studentId"`
+	Num       uint `json:"num"`
+}
+type QuesScore struct {
+	StudentId uint `json:"studentId"`
+	Score     int  `json:"score"`
+}

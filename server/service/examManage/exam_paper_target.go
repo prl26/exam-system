@@ -43,6 +43,7 @@ func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing 
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
 	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
+	_, err = targetExamService.CreateStatusRecord(examComing, ip)
 	if err != nil {
 		return
 	}
@@ -95,5 +96,17 @@ func (targetExamService *TargetExamPaperService) CreateStatus(examComing request
 		}
 		global.GVA_DB.Create(&status)
 	}
+	return
+}
+func (targetExamService *TargetExamPaperService) CreateStatusRecord(examComing request.ExamComing, IP string) (status examManage.ExamRecord, err error) {
+	status = examManage.ExamRecord{
+		GVA_MODEL: global.GVA_MODEL{},
+		StudentId: examComing.StudentId,
+		PlanId:    examComing.PlanId,
+		EnterTime: time.Now(),
+		EndTime:   time.Now(),
+		Ip:        IP,
+	}
+	err = global.GVA_DB.Create(&status).Error
 	return
 }

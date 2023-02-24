@@ -1,6 +1,7 @@
 package teachplan
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -30,6 +31,7 @@ var lessonService = service.ServiceGroupApp.BasicdataApiGroup.LessonService
 func (examPlanApi *ExamPlanApi) CreateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq
 	_ = c.ShouldBindJSON(&examPlan)
+	fmt.Println(examPlan)
 	verify := utils.Rules{
 		"Name":         {utils.NotEmpty()},
 		"TeachClassId": {utils.NotEmpty()},
@@ -123,6 +125,7 @@ func (examPlanApi *ExamPlanApi) DeleteExamPlanByIds(c *gin.Context) {
 func (examPlanApi *ExamPlanApi) UpdateExamPlan(c *gin.Context) {
 	var examPlan teachplanReq.ExamPlanRq1
 	_ = c.ShouldBindJSON(&examPlan)
+	fmt.Println(examPlan.IsLimitTime)
 	if err := examPlanService.UpdateExamPlan(examPlan); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)

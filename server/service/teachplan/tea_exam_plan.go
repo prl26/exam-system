@@ -44,6 +44,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 			UserId:        &userId,
 			PrePlanId:     "0",
 			Weight:        &examPlan.Weight,
+			IsLimitTime:   examPlan.IsLimitTime,
 		}
 		err = global.GVA_DB.Create(&ExamPlan).Error
 	}
@@ -71,6 +72,7 @@ func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.E
 	endTime := utils.StringToTime(examPlanRq.EndTime)
 	Time := int64(examPlanRq.Time)
 	examPlanRq.UpdatedAt = time.Now()
+	b := examPlanRq.IsLimitTime
 	examPlan := teachplan.ExamPlan{
 		GVA_MODEL:    examPlanRq.GVA_MODEL,
 		Name:         examPlanRq.Name,
@@ -87,8 +89,8 @@ func (examPlanService *ExamPlanService) UpdateExamPlan(examPlanRq teachplanReq.E
 		TermId:       &examPlanRq.TermId,
 		Weight:       &examPlanRq.Weight,
 	}
-	err = global.GVA_DB.Omit("is_distributed", "user_id", "pre_plan_id", "created_at", "updated_at").Updates(&examPlan).Error
-
+	err = global.GVA_DB.Omit("is_distributed", "user_id", "pre_plan_id", "created_at").Updates(&examPlan).Error
+	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", examPlanRq.ID).Update("is_limit_time", b)
 	return err
 }
 func (examPlanService *ExamPlanService) UpdatePrePlan(info request.PrePlanReq) (err error) {

@@ -19,8 +19,10 @@ import (
 	"github.com/tealeg/xlsx"
 	"github.com/xuri/excelize/v2"
 	"io"
+	"os"
 	"strconv"
 	"strings"
+	"text/template"
 	"time"
 )
 
@@ -164,6 +166,10 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP 
 	if err != nil {
 		return
 	}
+	_, err = examService.CreateStatusRecord(examComing, IP)
+	if err != nil {
+		return
+	}
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
 	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
@@ -281,6 +287,18 @@ func (examService *ExamService) CreateStatus(examComing request.ExamComing, IP s
 	}
 	return
 }
+func (examService *ExamService) CreateStatusRecord(examComing request.ExamComing, IP string) (status examManage.ExamRecord, err error) {
+	status = examManage.ExamRecord{
+		GVA_MODEL: global.GVA_MODEL{},
+		StudentId: examComing.StudentId,
+		PlanId:    examComing.PlanId,
+		EnterTime: time.Now(),
+		EndTime:   time.Now(),
+		Ip:        IP,
+	}
+	err = global.GVA_DB.Create(&status).Error
+	return
+}
 
 //保存试卷
 func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
@@ -309,6 +327,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	var BlankCommit = examPaperCommit.BlankCommit
 	//err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("is_commit", 1).Error
 	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Updates(examManage.StudentPaperStatus{IsCommit: true, EndTime: time.Now()}).Error
+
 	if err != nil {
 		return
 	}
@@ -382,6 +401,79 @@ func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.Comm
 	}
 	return
 }
+
+//func (examService *ExamService) CreateExamPapersRecord(examPaperCommit examManage.CommitExamPaper) (err error) {
+//	var optionCommit = examPaperCommit.MultipleChoiceCommit
+//	var JudgeCommit = examPaperCommit.JudgeCommit
+//	var BlankCommit = examPaperCommit.BlankCommit
+//	for _, v := range optionCommit {
+//		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, v.MergeId)
+//		if isCommit == false {
+//			return errors.New("找不到答题记录")
+//		} else {
+//			record := examManage.ExamRecordMerge{
+//				GVA_MODEL:    global.GVA_MODEL{},
+//				PaperId:      &examPaperCommit.PaperId,
+//				QuestionId:   &v.QuestionId,
+//				StudentId:    &examPaperCommit.StudentId,
+//				Answer:       answers,
+//				PlanId:       &examPaperCommit.PlanId,
+//				Score:        nil,
+//				QuestionType: uint(questionType.SINGLE_CHOICE),
+//				GotScore:     nil,
+//			}
+//			if err != nil {
+//				return
+//			}
+//			global.GVA_DB.Create(&record)
+//		}
+//	}
+//	for _, v := range JudgeCommit {
+//		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, v.MergeId)
+//		if isCommit == false {
+//			return errors.New("找不到答题记录")
+//		} else {
+//			record := examManage.ExamRecordMerge{
+//				GVA_MODEL:    global.GVA_MODEL{},
+//				PaperId:      &examPaperCommit.PaperId,
+//				QuestionId:   &v.QuestionId,
+//				StudentId:    &examPaperCommit.StudentId,
+//				Answer:       answers,
+//				PlanId:       &examPaperCommit.PlanId,
+//				Score:        nil,
+//				QuestionType: uint(questionType.JUDGE),
+//				GotScore:     nil,
+//			}
+//			if err != nil {
+//				return
+//			}
+//			global.GVA_DB.Create(&record)
+//		}
+//	}
+//	for _, v := range BlankCommit {
+//		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, v.MergeId)
+//		if isCommit == false {
+//			return errors.New("找不到答题记录")
+//		} else {
+//			record := examManage.ExamRecordMerge{
+//				GVA_MODEL:    global.GVA_MODEL{},
+//				PaperId:      &examPaperCommit.PaperId,
+//				QuestionId:   &v.QuestionId,
+//				StudentId:    &examPaperCommit.StudentId,
+//				Answer:       answers,
+//				PlanId:       &examPaperCommit.PlanId,
+//				Score:        nil,
+//				QuestionType: uint(questionType.SUPPLY_BLANK),
+//				GotScore:     nil,
+//			}
+//			if err != nil {
+//				return
+//			}
+//			global.GVA_DB.Create(&record)
+//		}
+//	}
+//	return
+//}
 
 //已废弃
 func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.CommitExamPaper) (err error) {
@@ -508,16 +600,39 @@ func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error
 	return
 }
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
-	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ?", id).Scan(&infoList).Error
+	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? ORDER BY b.student_id", id).Scan(&infoList).Error
 	return
 }
-
+func (ExamService *ExamService) GetPaperQuesNum(pid uint) (num []examManage.QuesNum, err error) {
+	err = global.GVA_DB.Raw("SELECT student_id,count(*) as num FROM `exam_student_paper` WHERE plan_id = ? GROUP BY student_id ORDER BY  num desc", pid).Find(&num).Error
+	return
+}
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
 	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
 	err = global.GVA_DB.Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) GetChoiceScore(pid uint, sid uint) (ScoreList []int, err error) {
+	qtype := uint(questionType.SINGLE_CHOICE)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetJudgeScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+	qtype := uint(questionType.JUDGE)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetBlankScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+	qtype := uint(questionType.SUPPLY_BLANK)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetProgramScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+	qtype := uint(questionType.PROGRAM)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
 
@@ -545,26 +660,89 @@ func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath
 	err = excel.SaveAs(filePath)
 	return err
 }
-func (ExamService *ExamService) ExportPaperScore(studentList []uint, infoList []examManage.ExamScore, filePath string) (err error) {
+
+func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, infoList []examManage.ExamScore, filePath string, quesNum uint) (err error) {
 	excel := excelize.NewFile()
-	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"})
-	for i, paper := range infoList {
+	titleList := []string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"}
+	for i := 0; i < int(quesNum); i++ {
+		titleList = append(titleList, fmt.Sprintf("第%d题得分", i+1))
+	}
+	excel.SetSheetRow("Sheet1", "A1", &titleList)
+	for i, student := range studentList {
+		choiceAnswer, _ := ExamService.GetChoiceScore(pid, student)
+		judgeAnswer, _ := ExamService.GetJudgeScore(pid, student)
+		blankAnswer, _ := ExamService.GetBlankScore(pid, student)
+		programAnswer, _ := ExamService.GetProgramScore(pid, student)
 		axis := fmt.Sprintf("A%d", i+2)
-		studentId := strconv.Itoa(int(*paper.StudentId))
-		score := strconv.Itoa(int(*paper.Score))
+		studentId := strconv.Itoa(int(*infoList[i].StudentId))
+		score := strconv.Itoa(int(*infoList[i].Score))
 		var studentInfo basicdata.Student
-		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", paper.StudentId).Find(&studentInfo)
-		excel.SetSheetRow("Sheet1", axis, &[]interface{}{
-			studentId,
-			studentInfo.Name,
-			paper.Name,
-			paper.TermName,
-			paper.CourseName,
-			score,
-		})
+		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[i].StudentId).Find(&studentInfo)
+		detail1 := []interface{}{studentId, studentInfo.Name, infoList[i].Name, infoList[i].TermName, infoList[i].CourseName, score}
+		for _, v := range choiceAnswer {
+			detail1 = append(detail1, v)
+		}
+		for _, v := range judgeAnswer {
+			detail1 = append(detail1, v)
+		}
+		for _, v := range blankAnswer {
+			detail1 = append(detail1, v)
+		}
+		for _, v := range programAnswer {
+			detail1 = append(detail1, v)
+		}
+		excel.SetSheetRow("Sheet1", axis, &detail1)
 	}
 	err = excel.SaveAs(filePath)
 	return err
+}
+
+//func (ExamService *ExamService) ExportPaperToHtml(pid uint) (content io.ReadSeeker, err error) {
+//	templatePath := global.GVA_CONFIG.HTML.Template
+//	htmlOutPath := global.GVA_CONFIG.HTML.Dir
+//	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index.html"))
+//	if err != nil {
+//		fmt.Println("获取模版文件失败")
+//	}
+//	//2.获取html生成路径
+//	fileName := filepath.Join(htmlOutPath, "htmlindex.html")
+//	//4.生成静态文件
+//	var planDetail teachplan.ExamPlan
+//	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
+//	if err != nil {
+//		return
+//	}
+//	examScoresList, err := ExamService.GetExamScoreToExcel(pid)
+//	if err != nil {
+//		return
+//	}
+//	var allproduct []*examManage.Product = []*examManage.Product{
+//		{1, "苹果手机"},
+//		{2, "苹果电脑"},
+//		{3, "苹果耳机"},
+//	}
+//	ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{"allproduct": allproduct})
+//	return
+//}
+func (ExamService *ExamService) generateStaticHtml(template *template.Template, fileName string, product map[string]interface{}) {
+	//1.判断静态文件是否存在
+	if ExamService.exist(fileName) {
+		err := os.Remove(fileName)
+		if err != nil {
+			fmt.Println("移除文件失败")
+		}
+	}
+	//2.生成静态文件
+	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	if err != nil {
+		fmt.Println("打开文件失败")
+	}
+	defer file.Close()
+	template.Execute(file, &product)
+}
+func (ExamService *ExamService) exist(fileName string) bool {
+	_, err := os.Stat(fileName)
+	return err == nil || os.IsExist(err)
 }
 func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (content io.ReadSeeker, err error) {
 	file := xlsx.NewFile()

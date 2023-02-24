@@ -236,10 +236,10 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/" + excelInfo.FileName
-
+	quesNum, _ := examService.GetPaperQuesNum(excelInfo.PlanId)
 	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	studentList, _ := examService.GetStudentList(excelInfo.PlanId)
-	err := examService.ExportPaperScore(studentList, infoList, filePath)
+	err := examService.ExportPaperScore(excelInfo.PlanId, studentList, infoList, filePath, quesNum[0].Num)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)
@@ -251,6 +251,16 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 			"filepath": respath,
 		}, c)
 	}
+}
+func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
+	var excelInfo request3.Excel
+	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
+	//examService.ExportPaperToHtml()
+	response.OkWithMessage("好了", c)
 }
 func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	var excelInfo request3.MultiExcel
