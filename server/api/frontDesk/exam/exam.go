@@ -156,7 +156,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 				time.AfterFunc(time.Second*5, func() {
 					wg.Add(1)
 					if err = examService.UpdateExamPapers(ExamCommit); err != nil {
-						global.GVA_LOG.Error("更新试卷记录失败失败", zap.Error(err))
+						global.GVA_LOG.Error("更新试卷记录失败", zap.Error(err))
 					}
 					utils.ExecPapers(ExamCommit)
 					defer wg.Done()

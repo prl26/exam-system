@@ -22,6 +22,7 @@ type Server struct {
 	AwsS3      AwsS3      `mapstructure:"aws-s3" json:"aws-s3" yaml:"aws-s3"`
 
 	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
+	HTML  Html  `mapstructure:"html" json:"html" yaml:"html"`
 	Timer Timer `mapstructure:"timer" json:"timer" yaml:"timer"`
 
 	// 跨域配置

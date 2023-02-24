@@ -190,6 +190,9 @@ func (examPaperService *ExamPaperService) GetExamPaperInfoList(info examManageRe
 	if info.LessonId != 0 {
 		db = db.Where("lesson_id = ?", info.LessonId)
 	}
+	if info.PlanId != 0 {
+		db = db.Where("plan_id = ?", info.PlanId)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
@@ -231,7 +234,7 @@ func (examPaperService *ExamPaperService) PaperDistribution(PlanId uint, number 
 		var result examManage.ExamPaper
 		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ? GROUP BY student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id", number[a], v, PlanId).Scan(&result)
 		var res1 []examManage.ExamStudentPaper
-		global.GVA_DB.Raw("UPDATE exam_student_paper SET got_score = 0 where student_id = ? and plan_id = ?", v, PlanId).Scan(&res1)
+		global.GVA_DB.Raw("UPDATE exam_student_paper SET got_score = 0 and created_at = NOW() and updated_at =NOW() where student_id = ? and plan_id = ?", v, PlanId).Scan(&res1)
 	}
 	return
 }

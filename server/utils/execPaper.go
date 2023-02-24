@@ -76,7 +76,20 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
+		if err != nil {
+			return err
+		}
+		var recordId uint
+		tx.Model(examManage.ExamRecord{}).Select("id").Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Order("created_at").First(&recordId)
+		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Error
+		if err != nil {
+			return err
+		}
+		err = tx.Model(examManage.ExamRecordMerge{}).Update("record_id", recordId).Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Error
 		//CreateExamScore(PlanDetail,sum,examPaperCommit.StudentId)
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	return

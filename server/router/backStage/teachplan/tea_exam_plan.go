@@ -18,7 +18,7 @@ func (s *ExamPlanRouter) InitExamPlanRouter(Router *gin.RouterGroup) {
 		examPlanRouter.POST("createExamPlan", examPlanApi.CreateExamPlan)             // 新建ExamPlan
 		examPlanRouter.DELETE("deleteExamPlan", examPlanApi.DeleteExamPlan)           // 删除ExamPlan
 		examPlanRouter.DELETE("deleteExamPlanByIds", examPlanApi.DeleteExamPlanByIds) // 批量删除ExamPlan
-		examPlanRouter.PUT("updateExamPlan", examPlanApi.UpdateExamPlan)              // 更新ExamPlan
+		examPlanRouter.POST("updateExamPlan", examPlanApi.UpdateExamPlan)             // 更新ExamPlan
 		examPlanRouter.POST("choosePreExam", examPlanApi.ChoosePrePlan)               //设置前置计划
 	}
 	{
