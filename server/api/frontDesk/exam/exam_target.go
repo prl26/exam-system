@@ -102,11 +102,9 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 		} else {
 			go func() {
 				fmt.Println("start,开始处理试卷")
-				time.AfterFunc(time.Second*5, func() {
-					wg.Add(1)
-					utils1.ExecTarget(ExamCommit)
-					defer wg.Done()
-				})
+				wg.Add(1)
+				utils1.ExecTarget(ExamCommit)
+				defer wg.Done()
 				wg.Wait()
 			}()
 			response.OkWithData(gin.H{"examPaper": ExamCommit}, c)

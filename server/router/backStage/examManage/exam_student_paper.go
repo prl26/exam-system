@@ -22,8 +22,8 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.POST("recoverPower", examstudentPaperApi.RecoverPower)                                 //恢复考试资格
 		examstudentPaperRouter.POST("reportScore", examstudentPaperApi.ReportScore)                                   //上报成绩
 		examstudentPaperRouter.POST("paperCheating", examstudentPaperApi.PaperCheating)                               //答案修正
-		examstudentPaperRouter.POST("paperReview", examstudentPaperApi.PaperReview)                                   //分页查看学生成绩-试卷批阅
-		examstudentPaperRouter.POST("statusMonitor", examstudentPaperApi.StatusMonitor)                               //状态检测
+		examstudentPaperRouter.GET("paperReview", examstudentPaperApi.PaperReview)                                    //分页查看学生成绩-试卷批阅
+		examstudentPaperRouter.GET("statusMonitor", examstudentPaperApi.StatusMonitor)                                //状态检测
 	}
 	{
 		examstudentPaperRouterWithoutRecord.GET("findExamStudentPaper", examstudentPaperApi.FindExamStudentPaper)       // 根据ID获取ExamStudentPaper

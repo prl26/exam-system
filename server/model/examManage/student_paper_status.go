@@ -8,7 +8,7 @@ import (
 type StudentPaperStatus struct {
 	global.GVA_MODEL
 	StudentId uint `json:"studentId"`
-	PlanId    uint `json:"planId"`
+	PlanId    uint `json:"planId" form:"planId"`
 	EnterTime time.Time
 	EndTime   time.Time
 	IsCommit  bool   `json:"isCommit"` //是否提交

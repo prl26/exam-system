@@ -29,3 +29,8 @@ type Detail struct {
 	TermName   string `json:"termName"`
 	CourseName string `json:"courseName"`
 }
+type ReviewScore struct {
+	UpdatedAt time.Time `json:"updatedAt"` // 更新时间
+	Score     *float64  `json:"score" form:"score"`
+	IsReport  bool      `json:"isReport" form:"isReport" gorm:"is_report;comment:是否上报"`
+}

@@ -19,6 +19,11 @@ func (studentService *StudentService) CreateStudent(student basicdata.Student) (
 	return err
 }
 
+func (studentService *StudentService) CreateStudentX(student *basicdata.Student) (err error) {
+	err = global.GVA_DB.Create(&student).Error
+	return err
+}
+
 // DeleteStudent 删除Student记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (studentService *StudentService) DeleteStudent(student basicdata.Student) (err error) {

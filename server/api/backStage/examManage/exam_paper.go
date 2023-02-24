@@ -37,9 +37,8 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	var examPaper examManage.ExamPaper
 	_ = c.ShouldBindJSON(&examPaper)
 	verify := utils.Rules{
-		"Name":       {utils.NotEmpty()},
-		"PlanId":     {utils.NotEmpty()},
-		"TemplateId": {utils.NotEmpty()},
+		"Name":   {utils.NotEmpty()},
+		"PlanId": {utils.NotEmpty()},
 	}
 	if err := utils.Verify(examPaper, verify); err != nil {
 		response.CheckHandle(c, err)
@@ -237,8 +236,10 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/" + excelInfo.FileName
+
 	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
-	err := examService.ExportPaperScore(infoList, filePath)
+	studentList, _ := examService.GetStudentList(excelInfo.PlanId)
+	err := examService.ExportPaperScore(studentList, infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)
