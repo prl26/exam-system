@@ -57,7 +57,7 @@ func (p PracticeService) CreatePracticeItem(questionType questionType.QuestionTy
 }
 
 func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint) {
-	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = ?", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
+	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = GREATEST(score,?)", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
 	return
 }
 

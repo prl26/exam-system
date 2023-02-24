@@ -5,6 +5,7 @@ import (
 	"github.com/prl26/exam-system/server/api/frontDesk/exam"
 	"github.com/prl26/exam-system/server/api/frontDesk/questionBank"
 	"github.com/prl26/exam-system/server/api/frontDesk/system"
+	"github.com/prl26/exam-system/server/api/frontDesk/teachplan"
 )
 
 type FrontDesk struct {
@@ -12,4 +13,5 @@ type FrontDesk struct {
 	ExamApiGroup      exam.ApiGroup
 	QuestionBankGroup questionBank.ApiGroup
 	SystemApiGroup    system.ApiGroup
+	TeachplanApiGroup teachplan.ApiGroup
 }

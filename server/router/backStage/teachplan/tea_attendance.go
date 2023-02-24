@@ -19,9 +19,11 @@ func (s *TeachAttendanceRouter) InitTeachAttendanceRouter(Router *gin.RouterGrou
 		teachAttendanceRouter.DELETE("deleteTeachAttendance", teachAttendanceApi.DeleteTeachAttendance)           // 删除TeachAttendance
 		teachAttendanceRouter.DELETE("deleteTeachAttendanceByIds", teachAttendanceApi.DeleteTeachAttendanceByIds) // 批量删除TeachAttendance
 		teachAttendanceRouter.PUT("updateTeachAttendance", teachAttendanceApi.UpdateTeachAttendance)              // 更新TeachAttendance
+		teachAttendanceRouter.POST("supplement", teachAttendanceApi.Supplement)                                   //补签
 	}
 	{
 		teachAttendanceRouterWithoutRecord.GET("findTeachAttendance", teachAttendanceApi.FindTeachAttendance)       // 根据ID获取TeachAttendance
 		teachAttendanceRouterWithoutRecord.GET("getTeachAttendanceList", teachAttendanceApi.GetTeachAttendanceList) // 获取TeachAttendance列表
+		teachAttendanceRouterWithoutRecord.POST("generateQRCode", teachAttendanceApi.GenerateQRCode)                // 获取TeachAttendance列表
 	}
 }
