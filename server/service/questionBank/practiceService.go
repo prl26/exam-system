@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
+	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
 	"time"
@@ -93,4 +95,15 @@ func (p PracticeService) CanNewPracticeRecord(lessonId uint, studentId uint) boo
 		global.GVA_REDIS.Set(context.Background(), str, true, 20*time.Minute)
 		return true
 	}
+}
+
+func (p PracticeService) RankingList(lessonId uint, info request.PageInfo) (list []questionBankVoResp.RankingListItem, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	err = global.GVA_DB.Model(&teachplan.PracticeAnswer{}).Group("student_id").Where("lesson_id=?", lessonId).Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Raw("select a.student_id,sum(a.score) as total_score,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=? GROUP BY student_id ORDER BY total_score desc limit ?  OFFSET ?", lessonId, limit, offset).Find(&list).Error
+	return
 }

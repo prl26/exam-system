@@ -125,15 +125,16 @@ func (teachAttendanceApi *TeachAttendanceApi) UpdateTeachAttendance(c *gin.Conte
 func (teachAttendanceApi *TeachAttendanceApi) FindTeachAttendance(c *gin.Context) {
 	var teachAttendance teachplanReq.AttendanceDetail
 	_ = c.ShouldBindQuery(&teachAttendance)
-	if list, total, err := teachAttendanceService.GetTeachAttendance(teachAttendance.AttendanceId, teachAttendance.PageInfo); err != nil {
+	if list, total, doneTotal, err := teachAttendanceService.GetTeachAttendance(teachAttendance.AttendanceId, teachAttendance.PageInfo); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     teachAttendance.Page,
-			PageSize: teachAttendance.PageSize,
+		response.OkWithDetailed(gin.H{
+			"List":      list,
+			"Total":     total,
+			"Page":      teachAttendance.Page,
+			"PageSize":  teachAttendance.PageSize,
+			"doneTotal": doneTotal,
 		}, "获取成功", c)
 	}
 }

@@ -20,3 +20,9 @@ type SituationDetail struct {
 	Score                        uint
 	CommitTime                   time.Time
 }
+
+type RankingListItem struct {
+	TotalScore uint
+	StudentId  uint
+	Name       string
+}

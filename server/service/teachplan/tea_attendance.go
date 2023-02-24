@@ -68,11 +68,15 @@ func (teachAttendanceService *TeachAttendanceService) UpdateTeachAttendance(teac
 
 // GetTeachAttendance 根据id获取TeachAttendance记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (teachAttendanceService *TeachAttendanceService) GetTeachAttendance(id uint, info request.PageInfo) (list []teachplanResp.AttendanceDetail, total int64, err error) {
+func (teachAttendanceService *TeachAttendanceService) GetTeachAttendance(id uint, info request.PageInfo) (list []teachplanResp.AttendanceDetail, total int64, doneTotal int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=?", id).Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=? and status > 0", id).Count(&total).Error
 	if err != nil {
 		return
 	}
