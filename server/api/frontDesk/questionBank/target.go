@@ -176,3 +176,45 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 	}()
 	questionBankResp.OkWithDetailed(score, "获取成功", c)
 }
+
+//select a.student_id,sum(a.score) as totalScore,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=25 GROUP BY student_id ORDER BY totalScore desc limit 5  OFFSET 0
+
+func (api *TargetApi) RankingList(c *gin.Context) {
+	req := questionBankReq.RankingList{}
+	_ = c.ShouldBindQuery(&req)
+	verify := utils.Rules{
+		"Page":     {utils.NotEmpty()},
+		"PageSize": {utils.NotEmpty()},
+	}
+	if err := utils.Verify(req, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if list, total, err := practiceService.RankingList(req.LessonId, req.PageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取失败:%s", err.Error()))
+	} else {
+		questionBankResp.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     req.Page,
+			PageSize: req.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+func (api *TargetApi) MyRank(c *gin.Context) {
+	lessonIdStr := c.Query("lessonId")
+	lessonId, err := strconv.Atoi(lessonIdStr)
+	if err != nil {
+		response.CheckHandle(c, err)
+		return
+	}
+	studentId := utils.GetStudentId(c)
+	rank, err := practiceService.GetMyRank(lessonId, studentId)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(rank, "获取成功", c)
+}

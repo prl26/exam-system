@@ -10,6 +10,7 @@ type PracticeAnswer struct {
 	StudentId    uint `json:"studentId"`
 	QuestionType questionType.QuestionType
 	QuestionId   uint
+	LessonId     uint
 	Score        uint
 }
 

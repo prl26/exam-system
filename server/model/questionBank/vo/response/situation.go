@@ -20,3 +20,11 @@ type SituationDetail struct {
 	Score                        uint
 	CommitTime                   time.Time
 }
+
+type RankingListItem struct {
+	Rank         uint `json:"rank" gorm:"-"`
+	ProblemCount uint
+	TotalScore   uint
+	StudentId    uint
+	Name         string
+}

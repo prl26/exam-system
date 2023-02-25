@@ -25,3 +25,8 @@ type TargetExcel struct {
 	File     *multipart.FileHeader `json:"file" form:"file"`
 	LessonId uint                  `json:"lessonId" form:"lessonId"`
 }
+
+type RankingList struct {
+	LessonId uint `json:"lessonId" form:"lessonId"`
+	request.PageInfo
+}

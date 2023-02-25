@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
+	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
 	"time"
@@ -57,7 +59,7 @@ func (p PracticeService) CreatePracticeItem(questionType questionType.QuestionTy
 }
 
 func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint) {
-	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = ?", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
+	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = GREATEST(score,?)", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
 	return
 }
 
@@ -93,4 +95,38 @@ func (p PracticeService) CanNewPracticeRecord(lessonId uint, studentId uint) boo
 		global.GVA_REDIS.Set(context.Background(), str, true, 20*time.Minute)
 		return true
 	}
+}
+
+func (p PracticeService) RankingList(lessonId uint, info request.PageInfo) (list []questionBankVoResp.RankingListItem, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	err = global.GVA_DB.Model(&teachplan.PracticeAnswer{}).Group("student_id").Where("lesson_id=?", lessonId).Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Raw("select a.student_id,sum(a.score) as total_score,count(a.score) as problem_count,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=? GROUP BY student_id ORDER BY total_score desc limit ?  OFFSET ?", lessonId, limit, offset).Find(&list).Error
+	if err != nil {
+		return
+	}
+	if len(list) != 0 {
+		var rank int64
+		err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select DISTINCT sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, list[0].TotalScore).First(&rank).Error
+		list[0].Rank = uint(rank)
+		for i := 1; i < len(list); i++ {
+			if list[i].TotalScore < list[i-1].TotalScore {
+				rank++
+			}
+			list[i].Rank = uint(rank)
+		}
+	}
+	return
+}
+
+func (p PracticeService) GetMyRank(lessonId int, studentId uint) (item questionBankVoResp.RankingListItem, err error) {
+	err = global.GVA_DB.Raw("select a.student_id,sum(a.score) as total_score,count(a.score) as problem_count,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=? and student_id=? GROUP BY student_id ", lessonId, studentId).Find(&item).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select DISTINCT sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, item.TotalScore).First(&item.Rank).Error
+	return
 }

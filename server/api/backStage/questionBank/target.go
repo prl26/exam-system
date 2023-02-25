@@ -145,6 +145,10 @@ func (api *TargetApi) Import(c *gin.Context) {
 		questionBankResp.CheckHandle(c, err)
 		return
 	}
+	if n <= 0 {
+		questionBankResp.CheckHandle(c, fmt.Errorf("插入表格无数据"))
+		return
+	}
 	lessonId := req.LessonId
 	chapterTable := make(map[string]uint)
 	knowledgeTable := make(map[uint]map[string]uint)

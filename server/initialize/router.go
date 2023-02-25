@@ -139,9 +139,11 @@ func Routers() *gin.Engine {
 		systemRouter := frontDeskRouterGroup.SystemRouterGroup
 		examRouterGroup := frontDeskRouterGroup.ExamRouterGroup
 		questionBankGroup := frontDeskRouterGroup.QuestionBankRouterGroup
+		teachplanGroup := frontDeskRouterGroup.TeachPlanRouterGroup
 		PublicGroup := Router.Group("")
 		{
-			systemRouter.InitBaseRouter(PublicGroup) // 学生登录 不做鉴权
+			systemRouter.InitBaseRouter(PublicGroup)         // 学生登录 不做鉴权
+			teachplanGroup.InitAttendanceRouter(PublicGroup) //完成考勤 不做鉴权
 		}
 
 		PrivateGroup := Router.Group("")
@@ -153,7 +155,9 @@ func Routers() *gin.Engine {
 			systemRouter.InitSystemRouter(PrivateGroup)
 			examRouterGroup.InitFrontExamRouter(PrivateGroup)
 			examRouterGroup.InitTargetExamRouter(PrivateGroup)
+
 		}
+
 	}
 	InstallPlugin(Router) // 安装插件
 

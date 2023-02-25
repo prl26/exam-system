@@ -54,7 +54,7 @@ func (teachAttendanceRecordService *TeachAttendanceRecordService) GetTeachAttend
 	db := global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{})
 	var teachAttendanceRecords []teachplan.TeachAttendanceRecord
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.StudentId != nil {
+	if info.StudentId != 0 {
 		db = db.Where("student_id = ?", info.StudentId)
 	}
 	if info.AttendanceId != nil {

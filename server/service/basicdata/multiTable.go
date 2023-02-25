@@ -150,3 +150,8 @@ func (multiTableService *MultiTableService) FindStudentsByClassId(classId uint) 
 
 	return students, nil
 }
+
+func (MultiTableService *MultiTableService) FindStudentByStudentClassId(classId uint) (res []uint, err error) {
+	err = global.GVA_DB.Select("student_id").Where("teach_class_id=?", classId).Model(&basicdata.StudentAndTeachClass{}).Find(&res).Error
+	return
+}

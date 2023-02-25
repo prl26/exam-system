@@ -1,15 +1,18 @@
 package teachplan
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
-	request2 "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
+	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"time"
 )
 
 type TeachAttendanceApi struct {
@@ -30,15 +33,15 @@ var MultiTableService = service.ServiceGroupApp.BasicdataApiGroup.MultiTableServ
 func (teachAttendanceApi *TeachAttendanceApi) CreateTeachAttendance(c *gin.Context) {
 	var teachAttendance teachplan.TeachAttendance
 	_ = c.ShouldBindJSON(&teachAttendance)
-	a := *teachAttendance.TeachClassId
-	var teachClassStudent = request2.TeachClassStudent{
-		TeachClassId: uint(a),
-		PageInfo: request.PageInfo{
-			Page:     10,
-			PageSize: 20,
-		},
-	}
-	students, _, err := MultiTableService.GetTeachClassStudentInfo(teachClassStudent)
+
+	//var teachClassStudent = request2.TeachClassStudent{
+	//	TeachClassId: uint(a),
+	//	PageInfo: request.PageInfo{
+	//		Page:     1,
+	//		PageSize: 1000,
+	//	},
+	//}
+	students, err := MultiTableService.FindStudentByStudentClassId(teachAttendance.TeachClassId)
 	if err != nil {
 		response.FailWithMessage("查询失败", c)
 	}
@@ -120,13 +123,19 @@ func (teachAttendanceApi *TeachAttendanceApi) UpdateTeachAttendance(c *gin.Conte
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /teachAttendance/findTeachAttendance [get]
 func (teachAttendanceApi *TeachAttendanceApi) FindTeachAttendance(c *gin.Context) {
-	var teachAttendance teachplan.TeachAttendance
+	var teachAttendance teachplanReq.AttendanceDetail
 	_ = c.ShouldBindQuery(&teachAttendance)
-	if reteachAttendance, err := teachAttendanceService.GetTeachAttendance(teachAttendance.ID); err != nil {
+	if list, total, doneTotal, err := teachAttendanceService.GetTeachAttendance(teachAttendance.AttendanceId, teachAttendance.PageInfo); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"reteachAttendance": reteachAttendance}, c)
+		response.OkWithDetailed(gin.H{
+			"List":      list,
+			"Total":     total,
+			"Page":      teachAttendance.Page,
+			"PageSize":  teachAttendance.PageSize,
+			"doneTotal": doneTotal,
+		}, "获取成功", c)
 	}
 }
 
@@ -153,4 +162,37 @@ func (teachAttendanceApi *TeachAttendanceApi) GetTeachAttendanceList(c *gin.Cont
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
+}
+
+func (TeachAttendanceApi *TeachAttendanceApi) Supplement(c *gin.Context) {
+	var req teachplanReq.Supplement
+	_ = c.ShouldBindJSON(&req)
+	ip, _ := c.RemoteIP()
+	if n, err := teachAttendanceService.Attendance(req.StudentId, ip.String(), req.AttendanceId, 2); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		if n == 0 {
+			response.CheckHandle(c, fmt.Errorf("该学员不存在于该考勤当中"))
+			return
+		}
+		response.OkWithMessage("补签成功", c)
+		return
+	}
+
+}
+
+func (TeachAttendanceApi *TeachAttendanceApi) GenerateQRCode(c *gin.Context) {
+	var req teachplanReq.GenerateQrCode
+	_ = c.ShouldBindJSON(&req)
+	t := time.Now().Add(time.Duration(req.Minute) * time.Minute)
+	timeStr := utils.TimeToString(t)
+	str := fmt.Sprintf("%d,%s", req.AttendanceId, timeStr)
+	key := utils.Crypto(str)
+	code := utils.GenerateQRCode(key)
+	response.OkWithData(teachplanResp.GenerateQRCode{
+		QRCodeURL:  code,
+		ExpireTime: timeStr,
+		Minute:     req.Minute,
+	}, c)
 }
