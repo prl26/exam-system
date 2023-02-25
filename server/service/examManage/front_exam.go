@@ -192,6 +192,8 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 		if *studentPaper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent2
 			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&Choice.Choice).Error
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
 			if err != nil {
 				return
 			}
@@ -202,10 +204,15 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 				examPaper.SingleChoiceComponent[singleChoiceCount].Score = studentPaper[i].Score
 				examPaper.SingleChoiceComponent[singleChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.SingleChoiceComponent[singleChoiceCount].GotScore = studentPaper[i].GotScore
+				examPaper.SingleChoiceComponent[singleChoiceCount].CorrectAnswer = answer
 				singleChoiceCount++
 			} else {
 				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
 				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = studentPaper[i].ID
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Score = studentPaper[i].Score
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Answer = studentPaper[i].Answer
+				examPaper.MultiChoiceComponent[MultiChoiceCount].GotScore = studentPaper[i].GotScore
+				examPaper.MultiChoiceComponent[MultiChoiceCount].CorrectAnswer = answer
 				MultiChoiceCount++
 			}
 		} else if *studentPaper[i].QuestionType == questionType.JUDGE {
@@ -214,15 +221,26 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			if err != nil {
 				return
 			}
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_judge").Select("is_right").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
+			if err != nil {
+				return
+			}
 			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
 			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
 			examPaper.JudgeComponent[judgeCount].Score = studentPaper[i].Score
 			examPaper.JudgeComponent[judgeCount].GotScore = studentPaper[i].GotScore
 			examPaper.JudgeComponent[judgeCount].Answer = studentPaper[i].Answer
+			examPaper.JudgeComponent[judgeCount].CorrectAnswer = answer
 			judgeCount++
 		} else if *studentPaper[i].QuestionType == questionType.SUPPLY_BLANK {
 			var Blank response.BlankComponent2
 			err = global.GVA_DB.Table("les_questionBank_supply_blank").Where("id = ?", studentPaper[i].QuestionId).Find(&Blank.Blank).Error
+			if err != nil {
+				return
+			}
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_supply_blank").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
 			if err != nil {
 				return
 			}
@@ -231,6 +249,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.BlankComponent[blankCount].Score = studentPaper[i].Score
 			examPaper.BlankComponent[blankCount].GotScore = studentPaper[i].GotScore
 			examPaper.BlankComponent[blankCount].Answer = studentPaper[i].Answer
+			examPaper.BlankComponent[blankCount].CorrectAnswer = answer
 			blankCount++
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent2

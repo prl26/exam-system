@@ -32,9 +32,10 @@ type ExamPaperResponse2 struct {
 	TargetComponent       []TargetComponent2  `json:"targetComponent"`
 }
 type ScoreStruct struct {
-	Score    *float64 `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
-	GotScore *float64 `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
-	Answer   string   `json:"answer" form:"answer" gorm:"column:answer;comment:该生题目答案;size:16000;"`
+	Score         *float64 `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
+	GotScore      *float64 `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
+	Answer        string   `json:"answer" form:"answer" gorm:"column:answer;comment:该生题目答案;size:16000;"`
+	CorrectAnswer string   `json:"correctAnswer" form:"correctAnswer"`
 }
 type ChoiceComponent struct {
 	MergeId uint                                  `json:"mergeId"`
