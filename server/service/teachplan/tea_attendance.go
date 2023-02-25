@@ -44,7 +44,7 @@ func (teachAttendanceService *TeachAttendanceService) DeleteTeachAttendance(teac
 	if err != nil {
 		return err
 	}
-	err = global.GVA_DB.Delete(&teachplan.TeachAttendanceRecord{}, "attenance_id=?", teachAttendance.ID).Error
+	err = global.GVA_DB.Delete(&teachplan.TeachAttendanceRecord{}, "attendance_id=?", teachAttendance.ID).Error
 	return err
 }
 

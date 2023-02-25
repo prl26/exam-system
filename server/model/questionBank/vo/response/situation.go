@@ -22,7 +22,9 @@ type SituationDetail struct {
 }
 
 type RankingListItem struct {
-	TotalScore uint
-	StudentId  uint
-	Name       string
+	Rank         uint `json:"rank" gorm:"-"`
+	ProblemCount uint
+	TotalScore   uint
+	StudentId    uint
+	Name         string
 }

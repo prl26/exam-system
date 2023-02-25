@@ -25,5 +25,6 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 		target.POST("practiceGenerateInstance", targetApi.PracticeGenerateInstance)
 		target.POST("practiceScore", targetApi.PracticeScore)
 		target.GET("rankingList", targetApi.RankingList)
+		target.GET("myRank", targetApi.MyRank)
 	}
 }

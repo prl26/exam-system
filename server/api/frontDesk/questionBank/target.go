@@ -202,3 +202,19 @@ func (api *TargetApi) RankingList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+func (api *TargetApi) MyRank(c *gin.Context) {
+	lessonIdStr := c.Query("lessonId")
+	lessonId, err := strconv.Atoi(lessonIdStr)
+	if err != nil {
+		response.CheckHandle(c, err)
+		return
+	}
+	studentId := utils.GetStudentId(c)
+	rank, err := practiceService.GetMyRank(lessonId, studentId)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(rank, "获取成功", c)
+}
