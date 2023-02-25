@@ -55,7 +55,7 @@ func (teachAttendanceService *TeachAttendanceService) DeleteTeachAttendanceByIds
 	if err != nil {
 		return err
 	}
-	err = global.GVA_DB.Delete(&[]teachplan.TeachAttendanceRecord{}, "attenance_id in ?", ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]teachplan.TeachAttendanceRecord{}, "attendance_id in ?", ids.Ids).Error
 	return err
 }
 
@@ -76,7 +76,7 @@ func (teachAttendanceService *TeachAttendanceService) GetTeachAttendance(id uint
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=? and status > 0", id).Count(&total).Error
+	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=? and attendance > 0", id).Count(&total).Error
 	if err != nil {
 		return
 	}
