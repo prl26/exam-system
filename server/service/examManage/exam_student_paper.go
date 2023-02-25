@@ -99,7 +99,15 @@ func (examstudentPaperService *ExamStudentPaperService) GetExamStudentPaper(id u
 
 //恢复学生考试资格
 func (examstudentPaperService *ExamStudentPaperService) RecoverStudentPower(sid uint, pid uint) (err error) {
-	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", sid, pid).Update("is_commit", 0).Error
+	var pd teachplan.ExamPlan
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&pd).Error
+	if err != nil {
+		return
+	}
+	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id =?", sid, pid).Updates(examManage.StudentPaperStatus{
+		EnterTime: *pd.StartTime,
+		IsCommit:  false,
+	}).Error
 	return
 }
 

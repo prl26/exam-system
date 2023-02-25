@@ -8,7 +8,7 @@ require (
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.51.0
 	github.com/casbin/gorm-adapter/v3 v3.7.3
-	github.com/deatil/go-cryptobin v1.0.1046 // indirect
+	github.com/deatil/go-cryptobin v1.0.1046
 	github.com/ethereum/go-ethereum v1.10.26
 	github.com/flipped-aurora/ws v1.0.2
 	github.com/fsnotify/fsnotify v1.4.9
@@ -32,7 +32,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil/v3 v3.22.5
-	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e // indirect
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/songzhibin97/gkit v1.2.7
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect

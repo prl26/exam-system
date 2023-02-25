@@ -49,6 +49,17 @@ func StringArrayToString(arr []string) (result string) {
 	}
 	return
 }
+func BlankStringArrayToString(arr []string) (result string) {
+	for k, v := range arr {
+		if k == len(arr)-1 {
+			result += v
+		} else {
+			result += v
+			result += ","
+		}
+	}
+	return
+}
 
 //字符串fenge
 func StringToStringArray(strArr string, sep string) []string {

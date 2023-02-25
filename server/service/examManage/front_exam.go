@@ -359,7 +359,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
 	}
 	for j := 0; j < len(BlankCommit); j++ {
-		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
+		blankAnswer := utils.BlankStringArrayToString(BlankCommit[j].Answer)
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
 	}
 	return
@@ -639,18 +639,23 @@ func (ExamService *ExamService) GetChoiceScore(pid uint, sid uint) (ScoreList []
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
-func (ExamService *ExamService) GetJudgeScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+func (ExamService *ExamService) GetJudgeScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.JUDGE)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
-func (ExamService *ExamService) GetBlankScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+func (ExamService *ExamService) GetBlankScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.SUPPLY_BLANK)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
-func (ExamService *ExamService) GetProgramScore(pid uint, sid uint) (ScoreList []examManage.QuesScore, err error) {
+func (ExamService *ExamService) GetProgramScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.PROGRAM)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetTargetScore(pid uint, sid uint) (ScoreList []int, err error) {
+	qtype := uint(questionType.Target)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
@@ -692,6 +697,7 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 		judgeAnswer, _ := ExamService.GetJudgeScore(pid, student)
 		blankAnswer, _ := ExamService.GetBlankScore(pid, student)
 		programAnswer, _ := ExamService.GetProgramScore(pid, student)
+		TargetAnswer, _ := ExamService.GetTargetScore(pid, student)
 		axis := fmt.Sprintf("A%d", i+2)
 		studentId := strconv.Itoa(int(*infoList[i].StudentId))
 		score := strconv.Itoa(int(*infoList[i].Score))
@@ -708,6 +714,9 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 			detail1 = append(detail1, v)
 		}
 		for _, v := range programAnswer {
+			detail1 = append(detail1, v)
+		}
+		for _, v := range TargetAnswer {
 			detail1 = append(detail1, v)
 		}
 		excel.SetSheetRow("Sheet1", axis, &detail1)
