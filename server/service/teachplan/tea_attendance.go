@@ -76,7 +76,7 @@ func (teachAttendanceService *TeachAttendanceService) GetTeachAttendance(id uint
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=? and attendance > 0", id).Count(&total).Error
+	err = global.GVA_DB.Model(&teachplan.TeachAttendanceRecord{}).Where("attendance_id=? and attendance > 0", id).Count(&doneTotal).Error
 	if err != nil {
 		return
 	}
