@@ -107,6 +107,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 	blankType := uint(questionType.SUPPLY_BLANK)
 	//programType := uint(questionType.PROGRAM)
 	//判断题处理
+	global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, judgeType).Find(&examPaperCommit.JudgeCommit)
 		for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {

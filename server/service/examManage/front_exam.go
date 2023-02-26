@@ -634,11 +634,11 @@ func (ExamService *ExamService) GetPaperQuesNum(pid uint) (num []examManage.Ques
 	return
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ?", id).Find(&infoList).Error
+	err = global.GVA_DB.Model(&teachplan.Score{}).Where("teach_class_id = ?", id).Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examManage.ExamScore, err error) {
-	err = global.GVA_DB.Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
+	err = global.GVA_DB.Model(&examManage.ExamScore{}).Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetChoiceScore(pid uint, sid uint) (ScoreList []int, err error) {
@@ -700,33 +700,42 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 	}
 	excel.SetSheetRow("Sheet1", "A1", &titleList)
 	for i, student := range studentList {
-		choiceAnswer, _ := ExamService.GetChoiceScore(pid, student)
-		judgeAnswer, _ := ExamService.GetJudgeScore(pid, student)
-		blankAnswer, _ := ExamService.GetBlankScore(pid, student)
-		programAnswer, _ := ExamService.GetProgramScore(pid, student)
-		TargetAnswer, _ := ExamService.GetTargetScore(pid, student)
-		axis := fmt.Sprintf("A%d", i+2)
-		studentId := strconv.Itoa(int(*infoList[i].StudentId))
-		score := strconv.Itoa(int(*infoList[i].Score))
-		var studentInfo basicdata.Student
-		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[i].StudentId).Find(&studentInfo)
-		detail1 := []interface{}{studentId, studentInfo.Name, infoList[i].Name, infoList[i].TermName, infoList[i].CourseName, score}
-		for _, v := range choiceAnswer {
-			detail1 = append(detail1, v)
+		if student == *infoList[i].StudentId {
+			choiceAnswer, _ := ExamService.GetChoiceScore(pid, student)
+			judgeAnswer, _ := ExamService.GetJudgeScore(pid, student)
+			blankAnswer, _ := ExamService.GetBlankScore(pid, student)
+			programAnswer, _ := ExamService.GetProgramScore(pid, student)
+			TargetAnswer, _ := ExamService.GetTargetScore(pid, student)
+			axis := fmt.Sprintf("A%d", i+2)
+			//studentId := strconv.Itoa(int(*infoList[i].StudentId))
+			score := strconv.Itoa(int(*infoList[i].Score))
+			var studentInfo basicdata.Student
+			global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[i].StudentId).Find(&studentInfo)
+			detail1 := []interface{}{student, studentInfo.Name, infoList[i].Name, infoList[i].TermName, infoList[i].CourseName, score}
+			for _, v := range choiceAnswer {
+				detail1 = append(detail1, v)
+			}
+			for _, v := range judgeAnswer {
+				detail1 = append(detail1, v)
+			}
+			for _, v := range blankAnswer {
+				detail1 = append(detail1, v)
+			}
+			for _, v := range programAnswer {
+				detail1 = append(detail1, v)
+			}
+			for _, v := range TargetAnswer {
+				detail1 = append(detail1, v)
+			}
+			excel.SetSheetRow("Sheet1", axis, &detail1)
+		} else {
+			axis := fmt.Sprintf("A%d", i+2)
+			var studentInfo basicdata.Student
+			global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[i].StudentId).Find(&studentInfo)
+			detail1 := []interface{}{student, studentInfo.Name, infoList[i].Name, infoList[i].TermName, infoList[i].CourseName, "缺考"}
+			excel.SetSheetRow("Sheet1", axis, &detail1)
 		}
-		for _, v := range judgeAnswer {
-			detail1 = append(detail1, v)
-		}
-		for _, v := range blankAnswer {
-			detail1 = append(detail1, v)
-		}
-		for _, v := range programAnswer {
-			detail1 = append(detail1, v)
-		}
-		for _, v := range TargetAnswer {
-			detail1 = append(detail1, v)
-		}
-		excel.SetSheetRow("Sheet1", axis, &detail1)
+
 	}
 	err = excel.SaveAs(filePath)
 	return err
