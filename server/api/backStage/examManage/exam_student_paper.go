@@ -11,6 +11,7 @@ import (
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
+	"github.com/prl26/exam-system/server/utils1"
 	"go.uber.org/zap"
 )
 
@@ -240,6 +241,10 @@ func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
 		global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
 		response.FailWithMessage("自动批阅出错啦", c)
 	} else {
+		if err := utils1.ReExecTargetPapers(sp); err != nil {
+			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+			response.FailWithMessage("自动批阅出错啦", c)
+		}
 		response.OkWithMessage("批阅成功", c)
 	}
 }
@@ -250,12 +255,22 @@ func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
 	_ = c.ShouldBindJSON(&examPlan)
 	studentList, _ := examService.GetStudentList(examPlan.ID)
 	for _, v := range studentList {
+		fmt.Println(v)
 		sp := teachplan.CoverRq{
 			StudentId: v,
 			PlanId:    examPlan.ID,
 		}
-		utils.ReExecPapers(sp)
+		if err := utils.ReExecPapers(sp); err != nil {
+			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+			response.FailWithMessage("自动批阅出错啦", c)
+		} else {
+			if err := utils1.ReExecTargetPapers(sp); err != nil {
+				global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+				response.FailWithMessage("自动批阅出错啦", c)
+			}
+		}
 	}
+	response.OkWithMessage("批阅成功", c)
 }
 
 //获取考试提交日志
