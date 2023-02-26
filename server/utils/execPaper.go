@@ -134,8 +134,6 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 					var result examManage.ExamStudentPaper
 					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
 					if err != nil {
-						fmt.Println("这里出错了")
-
 						return err
 					}
 				}
@@ -152,7 +150,6 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 					var result examManage.ExamStudentPaper
 					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ?", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
 					if err != nil {
-						fmt.Println("这里出错了")
 						return err
 					}
 				}

@@ -34,6 +34,15 @@ type CommitExamPaper struct {
 	JudgeCommit          []JudgeCommit          `json:"judgeCommit"`
 	BlankCommit          []BlankCommit          `json:"blankCommit"`
 }
+type CommitExamPaper1 struct {
+	StudentId            uint                   `json:"studentId" form:"studentId"`
+	PlanId               uint                   `json:"planId" form:"planId"`
+	PaperId              uint                   `json:"paperId" form:"paperId"`
+	MultipleChoiceCommit []MultipleChoiceCommit `json:"multipleChoiceCommit"`
+	JudgeCommit          []JudgeCommit          `json:"judgeCommit"`
+	BlankCommit          []BlankCommit          `json:"blankCommit"`
+	ProgramCommit        []CommitProgram        `json:"programCommit" form:"programCommit"`
+}
 type ReExecExamPaper struct {
 	StudentId            uint                    `json:"studentId" form:"studentId"`
 	PlanId               uint                    `json:"planId" form:"planId"`
@@ -42,6 +51,7 @@ type ReExecExamPaper struct {
 	JudgeCommit          []JudgeCommit1          `json:"judgeCommit"`
 	BlankCommit          []BlankCommit1          `json:"blankCommit"`
 }
+
 type MultipleChoiceCommit1 struct {
 	Id         uint   `json:"id"`
 	QuestionId uint   `json:"questionId" form:"questionId"`

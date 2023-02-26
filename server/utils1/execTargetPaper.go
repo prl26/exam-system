@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/examType"
 	"github.com/prl26/exam-system/server/model/examManage/request"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
 	"gorm.io/gorm"
@@ -15,7 +16,7 @@ var targetService = service.ServiceGroupApp.QuestionBankServiceGroup.TargetServi
 var targetOjService = service.ServiceGroupApp.QuestionBankServiceGroup.OjService.TargetService
 
 func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
-	fmt.Println("进入处理")
+	global.GVA_LOG.Info("进入靶场统分")
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		Target := examPaperCommit.TargetComponent
 		for _, v := range Target {
@@ -32,7 +33,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			tx.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", address, v.MergeId).Scan(&result)
 		}
 		//总分
-		fmt.Println("进入算分")
+		global.GVA_LOG.Info("进入统分")
 		var sum float64
 		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
 		global.GVA_LOG.Info(fmt.Sprintf("进入统分 %v", sum))
@@ -46,7 +47,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 				FinalExamId:   &planId,
 			})
 		} else if PlanDetail.Type == examType.ProceduralExam {
-			fmt.Println("过程化统分统分")
+			global.GVA_LOG.Info("进入过程化统分")
 			tx.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
@@ -82,6 +83,48 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			return err
 		}
 		return err
+	})
+	return
+}
+func ReExecTargetPapers(sp teachplan.CoverRq) (err error) {
+	var examPaperCommit request.CommitTargetExamPaper
+	examPaperCommit.StudentId = sp.StudentId
+	examPaperCommit.PlanId = sp.PlanId
+	targetType := uint(questionType.Target)
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, targetType).Find(&examPaperCommit.TargetComponent)
+		for _, v := range examPaperCommit.TargetComponent {
+			score, _ := targetOjService.QueryScore(v.Answer)
+			//fmt.Println(score)
+			//if err != nil {
+			//	return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
+			//}
+			var result examManage.ExamStudentPaper
+			tx.Raw("UPDATE exam_student_paper SET answer = ?,exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ?", v.Answer, v.MergeId).Scan(&result)
+		}
+		//总分
+		global.GVA_LOG.Info("进入统分")
+		var sum float64
+		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
+		global.GVA_LOG.Info(fmt.Sprintf("进入统分 %v", sum))
+		var PlanDetail teachplan.ExamPlan
+		tx.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
+		planId := int(PlanDetail.ID)
+		if PlanDetail.Type == examType.FinalExam {
+			tx.Select("exam_score", "final_exam_name", "final_exam_id").Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId).Updates(teachplan.Score{
+				ExamScrore:    &sum,
+				FinalExamName: PlanDetail.Name,
+				FinalExamId:   &planId,
+			})
+		} else if PlanDetail.Type == examType.ProceduralExam {
+			global.GVA_LOG.Info("进入过程化统分")
+			tx.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+		}
+		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
+		if err != nil {
+			return err
+		}
+		return nil
 	})
 	return
 }
