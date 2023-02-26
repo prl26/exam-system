@@ -326,15 +326,15 @@ func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.Commit
 	var BlankCommit = examPaperCommit.BlankCommit
 	for j := 0; j < len(optionCommit); j++ {
 		answers := strings.Join(optionCommit[j].Answer, ",")
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
 	}
 	for j := 0; j < len(JudgeCommit); j++ {
 		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
 	}
 	for j := 0; j < len(BlankCommit); j++ {
 		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
 	}
 	return
 }
@@ -367,6 +367,13 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 
 func (examService *ExamService) QueryExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
 	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", studentId, planId, mergeId)).Result()
+	if err != nil {
+		return "", false
+	}
+	return answer, true
+}
+func (examService *ExamService) QuerySaveExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
+	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", studentId, planId, mergeId)).Result()
 	if err != nil {
 		return "", false
 	}
@@ -574,7 +581,7 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []
 	list1.BlankAnswer = make([]response.SaveExamPaper, 0)
 	list1.ProgramAnswer = make([]response.SaveExamPaper, 0)
 	for _, v := range infoList {
-		ans, isCommit := examService.QueryExamPapers(sId, pId, v)
+		ans, isCommit := examService.QuerySaveExamPapers(sId, pId, v)
 		var quesType examManage.ExamStudentPaper
 		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("question_type").Where("id = ?", v).Find(&quesType)
 		if *quesType.QuestionType == questionType.SINGLE_CHOICE {
