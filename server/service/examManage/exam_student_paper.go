@@ -1,7 +1,6 @@
 package examManage
 
 import (
-	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -104,16 +103,20 @@ func (examstudentPaperService *ExamStudentPaperService) RecoverStudentPower(sid 
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id =?", sid, pid).Updates(examManage.StudentPaperStatus{
+	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", sid, pid).Updates(examManage.StudentPaperStatus{
 		EnterTime: *pd.StartTime,
-		IsCommit:  false,
 	}).Error
+	global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id =?", sid, pid).Update("is_commit", 0)
 	return
 }
 
 //上报分数
 func (examstudentPaperService *ExamStudentPaperService) ReportScore(pid uint) (err error) {
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =?", pid).Update("is_report", 1).Error
+	return
+}
+func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid uint, sid uint) (err error) {
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =? and student_id =?", pid, sid).Update("is_report", 1).Error
 	return
 }
 
@@ -133,7 +136,6 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Order("score desc").Find(&scores).Error
-	fmt.Println()
 	for _, v := range scores {
 		var sName string
 		var status examManage.StudentPaperStatus
@@ -220,5 +222,22 @@ func (examstudentPaperService *ExamStudentPaperService) PaperCheating(info examM
 		}
 		return nil
 	})
+	return
+}
+func (examstudentPaperService *ExamStudentPaperService) GetCommitRecord(info examManageReq.RecordRq) (recordList []response.RecordRp, err error) {
+	var Recordlist []examManage.ExamRecord
+	err = global.GVA_DB.Model(examManage.ExamRecord{}).Where("student_id = ? and plan_id =?", info.Student, info.PlanId).Find(&Recordlist).Error
+	if err != nil {
+		return
+	}
+	for _, v := range Recordlist {
+		var recordMerge []examManage.ExamRecordMerge
+		err = global.GVA_DB.Model(examManage.ExamRecordMerge{}).Where("record_id = ?", v.ID).Find(&recordMerge).Error
+		temp := response.RecordRp{
+			ExamRecord:  v,
+			RecorcMerge: recordMerge,
+		}
+		recordList = append(recordList, temp)
+	}
 	return
 }

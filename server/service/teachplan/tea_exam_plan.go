@@ -197,3 +197,12 @@ func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId u
 	}
 	return true, err, preExamIds
 }
+func (examPlanService *ExamPlanService) CheckIsExamSt(planId uint, studentId uint) (result bool, err error) {
+	var count int64
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id =?", planId, studentId).Count(&count).Error
+	if count > 0 {
+		return true, err
+	} else {
+		return false, err
+	}
+}

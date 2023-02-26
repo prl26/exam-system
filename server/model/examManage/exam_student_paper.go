@@ -18,7 +18,7 @@ type ExamStudentPaper struct {
 	Score        *float64                   `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
 	QuestionType *questionType.QuestionType `json:"questionType" form:"paperId" gorm:"column:question_type;comment:题目类型;size:8;"`
 	ProblemType  *int                       `json:"problemType" form:"problemType" gorm:"column:problem_type;comment:难度;size:8;"`
-	GotScore     *float64                   `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
+	GotScore     *float64                   `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分l;size:4"`
 }
 
 // TableName ExamStudentPaper 表名
@@ -33,6 +33,29 @@ type CommitExamPaper struct {
 	MultipleChoiceCommit []MultipleChoiceCommit `json:"multipleChoiceCommit"`
 	JudgeCommit          []JudgeCommit          `json:"judgeCommit"`
 	BlankCommit          []BlankCommit          `json:"blankCommit"`
+}
+type ReExecExamPaper struct {
+	StudentId            uint                    `json:"studentId" form:"studentId"`
+	PlanId               uint                    `json:"planId" form:"planId"`
+	PaperId              uint                    `json:"paperId" form:"paperId"`
+	MultipleChoiceCommit []MultipleChoiceCommit1 `json:"multipleChoiceCommit"`
+	JudgeCommit          []JudgeCommit1          `json:"judgeCommit"`
+	BlankCommit          []BlankCommit1          `json:"blankCommit"`
+}
+type MultipleChoiceCommit1 struct {
+	Id         uint   `json:"id"`
+	QuestionId uint   `json:"questionId" form:"questionId"`
+	Answer     string `json:"answer" form:"answer"`
+}
+type JudgeCommit1 struct {
+	Id         uint `json:"id"`
+	QuestionId uint `json:"questionId" form:"questionId"`
+	Answer     bool `json:"answer" form:"answer"`
+}
+type BlankCommit1 struct {
+	Id         uint   `json:"id"`
+	QuestionId uint   `json:"questionId" form:"questionId"`
+	Answer     string `json:"answer" form:"answer"`
 }
 type MultipleChoiceCommit struct {
 	MergeId    uint     `json:"mergeId"`
