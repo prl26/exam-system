@@ -32,12 +32,13 @@ func (draftPaperApi *DraftPaperApi) CreatePaperDraft(c *gin.Context) {
 		userId := utils.GetUserID(c)
 		examPaper.UserId = &userId
 		_ = c.ShouldBindJSON(&examPaper)
-		if err := DraftPaperService.CreateExamPaperDraft(examPaper); err != nil {
+		if paper, err := DraftPaperService.CreateExamPaperDraft(examPaper); err != nil {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
 			response.FailWithMessage("试卷创建失败", c)
 		} else {
 			response.OkWithData(gin.H{
-				"status": "创建成功",
+				"status":  "创建成功",
+				"paperId": paper.ID,
 			}, c)
 		}
 	}

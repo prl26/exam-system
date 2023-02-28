@@ -33,6 +33,7 @@ type CommitExamPaper struct {
 	MultipleChoiceCommit []MultipleChoiceCommit `json:"multipleChoiceCommit"`
 	JudgeCommit          []JudgeCommit          `json:"judgeCommit"`
 	BlankCommit          []BlankCommit          `json:"blankCommit"`
+	ProgramCommit        []CommitProgram        `json:"programCommit"`
 }
 type CommitExamPaper1 struct {
 	StudentId            uint                   `json:"studentId" form:"studentId"`

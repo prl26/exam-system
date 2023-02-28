@@ -357,6 +357,7 @@ func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.Commit
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
+	var ProgramCommit = examPaperCommit.ProgramCommit
 	for j := 0; j < len(optionCommit); j++ {
 		answers := strings.Join(optionCommit[j].Answer, ",")
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
@@ -368,6 +369,9 @@ func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.Commit
 	for j := 0; j < len(BlankCommit); j++ {
 		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
+	}
+	for j := 0; j < len(ProgramCommit); j++ {
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, ProgramCommit[j].MergeId), ProgramCommit[j].Code, 7*24*time.Hour)
 	}
 	return
 }
@@ -406,7 +410,7 @@ func (examService *ExamService) QueryExamPapers(studentId uint, planId uint, mer
 	return answer, true
 }
 func (examService *ExamService) QuerySaveExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
-	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", studentId, planId, mergeId)).Result()
+	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, studentId, planId, mergeId)).Result()
 	if err != nil {
 		return "", false
 	}

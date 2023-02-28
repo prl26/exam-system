@@ -156,7 +156,7 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 			programCount++
 		} else if *Paper[i].QuestionType == questionType.Target {
 			var Target response.TargetComponent
-			err = global.GVA_DB.Table("les_questionbank_target").Where("id = ?", Paper[i].QuestionId).Find(&Target.Target).Error
+			err = global.GVA_DB.Table("les_questionBank_target").Where("id = ?", Paper[i].QuestionId).Find(&Target.Target).Error
 			if err != nil {
 				return
 			}

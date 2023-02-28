@@ -13,9 +13,9 @@ import (
 type DraftPaperService struct {
 }
 
-func (draftPaperService *DraftPaperService) CreateExamPaperDraft(examPaper examManage.ExamPaperDraft) (err error) {
+func (draftPaperService *DraftPaperService) CreateExamPaperDraft(examPaper examManage.ExamPaperDraft) (examPaper1 examManage.ExamPaperDraft, err error) {
 	err = global.GVA_DB.Create(&examPaper).Error
-	return err
+	return examPaper, err
 }
 func (draftPaperService *DraftPaperService) DeleteExamPaperDraft(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]examManage.ExamPaperDraft{}, "id in ?", ids.Ids).Error
