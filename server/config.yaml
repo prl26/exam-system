@@ -74,6 +74,7 @@ excel:
 html:
   dir: ./resource/html/
   template: ./resource/html/
+  outPut: ./resource/html/zip/
 hua-wei-obs:
   path: you-path
   bucket: you-bucket

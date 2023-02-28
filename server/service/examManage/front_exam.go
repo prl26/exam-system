@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
@@ -20,6 +21,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"io"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"text/template"
@@ -185,9 +187,11 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent2, 0)
 	examPaper.JudgeComponent = make([]response.JudgeComponent2, 0)
 	examPaper.ProgramComponent = make([]response.ProgramComponent2, 0)
+	examPaper.TargetComponent = make([]response.STargetComponent, 0)
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
 	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
+	var singleChoiceOrder, MultiChoiceOrder, judgeOrder, blankOrder, programOrder uint
 	for i := 0; i < len(studentPaper); i++ {
 		if *studentPaper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent2
@@ -199,16 +203,20 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			}
 			//Choice.MergeId = studentPaper[i].ID
 			if Choice.Choice.IsIndefinite == 0 {
+				singleChoiceOrder++
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
+				examPaper.SingleChoiceComponent[singleChoiceCount].Order = singleChoiceOrder
 				examPaper.SingleChoiceComponent[singleChoiceCount].Score = studentPaper[i].Score
 				examPaper.SingleChoiceComponent[singleChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.SingleChoiceComponent[singleChoiceCount].GotScore = studentPaper[i].GotScore
 				examPaper.SingleChoiceComponent[singleChoiceCount].CorrectAnswer = answer
 				singleChoiceCount++
 			} else {
+				MultiChoiceOrder++
 				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
 				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = studentPaper[i].ID
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Order = MultiChoiceOrder
 				examPaper.MultiChoiceComponent[MultiChoiceCount].Score = studentPaper[i].Score
 				examPaper.MultiChoiceComponent[MultiChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.MultiChoiceComponent[MultiChoiceCount].GotScore = studentPaper[i].GotScore
@@ -226,8 +234,10 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			if err != nil {
 				return
 			}
+			judgeOrder++
 			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
 			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
+			examPaper.JudgeComponent[judgeCount].Order = judgeOrder
 			examPaper.JudgeComponent[judgeCount].Score = studentPaper[i].Score
 			examPaper.JudgeComponent[judgeCount].GotScore = studentPaper[i].GotScore
 			examPaper.JudgeComponent[judgeCount].Answer = studentPaper[i].Answer
@@ -244,8 +254,10 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			if err != nil {
 				return
 			}
+			blankOrder++
 			examPaper.BlankComponent = append(examPaper.BlankComponent, Blank)
 			examPaper.BlankComponent[blankCount].MergeId = studentPaper[i].ID
+			examPaper.BlankComponent[blankCount].Order = blankOrder
 			examPaper.BlankComponent[blankCount].Score = studentPaper[i].Score
 			examPaper.BlankComponent[blankCount].GotScore = studentPaper[i].GotScore
 			examPaper.BlankComponent[blankCount].Answer = studentPaper[i].Answer
@@ -259,14 +271,35 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 				return
 			}
 			Program.Program.Convert(&program)
+			programOrder++
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
+			examPaper.ProgramComponent[programCount].Order = programOrder
 			examPaper.ProgramComponent[programCount].Score = studentPaper[i].Score
 			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
 			programCount++
 		}
 	}
+	//else if *studentPaper[i].QuestionType == questionType.Target {
+	//	var target response.STargetComponent
+	//	err = global.GVA_DB.Table("les_questionBank_target").Where("id = ?", studentPaper[i].QuestionId).Find(&target.Target).Error
+	//	if err != nil {
+	//		return
+	//	}
+	//	var answer string
+	//	err = global.GVA_DB.Table("les_questionBank_target").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
+	//	if err != nil {
+	//		return
+	//	}
+	//	examPaper.TargetComponent = append(examPaper.TargetComponent, target)
+	//	examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
+	//	examPaper.TargetComponent[targetCount].Score = studentPaper[i].Score
+	//	examPaper.TargetComponent[targetCount].GotScore = studentPaper[i].GotScore
+	//	examPaper.TargetComponent[targetCount].Answer = studentPaper[i].Answer
+	//	examPaper.TargetComponent[targetCount].CorrectAnswer = answer
+	//	targetCount++
+	//}
 	var PaperId int64
 	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).Scan(&PaperId).Error
 	//PaperId, err := examService.GetStudentPaperId(examComing)
@@ -641,6 +674,10 @@ func (ExamService *ExamService) GetExamScoreToExcel(id uint) (infoList []examMan
 	err = global.GVA_DB.Model(&examManage.ExamScore{}).Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
 	return
 }
+func (ExamService *ExamService) GetExamScoreToHtml(id uint) (infoList []examManage.ExamScore, err error) {
+	err = global.GVA_DB.Model(&examManage.ExamScore{}).Where("plan_id = ?", id).Order("student_id").Find(&infoList).Error
+	return
+}
 func (ExamService *ExamService) GetChoiceScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.SINGLE_CHOICE)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
@@ -744,34 +781,62 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 	err = excel.SaveAs(filePath)
 	return err
 }
+func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (content io.ReadSeeker, err error, outPutPath string) {
+	templatePath := global.GVA_CONFIG.HTML.Template
+	htmlOut := global.GVA_CONFIG.HTML.Dir
+	outPut := global.GVA_CONFIG.HTML.OutPut
+	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index.html"))
+	htmlOutPath := filepath.Join(htmlOut, dirName)
+	if err != nil {
+		fmt.Println("获取模版文件失败")
+	}
+	var fileList []string
+	//先生成文件夹
+	if err = utils.CreateDir(htmlOutPath); err != nil {
+		return
+	}
+	examScoresList, err := ExamService.GetExamScoreToHtml(pid)
+	if err != nil {
+		return content, err, outPutPath
+	}
+	var planDetail teachplan.ExamPlan
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
+	outPutPath = filepath.Join(outPut, fmt.Sprintf("%s.zip", planDetail.Name))
+	for k, v := range examScoresList {
+		//2.获取html生成路径
+		var studentInfo basicdata.Student
+		global.GVA_DB.Model(basicdata.Student{}).Select("id,name").Where("id = ?", v.StudentId).Find(&studentInfo)
+		file := fmt.Sprintf("%d-%s.html", studentInfo.ID, studentInfo.Name)
+		fileName := filepath.Join(htmlOutPath, file)
+		//4.生成静态文件
+		examComing := request.ExamComing{
+			StudentId: *v.StudentId,
+			PlanId:    pid,
+		}
+		studentPaper, status, err := ExamService.GetExamPapersAndScores(examComing, "")
+		if err != nil {
+			return content, err, outPutPath
+		}
+		ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{
+			"examScoresList": examScoresList[k],
+			"studentInfo":    studentInfo,
+			"planDetail":     planDetail,
+			"singleChoice":   studentPaper.SingleChoiceComponent,
+			"multiChoice":    studentPaper.MultiChoiceComponent,
+			"judge":          studentPaper.JudgeComponent,
+			"blank":          studentPaper.BlankComponent,
+			"program":        studentPaper.ProgramComponent,
+			"target":         studentPaper.TargetComponent,
+			"status":         status,
+		})
+		fileList = append(fileList, fileName)
+	}
 
-//func (ExamService *ExamService) ExportPaperToHtml(pid uint) (content io.ReadSeeker, err error) {
-//	templatePath := global.GVA_CONFIG.HTML.Template
-//	htmlOutPath := global.GVA_CONFIG.HTML.Dir
-//	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index.html"))
-//	if err != nil {
-//		fmt.Println("获取模版文件失败")
-//	}
-//	//2.获取html生成路径
-//	fileName := filepath.Join(htmlOutPath, "htmlindex.html")
-//	//4.生成静态文件
-//	var planDetail teachplan.ExamPlan
-//	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
-//	if err != nil {
-//		return
-//	}
-//	examScoresList, err := ExamService.GetExamScoreToExcel(pid)
-//	if err != nil {
-//		return
-//	}
-//	var allproduct []*examManage.Product = []*examManage.Product{
-//		{1, "苹果手机"},
-//		{2, "苹果电脑"},
-//		{3, "苹果耳机"},
-//	}
-//	ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{"allproduct": allproduct})
-//	return
-//}
+	if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
+		return content, err, outPutPath
+	}
+	return
+}
 func (ExamService *ExamService) generateStaticHtml(template *template.Template, fileName string, product map[string]interface{}) {
 	//1.判断静态文件是否存在
 	if ExamService.exist(fileName) {

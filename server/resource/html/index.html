@@ -3,25 +3,182 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>商品列表页</title>
+    <title>{{.planDetail.Name}}</title>
+    <style>
+        .paper {
+            margin: 0;
+            font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: left;
+            color: hsl(0, 0%, 25%);
+        }
+        .paper *,
+        .paper *::before,
+        .paper *::after {
+            box-sizing: border-box;
+        }
+        .paper pre {
+            margin-top: 0;
+            margin-bottom: 0;
+            overflow: auto;
+            -ms-overflow-style: scrollbar;
+        }
+        .paper hr {
+            height: 0;
+            border: 0;
+            border-top: 1px solid hsl(0, 0%, 85%);
+            margin: 0;
+        }
+        .desc p {
+            margin: 0 !important;
+        }
+    </style>
 </head>
 <tbody>
-<div><a href="#">商品列表页</a></div>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>商品名称</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{range .allproduct}}
-    <tr>
-        <td>{{.Id}}</td>
-        <td>{{.Name}}</td>
-    </tr>
-    {{end}}
-    </tbody>
-</table>
+
+<div class="paper" style="max-width:1040px;margin:auto" data-reactroot="">
+    <div>
+        <p style="text-align: center; font-size: 1.5rem; font-weight: bold;">
+            {{.planDetail.Name}}
+        </p>
+    </div>
+    <div>
+        <div style="width:calc(100% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">开始时间</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+            {{.planDetail.StartTime}}
+        </span>
+        </div>
+        <div style="width:calc(100% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">结束时间</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+          {{.planDetail.EndTime}}
+        </span>
+        </div>
+        <div style="width:calc(90% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">答题时长</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+          {{.planDetail.Time}}
+        </span>
+        </div>
+        <div style="width:calc(100% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">考生</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+          {{.examScoresList.StudentId}} {{.studentInfo.Name}}
+        </span>
+        </div>
+        <div style="width:calc(100% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">得分</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+          {{.examScoresList.Score}}
+        </span>
+        </div>
+        <div style="width:calc(90% / 3);display:inline-flex;padding:4px">
+            <span style="font-weight:bold;min-width:56px">总分</span>
+            <span style="margin-left:8px;overflow:hidden;text-overflow:ellipsis">
+          100
+        </span>
+        </div>
+        <hr />
+
+        {{ range .singleChoice }}
+        <div style="display:flex">
+            <div style="margin-right:12px;white-space:nowrap">1-{{.Order}}</div>
+            <div style="overflow:auto;flex-grow:1">
+                <span class="desc">{{ .Choice.Describe }}</span>
+                <span>学生作答:</span>
+                <span>{{ .Answer }}</span>
+                <br />
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
+
+        {{ range .multiChoice }}
+        <div style="display:flex">
+            <div style="margin-right:12px;white-space:nowrap">2-{{.Order}}</div>
+            <div style="overflow:auto;flex-grow:1">
+                <span class="desc">{{ .Choice.Describe }}</span>
+                <span>学生作答:</span>
+                <span>{{ .Answer }}</span>
+                <br />
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
+
+        {{ range .judge }}
+        <div style="display:flex">
+            <div style="margin-right:12px;white-space:nowrap">3-{{.Order}}</div>
+            <div style="overflow:auto;flex-grow:1">
+                <span class="desc">{{ .Judge.Describe }}</span>
+                <span>学生作答:</span>
+                <span>{{ .Answer }}</span>
+                <br />
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
+
+        {{ range .blank }}
+        <div style="display:flex">
+            <div style="margin-right:12px;white-space:nowrap">4-{{.Order}}</div>
+            <div style="overflow:auto;flex-grow:1">
+                <span class="desc">{{ .Blank.Describe }}</span>
+                <span>学生作答:</span>
+                <span>{{ .Answer }}</span>
+                <br />
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
+
+        {{ range .program }}
+        <div style="padding-bottom:8px;margin-top:12px">
+            <div style="display:flex">
+                <div style="margin-right:12px;white-space:nowrap">5-{{.Order}}</div>
+                <div style="overflow:auto;flex-grow:1">
+                    <span class="desc">{{ .Program.Describe }}</span>
+                </div>
+            </div>
+            <div class="result" style="display:flex;margin-top:8px">
+                <pre><code>{{.Answer}}</code></pre>
+                <br/>
+                <div>学生作答:</div>
+                <div>{{ .Answer }}</div>
+                <br/>
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
+
+<!--        {{ range .program }}-->
+<!--        <div style="display:flex">-->
+<!--            <div style="margin-right:12px;white-space:nowrap">5-1</div>-->
+<!--            <div style="overflow:auto;flex-grow:1">-->
+<!--                <div>{{ .Blank.Describe }}</div>-->
+<!--                <span>学生作答:</span>-->
+<!--                <div>{{ .Answer }}</div>-->
+<!--                <span>得分:</span>-->
+<!--                <span>{{ .GotScore }}</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {{end}}-->
+<!--        <hr />-->
+    </div>
+</div>
+
 </html>
 {{end}}

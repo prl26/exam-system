@@ -9,7 +9,7 @@ type ExamScore struct {
 	global.GVA_MODEL
 	StudentId  *uint      `json:"studentId" form:"studentId"`
 	PlanId     *uint      `json:"planId" form:"planId" gorm:"column:plan_id;comment:考试计划id;size:32;"`
-	Name       string     `json:"name" form:"name" gorm:"column:name;comment:试卷名称;size:64;"`
+	Name       string     `json:"name" form:"name" gorm:"column:name;comment:考试计划名称;size:64;"`
 	TermId     *uint      `json:"termId" from:"termId"`
 	TermName   string     `json:"termName" form:"termName"`
 	LessonId   *int       `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程Id;size:32;"`

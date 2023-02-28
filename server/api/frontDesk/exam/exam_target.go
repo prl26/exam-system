@@ -40,8 +40,6 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 				StudentId: studentId,
 				PlanId:    planId.PlanId,
 			}
-			fmt.Println("查看examComing")
-			fmt.Println(examComing)
 			PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
 			if PlanDetail.StartTime.Unix() > time.Now().Unix() {
 				response.FailWithMessageAndError(701, "还没开考呢,莫急", c)

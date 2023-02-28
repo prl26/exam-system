@@ -259,8 +259,16 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	//examService.ExportPaperToHtml()
-	response.OkWithMessage("好了", c)
+	_, err, path := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
+	if err != nil {
+		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
+		response.FailWithMessage("生成zip失败", c)
+		return
+	} else {
+		response.OkWithData(gin.H{
+			"filepath": path,
+		}, c)
+	}
 }
 func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	var excelInfo request3.MultiExcel
