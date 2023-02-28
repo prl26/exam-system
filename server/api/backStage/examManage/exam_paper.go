@@ -259,12 +259,13 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	_, err, path := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
+	_, err := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
 	if err != nil {
 		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
 		response.FailWithMessage("生成zip失败", c)
 		return
 	} else {
+		path := "/static/html/zip" + fmt.Sprintf("%s.zip", excelInfo.FileName)
 		response.OkWithData(gin.H{
 			"filepath": path,
 		}, c)

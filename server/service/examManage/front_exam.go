@@ -781,7 +781,7 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 	err = excel.SaveAs(filePath)
 	return err
 }
-func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (content io.ReadSeeker, err error, outPutPath string) {
+func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (content io.ReadSeeker, err error) {
 	templatePath := global.GVA_CONFIG.HTML.Template
 	htmlOut := global.GVA_CONFIG.HTML.Dir
 	outPut := global.GVA_CONFIG.HTML.OutPut
@@ -797,11 +797,11 @@ func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (con
 	}
 	examScoresList, err := ExamService.GetExamScoreToHtml(pid)
 	if err != nil {
-		return content, err, outPutPath
+		return content, err
 	}
 	var planDetail teachplan.ExamPlan
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
-	outPutPath = filepath.Join(outPut, fmt.Sprintf("%s.zip", planDetail.Name))
+	outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", planDetail.Name))
 	for k, v := range examScoresList {
 		//2.获取html生成路径
 		var studentInfo basicdata.Student
@@ -815,7 +815,7 @@ func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (con
 		}
 		studentPaper, status, err := ExamService.GetExamPapersAndScores(examComing, "")
 		if err != nil {
-			return content, err, outPutPath
+			return content, err
 		}
 		ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{
 			"examScoresList": examScoresList[k],
@@ -833,7 +833,7 @@ func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (con
 	}
 
 	if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
-		return content, err, outPutPath
+		return content, err
 	}
 	return
 }
