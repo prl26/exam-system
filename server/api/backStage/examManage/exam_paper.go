@@ -265,7 +265,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("生成zip失败", c)
 		return
 	} else {
-		path := "/static/html/zip" + fmt.Sprintf("%s.zip", excelInfo.FileName)
+		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
 		response.OkWithData(gin.H{
 			"filepath": path,
 		}, c)

@@ -801,7 +801,7 @@ func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (con
 	}
 	var planDetail teachplan.ExamPlan
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
-	outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", planDetail.Name))
+	outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", dirName))
 	for k, v := range examScoresList {
 		//2.获取html生成路径
 		var studentInfo basicdata.Student
