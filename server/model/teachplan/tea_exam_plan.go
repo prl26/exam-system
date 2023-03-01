@@ -26,6 +26,7 @@ type ExamPlan struct {
 	UserId        *uint      `json:"userId" form:"userId" gorm:"column:user_id;comment:创建id;size:32;"`
 	PrePlanId     string     `json:"prePlanId" form:"prePlanId" gorm:"pre_plan_id"`
 	IsLimitTime   bool       `json:"isLimitTime" form:"isLimitTime" gorm:"is_limit_time;comment:是否限制考试时长"`
+	IsReady       bool       `json:"isReady" form:"isReady" gorm:"is_ready"`
 }
 type CoverRq struct {
 	StudentId uint `json:"studentId"`

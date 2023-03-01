@@ -45,6 +45,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 			PrePlanId:     "0",
 			Weight:        &examPlan.Weight,
 			IsLimitTime:   examPlan.IsLimitTime,
+			IsReady:       false,
 		}
 		err = global.GVA_DB.Create(&ExamPlan).Error
 	}

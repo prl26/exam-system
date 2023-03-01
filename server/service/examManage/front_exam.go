@@ -260,6 +260,7 @@ func (examService *ExamService) SetExamPre(pid uint) (err error) {
 		if err != nil {
 			return
 		}
+		global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ? ", pid).Update("is_ready", 1)
 		examPaper.PaperId = uint(PaperId)
 		redisPaper, _ := json.Marshal(examPaper)
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d", 05, v, pid), redisPaper, 7*24*time.Hour)
