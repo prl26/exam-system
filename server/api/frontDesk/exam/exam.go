@@ -110,7 +110,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 
 //保存试卷内容
 func (examApi *ExamApi) SaveExamPaper(c *gin.Context) {
-	var ExamCommit examManage.CommitExamPaper
+	var ExamCommit examManage.CommitExamPaper2
 	_ = c.ShouldBindJSON(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
 	PlanDetail, _ := examPlanService.GetExamPlan(ExamCommit.PlanId)

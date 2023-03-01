@@ -24,30 +24,56 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 	audit := 1
 	state := 1
 	time := int64(examPlan.Time)
+	time1 := int64(endTime.Sub(startTime).Minutes())
 	teachClassIds := examPlan.TeachClassId
 	for _, v := range teachClassIds {
-		ExamPlan := teachplan.ExamPlan{
-			GVA_MODEL:     global.GVA_MODEL{},
-			Name:          examPlan.Name,
-			TeachClassId:  &v,
-			Time:          &time,
-			StartTime:     &startTime,
-			EndTime:       &endTime,
-			LessonId:      &examPlan.LessonId,
-			TemplateId:    &examPlan.TemplateId,
-			State:         &state,
-			Audit:         &audit,
-			Type:          examPlan.Type,
-			PassScore:     &examPlan.PassScore,
-			TermId:        &examPlan.TermId,
-			IsDistributed: false,
-			UserId:        &userId,
-			PrePlanId:     "0",
-			Weight:        &examPlan.Weight,
-			IsLimitTime:   examPlan.IsLimitTime,
-			IsReady:       false,
+		if examPlan.IsLimitTime == false {
+			ExamPlan := teachplan.ExamPlan{
+				GVA_MODEL:     global.GVA_MODEL{},
+				Name:          examPlan.Name,
+				TeachClassId:  &v,
+				Time:          &time1,
+				StartTime:     &startTime,
+				EndTime:       &endTime,
+				LessonId:      &examPlan.LessonId,
+				TemplateId:    &examPlan.TemplateId,
+				State:         &state,
+				Audit:         &audit,
+				Type:          examPlan.Type,
+				PassScore:     &examPlan.PassScore,
+				TermId:        &examPlan.TermId,
+				IsDistributed: false,
+				UserId:        &userId,
+				PrePlanId:     "0",
+				Weight:        &examPlan.Weight,
+				IsLimitTime:   examPlan.IsLimitTime,
+				IsReady:       false,
+			}
+			err = global.GVA_DB.Create(&ExamPlan).Error
+		} else {
+			ExamPlan := teachplan.ExamPlan{
+				GVA_MODEL:     global.GVA_MODEL{},
+				Name:          examPlan.Name,
+				TeachClassId:  &v,
+				Time:          &time,
+				StartTime:     &startTime,
+				EndTime:       &endTime,
+				LessonId:      &examPlan.LessonId,
+				TemplateId:    &examPlan.TemplateId,
+				State:         &state,
+				Audit:         &audit,
+				Type:          examPlan.Type,
+				PassScore:     &examPlan.PassScore,
+				TermId:        &examPlan.TermId,
+				IsDistributed: false,
+				UserId:        &userId,
+				PrePlanId:     "0",
+				Weight:        &examPlan.Weight,
+				IsLimitTime:   examPlan.IsLimitTime,
+				IsReady:       false,
+			}
+			err = global.GVA_DB.Create(&ExamPlan).Error
 		}
-		err = global.GVA_DB.Create(&ExamPlan).Error
 	}
 	return err
 }
