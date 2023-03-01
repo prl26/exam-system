@@ -29,44 +29,44 @@ func (p *ProgramApi) Create(c *gin.Context) {
 		return
 	}
 	programPo := questionBankPo.Program{}
-	if len(req.ProgramCases) != 0 {
+	if req.ProgramCases != nil {
 		programCaseStr, err := req.ProgramCases.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.ProgramCases = programCaseStr
+		programPo.ProgramCases = &programCaseStr
 	} else {
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
 		//return
 	}
-	if len(req.LanguageSupports) != 0 {
+	if req.LanguageSupports != nil {
 		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.LanguageSupports = languageSupportStr
-		programPo.LanguageSupportsBrief = brief
+		programPo.LanguageSupports = &languageSupportStr
+		programPo.LanguageSupportsBrief = &brief
 	} else {
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入语言支持"))
 		//return
 	}
-	if len(req.DefaultCodes) != 0 {
+	if req.DefaultCodes != nil {
 		defaultCodeStr, err := req.DefaultCodes.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.DefaultCodes = defaultCodeStr
+		programPo.DefaultCodes = &defaultCodeStr
 	}
-	if len(req.ReferenceAnswers) != 0 {
+	if req.ReferenceAnswers != nil {
 		referenceAnswerStr, err := req.ReferenceAnswers.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.ReferenceAnswers = referenceAnswerStr
+		programPo.ReferenceAnswers = &referenceAnswerStr
 	}
 	programPo.BasicModel = req.BasicModel
 	programPo.CourseSupport = req.CourseSupport
@@ -113,29 +113,29 @@ func (api *ProgramApi) FindDetail(c *gin.Context) {
 			programDetail.BasicModel = detail.BasicModel
 			programDetail.Chapter = detail.Chapter
 			programDetail.Knowledge = detail.Knowledge
-			if detail.ProgramCases != "" {
-				if err := programDetail.ProgramCases.Deserialize(detail.ProgramCases); err != nil {
+			if detail.ProgramCases != nil {
+				if err := programDetail.ProgramCases.Deserialize(*detail.ProgramCases); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
 				}
 			}
-			if detail.LanguageSupports != "" {
-				if err := programDetail.LanguageSupports.Deserialization(detail.LanguageSupports); err != nil {
+			if detail.LanguageSupports != nil {
+				if err := programDetail.LanguageSupports.Deserialization(*detail.LanguageSupports); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
 				}
 			}
-			if detail.ReferenceAnswers != "" {
-				if err := programDetail.ReferenceAnswers.Deserialization(detail.ReferenceAnswers); err != nil {
+			if detail.ReferenceAnswers != nil {
+				if err := programDetail.ReferenceAnswers.Deserialization(*detail.ReferenceAnswers); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
 				}
 			}
-			if detail.DefaultCodes != "" {
-				if err := programDetail.DefaultCodes.Deserialization(detail.DefaultCodes); err != nil {
+			if detail.DefaultCodes != nil {
+				if err := programDetail.DefaultCodes.Deserialization(*detail.DefaultCodes); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
@@ -155,46 +155,46 @@ func (api *ProgramApi) Update(c *gin.Context) {
 	}
 	programPo := questionBankPo.Program{}
 	programPo.ID = req.Id
-	if len(req.ProgramCases) != 0 {
+	if req.ProgramCases != nil {
 		programCaseStr, err := req.ProgramCases.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.ProgramCases = programCaseStr
+		programPo.ProgramCases = &programCaseStr
 	} else {
 		// 修改的时候不一定修改编程题用例
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
 		//return
 	}
-	if len(req.LanguageSupports) != 0 {
+	if req.LanguageSupports != nil {
 		languageSupportStr, brief, err := req.LanguageSupports.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.LanguageSupports = languageSupportStr
-		programPo.LanguageSupportsBrief = brief
+		programPo.LanguageSupports = &languageSupportStr
+		programPo.LanguageSupportsBrief = &brief
 	} else {
 		// 修改的时候不一定修改语言支持
 		//questionBankResp.ErrorHandle(c, fmt.Errorf("未输入编程题用例"))
 		//return
 	}
-	if len(req.DefaultCodes) != 0 {
+	if req.DefaultCodes != nil {
 		defaultCodeStr, err := req.DefaultCodes.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.DefaultCodes = defaultCodeStr
+		programPo.DefaultCodes = &defaultCodeStr
 	}
-	if len(req.ReferenceAnswers) != 0 {
+	if req.ReferenceAnswers != nil {
 		referenceAnswerStr, err := req.ReferenceAnswers.Serialize()
 		if err != nil {
 			questionBankResp.ErrorHandle(c, err)
 			return
 		}
-		programPo.ReferenceAnswers = referenceAnswerStr
+		programPo.ReferenceAnswers = &referenceAnswerStr
 	}
 	programPo.BasicModel = req.BasicModel
 	programPo.CourseSupport = req.CourseSupport

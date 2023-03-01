@@ -11,10 +11,10 @@ type ProgramSearchCriteria struct {
 }
 
 type ProgramOjSupport struct {
-	LanguageSupports `json:"languageSupports"`
-	DefaultCodes     `json:"defaultCodes"`
-	ReferenceAnswers `json:"referenceAnswers"`
-	ProgramCases     `json:"programCases"`
+	*LanguageSupports `json:"languageSupports"`
+	*DefaultCodes     `json:"defaultCodes"`
+	*ReferenceAnswers `json:"referenceAnswers"`
+	*ProgramCases     `json:"programCases"`
 }
 
 type ProgramDetail struct {

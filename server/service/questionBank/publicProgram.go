@@ -95,9 +95,9 @@ func (p *PublicProgramService) Migrate(ids []uint, migration questionBankBo.Publ
 
 func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Program, table map[questionBankEnum.LanguageType]bool) error {
 	if len(table) != 0 {
-		if program.LanguageSupports != "" {
+		if program.LanguageSupports != nil {
 			defaultCode := questionBankBo.LanguageSupports{}
-			err := defaultCode.Deserialization(program.LanguageSupports)
+			err := defaultCode.Deserialization(*program.LanguageSupports)
 			if err != nil {
 				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
 				return err
@@ -107,12 +107,13 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 			if err != nil {
 				return err
 			}
-			program.LanguageSupports = serialize
-			program.LanguageSupportsBrief = defaultCode.Brief()
+			program.LanguageSupports = &serialize
+			s := defaultCode.Brief()
+			program.LanguageSupportsBrief = &s
 		}
-		if program.DefaultCodes != "" {
+		if program.DefaultCodes != nil {
 			defaultCode := questionBankBo.DefaultCodes{}
-			err := defaultCode.Deserialization(program.DefaultCodes)
+			err := defaultCode.Deserialization(*program.DefaultCodes)
 			if err != nil {
 				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
 				return err
@@ -122,11 +123,11 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 			if err != nil {
 				return err
 			}
-			program.DefaultCodes = serialize
+			program.DefaultCodes = &serialize
 		}
-		if program.ReferenceAnswers != "" {
+		if program.ReferenceAnswers != nil {
 			defaultCode := questionBankBo.ReferenceAnswers{}
-			err := defaultCode.Deserialization(program.ReferenceAnswers)
+			err := defaultCode.Deserialization(*program.ReferenceAnswers)
 			if err != nil {
 				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
 				return err
@@ -136,24 +137,26 @@ func (p *PublicProgramService) buildLanguageSupport(program *questionBankPo.Prog
 			if err != nil {
 				return err
 			}
-			program.ReferenceAnswers = serialize
+			program.ReferenceAnswers = &serialize
 		}
 
 	} else {
-		if program.LanguageSupports != "" {
-			defaultCode := questionBankBo.LanguageSupports{}
-			err := defaultCode.Deserialization(program.LanguageSupports)
-			if err != nil {
-				global.GVA_LOG.Sugar().Errorf("迁移失败%s", program.ID)
-				return err
-			}
-			serialize, _, err := defaultCode.Serialize()
-			if err != nil {
-				return err
-			}
-			program.LanguageSupports = serialize
-			program.LanguageSupportsBrief = defaultCode.Brief()
-		}
+		//if program.LanguageSupports != nil {
+		//	defaultCode := questionBankBo.LanguageSupports{}
+		//	err := defaultCode.Deserialization(*program.LanguageSupports)
+		//	if err != nil {
+		//		global.GVA_LOG.Sugar().Errorf("迁移失败%d", program.ID)
+		//		return err
+		//	}
+		//	serialize, _, err := defaultCode.Serialize()
+		//	if err != nil {
+		//		return err
+		//	}
+		//	program.LanguageSupports = &serialize
+		//	s:= defaultCode.Brief()
+		//	program.LanguageSupportsBrief = &s
+		//}
+
 	}
 	return nil
 }
