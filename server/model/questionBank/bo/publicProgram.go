@@ -203,7 +203,8 @@ func (s *LanguageSupports) Deserialization(str string) error {
 	if err != nil {
 		return err
 	}
-	*s = make([]*LanguageSupport, len(table))
+
+	*s = make(LanguageSupports, len(table))
 	i := 0
 	for k, support := range table {
 		(*s)[i] = &LanguageSupport{}

@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
+	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankReq "github.com/prl26/exam-system/server/model/questionBank/vo/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
@@ -120,21 +121,24 @@ func (api *ProgramApi) FindDetail(c *gin.Context) {
 					return
 				}
 			}
-			if detail.LanguageSupports != nil {
+			if detail.LanguageSupports != nil && *detail.LanguageSupports != "" {
+				programDetail.LanguageSupports = new(questionBankBo.LanguageSupports)
 				if err := programDetail.LanguageSupports.Deserialization(*detail.LanguageSupports); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
 				}
 			}
-			if detail.ReferenceAnswers != nil {
+			if detail.ReferenceAnswers != nil && *detail.ReferenceAnswers != "" {
+				programDetail.ReferenceAnswers = new(questionBankBo.ReferenceAnswers)
 				if err := programDetail.ReferenceAnswers.Deserialization(*detail.ReferenceAnswers); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
 					return
 				}
 			}
-			if detail.DefaultCodes != nil {
+			if detail.DefaultCodes != nil && *detail.DefaultCodes != "" {
+				programDetail.DefaultCodes = new(questionBankBo.DefaultCodes)
 				if err := programDetail.DefaultCodes.Deserialization(*detail.DefaultCodes); err != nil {
 					global.GVA_LOG.Error(err.Error())
 					questionBankResp.ErrorHandle(c, err)
