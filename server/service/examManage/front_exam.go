@@ -101,7 +101,7 @@ func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit b
 	return true, nil
 }
 
-func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (examPaper string, status examManage.StudentPaperStatus, err error) {
+func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (PaperId int64, sChoice []*response.ChoiceComponent, mChoice []*response.ChoiceComponent, judge []*response.JudgeComponent, blank []*response.BlankComponent, program []*response.ProgramComponent, status examManage.StudentPaperStatus, err error) {
 	//examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	//examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	//examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -158,14 +158,22 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP 
 	//		programCount++
 	//	}
 	//}
-	//var PaperId int64
-	//err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).Scan(&PaperId).Error
-	////PaperId, err := examService.GetStudentPaperId(examComing)
-	//if err != nil {
-	//	return
-	//}
-	//examPaper.PaperId = uint(PaperId)
-	examPaper, err = global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId)).Result()
+	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).Scan(&PaperId).Error
+	//PaperId, err := examService.GetStudentPaperId(examComing)
+	if err != nil {
+		return
+	}
+	sChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId, uint(questionType.SINGLE_CHOICE))).Result()
+	mChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId, uint(questionType.MULTIPLE_CHOICE))).Result()
+	judge1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId, uint(questionType.JUDGE))).Result()
+	blank1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId, uint(questionType.SUPPLY_BLANK))).Result()
+	program1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, examComing.StudentId, examComing.PlanId, uint(questionType.PROGRAM))).Result()
+	err = json.Unmarshal([]byte(sChoice1), &sChoice)
+	err = json.Unmarshal([]byte(mChoice1), &mChoice)
+	err = json.Unmarshal([]byte(judge1), &judge)
+	err = json.Unmarshal([]byte(blank1), &blank)
+	err = json.Unmarshal([]byte(program1), &program)
+
 	if err != nil {
 		return
 	}
@@ -262,8 +270,16 @@ func (examService *ExamService) SetExamPre(pid uint) (err error) {
 		}
 		global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ? ", pid).Update("is_ready", 1)
 		examPaper.PaperId = uint(PaperId)
-		redisPaper, _ := json.Marshal(examPaper)
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d", 05, v, pid), redisPaper, 7*24*time.Hour)
+		credisPaper, _ := json.Marshal(examPaper.SingleChoiceComponent)
+		mredisPaper, _ := json.Marshal(examPaper.MultiChoiceComponent)
+		jredisPaper, _ := json.Marshal(examPaper.JudgeComponent)
+		bredisPaper, _ := json.Marshal(examPaper.BlankComponent)
+		predisPaper, _ := json.Marshal(examPaper.ProgramComponent)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, v, pid, uint(questionType.SINGLE_CHOICE)), string(credisPaper), 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, v, pid, uint(questionType.MULTIPLE_CHOICE)), string(mredisPaper), 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, v, pid, uint(questionType.JUDGE)), string(jredisPaper), 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, v, pid, uint(questionType.SUPPLY_BLANK)), string(bredisPaper), 7*24*time.Hour)
+		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("studentPaper:%d:%d:%d:%d", 05, v, pid, uint(questionType.PROGRAM)), string(predisPaper), 7*24*time.Hour)
 	}
 	return
 }
@@ -439,28 +455,6 @@ func (examService *ExamService) CreateStatusRecord(examComing request.ExamComing
 }
 
 //保存试卷
-func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
-	var optionCommit = examPaperCommit.MultipleChoiceCommit
-	var JudgeCommit = examPaperCommit.JudgeCommit
-	var BlankCommit = examPaperCommit.BlankCommit
-	var ProgramCommit = examPaperCommit.ProgramCommit
-	for j := 0; j < len(optionCommit); j++ {
-		answers := strings.Join(optionCommit[j].Answer, ",")
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
-	}
-	for j := 0; j < len(JudgeCommit); j++ {
-		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
-	}
-	for j := 0; j < len(BlankCommit); j++ {
-		blankAnswer := utils.StringArrayToString(BlankCommit[j].Answer)
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId), blankAnswer, 7*24*time.Hour)
-	}
-	for j := 0; j < len(ProgramCommit); j++ {
-		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, ProgramCommit[j].MergeId), ProgramCommit[j].Code, 7*24*time.Hour)
-	}
-	return
-}
 
 //提交试卷
 func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
@@ -691,6 +685,18 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	err = db.Where("student_id = ? and is_report = 1", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
+func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
+	optionCommit, err := json.Marshal(examPaperCommit.MultipleChoiceCommit)
+	JudgeCommit, err := json.Marshal(examPaperCommit.JudgeCommit)
+	BlankCommit, err := json.Marshal(examPaperCommit.BlankCommit)
+	ProgramCommit, err := json.Marshal(examPaperCommit.ProgramCommit)
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, uint(questionType.SINGLE_CHOICE)), string(optionCommit), 7*24*time.Hour)
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, uint(questionType.JUDGE)), string(JudgeCommit), 7*24*time.Hour)
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, uint(questionType.SUPPLY_BLANK)), string(BlankCommit), 7*24*time.Hour)
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, examPaperCommit.StudentId, examPaperCommit.PlanId, uint(questionType.PROGRAM)), string(ProgramCommit), 7*24*time.Hour)
+
+	return
+}
 func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, err error) {
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("id").Where("student_id =? and plan_id = ?", sId, id).Find(&infoList).Error
 	if err != nil {
@@ -698,29 +704,37 @@ func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, 
 	}
 	return
 }
-func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint, infoList []uint) (list1 response.SaveAllPaperMerge, err error) {
-	list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
-	list1.JudgeAnswer = make([]response.SaveExamPaper, 0)
-	list1.BlankAnswer = make([]response.SaveExamPaper, 0)
-	list1.ProgramAnswer = make([]response.SaveExamPaper, 0)
-	for _, v := range infoList {
-		ans, isCommit := examService.QuerySaveExamPapers(sId, pId, v)
-		var quesType examManage.ExamStudentPaper
-		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("question_type").Where("id = ?", v).Find(&quesType)
-		if *quesType.QuestionType == questionType.SINGLE_CHOICE {
-			temp := examService.SaveAnswer(ans, isCommit, v)
-			list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
-		} else if *quesType.QuestionType == questionType.JUDGE {
-			temp := examService.SaveAnswer(ans, isCommit, v)
-			list1.JudgeAnswer = append(list1.JudgeAnswer, temp)
-		} else if *quesType.QuestionType == questionType.SUPPLY_BLANK {
-			temp := examService.SaveAnswer(ans, isCommit, v)
-			list1.BlankAnswer = append(list1.BlankAnswer, temp)
-		} else if *quesType.QuestionType == questionType.PROGRAM {
-			temp := examService.SaveAnswer(ans, isCommit, v)
-			list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
-		}
-	}
+func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperCommit examManage.CommitExamPaper, err error) {
+	sChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SINGLE_CHOICE))).Result()
+	judge1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.JUDGE))).Result()
+	blank1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SUPPLY_BLANK))).Result()
+	program1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.PROGRAM))).Result()
+	err = json.Unmarshal([]byte(sChoice1), &examPaperCommit.MultipleChoiceCommit)
+	err = json.Unmarshal([]byte(judge1), &examPaperCommit.JudgeCommit)
+	err = json.Unmarshal([]byte(blank1), &examPaperCommit.BlankCommit)
+	err = json.Unmarshal([]byte(program1), &examPaperCommit.ProgramCommit)
+	//list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
+	//list1.JudgeAnswer = make([]response.SaveExamPaper, 0)
+	//list1.BlankAnswer = make([]response.SaveExamPaper, 0)
+	//list1.ProgramAnswer = make([]response.SaveExamPaper, 0)
+	//for _, v := range infoList {
+	//	ans, isCommit := examService.QuerySaveExamPapers(sId, pId, v)
+	//	var quesType examManage.ExamStudentPaper
+	//	global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("question_type").Where("id = ?", v).Find(&quesType)
+	//	if *quesType.QuestionType == questionType.SINGLE_CHOICE {
+	//		temp := examService.SaveAnswer(ans, isCommit, v)
+	//		list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
+	//	} else if *quesType.QuestionType == questionType.JUDGE {
+	//		temp := examService.SaveAnswer(ans, isCommit, v)
+	//		list1.JudgeAnswer = append(list1.JudgeAnswer, temp)
+	//	} else if *quesType.QuestionType == questionType.SUPPLY_BLANK {
+	//		temp := examService.SaveAnswer(ans, isCommit, v)
+	//		list1.BlankAnswer = append(list1.BlankAnswer, temp)
+	//	} else if *quesType.QuestionType == questionType.PROGRAM {
+	//		temp := examService.SaveAnswer(ans, isCommit, v)
+	//		list1.ChoiceAnswer = append(list1.ChoiceAnswer, temp)
+	//	}
+	//}
 	return
 }
 func (examService *ExamService) SaveAnswer(ans string, isCommit bool, v uint) (list response.SaveExamPaper) {

@@ -1,7 +1,6 @@
 package exam
 
 import (
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	request2 "github.com/prl26/exam-system/server/model/common/request"
@@ -73,15 +72,20 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 				response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
 			} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
 				response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-			} else if examPaper, status, err := examService.GetExamPapers(examComing, ip); err != nil {
+			} else if examPaperId, singleChoice, multiChoice, judge, blank, program, status, err := examService.GetExamPapers(examComing, ip); err != nil {
 				global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
 				response.FailWithMessage("查询考试试卷失败", c)
 			} else if status.IsCommit {
 				response.FailWithMessageAndError(703, "你已经提交过了", c)
 			} else {
 				response.OkWithData(gin.H{
-					"examPaper": examPaper,
-					"enterTime": status.EnterTime,
+					"examPaperId":           examPaperId,
+					"singleChoiceComponent": singleChoice,
+					"multiChoiceComponent":  multiChoice,
+					"judgeComponent":        judge,
+					"blankComponent":        blank,
+					"programComponent":      program,
+					"enterTime":             status.EnterTime,
 				}, c)
 			}
 		}
@@ -116,20 +120,18 @@ func (examApi *ExamApi) FindSaveExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper
 	_ = c.ShouldBindQuery(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
-	if AllMergeId, err := examService.GetAllQues(ExamCommit.PlanId, ExamCommit.StudentId); err != nil {
-		global.GVA_LOG.Error("试卷保存失败", zap.Error(err))
-		response.FailWithMessage("试卷提交失败", c)
+	//if AllMergeId, err := examService.GetAllQues(ExamCommit.PlanId, ExamCommit.StudentId); err != nil {
+	//	global.GVA_LOG.Error("试卷保存失败", zap.Error(err))
+	//	response.FailWithMessage("试卷提交失败", c)
+	//} else {
+	if SavePaper, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId); err != nil {
+		global.GVA_LOG.Error("获取保存的试卷失败", zap.Error(err))
+		response.FailWithMessage("获取保存的试卷失败", c)
 	} else {
-		if Answer, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId, AllMergeId); err != nil {
-			global.GVA_LOG.Error("获取保存的试卷失败", zap.Error(err))
-			response.FailWithMessage("获取保存的试卷失败", c)
-		} else {
-			answer, _ := json.Marshal(Answer)
-			response.OkWithData(gin.H{
-				"Answer":  string(answer),
-				"message": "获取成功",
-			}, c)
-		}
+		response.OkWithData(gin.H{
+			"Answer":  SavePaper,
+			"message": "获取成功",
+		}, c)
 	}
 }
 
