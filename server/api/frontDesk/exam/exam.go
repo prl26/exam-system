@@ -72,21 +72,37 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 				response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
 			} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
 				response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-			} else if examPaperId, singleChoice, multiChoice, judge, blank, program, status, err := examService.GetExamPapers(examComing, ip); err != nil {
-				global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
-				response.FailWithMessage("查询考试试卷失败", c)
-			} else if status.IsCommit {
-				response.FailWithMessageAndError(703, "你已经提交过了", c)
 			} else {
-				response.OkWithData(gin.H{
-					"examPaperId":           examPaperId,
-					"singleChoiceComponent": singleChoice,
-					"multiChoiceComponent":  multiChoice,
-					"judgeComponent":        judge,
-					"blankComponent":        blank,
-					"programComponent":      program,
-					"enterTime":             status.EnterTime,
-				}, c)
+				if isReady, _ := examService.CheckIsReady(planId.PlanId); isReady == false {
+					if exampaper, status, err := examService.GetExamPapersBySql(examComing, ip); err != nil {
+						global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+						response.FailWithMessage("查询考试试卷失败", c)
+					} else if status.IsCommit {
+						response.FailWithMessageAndError(703, "你已经提交过了", c)
+					} else {
+						response.OkWithData(gin.H{
+							"examPaper": exampaper,
+							"enterTime": status.EnterTime,
+						}, c)
+					}
+				} else {
+					if examPaperId, singleChoice, multiChoice, judge, blank, program, status, err := examService.GetExamPapers(examComing, ip); err != nil {
+						global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+						response.FailWithMessage("查询考试试卷失败", c)
+					} else if status.IsCommit {
+						response.FailWithMessageAndError(703, "你已经提交过了", c)
+					} else {
+						response.OkWithData(gin.H{
+							"examPaperId":           examPaperId,
+							"singleChoiceComponent": singleChoice,
+							"multiChoiceComponent":  multiChoice,
+							"judgeComponent":        judge,
+							"blankComponent":        blank,
+							"programComponent":      program,
+							"enterTime":             status.EnterTime,
+						}, c)
+					}
+				}
 			}
 		}
 	}
