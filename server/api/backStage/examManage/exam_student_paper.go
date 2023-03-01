@@ -255,7 +255,6 @@ func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
 	_ = c.ShouldBindJSON(&examPlan)
 	studentList, _ := examService.GetStudentList(examPlan.ID)
 	for _, v := range studentList {
-		fmt.Println(v)
 		sp := teachplan.CoverRq{
 			StudentId: v,
 			PlanId:    examPlan.ID,

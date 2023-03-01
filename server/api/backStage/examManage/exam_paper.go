@@ -8,12 +8,14 @@ import (
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
+	"github.com/prl26/exam-system/server/model/teachplan"
 	request3 "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type ExamPaperApi struct {
@@ -293,5 +295,27 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 		response.OkWithData(gin.H{
 			"filepath": respath,
 		}, c)
+	}
+}
+func (examPaperApi *ExamPaperApi) SetExamPre(c *gin.Context) {
+	var plan teachplan.ExamPlan
+	_ = c.ShouldBindJSON(&plan)
+	plandetail, _ := examService.GetPlanDetail(plan.ID)
+	unix1 := time.Now().Add(24 * time.Hour)
+	if isDistributed, _ := examService.CheckIsDistributed(plan.ID); isDistributed == false {
+		response.FailWithMessage("需要先分配试卷", c)
+	} else if plandetail.StartTime.Unix() > unix1.Unix() {
+		response.FailWithMessage("进入考试准备阶段需要在开考的前一天内", c)
+	} else if plandetail.StartTime.Unix() < time.Now().Unix() {
+		response.FailWithMessage("考试已经开考了", c)
+	} else if plandetail.EndTime.Unix() < time.Now().Unix() {
+		response.FailWithMessage("考试已经结束了", c)
+	} else {
+		err := examService.SetExamPre(plan.ID)
+		if err != nil {
+			response.FailWithMessage("进入考试准备阶段失败", c)
+		} else {
+			response.OkWithMessage("成功进入考试准备阶段", c)
+		}
 	}
 }

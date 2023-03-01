@@ -103,7 +103,6 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 			response.FailWithMessage("试卷提交试卷失败", c)
 		} else {
 			go func() {
-				fmt.Println("start,开始处理试卷")
 				wg.Add(1)
 				utils1.ExecTarget(ExamCommit)
 				defer wg.Done()

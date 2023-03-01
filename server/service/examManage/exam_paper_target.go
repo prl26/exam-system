@@ -83,8 +83,7 @@ func (targetExamService *TargetExamPaperService) CreateStatus(examComing request
 	if err != nil {
 		return
 	} else if num == 0 {
-		fmt.Println(examComing)
-		fmt.Println("创建了status")
+
 		status = examManage.StudentPaperStatus{
 			GVA_MODEL: global.GVA_MODEL{},
 			StudentId: examComing.StudentId,
