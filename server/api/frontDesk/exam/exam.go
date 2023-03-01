@@ -2,7 +2,6 @@ package exam
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	request2 "github.com/prl26/exam-system/server/model/common/request"
@@ -57,30 +56,34 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	_ = c.ShouldBindQuery(&planId)
 	studentId := utils.GetStudentId(c)
 	ip := c.ClientIP()
-	if isFinishPreExam, err, preExamIds := examPlanService.IsFinishPreExam(planId.PlanId, studentId); err != nil {
-		response.FailWithMessage("前置计划查询出错", c)
-	} else if isFinishPreExam == false {
-		response.FailWithDetailedAndError(704, preExamIds, "请先完成前置计划", c)
+	if bool, _ := examPlanService.CheckIsExamSt(planId.PlanId, studentId); bool == false {
+		response.FailWithMessage("你不在参与此考试的范围中", c)
 	} else {
-		var examComing = request.ExamComing{
-			StudentId: studentId,
-			PlanId:    planId.PlanId,
-		}
-		PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
-		if PlanDetail.StartTime.Unix() > time.Now().Unix() {
-			response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
-		} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
-			response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-		} else if examPaper, status, err := examService.GetExamPapers(examComing, ip); err != nil {
-			global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
-			response.FailWithMessage("查询考试试卷失败", c)
-		} else if status.IsCommit {
-			response.FailWithMessageAndError(703, "你已经提交过了", c)
+		if isFinishPreExam, err, preExamIds := examPlanService.IsFinishPreExam(planId.PlanId, studentId); err != nil {
+			response.FailWithMessage("前置计划查询出错", c)
+		} else if isFinishPreExam == false {
+			response.FailWithDetailedAndError(704, preExamIds, "请先完成前置计划", c)
 		} else {
-			response.OkWithData(gin.H{
-				"examPaper": examPaper,
-				"enterTime": status.EnterTime,
-			}, c)
+			var examComing = request.ExamComing{
+				StudentId: studentId,
+				PlanId:    planId.PlanId,
+			}
+			PlanDetail, _ := examPlanService.GetExamPlan(planId.PlanId)
+			if PlanDetail.StartTime.Unix() > time.Now().Unix() {
+				response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
+			} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
+				response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
+			} else if examPaper, status, err := examService.GetExamPapers(examComing, ip); err != nil {
+				global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+				response.FailWithMessage("查询考试试卷失败", c)
+			} else if status.IsCommit {
+				response.FailWithMessageAndError(703, "你已经提交过了", c)
+			} else {
+				response.OkWithData(gin.H{
+					"examPaper": examPaper,
+					"enterTime": status.EnterTime,
+				}, c)
+			}
 		}
 	}
 }
@@ -117,7 +120,6 @@ func (examApi *ExamApi) FindSaveExamPaper(c *gin.Context) {
 		global.GVA_LOG.Error("试卷保存失败", zap.Error(err))
 		response.FailWithMessage("试卷提交失败", c)
 	} else {
-		fmt.Println(AllMergeId)
 		if Answer, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId, AllMergeId); err != nil {
 			global.GVA_LOG.Error("获取保存的试卷失败", zap.Error(err))
 			response.FailWithMessage("获取保存的试卷失败", c)

@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/examType"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service/questionBank/oj"
 	"gorm.io/gorm"
@@ -22,7 +23,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			} else {
 				if Bool == true {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score where id = ?", examPaperCommit.JudgeCommit[i].MergeId).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score where id = ?", examPaperCommit.JudgeCommit[i].MergeId).Scan(result).Error
 					if err != nil {
 						return err
 					}
@@ -66,7 +67,7 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		planId := int(PlanDetail.ID)
 		if PlanDetail.Type == examType.FinalExam {
 			global.GVA_LOG.Info("期末统分")
-			tx.Select("exam_score", "final_exam_name", "final_exam_id").Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId).Updates(teachplan.Score{
+			tx.Model(teachplan.Score{}).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId).Updates(teachplan.Score{
 				ExamScrore:    &sum,
 				FinalExamName: PlanDetail.Name,
 				FinalExamId:   &planId,
@@ -80,12 +81,13 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 			return err
 		}
 		var recordId uint
-		tx.Model(examManage.ExamRecord{}).Select("id").Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Order("created_at").First(&recordId)
-		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Error
+		var recoreMerge []examManage.ExamRecordMerge
+		tx.Model(examManage.ExamRecord{}).Select("id").Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Order("created_at desc").First(&recordId)
+		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&recoreMerge).Error
 		if err != nil {
 			return err
 		}
-		err = tx.Model(examManage.ExamRecordMerge{}).Update("record_id", recordId).Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Error
+		err = tx.Model(examManage.ExamRecordMerge{}).Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("record_id", recordId).Error
 		//CreateExamScore(PlanDetail,sum,examPaperCommit.StudentId)
 		if err != nil {
 			return err
@@ -95,6 +97,90 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	return
 }
 
+//试卷重新批阅
+func ReExecPapers(sp teachplan.CoverRq) (err error) {
+	var examPaperCommit examManage.ReExecExamPaper
+	examPaperCommit.StudentId = sp.StudentId
+	examPaperCommit.PlanId = sp.PlanId
+	choiceType := uint(questionType.SINGLE_CHOICE)
+	judgeType := uint(questionType.JUDGE)
+	blankType := uint(questionType.SUPPLY_BLANK)
+	//programType := uint(questionType.PROGRAM)
+	//判断题处理
+	global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
+	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, judgeType).Find(&examPaperCommit.JudgeCommit)
+		for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {
+			if Bool, err := ojService.JudgeService.ExamCheck(examPaperCommit.JudgeCommit[i].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
+				return err
+			} else {
+				if Bool == true {
+					var result examManage.ExamStudentPaper
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score where id = ?", examPaperCommit.JudgeCommit[i].Id).Scan(&result).Error
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, choiceType).Find(&examPaperCommit.MultipleChoiceCommit)
+		//选择题处理
+		for i := 0; i < len(examPaperCommit.MultipleChoiceCommit); i++ {
+			answer := StringToStringArray(examPaperCommit.MultipleChoiceCommit[i].Answer, ",")
+			if Bool, err := ojService.MultipleChoiceService.ExamCheck(examPaperCommit.MultipleChoiceCommit[i].QuestionId, answer); err != nil {
+				return err
+			} else {
+				if Bool == true {
+					var result examManage.ExamStudentPaper
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+		//填空题处理
+		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, blankType).Find(&examPaperCommit.BlankCommit)
+		for i := 0; i < len(examPaperCommit.BlankCommit); i++ {
+			answer := StringToStringArray(examPaperCommit.BlankCommit[i].Answer, ",")
+			if _, num, err := ojService.SupplyBlankService.ExamCheck(examPaperCommit.BlankCommit[i].QuestionId, answer); err != nil {
+				return err
+			} else {
+				if num != 0 {
+					var result examManage.ExamStudentPaper
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ?", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+		//总分
+		global.GVA_LOG.Info("进入统分")
+		var sum float64
+		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
+		var PlanDetail teachplan.ExamPlan
+		tx.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
+		planId := int(PlanDetail.ID)
+		if PlanDetail.Type == examType.FinalExam {
+			global.GVA_LOG.Info("期末统分")
+			tx.Model(teachplan.Score{}).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId).Updates(teachplan.Score{
+				ExamScrore:    &sum,
+				FinalExamName: PlanDetail.Name,
+				FinalExamId:   &planId,
+			})
+		} else if PlanDetail.Type == examType.ProceduralExam {
+			global.GVA_LOG.Info("过程化统分")
+			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+		}
+		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return
+}
 func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	var result examManage.ExamStudentPaper
 	if score != 0 {
@@ -106,25 +192,31 @@ func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	return err
 }
 func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint) (err error) {
-	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		var term basicdata.Term
-		var lesson basicdata.Lesson
-		tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
-		tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
-		tx.Create(&examManage.ExamScore{
-			StudentId:  &studentId,
-			PlanId:     &PlanDetail.ID,
-			Name:       PlanDetail.Name,
-			TermId:     PlanDetail.TermId,
-			TermName:   term.Name,
-			LessonId:   PlanDetail.LessonId,
-			CourseName: lesson.Name,
-			Score:      &sum,
-			ExamType:   &PlanDetail.Type,
-			StartTime:  PlanDetail.StartTime,
-			Weight:     PlanDetail.Weight,
+	var num int64
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", studentId, PlanDetail.ID).Count(&num).Error
+	if err != nil {
+		return
+	} else if num == 0 {
+		global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+			var term basicdata.Term
+			var lesson basicdata.Lesson
+			tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
+			tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
+			tx.Create(&examManage.ExamScore{
+				StudentId:  &studentId,
+				PlanId:     &PlanDetail.ID,
+				Name:       PlanDetail.Name,
+				TermId:     PlanDetail.TermId,
+				TermName:   term.Name,
+				LessonId:   PlanDetail.LessonId,
+				CourseName: lesson.Name,
+				Score:      &sum,
+				ExamType:   &PlanDetail.Type,
+				StartTime:  PlanDetail.StartTime,
+				Weight:     PlanDetail.Weight,
+			})
+			return nil
 		})
-		return nil
-	})
+	}
 	return
 }

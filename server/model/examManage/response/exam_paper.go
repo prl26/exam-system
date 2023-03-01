@@ -29,12 +29,19 @@ type ExamPaperResponse2 struct {
 	JudgeComponent        []JudgeComponent2   `json:"judgeComponent"`
 	BlankComponent        []BlankComponent2   `json:"blankComponent"`
 	ProgramComponent      []ProgramComponent2 `json:"programComponent"`
-	TargetComponent       []TargetComponent2  `json:"targetComponent"`
+	TargetComponent       []STargetComponent  `json:"targetComponent"`
+}
+type STargetComponent struct {
+	Order   uint   `json:"order"`
+	MergeId uint   `json:"mergeId"`
+	Target  Target `json:"target"`
+	ScoreStruct
 }
 type ScoreStruct struct {
-	Score    *float64 `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
-	GotScore *float64 `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
-	Answer   string   `json:"answer" form:"answer" gorm:"column:answer;comment:该生题目答案;size:16000;"`
+	Score         *float64 `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
+	GotScore      *float64 `json:"gotScore" form:"gotScore" gorm:"column:got_score;comment:该生得分"`
+	Answer        string   `json:"answer" form:"answer" gorm:"column:answer;comment:该生题目答案;size:16000;"`
+	CorrectAnswer string   `json:"correctAnswer" form:"correctAnswer"`
 }
 type ChoiceComponent struct {
 	MergeId uint                                  `json:"mergeId"`
@@ -47,6 +54,7 @@ type ChoiceComponent1 struct {
 }
 type ChoiceComponent2 struct {
 	MergeId uint                                  `json:"mergeId"`
+	Order   uint                                  `json:"order"`
 	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
 	ScoreStruct
 }
@@ -61,6 +69,7 @@ type JudgeComponent1 struct {
 }
 type JudgeComponent2 struct {
 	MergeId uint                             `json:"mergeId"`
+	Order   uint                             `json:"order"`
 	Judge   questionBankVoResp.JudgePractice `json:"judgeComponent"`
 	ScoreStruct
 }
@@ -75,6 +84,7 @@ type BlankComponent1 struct {
 }
 type BlankComponent2 struct {
 	MergeId uint                                   `json:"mergeId"`
+	Order   uint                                   `json:"order"`
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
 	ScoreStruct
 }
@@ -89,6 +99,7 @@ type ProgramComponent1 struct {
 }
 type ProgramComponent2 struct {
 	MergeId uint                               `json:"mergeId"`
+	Order   uint                               `json:"order"`
 	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
 	ScoreStruct
 }

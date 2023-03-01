@@ -235,7 +235,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	}
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	respath := "/static/" + excelInfo.FileName
+	respath := "/static/excel" + excelInfo.FileName
 	quesNum, _ := examService.GetPaperQuesNum(excelInfo.PlanId)
 	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	studentList, _ := examService.GetStudentList(excelInfo.PlanId)
@@ -259,8 +259,17 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	//examService.ExportPaperToHtml()
-	response.OkWithMessage("好了", c)
+	_, err := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
+	if err != nil {
+		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
+		response.FailWithMessage("生成zip失败", c)
+		return
+	} else {
+		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
+		response.OkWithData(gin.H{
+			"filepath": path,
+		}, c)
+	}
 }
 func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	var excelInfo request3.MultiExcel

@@ -10,6 +10,8 @@ import (
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service"
+	"github.com/prl26/exam-system/server/utils"
+	"github.com/prl26/exam-system/server/utils1"
 	"go.uber.org/zap"
 )
 
@@ -208,7 +210,6 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
 	var cheating examManageReq.PaperCheating
 	_ = c.ShouldBindJSON(&cheating)
-	fmt.Println(cheating.AnswerCheating[0].GotScore)
 	if err := examstudentPaperService.PaperCheating(cheating); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage("修改失败", c)
@@ -216,6 +217,72 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
 		response.OkWithData(gin.H{
 			"修改数据":    cheating.AnswerCheating,
 			"message": "修改成功",
+		}, c)
+	}
+}
+
+//单独上报学生分数
+func (examstudentPaperApi *ExamStudentPaperApi) ReportStudentScore(c *gin.Context) {
+	var st teachplan.CoverRq
+	_ = c.ShouldBindJSON(&st)
+	if err := examstudentPaperService.ReportStudentScore(st.PlanId, st.StudentId); err != nil {
+		global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
+		response.FailWithMessage("上报失败", c)
+	} else {
+		response.OkWithMessage("上报成功", c)
+	}
+}
+
+//单个学生试卷重新批阅
+func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
+	var sp teachplan.CoverRq
+	_ = c.ShouldBindJSON(&sp)
+	if err := utils.ReExecPapers(sp); err != nil {
+		global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+		response.FailWithMessage("自动批阅出错啦", c)
+	} else {
+		if err := utils1.ReExecTargetPapers(sp); err != nil {
+			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+			response.FailWithMessage("自动批阅出错啦", c)
+		}
+		response.OkWithMessage("批阅成功", c)
+	}
+}
+
+//考试计划下学生试卷重新批阅
+func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
+	var examPlan teachplan.ExamPlan
+	_ = c.ShouldBindJSON(&examPlan)
+	studentList, _ := examService.GetStudentList(examPlan.ID)
+	for _, v := range studentList {
+		fmt.Println(v)
+		sp := teachplan.CoverRq{
+			StudentId: v,
+			PlanId:    examPlan.ID,
+		}
+		if err := utils.ReExecPapers(sp); err != nil {
+			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+			response.FailWithMessage("自动批阅出错啦", c)
+		} else {
+			if err := utils1.ReExecTargetPapers(sp); err != nil {
+				global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
+				response.FailWithMessage("自动批阅出错啦", c)
+			}
+		}
+	}
+	response.OkWithMessage("批阅成功", c)
+}
+
+//获取考试提交日志
+func (examstudentPaperApi *ExamStudentPaperApi) GetCommitRecord(c *gin.Context) {
+	var recordRq examManageReq.RecordRq
+	_ = c.ShouldBindQuery(&recordRq)
+	if recordList, err := examstudentPaperService.GetCommitRecord(recordRq); err != nil {
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithData(gin.H{
+			"recordList": recordList,
+			"message":    "获取成功",
 		}, c)
 	}
 }
