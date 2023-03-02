@@ -237,7 +237,7 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	}
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	respath := "/static/excel" + excelInfo.FileName
+	respath := "/static/excel/" + excelInfo.FileName
 	quesNum, _ := examService.GetPaperQuesNum(excelInfo.PlanId)
 	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	studentList, _ := examService.GetStudentList(excelInfo.PlanId)

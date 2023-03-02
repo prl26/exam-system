@@ -35,3 +35,10 @@ func (student_paper_status *ExamStatusService) GetStatus(StudentId uint, PlanId 
 	}
 	return
 }
+func (student_paper_status *ExamStatusService) GetScore(StudentId uint, PlanId uint) (status examManage.ExamScore, err error) {
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", StudentId, PlanId).Find(&status).Error
+	if err != nil {
+		return
+	}
+	return
+}

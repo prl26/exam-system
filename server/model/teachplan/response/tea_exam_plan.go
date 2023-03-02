@@ -12,11 +12,16 @@ type ItemName struct {
 	TeachClassName string `json:"teachClassName" form:"teachClassName"`
 }
 type ExamPlanRp1 struct {
-	Plan   teachplan.ExamPlan `json:"plan"`
-	Status PlanStatus         `json:"status"`
+	Plan           teachplan.ExamPlan `json:"plan"`
+	Status         PlanStatus         `json:"status"`
+	IsOkayToReExam bool               `json:"isOkayToReExam"`
 }
 type PlanStatus struct {
 	IsBegin          int `json:"isBegin" form:"isBegin"`
 	IsCommit         int `json:"isCommit" form:"isCommit"`
 	IsFinishPreExams int `json:"isFinishPreExams"`
+}
+type PlanRp struct {
+	ExamPlan       teachplan.ExamPlan `json:"examPlan"`
+	IsOkayToReExam bool               `json:"isOkayToReExam"`
 }

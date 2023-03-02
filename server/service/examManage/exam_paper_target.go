@@ -15,7 +15,7 @@ import (
 type TargetExamPaperService struct {
 }
 
-func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing request.ExamComing, ip string) (examPaper response.TargetExamPaperResponse, status examManage.StudentPaperStatus, err error) {
+func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing request.ExamComing, ip string) (examPaper response.TargetExamPaperResponse, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
 	examPaper.TargetComponent = make([]response.TargetComponent, 0)
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
@@ -42,7 +42,7 @@ func (targetExamService *TargetExamPaperService) GetTargetExamPapers(examComing 
 	fmt.Println(status)
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
-	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
+	examScore, err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
 	_, err = targetExamService.CreateStatusRecord(examComing, ip)
 	if err != nil {
 		return

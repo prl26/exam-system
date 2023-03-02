@@ -32,14 +32,34 @@ import (
 type ExamService struct {
 }
 
-func (examService *ExamService) FindExamPlans(teachClassId uint) (examPlans []teachplan.ExamPlan, err error) {
-	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
+func (examService *ExamService) FindExamPlans(teachClassId uint, sid uint) (examPlans []response2.PlanRp, err error) {
+	var examPlan []teachplan.ExamPlan
+	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlan).Error
+	for _, v := range examPlan {
+		var score int64
+		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sid, v.ID).Scan(&score).Error
+		if err != nil {
+			return
+		}
+		if float64(score) <= *v.PassScore && v.Type == examType.ProceduralExam {
+			temp := response2.PlanRp{
+				ExamPlan:       v,
+				IsOkayToReExam: false,
+			}
+			examPlans = append(examPlans, temp)
+		}
+	}
 	return
 }
 func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
 	var examPlans []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
 	for i := 0; i < len(examPlans); i++ {
+		var score int64
+		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&score).Error
+		if err != nil {
+			return
+		}
 		var plan response2.ExamPlanRp1
 		plan.Plan = examPlans[i]
 		if examPlans[i].StartTime.Unix() > time.Now().Unix() {
@@ -62,6 +82,11 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 			plan.Status.IsFinishPreExams = 1
 		} else {
 			plan.Status.IsFinishPreExams = 0
+		}
+		if float64(score) <= *examPlans[i].PassScore && examPlans[i].Type == examType.ProceduralExam {
+			plan.IsOkayToReExam = true
+		} else {
+			plan.IsOkayToReExam = false
 		}
 		planAndStatus = append(planAndStatus, plan)
 	}
@@ -104,7 +129,7 @@ func (examService *ExamService) CheckIsReady(pid uint) (isReady bool, err error)
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Select("is_ready").Where("id = ?", pid).Scan(&isReady).Error
 	return
 }
-func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, err error) {
+func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
 	examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -179,13 +204,13 @@ func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing
 	}
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
-	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
+	examScore, err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
 	if err != nil {
 		return
 	}
 	return
 }
-func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (PaperId int64, sChoice []*response.ChoiceComponent, mChoice []*response.ChoiceComponent, judge []*response.JudgeComponent, blank []*response.BlankComponent, program []*response.ProgramComponent, status examManage.StudentPaperStatus, err error) {
+func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (PaperId int64, sChoice []*response.ChoiceComponent, mChoice []*response.ChoiceComponent, judge []*response.JudgeComponent, blank []*response.BlankComponent, program []*response.ProgramComponent, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
 	//examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	//examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	//examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -271,7 +296,7 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP 
 	}
 	var PlanDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id =?", examComing.PlanId).Find(&PlanDetail)
-	err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
+	examScore, err = utils.CreateExamScore(PlanDetail, 0, examComing.StudentId)
 	if err != nil {
 		return
 	}
@@ -556,7 +581,7 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId), answers, 7*24*time.Hour)
 	}
 	for j := 0; j < len(JudgeCommit); j++ {
-		s := strconv.FormatBool(examPaperCommit.JudgeCommit[0].Answer)
+		s := strconv.FormatBool(examPaperCommit.JudgeCommit[j].Answer)
 		global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId), s, 7*24*time.Hour)
 	}
 	for j := 0; j < len(BlankCommit); j++ {

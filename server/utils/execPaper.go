@@ -191,7 +191,7 @@ func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", program.StudentId, program.PlanId).Update("score", sum).Error
 	return err
 }
-func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint) (err error) {
+func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint) (examScore examManage.ExamScore, err error) {
 	var num int64
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", studentId, PlanDetail.ID).Count(&num).Error
 	if err != nil {
@@ -202,7 +202,7 @@ func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint)
 			var lesson basicdata.Lesson
 			tx.Model(&basicdata.Term{}).Where("id = ?", PlanDetail.TermId).Find(&term)
 			tx.Model(&basicdata.Lesson{}).Where("id = ?", PlanDetail.LessonId).Find(&lesson)
-			tx.Create(&examManage.ExamScore{
+			examScore = examManage.ExamScore{
 				StudentId:  &studentId,
 				PlanId:     &PlanDetail.ID,
 				Name:       PlanDetail.Name,
@@ -214,7 +214,9 @@ func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint)
 				ExamType:   &PlanDetail.Type,
 				StartTime:  PlanDetail.StartTime,
 				Weight:     PlanDetail.Weight,
-			})
+				IsReport:   false,
+			}
+			tx.Create(&examScore)
 			return nil
 		})
 	}
