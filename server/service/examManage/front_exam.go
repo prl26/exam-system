@@ -401,8 +401,8 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 	examPaper.TargetComponent = make([]response.STargetComponent, 0)
 	var studentPaper []examManage.ExamStudentPaper
 	err = global.GVA_DB.Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&studentPaper).Error
-	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount uint
-	var singleChoiceOrder, MultiChoiceOrder, judgeOrder, blankOrder, programOrder uint
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount, targetCount uint
+	var singleChoiceOrder, MultiChoiceOrder, judgeOrder, blankOrder, programOrder, targetOrder uint
 	for i := 0; i < len(studentPaper); i++ {
 		if *studentPaper[i].QuestionType == questionType.SINGLE_CHOICE {
 			var Choice response.ChoiceComponent2
@@ -490,27 +490,25 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
 			programCount++
+		} else if *studentPaper[i].QuestionType == questionType.Target {
+			var target response.STargetComponent
+			err = global.GVA_DB.Table("les_questionBank_target").Where("id = ?", studentPaper[i].QuestionId).Find(&target.Target).Error
+			if err != nil {
+				return
+			}
+			if err != nil {
+				return
+			}
+			targetOrder++
+			examPaper.TargetComponent = append(examPaper.TargetComponent, target)
+			examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
+			examPaper.ProgramComponent[targetCount].Order = programOrder
+			examPaper.TargetComponent[targetCount].Score = studentPaper[i].Score
+			examPaper.TargetComponent[targetCount].GotScore = studentPaper[i].GotScore
+			examPaper.TargetComponent[targetCount].Answer = studentPaper[i].Answer
+			targetCount++
 		}
 	}
-	//else if *studentPaper[i].QuestionType == questionType.Target {
-	//	var target response.STargetComponent
-	//	err = global.GVA_DB.Table("les_questionBank_target").Where("id = ?", studentPaper[i].QuestionId).Find(&target.Target).Error
-	//	if err != nil {
-	//		return
-	//	}
-	//	var answer string
-	//	err = global.GVA_DB.Table("les_questionBank_target").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
-	//	if err != nil {
-	//		return
-	//	}
-	//	examPaper.TargetComponent = append(examPaper.TargetComponent, target)
-	//	examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
-	//	examPaper.TargetComponent[targetCount].Score = studentPaper[i].Score
-	//	examPaper.TargetComponent[targetCount].GotScore = studentPaper[i].GotScore
-	//	examPaper.TargetComponent[targetCount].Answer = studentPaper[i].Answer
-	//	examPaper.TargetComponent[targetCount].CorrectAnswer = answer
-	//	targetCount++
-	//}
 	var PaperId int64
 	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).Scan(&PaperId).Error
 	//PaperId, err := examService.GetStudentPaperId(examComing)
@@ -877,11 +875,11 @@ func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error
 	return
 }
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
-	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? ORDER BY b.student_id", id).Scan(&infoList).Error
+	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? and b.deleted_at is null ORDER BY b.student_id", id).Scan(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetPaperQuesNum(pid uint) (num []examManage.QuesNum, err error) {
-	err = global.GVA_DB.Raw("SELECT student_id,count(*) as num FROM `exam_student_paper` WHERE plan_id = ? GROUP BY student_id ORDER BY  num desc", pid).Find(&num).Error
+	err = global.GVA_DB.Raw("SELECT student_id,count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and deleted_at is null GROUP BY student_id ORDER BY  num desc", pid).Find(&num).Error
 	return
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {

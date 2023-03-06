@@ -83,11 +83,11 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 		var recordId uint
 		var recoreMerge []examManage.ExamRecordMerge
 		tx.Model(examManage.ExamRecord{}).Select("id").Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Order("created_at desc").First(&recordId)
-		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&recoreMerge).Error
+		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,record_id) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,"+fmt.Sprintf("%d", recordId)+" FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&recoreMerge).Error
 		if err != nil {
 			return err
 		}
-		err = tx.Model(examManage.ExamRecordMerge{}).Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("record_id", recordId).Error
+		//err = tx.Model(examManage.ExamRecordMerge{}).Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("record_id", recordId).Error
 		//CreateExamScore(PlanDetail,sum,examPaperCommit.StudentId)
 		if err != nil {
 			return err
@@ -116,7 +116,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 			} else {
 				if Bool == true {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score where id = ?", examPaperCommit.JudgeCommit[i].Id).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score where id = ? and deleted_at is null", examPaperCommit.JudgeCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
@@ -132,7 +132,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 			} else {
 				if Bool == true {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ?", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ? and deleted_at is null", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
@@ -148,7 +148,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 			} else {
 				if num != 0 {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ?", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
@@ -158,7 +158,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 		//总分
 		global.GVA_LOG.Info("进入统分")
 		var sum float64
-		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
+		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ? and deleted_at is null", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&sum)
 		var PlanDetail teachplan.ExamPlan
 		tx.Model(teachplan.ExamPlan{}).Where("id =?", examPaperCommit.PlanId).Find(&PlanDetail)
 		planId := int(PlanDetail.ID)
@@ -171,7 +171,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 			})
 		} else if PlanDetail.Type == examType.ProceduralExam {
 			global.GVA_LOG.Info("过程化统分")
-			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ?", examPaperCommit.StudentId, PlanDetail.TeachClassId)
+			global.GVA_DB.Raw("UPDATE tea_score SET procedure_score = procedure_score+procedure_proportion/100*?)", sum).Where("student_id = ? and teach_class_id = ? and deleted_at is null", examPaperCommit.StudentId, PlanDetail.TeachClassId)
 		}
 		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("score", sum).Error
 		if err != nil {
@@ -184,16 +184,16 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	var result examManage.ExamStudentPaper
 	if score != 0 {
-		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ?", score), program.MergeId).Scan(&result).Error
+		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ? and deleted_at is null", score), program.MergeId).Scan(&result).Error
 	}
 	var sum float64
-	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", program.StudentId, program.PlanId).Scan(&sum)
+	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ? and deleted_at is null", program.StudentId, program.PlanId).Scan(&sum)
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", program.StudentId, program.PlanId).Update("score", sum).Error
 	return err
 }
 func CreateExamScore(PlanDetail teachplan.ExamPlan, sum float64, studentId uint) (examScore examManage.ExamScore, err error) {
 	var num int64
-	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", studentId, PlanDetail.ID).Count(&num).Error
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", studentId, PlanDetail.ID).Find(&examScore).Count(&num).Error
 	if err != nil {
 		return
 	} else if num == 0 {

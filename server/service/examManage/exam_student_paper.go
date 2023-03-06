@@ -215,7 +215,7 @@ func (examstudentPaperService *ExamStudentPaperService) PaperCheating(info examM
 			}
 		}
 		var sum int64
-		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?", info.StudentId, info.PlanId).Scan(&sum)
+		tx.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ? and deleted_at is null", info.StudentId, info.PlanId).Scan(&sum)
 		err = tx.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", info.StudentId, info.PlanId).Update("score", sum).Error
 		if err != nil {
 			return err
@@ -239,5 +239,30 @@ func (examstudentPaperService *ExamStudentPaperService) GetCommitRecord(info exa
 		}
 		recordList = append(recordList, temp)
 	}
+	return
+}
+
+//删除学生考卷
+func (examstudentPaperService *ExamStudentPaperService) DeleteAnswer(pid uint, sid uint) (err error) {
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", sid, pid).Update("answer", "").Error
+	if err != nil {
+		return
+	}
+	var score examManage.ExamScore
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("student_id = ? and plan_id = ?", sid, pid).Delete(&score).Error
+	if err != nil {
+		return
+	}
+	var status examManage.StudentPaperStatus
+	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id = ?", sid, pid).Delete(&status).Error
+	if err != nil {
+		return
+	}
+	return
+}
+func (examstudentPaperService *ExamStudentPaperService) RecoverByRecord(pid, sid, rid uint) (err error) {
+	err = global.GVA_DB.Raw("UPDATE exam_student_paper as e,exam_record_merge as r SET e.answer = r.answer,e.got_score = r.got_score WHERE e.student_id = r.student_id and e.plan_id = r.plan_id and e.question_type = r.question_type and e.question_id =r.question_id and e.problem_type = r.problem_type and r.record_id = ?", rid).Error
+	var sum float64
+	global.GVA_DB.Raw("UPDATE exam_scores SET score = (SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?) WHERE student_id = ? and plan_id = ?", sid, pid, sid, pid).Scan(&sum)
 	return
 }

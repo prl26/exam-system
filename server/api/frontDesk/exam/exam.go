@@ -170,32 +170,36 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	examScore, _ := statuServie.GetScore(ExamCommit.StudentId, ExamCommit.PlanId)
 	minutes := *PlanDetail.Time
 	unix1 := status.EnterTime.Add(time.Duration(minutes) * time.Minute)
-	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
-		response.FailWithMessageAndError(704, "超出考试时间", c)
-	} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
-		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
-	} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
-		response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
-	} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
-		response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
+	if bool, _ := examPlanService.CheckIsExamSt(ExamCommit.PlanId, ExamCommit.StudentId); bool == false {
+		response.FailWithMessage("你不在参与此考试的范围中", c)
 	} else {
-		if err := examService.CommitExamPapers(ExamCommit); err != nil {
-			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
-			response.FailWithMessage("试卷提交失败", c)
+		if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+			response.FailWithMessageAndError(704, "超出考试时间", c)
+		} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
+		} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
+			response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
+		} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
+			response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
 		} else {
-			go func() {
-				global.GVA_LOG.Info("start,开始处理试卷")
-				time.AfterFunc(time.Second*5, func() {
-					wg.Add(1)
-					if err = examService.UpdateExamPapers(ExamCommit); err != nil {
-						global.GVA_LOG.Error("更新试卷记录失败", zap.Error(err))
-					}
-					utils.ExecPapers(ExamCommit)
-					defer wg.Done()
-				})
-				wg.Wait()
-			}()
-			response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
+			if err := examService.CommitExamPapers(ExamCommit); err != nil {
+				global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
+				response.FailWithMessage("试卷提交失败", c)
+			} else {
+				go func() {
+					global.GVA_LOG.Info("start,开始处理试卷")
+					time.AfterFunc(time.Second*5, func() {
+						wg.Add(1)
+						if err = examService.UpdateExamPapers(ExamCommit); err != nil {
+							global.GVA_LOG.Error("更新试卷记录失败", zap.Error(err))
+						}
+						utils.ExecPapers(ExamCommit)
+						defer wg.Done()
+					})
+					wg.Wait()
+				}()
+				response.OkWithData(gin.H{"examPaper": ExamCommit}, c)
+			}
 		}
 	}
 }

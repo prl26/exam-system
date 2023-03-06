@@ -203,10 +203,10 @@ func (examPlanService *ExamPlanService) ChangeAudit(planId uint, value uint) (er
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Update("audit", value).Error
 	return
 }
-func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
+func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamNames []string) {
 	var examPlan teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&examPlan)
-	preExamIds = strings.Split(examPlan.PrePlanId, ",")
+	preExamIds := strings.Split(examPlan.PrePlanId, ",")
 	for _, v := range preExamIds {
 		preExamId, _ := strconv.Atoi(v)
 		if preExamId == 0 {
@@ -214,9 +214,15 @@ func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId u
 		}
 		var examRecords examManage.ExamScore
 		var count int64
+		var prePlanDetail teachplan.ExamPlan
+		err = global.GVA_DB.Where("plan_id = ?", preExamId).Find(&prePlanDetail).Error
 		err = global.GVA_DB.Where("plan_id = ? and student_id = ?", preExamId, studentId).Find(&examRecords).Count(&count).Error
+		preExamNames = append(preExamNames, prePlanDetail.Name)
 		if err != nil {
 			return false, err, preExamIds
+		}
+		if *examRecords.Score < *prePlanDetail.PassScore {
+			return false, nil, preExamIds
 		}
 		if count == 0 {
 			return false, nil, preExamIds

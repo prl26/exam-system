@@ -1,7 +1,6 @@
 package examManage
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -192,7 +191,6 @@ func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 	var pageInfo examManageReq.PaperReview
 	_ = c.ShouldBindQuery(&pageInfo)
-	fmt.Println(pageInfo)
 	if list, total, err := examstudentPaperService.ReviewScore(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -283,5 +281,28 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetCommitRecord(c *gin.Context) 
 			"recordList": recordList,
 			"message":    "获取成功",
 		}, c)
+	}
+}
+
+//通过指定的日志id恢复学生试卷
+func (examstudentPaperApi *ExamStudentPaperApi) RecoverByRecord(c *gin.Context) {
+	var recordRq examManageReq.RecordRq1
+	_ = c.ShouldBindQuery(&recordRq)
+	if err := examstudentPaperService.RecoverByRecord(recordRq.PlanId, recordRq.Student, recordRq.RecordId); err != nil {
+		global.GVA_LOG.Error("恢复学生试卷失败!", zap.Error(err))
+		response.FailWithMessage("恢复学生试卷失败", c)
+	} else {
+		response.OkWithMessage("恢复学生试卷成功", c)
+	}
+}
+
+//删除学生考卷
+func (examstudentPaperApi *ExamStudentPaperApi) DeleteStudentAnswer(c *gin.Context) {
+	var recordRq examManageReq.RecordRq
+	_ = c.ShouldBindJSON(&recordRq)
+	if err := examstudentPaperService.DeleteAnswer(recordRq.PlanId, recordRq.Student); err != nil {
+		response.FailWithMessage("删除失败", c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

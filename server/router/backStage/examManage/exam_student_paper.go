@@ -27,7 +27,9 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.GET("statusMonitor", examstudentPaperApi.StatusMonitor)                                //状态检测
 		examstudentPaperRouter.POST("execAgain", examstudentPaperApi.ExecAgain)                                       //单学生重新批阅
 		examstudentPaperRouter.POST("allExecAgain", examstudentPaperApi.AllExecAgain)                                 //考试计划下所有学生试卷重批阅
-		examstudentPaperRouter.GET("GetCommitRecord", examstudentPaperApi.GetCommitRecord)                            //获取提交日志记录
+		examstudentPaperRouter.GET("getCommitRecord", examstudentPaperApi.GetCommitRecord)                            //获取提交日志记录
+		examstudentPaperRouter.POST("recoverByRecord", examstudentPaperApi.RecoverByRecord)                           //清空学生答卷
+		examstudentPaperRouter.POST("deleteStudentAnswer", examstudentPaperApi.DeleteStudentAnswer)                   //清空学生答卷
 
 	}
 	{
