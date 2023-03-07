@@ -34,3 +34,7 @@ type ReviewScore struct {
 	Score     *float64  `json:"score" form:"score"`
 	IsReport  bool      `json:"isReport" form:"isReport" gorm:"is_report;comment:是否上报"`
 }
+type ScoreList struct {
+	Score    int64 `json:"score" form:"score" gorm:"score"`
+	GotScore int64 `json:"gotScore" form:"gotScore" gorm:"got_score"`
+}

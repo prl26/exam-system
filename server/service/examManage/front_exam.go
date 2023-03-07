@@ -417,7 +417,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 				singleChoiceOrder++
 				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
 				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
-				examPaper.SingleChoiceComponent[singleChoiceCount].Order = singleChoiceOrder
+				examPaper.SingleChoiceComponent[singleChoiceCount].Order = fmt.Sprintf("%d.", singleChoiceOrder)
 				examPaper.SingleChoiceComponent[singleChoiceCount].Score = studentPaper[i].Score
 				examPaper.SingleChoiceComponent[singleChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.SingleChoiceComponent[singleChoiceCount].GotScore = studentPaper[i].GotScore
@@ -427,7 +427,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 				MultiChoiceOrder++
 				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
 				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = studentPaper[i].ID
-				examPaper.MultiChoiceComponent[MultiChoiceCount].Order = MultiChoiceOrder
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Order = fmt.Sprintf("%d.", MultiChoiceOrder)
 				examPaper.MultiChoiceComponent[MultiChoiceCount].Score = studentPaper[i].Score
 				examPaper.MultiChoiceComponent[MultiChoiceCount].Answer = studentPaper[i].Answer
 				examPaper.MultiChoiceComponent[MultiChoiceCount].GotScore = studentPaper[i].GotScore
@@ -448,7 +448,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			judgeOrder++
 			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
 			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
-			examPaper.JudgeComponent[judgeCount].Order = judgeOrder
+			examPaper.JudgeComponent[judgeCount].Order = fmt.Sprintf("%d.", judgeOrder)
 			examPaper.JudgeComponent[judgeCount].Score = studentPaper[i].Score
 			examPaper.JudgeComponent[judgeCount].GotScore = studentPaper[i].GotScore
 			examPaper.JudgeComponent[judgeCount].Answer = studentPaper[i].Answer
@@ -468,7 +468,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			blankOrder++
 			examPaper.BlankComponent = append(examPaper.BlankComponent, Blank)
 			examPaper.BlankComponent[blankCount].MergeId = studentPaper[i].ID
-			examPaper.BlankComponent[blankCount].Order = blankOrder
+			examPaper.BlankComponent[blankCount].Order = fmt.Sprintf("%d.", blankOrder)
 			examPaper.BlankComponent[blankCount].Score = studentPaper[i].Score
 			examPaper.BlankComponent[blankCount].GotScore = studentPaper[i].GotScore
 			examPaper.BlankComponent[blankCount].Answer = studentPaper[i].Answer
@@ -485,7 +485,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			programOrder++
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
-			examPaper.ProgramComponent[programCount].Order = programOrder
+			examPaper.ProgramComponent[programCount].Order = fmt.Sprintf("%d.", programOrder)
 			examPaper.ProgramComponent[programCount].Score = studentPaper[i].Score
 			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
@@ -502,7 +502,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			targetOrder++
 			examPaper.TargetComponent = append(examPaper.TargetComponent, target)
 			examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
-			examPaper.ProgramComponent[targetCount].Order = programOrder
+			examPaper.ProgramComponent[targetCount].Order = fmt.Sprintf("%d.", targetOrder)
 			examPaper.TargetComponent[targetCount].Score = studentPaper[i].Score
 			examPaper.TargetComponent[targetCount].GotScore = studentPaper[i].GotScore
 			examPaper.TargetComponent[targetCount].Answer = studentPaper[i].Answer
@@ -875,11 +875,11 @@ func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error
 	return
 }
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
-	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? and b.deleted_at is null ORDER BY b.student_id", id).Scan(&infoList).Error
+	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? ORDER BY b.student_id", id).Scan(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetPaperQuesNum(pid uint) (num []examManage.QuesNum, err error) {
-	err = global.GVA_DB.Raw("SELECT student_id,count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and deleted_at is null GROUP BY student_id ORDER BY  num desc", pid).Find(&num).Error
+	err = global.GVA_DB.Raw("SELECT student_id,count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and deleted_at is null GROUP BY student_id ORDER BY num desc", pid).Find(&num).Error
 	return
 }
 func (ExamService *ExamService) GetTeachScore(id uint) (infoList []teachplan.Score, err error) {
@@ -899,9 +899,29 @@ func (ExamService *ExamService) GetChoiceScore(pid uint, sid uint) (ScoreList []
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
+func (ExamService *ExamService) GetChoiceAllScore(pid uint, sid uint) (sum int64, err error) {
+	qtype := uint(questionType.SINGLE_CHOICE)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT SUM(got_score) FROM exam_student_paper WHERE plan_id = ? and student_id = ? and question_type = ? and deleted_at is null ", pid, sid, qtype).Scan(&sum).Error
+	return
+}
+func (ExamService *ExamService) GetChoiceNum(pid uint) (num int64, err error) {
+	qtype := uint(questionType.SINGLE_CHOICE)
+	err = global.GVA_DB.Raw("SELECT count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and question_type = ? and deleted_at is null GROUP BY student_id ORDER BY num desc ", pid, qtype).Scan(&num).Error
+	return
+}
 func (ExamService *ExamService) GetJudgeScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.JUDGE)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetJudgeAllScore(pid uint, sid uint) (sum int64, err error) {
+	qtype := uint(questionType.JUDGE)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT SUM(got_score) FROM exam_student_paper WHERE plan_id = ? and student_id = ? and question_type = ? and deleted_at is null ", pid, sid, qtype).Scan(&sum).Error
+	return
+}
+func (ExamService *ExamService) GetJudgeNum(pid uint) (num int64, err error) {
+	qtype := uint(questionType.JUDGE)
+	err = global.GVA_DB.Raw("SELECT count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and question_type = ? and deleted_at is null GROUP BY student_id ORDER BY num desc ", pid, qtype).Scan(&num).Error
 	return
 }
 func (ExamService *ExamService) GetBlankScore(pid uint, sid uint) (ScoreList []int, err error) {
@@ -909,9 +929,29 @@ func (ExamService *ExamService) GetBlankScore(pid uint, sid uint) (ScoreList []i
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
+func (ExamService *ExamService) GetBlankAllScore(pid uint, sid uint) (sum int64, err error) {
+	qtype := uint(questionType.SUPPLY_BLANK)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT SUM(got_score) FROM exam_student_paper WHERE plan_id = ? and student_id = ? and question_type = ? and deleted_at is null ", pid, sid, qtype).Scan(&sum).Error
+	return
+}
+func (ExamService *ExamService) GetBlankNum(pid uint) (num int64, err error) {
+	qtype := uint(questionType.SUPPLY_BLANK)
+	err = global.GVA_DB.Raw("SELECT count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and question_type = ? and deleted_at is null GROUP BY student_id ORDER BY num desc ", pid, qtype).Scan(&num).Error
+	return
+}
 func (ExamService *ExamService) GetProgramScore(pid uint, sid uint) (ScoreList []int, err error) {
 	qtype := uint(questionType.PROGRAM)
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
+	return
+}
+func (ExamService *ExamService) GetProgramAllScore(pid uint, sid uint) (sum int64, err error) {
+	qtype := uint(questionType.PROGRAM)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT SUM(got_score) FROM exam_student_paper WHERE plan_id = ? and student_id = ? and question_type = ? and deleted_at is null ", pid, sid, qtype).Scan(&sum).Error
+	return
+}
+func (ExamService *ExamService) GetProgramNum(pid uint) (num int64, err error) {
+	qtype := uint(questionType.PROGRAM)
+	err = global.GVA_DB.Raw("SELECT count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and question_type = ? and deleted_at is null GROUP BY student_id ORDER BY num desc ", pid, qtype).Scan(&num).Error
 	return
 }
 func (ExamService *ExamService) GetTargetScore(pid uint, sid uint) (ScoreList []int, err error) {
@@ -919,7 +959,16 @@ func (ExamService *ExamService) GetTargetScore(pid uint, sid uint) (ScoreList []
 	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Select("got_score").Where("plan_id = ? and student_id = ? and question_type = ?", pid, sid, qtype).Find(&ScoreList).Error
 	return
 }
-
+func (ExamService *ExamService) GetTargetAllScore(pid uint, sid uint) (sum int64, err error) {
+	qtype := uint(questionType.Target)
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT SUM(got_score) FROM exam_student_paper WHERE plan_id = ? and student_id = ? and question_type = ? and deleted_at is null ", pid, sid, qtype).Scan(&sum).Error
+	return
+}
+func (ExamService *ExamService) GetTargetNum(pid uint) (num int64, err error) {
+	qtype := uint(questionType.Target)
+	err = global.GVA_DB.Raw("SELECT count(*) as num FROM `exam_student_paper` WHERE plan_id = ? and question_type = ? and deleted_at is null GROUP BY student_id ORDER BY num desc ", pid, qtype).Scan(&num).Error
+	return
+}
 func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath string) (err error) {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"学号", "课程名称", "教学班名称",
@@ -947,51 +996,176 @@ func (ExamService *ExamService) ExportScore(infoList []teachplan.Score, filePath
 
 func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, infoList []examManage.ExamScore, filePath string, quesNum uint) (err error) {
 	excel := excelize.NewFile()
-	titleList := []string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"}
-	for i := 0; i < int(quesNum); i++ {
-		titleList = append(titleList, fmt.Sprintf("第%d题得分", i+1))
+	//titleList := []string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"}
+	style, _ := excel.NewStyle(&excelize.Style{
+		Alignment: &excelize.Alignment{Horizontal: "center"},
+	})
+	choiceNum, _ := ExamService.GetChoiceNum(pid)
+	judgeNum, _ := ExamService.GetJudgeNum(pid)
+	blankNum, _ := ExamService.GetBlankNum(pid)
+	programNum, _ := ExamService.GetProgramNum(pid)
+	targetNum, _ := ExamService.GetTargetNum(pid)
+
+	info1 := fmt.Sprintf("成绩明细 - %s - 全体考生", infoList[0].Name)
+	row1 := []string{info1, "", "", "", "", ""}
+	row2 := []string{"学号", "姓名", "考试名称", "学期", "课程名", "总分"}
+	order := 0
+	if int(choiceNum) > 0 {
+		row1 = append(row1, "选择题")
+		order++
+		for i := 0; i <= int(choiceNum); i++ {
+			if i == int(choiceNum) {
+				row2 = append(row2, "选择题总得分")
+			} else {
+				row1 = append(row1, "")
+				row2 = append(row2, fmt.Sprintf("%d-%d", order, i+1))
+			}
+		}
 	}
-	excel.SetSheetRow("Sheet1", "A1", &titleList)
+	if int(judgeNum) > 0 {
+		order++
+		row1 = append(row1, "判断题")
+		for i := 0; i <= int(judgeNum); i++ {
+			if i == int(judgeNum) {
+				row2 = append(row2, "判断题总得分")
+			} else {
+				row1 = append(row1, "")
+				row2 = append(row2, fmt.Sprintf("%d-%d", order, i+1))
+			}
+		}
+	}
+	if int(blankNum) > 0 {
+		order++
+		row1 = append(row1, "填空题")
+		for i := 0; i <= int(blankNum); i++ {
+			if i == int(blankNum) {
+				row2 = append(row2, "填空题总得分")
+			} else {
+				row1 = append(row1, "")
+				row2 = append(row2, fmt.Sprintf("%d-%d", order, i+1))
+			}
+		}
+	}
+	if int(programNum) > 0 {
+		order++
+		row1 = append(row1, "编程题")
+		for i := 0; i <= int(programNum); i++ {
+			if i == int(programNum) {
+				row2 = append(row2, "编程题总得分")
+			} else {
+				row1 = append(row1, "")
+				row2 = append(row2, fmt.Sprintf("%d-%d", order, i+1))
+			}
+		}
+	}
+	if int(targetNum) > 0 {
+		order++
+		row1 = append(row1, "攻防题")
+		for i := 0; i <= int(targetNum); i++ {
+			if i == int(targetNum) {
+				row2 = append(row2, "攻防题总得分")
+			} else {
+				row1 = append(row1, "")
+				row2 = append(row2, fmt.Sprintf("%d-%d", order, i+1))
+			}
+		}
+	}
+	excel.SetSheetRow("Sheet1", "A1", &row1)
+	excel.SetSheetRow("Sheet1", "A2", &row2)
+	//F-70
+	beginNum := 71
+	if int(choiceNum) > 0 {
+		endNum := string(beginNum + int(choiceNum))
+		excel.MergeCell("Sheet1", fmt.Sprintf("%s1", string(beginNum)), fmt.Sprintf("%s1", endNum))
+		beginNum += int(choiceNum) + 1
+	}
+	if int(judgeNum) > 0 {
+		endNum := string(beginNum + int(judgeNum))
+		excel.MergeCell("Sheet1", fmt.Sprintf("%s1", string(beginNum)), fmt.Sprintf("%s1", endNum))
+		beginNum += int(judgeNum) + 1
+	}
+	if int(blankNum) > 0 {
+		endNum := string(beginNum + int(blankNum))
+		excel.MergeCell("Sheet1", fmt.Sprintf("%s1", string(beginNum)), fmt.Sprintf("%s1", endNum))
+		beginNum += int(blankNum) + 1
+	}
+	if int(programNum) > 0 {
+		endNum := string(beginNum + int(programNum))
+		excel.MergeCell("Sheet1", fmt.Sprintf("%s1", string(beginNum)), fmt.Sprintf("%s1", endNum))
+		beginNum += int(programNum) + 1
+	}
+	if int(targetNum) > 0 {
+		endNum := string(beginNum + int(targetNum))
+		excel.MergeCell("Sheet1", fmt.Sprintf("%s1", string(beginNum)), fmt.Sprintf("%s1", endNum))
+		beginNum += int(targetNum) + 1
+	}
+	excel.MergeCell("Sheet1", "A1", "F1")
+	excel.SetCellStyle("Sheet1", "A1", "Z99", style)
 	count := 0
 	for i, student := range studentList {
 		if count < len(infoList) {
 			if student == *infoList[count].StudentId {
-				fmt.Println(count)
 				choiceAnswer, _ := ExamService.GetChoiceScore(pid, student)
 				judgeAnswer, _ := ExamService.GetJudgeScore(pid, student)
 				blankAnswer, _ := ExamService.GetBlankScore(pid, student)
 				programAnswer, _ := ExamService.GetProgramScore(pid, student)
 				TargetAnswer, _ := ExamService.GetTargetScore(pid, student)
-				axis := fmt.Sprintf("A%d", i+2)
+				choiceScore, _ := ExamService.GetChoiceAllScore(pid, student)
+				judgeScore, _ := ExamService.GetJudgeAllScore(pid, student)
+				blankScore, _ := ExamService.GetBlankAllScore(pid, student)
+				programScore, _ := ExamService.GetProgramAllScore(pid, student)
+				TargetScore, _ := ExamService.GetTargetAllScore(pid, student)
+				axis := fmt.Sprintf("A%d", i+3)
 				//studentId := strconv.Itoa(int(*infoList[i].StudentId))
 				score := strconv.Itoa(int(*infoList[count].Score))
 				var studentInfo basicdata.Student
-				global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[count].StudentId).Find(&studentInfo)
+				global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", student).Find(&studentInfo)
 				detail1 := []interface{}{student, studentInfo.Name, infoList[count].Name, infoList[count].TermName, infoList[count].CourseName, score}
-				for _, v := range choiceAnswer {
+				for k, v := range choiceAnswer {
 					detail1 = append(detail1, v)
+					if k == len(choiceAnswer)-1 {
+						detail1 = append(detail1, choiceScore)
+					}
 				}
-				for _, v := range judgeAnswer {
+				for k, v := range judgeAnswer {
 					detail1 = append(detail1, v)
+					if k == len(judgeAnswer)-1 {
+						detail1 = append(detail1, judgeScore)
+					}
 				}
-				for _, v := range blankAnswer {
+				for k, v := range blankAnswer {
 					detail1 = append(detail1, v)
+					if k == len(blankAnswer)-1 {
+						detail1 = append(detail1, blankScore)
+					}
 				}
-				for _, v := range programAnswer {
+				for k, v := range programAnswer {
 					detail1 = append(detail1, v)
+					if k == len(programAnswer)-1 {
+						detail1 = append(detail1, programScore)
+					}
 				}
-				for _, v := range TargetAnswer {
+				for k, v := range TargetAnswer {
 					detail1 = append(detail1, v)
+					if k == len(TargetAnswer)-1 {
+						detail1 = append(detail1, TargetScore)
+					}
 				}
 				count++
 				excel.SetSheetRow("Sheet1", axis, &detail1)
 			} else {
-				axis := fmt.Sprintf("A%d", i+2)
+				axis := fmt.Sprintf("A%d", i+3)
 				var studentInfo basicdata.Student
-				global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", infoList[count].StudentId).Find(&studentInfo)
-				detail1 := []interface{}{student, studentInfo.Name, infoList[count].Name, infoList[count].TermName, infoList[count].CourseName, "缺考"}
+				global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", student).Find(&studentInfo)
+				detail1 := []interface{}{student, studentInfo.Name, infoList[0].Name, infoList[0].TermName, infoList[0].CourseName, "缺考"}
 				excel.SetSheetRow("Sheet1", axis, &detail1)
 			}
+		} else {
+			axis := fmt.Sprintf("A%d", i+3)
+			var studentInfo basicdata.Student
+			global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", student).Find(&studentInfo)
+			detail1 := []interface{}{student, studentInfo.Name, infoList[0].Name, infoList[0].TermName, infoList[0].CourseName, "缺考"}
+			excel.SetSheetRow("Sheet1", axis, &detail1)
 		}
 	}
 	err = excel.SaveAs(filePath)

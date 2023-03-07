@@ -32,7 +32,7 @@ type ExamPaperResponse2 struct {
 	TargetComponent       []STargetComponent  `json:"targetComponent"`
 }
 type STargetComponent struct {
-	Order   uint   `json:"order"`
+	Order   string `json:"order"`
 	MergeId uint   `json:"mergeId"`
 	Target  Target `json:"target"`
 	ScoreStruct
@@ -54,7 +54,7 @@ type ChoiceComponent1 struct {
 }
 type ChoiceComponent2 struct {
 	MergeId uint                                  `json:"mergeId"`
-	Order   uint                                  `json:"order"`
+	Order   string                                `json:"order"`
 	Choice  questionBankVoResp.MultipleChoiceExam `json:"choiceComponent"`
 	ScoreStruct
 }
@@ -69,7 +69,7 @@ type JudgeComponent1 struct {
 }
 type JudgeComponent2 struct {
 	MergeId uint                             `json:"mergeId"`
-	Order   uint                             `json:"order"`
+	Order   string                           `json:"order"`
 	Judge   questionBankVoResp.JudgePractice `json:"judgeComponent"`
 	ScoreStruct
 }
@@ -84,7 +84,7 @@ type BlankComponent1 struct {
 }
 type BlankComponent2 struct {
 	MergeId uint                                   `json:"mergeId"`
-	Order   uint                                   `json:"order"`
+	Order   string                                 `json:"order"`
 	Blank   questionBankVoResp.SupplyBlankPractice `json:"blankComponent"`
 	ScoreStruct
 }
@@ -99,7 +99,7 @@ type ProgramComponent1 struct {
 }
 type ProgramComponent2 struct {
 	MergeId uint                               `json:"mergeId"`
-	Order   uint                               `json:"order"`
+	Order   string                             `json:"order"`
 	Program questionBankVoResp.ProgramPractice `json:"programComponent"`
 	ScoreStruct
 }

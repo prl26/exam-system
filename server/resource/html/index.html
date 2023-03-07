@@ -82,10 +82,10 @@
         </span>
         </div>
         <hr />
-
+        单选题
         {{ range .singleChoice }}
         <div style="display:flex">
-            <div style="margin-right:12px;white-space:nowrap">1-{{.Order}}</div>
+            <div style="margin-right:12px;white-space:nowrap">{{.Order}}</div>
             <div style="overflow:auto;flex-grow:1">
                 <span class="desc">{{ .Choice.Describe }}</span>
                 <span>学生作答:</span>
@@ -97,10 +97,10 @@
         </div>
         {{end}}
         <hr />
-
+        多选题
         {{ range .multiChoice }}
         <div style="display:flex">
-            <div style="margin-right:12px;white-space:nowrap">2-{{.Order}}</div>
+            <div style="margin-right:12px;white-space:nowrap">{{.Order}}</div>
             <div style="overflow:auto;flex-grow:1">
                 <span class="desc">{{ .Choice.Describe }}</span>
                 <span>学生作答:</span>
@@ -112,10 +112,10 @@
         </div>
         {{end}}
         <hr />
-
+        判断题
         {{ range .judge }}
         <div style="display:flex">
-            <div style="margin-right:12px;white-space:nowrap">3-{{.Order}}</div>
+            <div style="margin-right:12px;white-space:nowrap">{{.Order}}</div>
             <div style="overflow:auto;flex-grow:1">
                 <span class="desc">{{ .Judge.Describe }}</span>
                 <span>学生作答:</span>
@@ -127,10 +127,10 @@
         </div>
         {{end}}
         <hr />
-
+        填空题
         {{ range .blank }}
         <div style="display:flex">
-            <div style="margin-right:12px;white-space:nowrap">4-{{.Order}}</div>
+            <div style="margin-right:12px;white-space:nowrap">{{.Order}}</div>
             <div style="overflow:auto;flex-grow:1">
                 <span class="desc">{{ .Blank.Describe }}</span>
                 <span>学生作答:</span>
@@ -142,41 +142,39 @@
         </div>
         {{end}}
         <hr />
-
+        编程题
         {{ range .program }}
         <div style="padding-bottom:8px;margin-top:12px">
             <div style="display:flex">
-                <div style="margin-right:12px;white-space:nowrap">5-{{.Order}}</div>
+                <div style="margin-right:12px;white-space:nowrap">{{.Order}}</div>
                 <div style="overflow:auto;flex-grow:1">
                     <span class="desc">{{ .Program.Describe }}</span>
                 </div>
             </div>
             <div class="result" style="display:flex;margin-top:8px">
-                <pre><code>{{.Answer}}</code></pre>
-                <br/>
-                <div>学生作答:</div>
-                <div>{{ .Answer }}</div>
-                <br/>
+                <span>学生作答:</span>
+                <span>{{ .Answer }}</span>
+                <br />
                 <span>得分:</span>
                 <span>{{ .GotScore }}</span>
             </div>
         </div>
         {{end}}
         <hr />
-
-<!--        {{ range .program }}-->
-<!--        <div style="display:flex">-->
-<!--            <div style="margin-right:12px;white-space:nowrap">5-1</div>-->
-<!--            <div style="overflow:auto;flex-grow:1">-->
-<!--                <div>{{ .Blank.Describe }}</div>-->
-<!--                <span>学生作答:</span>-->
-<!--                <div>{{ .Answer }}</div>-->
-<!--                <span>得分:</span>-->
-<!--                <span>{{ .GotScore }}</span>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        {{end}}-->
-<!--        <hr />-->
+        攻防题
+        {{ range .target }}
+        <div style="display:flex">
+            <div style="margin-right:12px;white-space:nowrap">5-1</div>
+            <div style="overflow:auto;flex-grow:1">
+                <div>{{ .Target.Describe }}</div>
+                <span>学生作答:</span>
+                <div>{{ .Answer }}</div>
+                <span>得分:</span>
+                <span>{{ .GotScore }}</span>
+            </div>
+        </div>
+        {{end}}
+        <hr />
     </div>
 </div>
 
