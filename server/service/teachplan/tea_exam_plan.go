@@ -215,16 +215,15 @@ func (examPlanService *ExamPlanService) IsFinishPreExam(planId uint, studentId u
 		var examRecords examManage.ExamScore
 		var count int64
 		var prePlanDetail teachplan.ExamPlan
-		err = global.GVA_DB.Where("plan_id = ?", preExamId).Find(&prePlanDetail).Error
+		err = global.GVA_DB.Where("id = ?", preExamId).Find(&prePlanDetail).Error
 		err = global.GVA_DB.Where("plan_id = ? and student_id = ?", preExamId, studentId).Find(&examRecords).Count(&count).Error
 		preExamNames = append(preExamNames, prePlanDetail.Name)
 		if err != nil {
 			return false, err, preExamIds
 		}
-		if *examRecords.Score < *prePlanDetail.PassScore {
-			return false, nil, preExamIds
-		}
 		if count == 0 {
+			return false, nil, preExamIds
+		} else if *examRecords.Score < *prePlanDetail.PassScore {
 			return false, nil, preExamIds
 		}
 	}

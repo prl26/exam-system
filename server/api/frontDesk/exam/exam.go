@@ -63,7 +63,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 		if isFinishPreExam, err, preExamIds := examPlanService.IsFinishPreExam(planId.PlanId, studentId); err != nil {
 			response.FailWithMessage("前置计划查询出错", c)
 		} else if isFinishPreExam == false {
-			response.FailWithDetailedAndError(704, preExamIds, "请先完成前置计划", c)
+			response.FailWithDetailedAndError(704, preExamIds, "请先完成并通过前置计划", c)
 		} else {
 			var examComing = request.ExamComing{
 				StudentId: studentId,
@@ -84,16 +84,17 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
 						response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
 					} else {
-						//time1 := PlanDetail.EndTime.Sub(status.EnterTime).Minutes()
-						//if time1 < float64(*PlanDetail.Time) {
-						//	remainTime := time1
-						//} else {
-						//	remainTime := PlanDetail.Time
-						//}
+						var remainTime float64
+						time1 := PlanDetail.EndTime.Sub(status.EnterTime).Minutes()
+						if time1 < float64(*PlanDetail.Time) {
+							remainTime = time1
+						} else {
+							remainTime = float64(*PlanDetail.Time)
+						}
 						response.OkWithData(gin.H{
-							"examPaper": exampaper,
-							"enterTime": status.EnterTime,
-							//"timeRemain": remainTime,
+							"examPaper":  exampaper,
+							"enterTime":  status.EnterTime,
+							"timeRemain": remainTime,
 						}, c)
 					}
 				} else {
