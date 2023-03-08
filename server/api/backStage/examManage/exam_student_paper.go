@@ -12,6 +12,7 @@ import (
 	"github.com/prl26/exam-system/server/utils"
 	"github.com/prl26/exam-system/server/utils1"
 	"go.uber.org/zap"
+	"time"
 )
 
 type ExamStudentPaperApi struct {
@@ -168,10 +169,15 @@ func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
 	var plan teachplan.CoverRq
 	_ = c.ShouldBindJSON(&plan)
-	if err := examstudentPaperService.RecoverStudentPower(plan.StudentId, plan.PlanId); err != nil {
-		response.FailWithMessage("恢复失败", c)
+	planDetail, _ := examService.GetPlanDetail(plan.PlanId)
+	if planDetail.EndTime.Unix() < time.Now().Unix() {
+		response.FailWithMessage("已经超过考试截至时间了", c)
 	} else {
-		response.OkWithMessage("恢复成功", c)
+		if err := examstudentPaperService.RecoverStudentPower(plan.StudentId, plan.PlanId); err != nil {
+			response.FailWithMessage("恢复失败", c)
+		} else {
+			response.OkWithMessage("恢复成功", c)
+		}
 	}
 }
 

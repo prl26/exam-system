@@ -56,7 +56,8 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
 	for i := 0; i < len(examPlans); i++ {
 		var score int64
-		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&score).Error
+		var scoreCount int64
+		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&score).Count(&scoreCount).Error
 		if err != nil {
 			return
 		}
@@ -83,7 +84,7 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 		} else {
 			plan.Status.IsFinishPreExams = 0
 		}
-		if float64(score) <= *examPlans[i].PassScore && examPlans[i].Type == examType.ProceduralExam {
+		if scoreCount != 0 && float64(score) <= *examPlans[i].PassScore && examPlans[i].Type == examType.ProceduralExam {
 			plan.IsOkayToReExam = true
 		} else {
 			plan.IsOkayToReExam = false

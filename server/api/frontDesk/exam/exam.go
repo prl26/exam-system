@@ -84,9 +84,16 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
 						response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
 					} else {
+						//time1 := PlanDetail.EndTime.Sub(status.EnterTime).Minutes()
+						//if time1 < float64(*PlanDetail.Time) {
+						//	remainTime := time1
+						//} else {
+						//	remainTime := PlanDetail.Time
+						//}
 						response.OkWithData(gin.H{
 							"examPaper": exampaper,
 							"enterTime": status.EnterTime,
+							//"timeRemain": remainTime,
 						}, c)
 					}
 				} else {

@@ -9,6 +9,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"gorm.io/gorm"
+	"time"
 )
 
 type ExamStudentPaperService struct {
@@ -98,13 +99,14 @@ func (examstudentPaperService *ExamStudentPaperService) GetExamStudentPaper(id u
 
 //恢复学生考试资格
 func (examstudentPaperService *ExamStudentPaperService) RecoverStudentPower(sid uint, pid uint) (err error) {
-	var pd teachplan.ExamPlan
-	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&pd).Error
-	if err != nil {
-		return
-	}
+	//var pd teachplan.ExamPlan
+	//err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&pd).Error
+	//if err != nil {
+	//	return
+	//}
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id =?", sid, pid).Updates(examManage.StudentPaperStatus{
-		EnterTime: *pd.StartTime,
+		EnterTime: time.Now(),
+		EndTime:   time.Now(),
 	}).Error
 	global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("student_id = ? and plan_id =?", sid, pid).Update("is_commit", 0)
 	return
