@@ -74,7 +74,7 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 		var recordId uint
 		var recoreMerge []examManage.ExamRecordMerge
 		tx.Model(examManage.ExamRecord{}).Select("id").Where("student_id =? and plan_id =?", examPaperCommit.StudentId, examPaperCommit.PlanId).Order("created_at").First(&recordId)
-		err = tx.Raw("INSERT INTO exam_record_merge(created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,record_id) SELECT created_at,updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,"+fmt.Sprintf("%d", recordId)+"FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&recoreMerge).Error
+		err = tx.Raw("INSERT INTO exam_record_merge(updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,record_id) SELECT updated_at,paper_id,question_id,student_id,answer,plan_id,score,question_type,problem_type,got_score,"+fmt.Sprintf("%d", recordId)+" FROM exam_student_paper WHERE student_id = ? AND plan_id = ? and deleted_at is null ", examPaperCommit.StudentId, examPaperCommit.PlanId).Scan(&recoreMerge).Error
 		if err != nil {
 			return err
 		}

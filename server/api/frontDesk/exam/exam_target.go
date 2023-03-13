@@ -108,8 +108,10 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
 			response.FailWithMessage("试卷提交试卷失败", c)
 		} else {
+			fmt.Println("进入靶场判题")
 			go func() {
 				wg.Add(1)
+				fmt.Println("好气鼓")
 				utils1.ExecTarget(ExamCommit)
 				defer wg.Done()
 				wg.Wait()
