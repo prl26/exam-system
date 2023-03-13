@@ -503,7 +503,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			targetOrder++
 			examPaper.TargetComponent = append(examPaper.TargetComponent, target)
 			examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
-			examPaper.ProgramComponent[targetCount].Order = fmt.Sprintf("%d.", targetOrder)
+			examPaper.TargetComponent[targetCount].Order = fmt.Sprintf("%d.", targetOrder)
 			examPaper.TargetComponent[targetCount].Score = studentPaper[i].Score
 			examPaper.TargetComponent[targetCount].GotScore = studentPaper[i].GotScore
 			examPaper.TargetComponent[targetCount].Answer = studentPaper[i].Answer

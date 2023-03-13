@@ -85,7 +85,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 						response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
 					} else {
 						var remainTime float64
-						time1 := PlanDetail.EndTime.Sub(status.EnterTime).Minutes()
+						time1 := PlanDetail.EndTime.Sub(time.Now()).Minutes()
 						if time1 < float64(*PlanDetail.Time) {
 							remainTime = time1
 						} else {

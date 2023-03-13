@@ -33,3 +33,7 @@ type ProgramPractice struct {
 	DefaultCodes          string `json:"defaultCodes"`
 	LanguageSupportsBrief string `json:"languageSupportBrief"`
 }
+type ProgramPractice1 struct {
+	PracticeModel
+	LanguageSupportsBrief string `json:"languageSupportBrief"`
+}
