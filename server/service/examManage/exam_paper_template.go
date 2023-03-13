@@ -102,30 +102,30 @@ func (PapertemplateService *PaperTemplateService) GetPaperTemplateInfoList(info 
 
 //查找该课程下有哪些章节,章节下面各题目难度的题目数目
 func (PapertemplateService *PaperTemplateService) GetDetails(lessonId uint) (templates response.Template, err error) {
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_multiple_choice as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_multiple_choice as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null and j.can_exam = 1\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Choice).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_judge as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_judge as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null and j.can_exam = 1\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Judge).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_supply_blank as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_supply_blank as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null and j.can_exam = 1\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Blank).Error
 	if err != nil {
 		return
 	}
 
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_programm as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_programm as j\nWHERE  b.lesson_id = ? and b.id = j.chapter_id and j.deleted_at is null and j.can_exam = 1\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n", lessonId).
 		Scan(&templates.Program).Error
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_target as j\nWHERE  b.lesson_id = 25 and b.id = j.chapter_id and j.deleted_at is null\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n").
+	err = global.GVA_DB.Raw("select b.id as chapter_id,b.`name` as chapter_name,problem_type,count(j.id) as Num\nFROM bas_chapter as b,les_questionbank_target as j\nWHERE  b.lesson_id = 25 and b.id = j.chapter_id and j.deleted_at is null and j.can_exam = 1\ngroup by b.id,b.`name`,problem_type\nORDER BY b.`name`\n").
 		Scan(&templates.Target).Error
 	return
 }

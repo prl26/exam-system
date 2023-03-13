@@ -34,7 +34,7 @@ type ExamPaperResponse2 struct {
 type STargetComponent struct {
 	Order   string `json:"order"`
 	MergeId uint   `json:"mergeId"`
-	Target  Target `json:"target"`
+	Target  Target `json:"targetComponent"`
 	ScoreStruct
 }
 type ScoreStruct struct {
