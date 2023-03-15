@@ -113,8 +113,8 @@ func (examstudentPaperService *ExamStudentPaperService) RecoverStudentPower(sid 
 }
 
 //上报分数
-func (examstudentPaperService *ExamStudentPaperService) ReportScore(pid uint) (err error) {
-	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =?", pid).Update("is_report", 1).Error
+func (examstudentPaperService *ExamStudentPaperService) ReportScore(st teachplan.CoverRqs) (err error) {
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =? and student_id in ?", st.PlanId, st.StudentIds).Update("is_report", 1).Error
 	return
 }
 func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid uint, sid uint) (err error) {

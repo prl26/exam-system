@@ -42,3 +42,7 @@ type ScoreList struct {
 	Score    int64 `json:"score" form:"score" gorm:"score"`
 	GotScore int64 `json:"gotScore" form:"gotScore" gorm:"got_score"`
 }
+type TargetExamingScore struct {
+	MergeId uint  `json:"mergeId" form:"mergeId"`
+	Score   int64 `json:"score" form:"score" gorm:"score"`
+}

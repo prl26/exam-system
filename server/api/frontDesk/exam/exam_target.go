@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/response"
+	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/examType"
 	"github.com/prl26/exam-system/server/model/examManage/request"
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
@@ -154,4 +155,24 @@ func (targetExamApi *TargetExamApi) GetTargetExamScore(c *gin.Context) {
 			PageSize: ScoreSearch.PageSize,
 		}, "获取成功", c)
 	}
+}
+
+//获取考试做题情况
+func (targetExamApi *TargetExamApi) GetTargetExamingScore(c *gin.Context) {
+	var ExamCommit request.CommitTargetExamPaper
+	_ = c.ShouldBindJSON(&ExamCommit)
+	ExamCommit.StudentId = utils.GetStudentId(c)
+	var scoreList []examManage.TargetExamingScore
+	for _, v := range ExamCommit.TargetComponent {
+		address, _ := targetService.QueryExamRecord(ExamCommit.StudentId, v.QuestionId, ExamCommit.PlanId)
+		score, _ := targetOjService.QueryScore(address)
+		list := examManage.TargetExamingScore{
+			MergeId: v.MergeId,
+			Score:   score,
+		}
+		scoreList = append(scoreList, list)
+	}
+	response.OkWithData(gin.H{
+		"scoreList": scoreList,
+	}, c)
 }

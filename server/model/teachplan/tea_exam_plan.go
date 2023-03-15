@@ -32,6 +32,10 @@ type CoverRq struct {
 	StudentId uint `json:"studentId"`
 	PlanId    uint `json:"planId"`
 }
+type CoverRqs struct {
+	StudentIds []uint `json:"studentIds"`
+	PlanId     uint   `json:"planId"`
+}
 
 //type ExamPlan
 

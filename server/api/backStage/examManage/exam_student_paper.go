@@ -183,9 +183,9 @@ func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
 
 //上报学生分数
 func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
-	var plan teachplan.ExamPlan
-	_ = c.ShouldBindJSON(&plan)
-	if err := examstudentPaperService.ReportScore(plan.ID); err != nil {
+	var st teachplan.CoverRqs
+	_ = c.ShouldBindJSON(&st)
+	if err := examstudentPaperService.ReportScore(st); err != nil {
 		global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
 		response.FailWithMessage("上报失败", c)
 	} else {
@@ -255,19 +255,18 @@ func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
 
 //考试计划下学生试卷重新批阅
 func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
-	var examPlan teachplan.ExamPlan
-	_ = c.ShouldBindJSON(&examPlan)
-	studentList, _ := examService.GetStudentList(examPlan.ID)
-	for _, v := range studentList {
-		sp := teachplan.CoverRq{
+	var sp teachplan.CoverRqs
+	_ = c.ShouldBindJSON(&sp)
+	for _, v := range sp.StudentIds {
+		lsp := teachplan.CoverRq{
 			StudentId: v,
-			PlanId:    examPlan.ID,
+			PlanId:    sp.PlanId,
 		}
-		if err := utils.ReExecPapers(sp); err != nil {
+		if err := utils.ReExecPapers(lsp); err != nil {
 			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
 			response.FailWithMessage("自动批阅出错啦", c)
 		} else {
-			if err := utils1.ReExecTargetPapers(sp); err != nil {
+			if err := utils1.ReExecTargetPapers(lsp); err != nil {
 				global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
 				response.FailWithMessage("自动批阅出错啦", c)
 			}
