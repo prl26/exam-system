@@ -185,11 +185,26 @@ func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
 func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 	var st teachplan.CoverRqs
 	_ = c.ShouldBindJSON(&st)
-	if err := examstudentPaperService.ReportScore(st); err != nil {
-		global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
-		response.FailWithMessage("上报失败", c)
+	var isCheck bool
+	for _, v := range st.StudentIds {
+		lst := teachplan.CoverRq{
+			StudentId: v,
+			PlanId:    st.PlanId,
+		}
+		if bool, _ := examstudentPaperService.CheckIsCommit(lst); bool == false {
+			isCheck = false
+			break
+		}
+	}
+	if isCheck == false {
+		response.FailWithMessage("选中的学生中有未提交的学生", c)
 	} else {
-		response.OkWithMessage("上报成功", c)
+		if err := examstudentPaperService.ReportScore(st); err != nil {
+			global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
+			response.FailWithMessage("上报失败", c)
+		} else {
+			response.OkWithMessage("上报成功", c)
+		}
 	}
 }
 
@@ -229,12 +244,19 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
 func (examstudentPaperApi *ExamStudentPaperApi) ReportStudentScore(c *gin.Context) {
 	var st teachplan.CoverRq
 	_ = c.ShouldBindJSON(&st)
-	if err := examstudentPaperService.ReportStudentScore(st.PlanId, st.StudentId); err != nil {
-		global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
-		response.FailWithMessage("上报失败", c)
+	if bool, err := examstudentPaperService.CheckIsCommit(st); err != nil {
+		response.FailWithMessage("查询试卷状态失败", c)
+	} else if bool == false {
+		response.FailWithMessage("该生还未提交试卷", c)
 	} else {
-		response.OkWithMessage("上报成功", c)
+		if err := examstudentPaperService.ReportStudentScore(st.PlanId, st.StudentId); err != nil {
+			global.GVA_LOG.Error("上报成绩失败!", zap.Error(err))
+			response.FailWithMessage("上报失败", c)
+		} else {
+			response.OkWithMessage("上报成功", c)
+		}
 	}
+
 }
 
 //单个学生试卷重新批阅
@@ -309,5 +331,16 @@ func (examstudentPaperApi *ExamStudentPaperApi) DeleteStudentAnswer(c *gin.Conte
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// 强制提交学生试卷
+func (examstudentPaperApi *ExamStudentPaperApi) ForceCommitStudent(c *gin.Context) {
+	var recordRq examManageReq.RecordRq
+	_ = c.ShouldBindJSON(&recordRq)
+	if err := examstudentPaperService.ForceCommitStudent(recordRq.PlanId, recordRq.Student); err != nil {
+		response.FailWithMessage("强制提交失败", c)
+	} else {
+		response.OkWithMessage("强制提交成功", c)
 	}
 }

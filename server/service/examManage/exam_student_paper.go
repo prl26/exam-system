@@ -117,6 +117,10 @@ func (examstudentPaperService *ExamStudentPaperService) ReportScore(st teachplan
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =? and student_id in ?", st.PlanId, st.StudentIds).Update("is_report", 1).Error
 	return
 }
+func (examstudentPaperService *ExamStudentPaperService) CheckIsCommit(st teachplan.CoverRq) (bool bool, err error) {
+	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Select("is_commit").Where("plan_id =? and student_id in ?", st.PlanId, st.StudentId).Scan(&bool).Error
+	return
+}
 func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid uint, sid uint) (err error) {
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Omit("updated_at").Where("plan_id =? and student_id =?", pid, sid).Update("is_report", 1).Error
 	return
@@ -266,5 +270,10 @@ func (examstudentPaperService *ExamStudentPaperService) RecoverByRecord(pid, sid
 	err = global.GVA_DB.Raw("UPDATE exam_student_paper as e,exam_record_merge as r SET e.answer = r.answer,e.got_score = r.got_score WHERE e.student_id = r.student_id and e.plan_id = r.plan_id and e.question_type = r.question_type and e.question_id =r.question_id and e.problem_type = r.problem_type and r.record_id = ?", rid).Error
 	var sum float64
 	global.GVA_DB.Raw("UPDATE exam_scores SET score = (SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ?) WHERE student_id = ? and plan_id = ?", sid, pid, sid, pid).Scan(&sum)
+	return
+}
+func (examstudentPaperService *ExamStudentPaperService) ForceCommitStudent(pid, sid uint) (err error) {
+
+	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("plan_id = ? and student_id =?", pid, sid).Update("is_commit", 1).Error
 	return
 }

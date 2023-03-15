@@ -30,6 +30,7 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.GET("getCommitRecord", examstudentPaperApi.GetCommitRecord)                            //获取提交日志记录
 		examstudentPaperRouter.POST("recoverByRecord", examstudentPaperApi.RecoverByRecord)                           //清空学生答卷
 		examstudentPaperRouter.POST("deleteStudentAnswer", examstudentPaperApi.DeleteStudentAnswer)                   //清空学生答卷
+		examstudentPaperRouter.POST("forceCommitStudent", examstudentPaperApi.ForceCommitStudent)                     //清空学生答卷
 
 	}
 	{
