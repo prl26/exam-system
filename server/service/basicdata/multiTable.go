@@ -68,30 +68,34 @@ func (multiTableService *MultiTableService) DeleteTeachClassStudents(info reques
 // GetTeachClassStudentInfo 获取教学班的学生
 func (multiTableService *MultiTableService) GetTeachClassStudentInfo(info request.TeachClassStudent) (list []basicdata.Student, total int64, err error) {
 
-	var limit, offset int
-
-	if info.PageSize <= 0 {
-		limit = 10
-	} else {
-		limit = info.PageSize
-	}
-
-	if info.Page <= 0 {
-		offset = 0
-	} else {
-		offset = info.PageSize * (info.Page - 1)
-	}
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	//var limit, offset int
+	//
+	//if info.PageSize <= 0 {
+	//	limit = 10
+	//} else {
+	//	limit = info.PageSize
+	//}
+	//
+	//if info.Page <= 0 {
+	//	offset = 0
+	//} else {
+	//	offset = info.PageSize * (info.Page - 1)
+	//}
 
 	var teachClass basicdata.TeachClass
 	teachClass.ID = info.TeachClassId
 
 	var students []basicdata.Student
+	var sLength []basicdata.Student
 
 	db := global.GVA_DB
 
-	//err = db.Model(&teachClass).Association("Student").Find(&students) 高端写法但是无法分页
+	_ = db.Model(&teachClass).Association("Student").Find(&sLength)
+	total = int64(len(sLength))
 	err = db.Limit(limit).Offset(offset).Where("id in (?)", db.Table("bas_student_teach_classes").
-		Select("student_id").Where("teach_class_id = ?", teachClass.ID)).Find(&students).Count(&total).Error
+		Select("student_id").Where("teach_class_id = ?", teachClass.ID)).Find(&students).Error
 
 	return students, total, err
 
