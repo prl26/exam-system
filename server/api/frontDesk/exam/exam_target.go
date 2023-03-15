@@ -129,9 +129,6 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 		} else {
 			go func() {
 				wg.Add(1)
-				if err = examService.UpdateTargetExamPapers(ExamCommit); err != nil {
-					global.GVA_LOG.Error("更新试卷记录失败", zap.Error(err))
-				}
 				utils1.ExecTarget(ExamCommit)
 				defer wg.Done()
 				wg.Wait()
