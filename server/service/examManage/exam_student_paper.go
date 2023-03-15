@@ -118,7 +118,7 @@ func (examstudentPaperService *ExamStudentPaperService) ReportScore(pid uint) (e
 	return
 }
 func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid uint, sid uint) (err error) {
-	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =? and student_id =?", pid, sid).Update("is_report", 1).Error
+	err = global.GVA_DB.Model(examManage.ExamScore{}).Omit("updated_at").Where("plan_id =? and student_id =?", pid, sid).Update("is_report", 1).Error
 	return
 }
 

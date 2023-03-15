@@ -55,6 +55,11 @@ func (examPaperService *ExamPaperService) CreateExamPaper(examPaper examManage.E
 	return nil
 }
 
+func (examPaperService *ExamPaperService) FindTemplateId(examPaper examManage.ExamPaper) (tId int64, err error) {
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Select("template_id").Where("id = ?", examPaper.PlanId).Scan(&tId).Error
+	return
+}
+
 // DeleteExamPaper 删除ExamPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPaperService *ExamPaperService) DeleteExamPaper(examPaper examManage.ExamPaper) (err error) {

@@ -52,14 +52,20 @@ func (examPaperApi *ExamPaperApi) CreateExamPaperByRand(c *gin.Context) {
 	n, _ := strconv.Atoi(numOfPapers)
 	if n == 0 {
 		response.FailWithMessage("试卷份数不能为0", c)
-	}
-	for i := 0; i < n; i++ {
-		if err := examPaperService.CreateExamPaper(examPaper); err != nil {
-			global.GVA_LOG.Error("创建失败!", zap.Error(err))
-			response.FailWithMessage("试卷创建失败", c)
+	} else {
+		templateId, err := examPaperService.FindTemplateId(examPaper)
+		if templateId == 0 || err != nil {
+			response.FailWithMessage("请先绑定模板", c)
+		} else {
+			for i := 0; i < n; i++ {
+				if err := examPaperService.CreateExamPaper(examPaper); err != nil {
+					global.GVA_LOG.Error("创建失败!", zap.Error(err))
+					response.FailWithMessage("试卷创建失败", c)
+				}
+			}
+			response.OkWithMessage("创建成功", c)
 		}
 	}
-	response.OkWithMessage("创建成功", c)
 }
 
 // DeleteExamPaper 删除ExamPaper
@@ -297,6 +303,8 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 		}, c)
 	}
 }
+
+//进入考试准备阶段
 func (examPaperApi *ExamPaperApi) SetExamPre(c *gin.Context) {
 	var plan teachplan.ExamPlan
 	_ = c.ShouldBindJSON(&plan)

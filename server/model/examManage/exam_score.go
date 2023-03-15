@@ -14,7 +14,7 @@ type ExamScore struct {
 	TermName   string     `json:"termName" form:"termName"`
 	LessonId   *int       `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程Id;size:32;"`
 	CourseName string     `json:"courseName" form:"courseName"`
-	Score      *float64   `json:"score" form:"score"`
+	Score      *float64   `json:"score" form:"score" gorm:"column:score;comment:本题分值;size:8;"`
 	ExamType   *int       `json:"examType" form:"examType"`
 	StartTime  *time.Time `json:"startTime" form:"startTime"`
 	Weight     *int       `json:"weight" form:"weight" gorm:"column:weight;comment:权重;size:8;"`
@@ -23,6 +23,10 @@ type ExamScore struct {
 
 func (ExamScore) TableName() string {
 	return "exam_scores"
+}
+
+type AllScore struct {
+	Score float64 `json:"score"`
 }
 
 type Detail struct {

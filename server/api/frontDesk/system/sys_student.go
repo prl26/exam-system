@@ -133,6 +133,17 @@ func (b *BaseApi) GetTeachPlans(c *gin.Context) {
 		response.OkWithData(Lessons, c)
 	}
 }
+func (b *BaseApi) GetAllTeachPlans(c *gin.Context) {
+	termId := c.Query("termId")
+	termID, _ := strconv.Atoi(termId)
+	StudentId := utils.GetStudentId(c)
+	Lessons, err := teachClassService.FindAllTeachClass(StudentId, termID)
+	if err != nil {
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithData(Lessons, c)
+	}
+}
 
 //获取该学生所在的所有教学计划--靶场专区
 func (b *BaseApi) GetTargetTeachPlans(c *gin.Context) {

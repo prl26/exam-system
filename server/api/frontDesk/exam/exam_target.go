@@ -46,18 +46,36 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 				response.FailWithMessageAndError(701, "还没开考呢,莫急", c)
 			} else if PlanDetail.EndTime.Unix() < time.Now().Unix() {
 				response.FailWithMessageAndError(702, "你来晚了,考试已经结束了", c)
-			} else if examPaper, status, examScore, err := targetExamService.GetTargetExamPapers(examComing, ip); err != nil {
-				global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
-				response.FailWithMessage("查询考试试卷失败", c)
-			} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
-				response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
-			} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
-				response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
 			} else {
-				response.OkWithData(gin.H{
-					"examPaper": examPaper,
-					"enterTime": status,
-				}, c)
+				if isReady, _ := examService.CheckIsReady(planId.PlanId); isReady == true {
+					if examPaper, status, examScore, err := targetExamService.GetTargetExamPapersByRedis(examComing, ip); err != nil {
+						global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+						response.FailWithMessage("查询考试试卷失败", c)
+					} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
+						response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
+					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
+						response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
+					} else {
+						response.OkWithData(gin.H{
+							"examPaper": examPaper,
+							"enterTime": status,
+						}, c)
+					}
+				} else {
+					if examPaper, status, examScore, err := targetExamService.GetTargetExamPapers(examComing, ip); err != nil {
+						global.GVA_LOG.Error("查询考试试卷失败", zap.Error(err))
+						response.FailWithMessage("查询考试试卷失败", c)
+					} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
+						response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
+					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
+						response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
+					} else {
+						response.OkWithData(gin.H{
+							"examPaper": examPaper,
+							"enterTime": status,
+						}, c)
+					}
+				}
 			}
 		}
 	}
@@ -108,10 +126,11 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 			global.GVA_LOG.Error("试卷提交失败", zap.Error(err))
 			response.FailWithMessage("试卷提交试卷失败", c)
 		} else {
-			fmt.Println("进入靶场判题")
 			go func() {
 				wg.Add(1)
-				fmt.Println("好气鼓")
+				if err = examService.UpdateTargetExamPapers(ExamCommit); err != nil {
+					global.GVA_LOG.Error("更新试卷记录失败", zap.Error(err))
+				}
 				utils1.ExecTarget(ExamCommit)
 				defer wg.Done()
 				wg.Wait()
