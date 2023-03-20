@@ -233,6 +233,28 @@ func (examPaperApi *ExamPaperApi) PaperDistribution(c *gin.Context) {
 	}
 }
 
+//迟到学生试卷分发
+func (examPaperApi *ExamPaperApi) LateStudentDistribute(c *gin.Context) {
+	var plan teachplan.ExamPlan
+	_ = c.ShouldBindJSON(&plan)
+	if diffArray, err := examPaperService.FindLateJoinStd(plan.ID); err != nil {
+		response.FailWithMessage("查询未分发试卷的学生出错", c)
+	} else {
+		if number, err := examPaperService.GetPaperNum(plan.ID); err != nil {
+			response.FailWithMessage("试卷分发失败", c)
+		} else if len(number) == 0 {
+			response.FailWithMessageAndError(602, "需要先为计划生成试卷", c)
+		} else {
+			err = examPaperService.LateStdsDistribution(plan.ID, diffArray, number)
+			if err != nil {
+				response.FailWithMessage("试卷补发失败", c)
+			} else {
+				response.OkWithMessage("试卷补发成功", c)
+			}
+		}
+	}
+}
+
 //导出成绩表
 func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	var excelInfo request3.Excel

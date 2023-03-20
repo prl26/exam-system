@@ -15,3 +15,21 @@ func Check(item []examManage.PaperTemplateItem) bool {
 	}
 	return false
 }
+func DiffArray(a []int64, b []int64) []int64 {
+	var diffArray []int64
+	temp := map[int64]struct{}{}
+
+	for _, val := range b {
+		if _, ok := temp[val]; !ok {
+			temp[val] = struct{}{}
+		}
+	}
+
+	for _, val := range a {
+		if _, ok := temp[val]; !ok {
+			diffArray = append(diffArray, val)
+		}
+	}
+
+	return diffArray
+}

@@ -10,6 +10,7 @@ import (
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	"github.com/prl26/exam-system/server/model/teachplan"
+	"github.com/prl26/exam-system/server/utils"
 	"gorm.io/gorm"
 	"math/rand"
 	"sync"
@@ -219,6 +220,26 @@ func (examPaperService *ExamPaperService) GetPaperNum(PlanId uint) (number []int
 	err = global.GVA_DB.Table("exam_paper").Select("id").Where("plan_id = ?", PlanId).Scan(&number).Error
 	if err != nil {
 		return nil, err
+	}
+	return
+}
+func (examPaperService *ExamPaperService) FindLateJoinStd(pid uint) (diffArray []int64, err error) {
+	var students []int64
+	err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes as b\njoin tea_examplan as t on t.teach_class_id = b.teach_class_id and t.id =? ", pid).Scan(&students).Error
+	var nowStds []int64
+	err = global.GVA_DB.Raw("SELECT student_id from exam_student_paper where plan_id = ? group by student_id", pid).Scan(&nowStds).Error
+	diffArray = utils.DiffArray(students, nowStds)
+	return
+}
+func (examPaperService *ExamPaperService) LateStdsDistribution(PlanId uint, studentList []int64, number []int64) (err error) {
+	global.GVA_DB.Table("tea_examplan").Where("id = ?", PlanId).Update("is_distributed", 1)
+	rand.Seed(time.Now().UnixNano())
+	for _, v := range studentList {
+		a := rand.Intn(len(number))
+		var result examManage.ExamPaper
+		global.GVA_DB.Raw("INSERT INTO exam_student_paper(student_id,plan_id,question_id,score,question_type,problem_type,paper_id) SELECT student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id from bas_student_teach_classes,exam_paper_question_merge,tea_examplan WHERE paper_id = ? and student_id = ? and tea_examplan.id = ? GROUP BY student_id,tea_examplan.id,question_id,score,question_type,problem_type,paper_id", number[a], v, PlanId).Scan(&result)
+		var res1 []examManage.ExamStudentPaper
+		global.GVA_DB.Raw("UPDATE exam_student_paper SET got_score = 0 and created_at = NOW() and updated_at =NOW() where student_id = ? and plan_id = ?", v, PlanId).Scan(&res1)
 	}
 	return
 }

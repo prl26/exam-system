@@ -273,7 +273,6 @@ func (examstudentPaperService *ExamStudentPaperService) RecoverByRecord(pid, sid
 	return
 }
 func (examstudentPaperService *ExamStudentPaperService) ForceCommitStudent(pid, sid uint) (err error) {
-
 	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("plan_id = ? and student_id =?", pid, sid).Update("is_commit", 1).Error
 	return
 }
