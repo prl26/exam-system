@@ -119,6 +119,7 @@ func (service *TargetService) PracticeRecord(studentId uint, targetId uint, addr
 }
 func (service *TargetService) ExamRecord(studentId uint, targetId uint, address string, planId uint) {
 	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, 24*time.Hour)
+	global.GVA_LOG.Info(address)
 }
 func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, planId uint) (string, bool) {
 	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId)).Result()
