@@ -118,11 +118,15 @@ func (service *TargetService) PracticeRecord(studentId uint, targetId uint, addr
 	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
 }
 func (service *TargetService) ExamRecord(studentId uint, targetId uint, address string, planId uint) {
-	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, 24*time.Hour)
+	send := studentId % 1000000
+	ddl := send + 22*3600
+	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, time.Duration(ddl)*time.Second)
+	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
 	global.GVA_LOG.Info(fmt.Sprintf("题目实例地址:%s", address))
 }
 func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, planId uint) (string, bool) {
 	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId)).Result()
+	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
 	if err != nil {
 		return "", false
 	}

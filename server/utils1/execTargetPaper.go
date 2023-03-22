@@ -25,6 +25,8 @@ func ExecTarget(examPaperCommit request.CommitTargetExamPaper) (err error) {
 			//	return fmt.Errorf("暂未生成实例地址", err.Error())
 			//}
 			score, _ := targetOjService.QueryScore(address)
+			global.GVA_LOG.Info(fmt.Sprintf("获取到的实例地址:%s  获取到的得分:%d", address, score))
+
 			//fmt.Println(score)
 			//if err != nil {
 			//	return fmt.Errorf("获取分数错误，请联系管理员或重新生成实例")
