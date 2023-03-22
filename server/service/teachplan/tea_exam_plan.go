@@ -82,6 +82,12 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 // Author [piexlmax](https://github.com/piexlmax)
 func (examPlanService *ExamPlanService) DeleteExamPlan(examPlan teachplan.ExamPlan) (err error) {
 	err = global.GVA_DB.Delete(&examPlan).Error
+	var examPaper []examManage.ExamPaper
+	err = global.GVA_DB.Model(&examManage.ExamPaper{}).Delete(&examPaper).Where("plan_id = ?", examPlan.ID).Error
+	var examStudentPaper []examManage.ExamStudentPaper
+	err = global.GVA_DB.Model(&examManage.ExamStudentPaper{}).Delete(&examStudentPaper).Where("plan_id = ?", examPlan.ID).Error
+	var examScore []examManage.ExamScore
+	err = global.GVA_DB.Model(&examManage.ExamScore{}).Delete(&examScore).Where("plan_id = ?", examPlan.ID).Error
 	return err
 }
 

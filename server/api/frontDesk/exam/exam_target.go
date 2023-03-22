@@ -165,6 +165,7 @@ func (targetExamApi *TargetExamApi) GetTargetExamingScore(c *gin.Context) {
 		score, _ := targetOjService.QueryScore(address)
 		list := examManage.TargetExamingScore{
 			MergeId: v.MergeId,
+			Answer:  address,
 			Score:   score,
 		}
 		scoreList = append(scoreList, list)
