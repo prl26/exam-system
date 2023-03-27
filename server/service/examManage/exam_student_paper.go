@@ -117,8 +117,9 @@ func (examstudentPaperService *ExamStudentPaperService) ReportScore(st teachplan
 	err = global.GVA_DB.Model(examManage.ExamScore{}).Where("plan_id =? and student_id in ?", st.PlanId, st.StudentIds).Update("is_report", 1).Error
 	return
 }
+
 func (examstudentPaperService *ExamStudentPaperService) CheckIsCommit(st teachplan.CoverRq) (bool bool, err error) {
-	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Select("is_commit").Where("plan_id =? and student_id in ?", st.PlanId, st.StudentId).Scan(&bool).Error
+	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Select("is_commit").Where("plan_id =? and student_id =?", st.PlanId, st.StudentId).Scan(&bool).Error
 	return
 }
 func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid uint, sid uint) (err error) {
