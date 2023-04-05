@@ -130,3 +130,16 @@ func ReExecTargetPapers(sp teachplan.CoverRq) (err error) {
 	})
 	return
 }
+func GetTargetExamingScore(ExamCommit request.CommitTargetExamPaper) (scoreList []examManage.TargetExamingScore, err error) {
+	for _, v := range ExamCommit.TargetComponent {
+		address, _ := targetService.QueryExamRecord(ExamCommit.StudentId, v.QuestionId, ExamCommit.PlanId)
+		score, _ := targetOjService.QueryScore(address)
+		list := examManage.TargetExamingScore{
+			MergeId: v.MergeId,
+			Answer:  address,
+			Score:   score,
+		}
+		scoreList = append(scoreList, list)
+	}
+	return
+}

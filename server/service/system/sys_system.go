@@ -5,7 +5,10 @@ import (
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/system"
 	"github.com/prl26/exam-system/server/utils"
+	"github.com/prl26/exam-system/server/utils/upload"
 	"go.uber.org/zap"
+	"mime/multipart"
+	"strings"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -57,4 +60,22 @@ func (systemConfigService *SystemConfigService) GetServerInfo() (server *utils.S
 	}
 
 	return &s, nil
+}
+func (systemConfigService *SystemConfigService) UploadFile(header *multipart.FileHeader, noSave string) (file system.ExaFileUploadAndDownload, err error) {
+	oss := upload.NewOss()
+	filePath, key, uploadErr := oss.UploadFile(header)
+	if uploadErr != nil {
+		panic(err)
+	}
+	if noSave == "0" {
+		s := strings.Split(header.Filename, ".")
+		f := system.ExaFileUploadAndDownload{
+			Url:  filePath,
+			Name: header.Filename,
+			Tag:  s[len(s)-1],
+			Key:  key,
+		}
+		return f, nil
+	}
+	return
 }

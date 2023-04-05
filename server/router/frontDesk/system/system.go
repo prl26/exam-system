@@ -14,6 +14,7 @@ func (c *BaseRouter) InitSystemRouter(Router *gin.RouterGroup) {
 	{
 		CommonRouterWithoutRecord.GET("getTerms", systemApi.GetTerms)
 		CommonRouterWithoutRecord.GET("getLessons", systemApi.GetLessons)
+		CommonRouterWithoutRecord.GET("uploadFile", systemApi.UploadFile)
 	}
 
 }

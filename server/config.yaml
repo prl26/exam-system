@@ -90,12 +90,12 @@ local:
   path: uploads/file
   store-path: uploads/file
 mysql:
-  path: 139.9.249.149
+  path: 172.27.16.17
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
   db-name: gva
   username: root
-  password: cuit@123456
+  password: cuitcuit001
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: info

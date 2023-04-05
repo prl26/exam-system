@@ -126,7 +126,7 @@ func (service *TargetService) ExamRecord(studentId uint, targetId uint, address 
 }
 func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, planId uint) (string, bool) {
 	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId)).Result()
-	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
+	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d answer:%s", studentId, targetId, planId, address))
 	if err != nil {
 		return "", false
 	}
