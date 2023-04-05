@@ -9,9 +9,9 @@ import (
 func (t *TeachClassService) FindTeachClass(id uint, termId int) (teachClassAndLessons []response.TeachAndLessons, err error) {
 	var teachClassIds []basicdata.StudentAndTeachClassAndTerm
 	if termId != 0 {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id and t.course_id != 25 and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.term_id = ? and t.id = s.teach_class_id and t.course_id != 25 and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
 	} else {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.id = s.teach_class_id and t.course_id != 25 and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.id = s.teach_class_id and t.course_id != 25 and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
 	}
 	if err != nil {
 		return
@@ -30,9 +30,9 @@ func (t *TeachClassService) FindTeachClass(id uint, termId int) (teachClassAndLe
 func (t *TeachClassService) FindAllTeachClass(id uint, termId int) (teachClassAndLessons []response.TeachAndLessons, err error) {
 	var teachClassIds []basicdata.StudentAndTeachClassAndTerm
 	if termId != 0 {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id  and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id  and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
 	} else {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.id = s.teach_class_id  and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.id = s.teach_class_id  and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
 	}
 	if err != nil {
 		return
@@ -52,9 +52,9 @@ func (t *TeachClassService) FindAllTeachClass(id uint, termId int) (teachClassAn
 func (t *TeachClassService) FindTargetTeachClass(id uint, termId int) (teachClassAndLessons []response.TeachAndLessons, err error) {
 	var teachClassIds []basicdata.StudentAndTeachClassAndTerm
 	if termId != 0 {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id and t.course_id = 25 and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.term_id =? and t.id = s.teach_class_id and t.course_id = 25 and s.student_id = ? GROUP BY teach_class_id", termId, id).Find(&teachClassIds).Error
 	} else {
-		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s\nJOIN bas_teach_class as t ON t.id = s.teach_class_id and t.course_id = 25 and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
+		err = global.GVA_DB.Raw("SELECT teach_class_id,student_id FROM `bas_student_teach_classes` as s JOIN bas_teach_class as t ON t.id = s.teach_class_id and t.course_id = 25 and s.student_id = ? GROUP BY teach_class_id", id).Find(&teachClassIds).Error
 	}
 	if err != nil {
 		return
