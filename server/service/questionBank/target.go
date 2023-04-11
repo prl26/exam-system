@@ -115,12 +115,18 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 	return &code
 }
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
-	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour)
+	err := global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour).Err()
+	if err != nil {
+		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
+	}
 }
 func (service *TargetService) ExamRecord(studentId uint, targetId uint, address string, planId uint) {
 	send := studentId % 1000000
 	ddl := send + 22*3600
-	global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, time.Duration(ddl)*time.Second)
+	err := global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, time.Duration(ddl)*time.Second).Err()
+	if err != nil {
+		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
+	}
 	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
 	global.GVA_LOG.Info(fmt.Sprintf("题目实例地址:%s", address))
 }

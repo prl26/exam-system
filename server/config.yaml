@@ -121,7 +121,7 @@ qiniu:
   use-cdn-domains: false
 redis:
   db: 0
-  addr: 122.9.132.2:6379
+  addr: 162.14.117.85:6379
   password: ""
 system:
   env: public
