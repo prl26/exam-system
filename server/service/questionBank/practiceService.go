@@ -112,11 +112,14 @@ func (p PracticeService) RankingList(lessonId uint, info request.PageInfo) (list
 		var rank int64
 		err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select DISTINCT sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, list[0].TotalScore).First(&rank).Error
 		list[0].Rank = uint(rank)
+		next := offset + 1
 		for i := 1; i < len(list); i++ {
-			if list[i].TotalScore < list[i-1].TotalScore {
-				rank++
+			next++
+			if list[i].TotalScore == list[i-1].TotalScore {
+				list[i].Rank = list[i-1].Rank
+			} else {
+				list[i].Rank = uint(next)
 			}
-			list[i].Rank = uint(rank)
 		}
 	}
 	return
