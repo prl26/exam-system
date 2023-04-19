@@ -14,7 +14,7 @@ type ProgramOjSupport struct {
 	*LanguageSupports `json:"languageSupports"`
 	*DefaultCodes     `json:"defaultCodes"`
 	*ReferenceAnswers `json:"referenceAnswers"`
-	*ProgramCases     `json:"programCases"`
+	ProgramCases      `json:"programCases"`
 }
 
 type ProgramDetail struct {
