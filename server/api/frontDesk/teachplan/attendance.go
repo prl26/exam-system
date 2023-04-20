@@ -19,6 +19,10 @@ var teachplanService = service.ServiceGroupApp.TeachplanServiceGroup.TeachAttend
 func (a AttendanceApi) Attendance(c *gin.Context) {
 	var req teachplanReq.Attendance
 	_ = c.ShouldBindJSON(&req)
+
+	// escape
+	req.Code = strings.ReplaceAll(req.Code, " ", "+")
+
 	crypto := utils.Decryption(req.Code)
 	ExpirationTimeStr := ""
 	AttendanceId := 0

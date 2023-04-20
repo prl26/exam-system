@@ -191,7 +191,9 @@ func (TeachAttendanceApi *TeachAttendanceApi) GenerateQRCode(c *gin.Context) {
 	str := fmt.Sprintf("%d,%s", req.AttendanceId, timeStr)
 	key := utils.Crypto(str)
 	key = fmt.Sprintf("%s/check-in?code=%s", global.GVA_CONFIG.FrontDeskAddress, key)
+
 	key = url.QueryEscape(key)
+
 	code := utils.GenerateQRCode(key)
 	response.OkWithData(teachplanResp.GenerateQRCode{
 		QRCodeURL:  code,
