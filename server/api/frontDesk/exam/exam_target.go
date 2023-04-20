@@ -57,9 +57,19 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
 						response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
 					} else {
+						time3 := int64(time.Now().Sub(status.EnterTime).Seconds())
+						time1 := *PlanDetail.Time*60 - time3
+						time2 := int64(PlanDetail.EndTime.Sub(time.Now()).Seconds())
+						var timeLimit int64
+						if time1 <= time2 {
+							timeLimit = time1
+						} else {
+							timeLimit = time2
+						}
 						response.OkWithData(gin.H{
 							"examPaper": examPaper,
 							"enterTime": status,
+							"timeLimit": timeLimit,
 						}, c)
 					}
 				} else {
@@ -71,9 +81,19 @@ func (targetExamApi *TargetExamApi) GetTargetExamPaper(c *gin.Context) {
 					} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
 						response.FailWithMessageAndError(703, "你已经提交过了且通过该考试", c)
 					} else {
+						time3 := int64(time.Now().Sub(status.EnterTime).Seconds())
+						time1 := *PlanDetail.Time*60 - time3
+						time2 := int64(PlanDetail.EndTime.Sub(time.Now()).Seconds())
+						var timeLimit int64
+						if time1 <= time2 {
+							timeLimit = time1
+						} else {
+							timeLimit = time2
+						}
 						response.OkWithData(gin.H{
 							"examPaper": examPaper,
 							"enterTime": status,
+							"timeLimit": timeLimit,
 						}, c)
 					}
 				}
