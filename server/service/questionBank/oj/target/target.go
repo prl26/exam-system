@@ -59,5 +59,8 @@ func (service *TargetService) QueryScore(address string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if score.Int64() < 0 || score.Int64() > 100 {
+		return 100, err
+	}
 	return score.Int64(), err
 }

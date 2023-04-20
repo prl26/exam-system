@@ -12,6 +12,7 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"net/url"
 	"time"
 )
 
@@ -189,6 +190,10 @@ func (TeachAttendanceApi *TeachAttendanceApi) GenerateQRCode(c *gin.Context) {
 	timeStr := utils.TimeToString(t)
 	str := fmt.Sprintf("%d,%s", req.AttendanceId, timeStr)
 	key := utils.Crypto(str)
+	key = fmt.Sprintf("%s/check-in?code=%s", global.GVA_CONFIG.FrontDeskAddress, key)
+
+	key = url.QueryEscape(key)
+
 	code := utils.GenerateQRCode(key)
 	response.OkWithData(teachplanResp.GenerateQRCode{
 		QRCodeURL:  code,

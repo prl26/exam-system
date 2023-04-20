@@ -19,6 +19,10 @@ var teachplanService = service.ServiceGroupApp.TeachplanServiceGroup.TeachAttend
 func (a AttendanceApi) Attendance(c *gin.Context) {
 	var req teachplanReq.Attendance
 	_ = c.ShouldBindJSON(&req)
+
+	// escape
+	req.Code = strings.ReplaceAll(req.Code, " ", "+")
+
 	crypto := utils.Decryption(req.Code)
 	ExpirationTimeStr := ""
 	AttendanceId := 0
@@ -43,7 +47,7 @@ func (a AttendanceApi) Attendance(c *gin.Context) {
 		return
 	}
 	if attendance == 0 {
-		response.CheckHandle(c, fmt.Errorf("输入学号错误"))
+		response.CheckHandle(c, fmt.Errorf("输入学号错误,或不再该班级"))
 		return
 	}
 	response.OkWithMessage("签到成功！", c)
