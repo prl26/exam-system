@@ -28,6 +28,7 @@ var lessonService = service.ServiceGroupApp.BasicdataApiGroup.LessonService
 func (lessonApi *LessonApi) CreateLesson(c *gin.Context) {
 	var lesson basicdata.Lesson
 	_ = c.ShouldBindJSON(&lesson)
+	lesson.OpenQuestionBank = true
 	if err := lessonService.CreateLesson(lesson); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)

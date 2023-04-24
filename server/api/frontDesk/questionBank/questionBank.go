@@ -1,6 +1,7 @@
 package questionBank
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
@@ -13,6 +14,7 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"strconv"
 	"time"
 )
@@ -93,6 +95,22 @@ func (*QuestionBankApi) BeginPractice(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
+	lesson, err := lessonService.GetLesson(uint(idInt))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			questionBankResp.NotFind(c)
+			return
+		}
+		global.GVA_LOG.Error(err.Error())
+		questionBankResp.ErrorHandle(c, err)
+		return
+	}
+	if !lesson.OpenQuestionBank {
+		questionBankResp.ErrorHandle(c, fmt.Errorf("题库关闭，请联系管理员开放题库"))
+		return
+	}
+
 	lessonId := uint(idInt)
 	studentId := utils.GetStudentId(c)
 	detail, err := lessonService.FindLessonDetail(lessonId, false, studentId)
