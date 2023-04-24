@@ -21,7 +21,7 @@ func (s SituationService) FindTeachClassSituation(info request.PageInfo, lessonI
 		return
 	}
 	// 创建db
-	sql := `select  b.student_id,b.record_count,count(tea_practice_answer.id) as question_count from
+	sql := `select  b.student_id,b.record_count,bas_student.name,count(tea_practice_answer.id) as question_count from
 			(select a.student_id,count(tea_practice_record.student_id) as record_count from tea_practice_record right join (
 				select bas_student.id as student_id,bas_student.name
 				from bas_student_teach_classes
