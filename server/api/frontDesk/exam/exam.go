@@ -183,7 +183,7 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	} else {
 		if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
 			response.FailWithMessageAndError(704, "超出考试时间", c)
-		} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+		} else if time.Now().Unix() > PlanDetail.EndTime.Add(time.Second*5).Unix() {
 			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 		} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
 			response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
