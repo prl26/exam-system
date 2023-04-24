@@ -104,13 +104,13 @@ func (p PracticeService) RankingList(lessonId uint, info request.PageInfo) (list
 	if err != nil {
 		return
 	}
-	err = global.GVA_DB.Raw("select a.student_id,sum(a.score) as total_score,count(a.score) as problem_count,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=? GROUP BY student_id ORDER BY total_score desc limit ?  OFFSET ?", lessonId, limit, offset).Find(&list).Error
+	err = global.GVA_DB.Raw("select a.student_id,sum(a.score) as total_score,count(a.score) as problem_count,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=? GROUP BY student_id ORDER BY total_score desc,student_id limit ?  OFFSET ?", lessonId, limit, offset).Find(&list).Error
 	if err != nil {
 		return
 	}
 	if len(list) != 0 {
 		var rank int64
-		err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select DISTINCT sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, list[0].TotalScore).First(&rank).Error
+		err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, list[0].TotalScore).First(&rank).Error
 		list[0].Rank = uint(rank)
 		next := offset + 1
 		for i := 1; i < len(list); i++ {

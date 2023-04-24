@@ -30,7 +30,8 @@ func (s SituationService) FindTeachClassSituation(info request.PageInfo, lessonI
 				where bas_student_teach_classes.teach_class_id=?
 				limit ?,?)  a 
 			on a.student_id=tea_practice_record.student_id and tea_practice_record.lesson_id=? where isnull(tea_practice_record.deleted_at) GROUP BY a.student_id) b 
-		  LEFT JOIN tea_practice_answer on b.student_id=tea_practice_answer.student_id and tea_practice_answer.lesson_id=? GROUP BY b.student_id`
+		  LEFT JOIN tea_practice_answer on b.student_id=tea_practice_answer.student_id and tea_practice_answer.lesson_id=? 
+          LEFT JOIN bas_student on bas_student.id=b.student_id GROUP BY b.student_id`
 	err = global.GVA_DB.Raw(sql, teachClassId, offset, limit, lessonId, lessonId).Scan(&data).Error
 
 	return

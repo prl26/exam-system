@@ -8,6 +8,7 @@ import (
 
 type QuestionSituation struct {
 	StudentId     uint
+	Name          string
 	RecordCount   uint
 	QuestionCount uint
 }
