@@ -13,7 +13,7 @@ import (
 type SituationService struct {
 }
 
-func (s SituationService) FindTeachClassSituation(info request.PageInfo, lessonId uint, teachClassId uint) (data []questionBankVoResp.QuestionSituation, total int64, err error) {
+func (s SituationService) FindTeachClassSituation(info request.PageInfo, lessonId uint, teachClassId uint) (data []*questionBankVoResp.QuestionSituation, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	err = global.GVA_DB.Model(&basicdata.StudentAndTeachClass{}).Where("teach_class_id=?", teachClassId).Count(&total).Error
@@ -21,19 +21,38 @@ func (s SituationService) FindTeachClassSituation(info request.PageInfo, lessonI
 		return
 	}
 	// 创建db
-	sql := `select  b.student_id,b.record_count,bas_student.name,count(tea_practice_answer.id) as question_count from
-			(select a.student_id,count(tea_practice_record.student_id) as record_count from tea_practice_record right join (
+	sql := `select  b.student_id,b.record_count,b.name from
+			(select a.student_id,count(tea_practice_record.student_id) as record_count,a.name from tea_practice_record right join (
 				select bas_student.id as student_id,bas_student.name
 				from bas_student_teach_classes
 				left join bas_student
 				on bas_student.id=bas_student_teach_classes.student_id
 				where bas_student_teach_classes.teach_class_id=?
+				order by student_id
 				limit ?,?)  a 
-			on a.student_id=tea_practice_record.student_id and tea_practice_record.lesson_id=? where isnull(tea_practice_record.deleted_at) GROUP BY a.student_id) b 
-		  LEFT JOIN tea_practice_answer on b.student_id=tea_practice_answer.student_id and tea_practice_answer.lesson_id=? 
-          LEFT JOIN bas_student on bas_student.id=b.student_id GROUP BY b.student_id`
-	err = global.GVA_DB.Raw(sql, teachClassId, offset, limit, lessonId, lessonId).Scan(&data).Error
+			on a.student_id=tea_practice_record.student_id and tea_practice_record.lesson_id=? where isnull(tea_practice_record.deleted_at) GROUP BY a.student_id) b`
+	err = global.GVA_DB.Raw(sql, teachClassId, offset, limit, lessonId).Scan(&data).Error
+	if err != nil {
+		return nil, 0, err
+	}
 
+	ids := make([]uint, len(data))
+	table := map[uint]*questionBankVoResp.QuestionSituation{}
+	for i, datum := range data {
+		ids[i] = datum.StudentId
+		table[datum.StudentId] = datum
+	}
+
+	items := []questionBankVoResp.RankingListItem{}
+	sql2 := `select a.student_id,sum(a.score) as total_score,count(a.score) as problem_count from tea_practice_answer a right join bas_student  b on a.student_id=b.id where lesson_id=? and student_id in (?) GROUP BY student_id`
+	err = global.GVA_DB.Raw(sql2, lessonId, ids).Find(&items).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, item := range items {
+		table[item.StudentId].Score = item.TotalScore
+		table[item.StudentId].QuestionCount = item.ProblemCount
+	}
 	return
 }
 

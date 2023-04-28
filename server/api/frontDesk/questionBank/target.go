@@ -43,7 +43,7 @@ func (*TargetApi) BeginPractice(c *gin.Context) {
 		questionBankResp.ErrorHandle(c, err)
 		return
 	}
-	if !lesson.OpenQuestionBank {
+	if lesson.OpenQuestionBank == nil || !*lesson.OpenQuestionBank {
 		questionBankResp.CheckHandle(c, fmt.Errorf("题库关闭，请联系管理员开放题库"))
 		return
 	}

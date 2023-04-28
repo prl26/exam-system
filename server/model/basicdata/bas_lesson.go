@@ -9,7 +9,7 @@ import (
 type Lesson struct {
 	global.GVA_MODEL
 	Name             string     `json:"name" form:"name" gorm:"column:name;comment:课程的名称;size:32;"`
-	OpenQuestionBank bool       `json:"openQuestionBank" gorm:"column:open_questionBank"`
+	OpenQuestionBank *bool      `json:"openQuestionBank" gorm:"column:open_questionBank"`
 	Chapters         []*Chapter `json:"chapters"`
 }
 
