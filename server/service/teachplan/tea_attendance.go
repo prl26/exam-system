@@ -31,7 +31,10 @@ func (teachAttendanceService *TeachAttendanceService) CreateTeachAttendance(teac
 				}
 				attendances = append(attendances, attendanceRecord)
 			}
-			global.GVA_DB.Create(&attendances)
+			err := global.GVA_DB.Create(&attendances).Error
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return err
