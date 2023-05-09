@@ -112,8 +112,8 @@ func (api *ProgramApi) FindDetail(c *gin.Context) {
 			programDetail := questionBankResp.ProgramDetail{}
 			programDetail.GVA_MODEL = detail.GVA_MODEL
 			programDetail.BasicModel = detail.BasicModel
-			programDetail.Chapter = detail.Chapter
-			programDetail.Knowledge = detail.Knowledge
+			programDetail.CourseSupportPtr = detail.CourseSupportPtr
+			programDetail.CourseSupport = detail.CourseSupport
 			if detail.ProgramCases != nil {
 				if err := programDetail.ProgramCases.Deserialize(*detail.ProgramCases); err != nil {
 					global.GVA_LOG.Error(err.Error())

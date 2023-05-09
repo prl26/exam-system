@@ -2,16 +2,15 @@ package response
 
 import (
 	"github.com/prl26/exam-system/server/global"
-	"github.com/prl26/exam-system/server/model/basicdata"
-	"github.com/prl26/exam-system/server/model/lessondata"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
+	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 )
 
 type ProgramDetail struct {
 	global.GVA_MODEL
-	Chapter   *basicdata.Chapter
-	Knowledge *lessondata.Knowledge
+	questionBankPo.CourseSupport
+	questionBankBo.CourseSupportPtr
 	questionBankBo.ProgramOjSupport
 	questionBank.BasicModel
 }

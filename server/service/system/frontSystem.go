@@ -18,10 +18,10 @@ import (
 	"time"
 )
 
-type FrontSystemService struct {
+type SystemService struct {
 }
 
-func (frontSystemService *FrontSystemService) GetTermInfoList(info basicdataReq.FrontTermSearch) (list []basicdata.Term, total int64, err error) {
+func (frontSystemService *SystemService) GetTermInfoList(info basicdataReq.FrontTermSearch) (list []basicdata.Term, total int64, err error) {
 
 	// 创建db
 	db := global.GVA_DB.Model(&basicdata.Term{})
@@ -37,7 +37,7 @@ func (frontSystemService *FrontSystemService) GetTermInfoList(info basicdataReq.
 	err = db.Find(&terms).Error
 	return terms, total, err
 }
-func (frontSystemService *FrontSystemService) GetLessonInfoList(info basicdataReq.FrontLessonSearch) (list []basicdata.Lesson, total int64, err error) {
+func (frontSystemService *SystemService) GetLessonInfoList(info basicdataReq.FrontLessonSearch) (list []basicdata.Lesson, total int64, err error) {
 
 	// 创建db
 	db := global.GVA_DB.Model(&basicdata.Lesson{})
@@ -53,7 +53,7 @@ func (frontSystemService *FrontSystemService) GetLessonInfoList(info basicdataRe
 	err = db.Find(&lessons).Error
 	return lessons, total, err
 }
-func (frontSystemService *FrontSystemService) UploadFile(header *multipart.FileHeader, noSave string, planId uint, studentId uint) (file system.ExaFileUploadAndDownload, err error) {
+func (frontSystemService *SystemService) UploadFile(header *multipart.FileHeader, noSave string, planId uint, studentId uint) (file system.ExaFileUploadAndDownload, err error) {
 	var planDetail teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&planDetail)
 	filePath, key, uploadErr := frontSystemService.UploadFile1(header, planDetail.Name, studentId)
@@ -72,7 +72,8 @@ func (frontSystemService *FrontSystemService) UploadFile(header *multipart.FileH
 	}
 	return
 }
-func (frontSystemService *FrontSystemService) UploadFile1(file *multipart.FileHeader, planName string, studentId uint) (string, string, error) {
+
+func (frontSystemService *SystemService) UploadFile1(file *multipart.FileHeader, planName string, studentId uint) (string, string, error) {
 	// 读取文件后缀
 	ext := path.Ext(file.Filename)
 	// 读取文件名并加密
@@ -89,6 +90,48 @@ func (frontSystemService *FrontSystemService) UploadFile1(file *multipart.FileHe
 	// 拼接路径和文件名
 	p := fmt.Sprintf("%s/%s/%d", global.GVA_CONFIG.Local.StorePath, planName, studentId) + "/" + filename
 	filepath := fmt.Sprintf("%s/%s/%d", global.GVA_CONFIG.Local.StorePath, planName, studentId) + "/" + filename
+
+	f, openError := file.Open() // 读取文件
+	if openError != nil {
+		global.GVA_LOG.Error("function file.Open() Filed", zap.Any("err", openError.Error()))
+		return "", "", errors.New("function file.Open() Filed, err:" + openError.Error())
+	}
+	defer f.Close() // 创建文件 defer 关闭
+
+	out, createErr := os.Create(p)
+	if createErr != nil {
+		global.GVA_LOG.Error("function os.Create() Filed", zap.Any("err", createErr.Error()))
+
+		return "", "", errors.New("function os.Create() Filed, err:" + createErr.Error())
+	}
+	defer out.Close() // 创建文件 defer 关闭
+
+	_, copyErr := io.Copy(out, f) // 传输（拷贝）文件
+	if copyErr != nil {
+		global.GVA_LOG.Error("function io.Copy() Filed", zap.Any("err", copyErr.Error()))
+		return "", "", errors.New("function io.Copy() Filed, err:" + copyErr.Error())
+	}
+	return filepath, filename, nil
+}
+
+func (frontSystemService *SystemService) UploadTitleFile(file *multipart.FileHeader) (string, string, error) {
+	// 读取文件后缀
+	ext := path.Ext(file.Filename)
+	// 读取文件名并加密
+	name := strings.TrimSuffix(file.Filename, ext)
+	name = utils.MD5V([]byte(name))
+	// 拼接新文件名
+	filename := name + "_" + time.Now().Format("20060102150405") + ext
+	// 尝试创建此路径
+	fileDir := fmt.Sprintf("%s/%s/%d", global.GVA_CONFIG.Local.StorePath, "title", time.Now().Format("2006-01-02"))
+	mkdirErr := os.MkdirAll(fileDir, os.ModePerm)
+	if mkdirErr != nil {
+		global.GVA_LOG.Error("function os.MkdirAll() Filed", zap.Any("err", mkdirErr.Error()))
+		return "", "", errors.New("function os.MkdirAll() Filed, err:" + mkdirErr.Error())
+	}
+	// 拼接路径和文件名
+	p := fileDir + "/" + filename
+	filepath := fileDir + "/" + filename
 
 	f, openError := file.Open() // 读取文件
 	if openError != nil {
