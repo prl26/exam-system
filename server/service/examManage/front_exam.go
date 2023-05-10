@@ -854,26 +854,26 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperC
 	blank1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SUPPLY_BLANK))).Result()
 	program1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.PROGRAM))).Result()
 
-	if sChoice1 != "[]" && sChoice1 != "nil" && sChoice1 != "" {
+	if sChoice1 != "[]" && sChoice1 != "nil" && sChoice1 != "" && sChoice1 != "null" {
 		IsNull = false
 		err = json.Unmarshal([]byte(sChoice1), &examPaperCommit.SingleChoiceCommit)
 	}
-	if mChoice1 != "[]" && mChoice1 != "nil" && mChoice1 != "" {
+	if mChoice1 != "[]" && mChoice1 != "nil" && mChoice1 != "" && mChoice1 != "null" {
 		err = json.Unmarshal([]byte(mChoice1), &examPaperCommit.MultipleChoiceCommit)
 
 		IsNull = false
 	}
-	if judge1 != "[]" && judge1 != "nil" && judge1 != "" {
+	if judge1 != "[]" && judge1 != "nil" && judge1 != "" && judge1 != "null" {
 		err = json.Unmarshal([]byte(judge1), &examPaperCommit.JudgeCommit)
 
 		IsNull = false
 	}
-	if blank1 != "[]" && blank1 != "nil" && blank1 != "" {
+	if blank1 != "[]" && blank1 != "nil" && blank1 != "" && blank1 != "null" {
 		err = json.Unmarshal([]byte(blank1), &examPaperCommit.BlankCommit)
 
 		IsNull = false
 	}
-	if program1 != "[]" && program1 != "nil" && program1 != "" {
+	if program1 != "[]" && program1 != "nil" && program1 != "" && program1 != "null" {
 		err = json.Unmarshal([]byte(program1), &examPaperCommit.ProgramCommit)
 
 		IsNull = false
