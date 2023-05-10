@@ -157,7 +157,9 @@ func (examApi *ExamApi) FindSaveExamPaper(c *gin.Context) {
 	//	global.GVA_LOG.Error("试卷保存失败", zap.Error(err))
 	//	response.FailWithMessage("试卷提交失败", c)
 	//} else {
-	if SavePaper, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId); err != nil {
+	if SavePaper, _, err := examService.GetAllQuesAnswer(ExamCommit.PlanId, ExamCommit.StudentId); err.Error() == "redis: nil" {
+		response.FailWithMessageAndError(704, "无已保存的试卷", c)
+	} else if err != nil {
 		global.GVA_LOG.Error("获取保存的试卷失败", zap.Error(err))
 		response.FailWithMessage("获取保存的试卷失败", c)
 	} else {

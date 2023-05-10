@@ -36,6 +36,7 @@ func (examService *ExamService) FindExamPlans(teachClassId uint, sid uint) (exam
 	var examPlan []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlan).Error
 	for _, v := range examPlan {
+
 		var score int64
 		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sid, v.ID).Scan(&score).Error
 		if err != nil {
@@ -55,6 +56,8 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 	var examPlans []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
 	for i := 0; i < len(examPlans); i++ {
+		var isReport bool = false
+		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("is_report").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&isReport).Error
 		var score int64
 		var scoreCount int64
 		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&score).Count(&scoreCount).Error
@@ -84,7 +87,7 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 		} else {
 			plan.Status.IsFinishPreExams = 0
 		}
-		if scoreCount != 0 && float64(score) <= *examPlans[i].PassScore && examPlans[i].Type == examType.ProceduralExam {
+		if scoreCount != 0 && float64(score) <= *examPlans[i].PassScore && examPlans[i].Type == examType.ProceduralExam && isReport == true {
 			plan.IsOkayToReExam = true
 		} else {
 			plan.IsOkayToReExam = false
@@ -843,17 +846,38 @@ func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, 
 	}
 	return
 }
-func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperCommit examManage.CommitExamPaper2, err error) {
+func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperCommit examManage.CommitExamPaper2, IsNull bool, err error) {
+	IsNull = true
 	sChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SINGLE_CHOICE))).Result()
 	mChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.MULTIPLE_CHOICE))).Result()
 	judge1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.JUDGE))).Result()
 	blank1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SUPPLY_BLANK))).Result()
 	program1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.PROGRAM))).Result()
-	err = json.Unmarshal([]byte(sChoice1), &examPaperCommit.SingleChoiceCommit)
-	err = json.Unmarshal([]byte(mChoice1), &examPaperCommit.MultipleChoiceCommit)
-	err = json.Unmarshal([]byte(judge1), &examPaperCommit.JudgeCommit)
-	err = json.Unmarshal([]byte(blank1), &examPaperCommit.BlankCommit)
-	err = json.Unmarshal([]byte(program1), &examPaperCommit.ProgramCommit)
+
+	if sChoice1 != "[]" && sChoice1 != "nil" && sChoice1 != "" {
+		IsNull = false
+		err = json.Unmarshal([]byte(sChoice1), &examPaperCommit.SingleChoiceCommit)
+	}
+	if mChoice1 != "[]" && mChoice1 != "nil" && mChoice1 != "" {
+		err = json.Unmarshal([]byte(mChoice1), &examPaperCommit.MultipleChoiceCommit)
+
+		IsNull = false
+	}
+	if judge1 != "[]" && judge1 != "nil" && judge1 != "" {
+		err = json.Unmarshal([]byte(judge1), &examPaperCommit.JudgeCommit)
+
+		IsNull = false
+	}
+	if blank1 != "[]" && blank1 != "nil" && blank1 != "" {
+		err = json.Unmarshal([]byte(blank1), &examPaperCommit.BlankCommit)
+
+		IsNull = false
+	}
+	if program1 != "[]" && program1 != "nil" && program1 != "" {
+		err = json.Unmarshal([]byte(program1), &examPaperCommit.ProgramCommit)
+
+		IsNull = false
+	}
 	//list1.ChoiceAnswer = make([]response.SaveExamPaper, 0)
 	//list1.JudgeAnswer = make([]response.SaveExamPaper, 0)
 	//list1.BlankAnswer = make([]response.SaveExamPaper, 0)
