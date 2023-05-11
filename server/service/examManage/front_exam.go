@@ -509,7 +509,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			examPaper.ProgramComponent[programCount].Order = fmt.Sprintf("%d.", programOrder)
 			examPaper.ProgramComponent[programCount].Score = studentPaper[i].Score
 			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
-			if pr.ReferenceAnswers == nil {
+			if pr.ReferenceAnswers != nil {
 				examPaper.ProgramComponent[programCount].CorrectAnswer = *pr.ReferenceAnswers
 			}
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
