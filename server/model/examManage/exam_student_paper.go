@@ -61,8 +61,14 @@ type ReExecExamPaper struct {
 	MultipleChoiceCommit []MultipleChoiceCommit1 `json:"multipleChoiceCommit"`
 	JudgeCommit          []JudgeCommit1          `json:"judgeCommit"`
 	BlankCommit          []BlankCommit1          `json:"blankCommit"`
+	ProgramCommit        []ProgramCommit1        `json:"programCommit"`
 }
 
+type ProgramCommit1 struct {
+	Id         uint   `json:"id"`
+	QuestionId uint   `json:"questionId" form:"questionId"`
+	Answer     string `json:"answer" form:"answer"`
+}
 type MultipleChoiceCommit1 struct {
 	Id         uint   `json:"id"`
 	QuestionId uint   `json:"questionId" form:"questionId"`

@@ -15,6 +15,7 @@ import (
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
+	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	response2 "github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/utils"
@@ -312,7 +313,7 @@ func (examService *ExamService) GetPlanDetail(pid uint) (plan teachplan.ExamPlan
 	return
 }
 
-//进入考试准备阶段
+// 进入考试准备阶段
 func (examService *ExamService) SetExamPre(pid uint) (err error) {
 	studentList, _ := examService.GetStudentList(pid)
 	for _, v := range studentList {
@@ -490,17 +491,25 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent2
 			var program questionBankBo.ProgramPractice
-			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&program).Error
+			var pr questionBankPo.Program
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&pr).Error
 			if err != nil {
 				return
 			}
-			Program.Program.Convert(&program)
+			Program.Program.PracticeModel.GVA_MODEL = program.GVA_MODEL
+			Program.Program.PracticeModel.SerNo = program.SerNo
+			Program.Program.PracticeModel.Describe = program.Describe
+			Program.Program.PracticeModel.Title = program.Title
+			Program.Program.PracticeModel.ProblemType = program.ProblemType
 			programOrder++
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
 			examPaper.ProgramComponent[programCount].Order = fmt.Sprintf("%d.", programOrder)
 			examPaper.ProgramComponent[programCount].Score = studentPaper[i].Score
 			examPaper.ProgramComponent[programCount].Answer = studentPaper[i].Answer
+			if pr.ReferenceAnswers == nil {
+				examPaper.ProgramComponent[programCount].CorrectAnswer = *pr.ReferenceAnswers
+			}
 			examPaper.ProgramComponent[programCount].GotScore = studentPaper[i].GotScore
 			programCount++
 		} else if *studentPaper[i].QuestionType == questionType.Target {
@@ -576,7 +585,7 @@ func (examService *ExamService) CreateStatusRecord(examComing request.ExamComing
 
 //保存试卷
 
-//提交试卷
+// 提交试卷
 func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
@@ -756,7 +765,7 @@ func (examService *ExamService) UpdateTargetExamPapers(examPaperCommit request.C
 //	return
 //}
 
-//已废弃
+// 已废弃
 func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
@@ -798,9 +807,14 @@ func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.Com
 	return
 }
 func (examService *ExamService) CommitProgram(program examManage.CommitProgram) (err error) {
+	name, _ := program.LanguageId.GetLanguageName()
+	answer := examManage.ProgramAnswer{
+		Code:         program.Code,
+		LanguageType: name,
+	}
 	err = global.GVA_DB.Table("exam_student_paper").Select("answer").
 		Where("id = ?", program.MergeId).
-		Updates(&examManage.ExamStudentPaper{Answer: program.Code}).
+		Updates(&examManage.ExamStudentPaper{Answer: answer.Encode()}).
 		Error
 	return
 }

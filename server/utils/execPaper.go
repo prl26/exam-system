@@ -6,6 +6,7 @@ import (
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/examType"
+	"github.com/prl26/exam-system/server/model/questionBank/enum/languageType"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	"github.com/prl26/exam-system/server/model/teachplan"
 	"github.com/prl26/exam-system/server/service/questionBank/oj"
@@ -97,15 +98,17 @@ func ExecPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	return
 }
 
-//试卷重新批阅
+// 试卷重新批阅
 func ReExecPapers(sp teachplan.CoverRq) (err error) {
 	var examPaperCommit examManage.ReExecExamPaper
 	examPaperCommit.StudentId = sp.StudentId
 	examPaperCommit.PlanId = sp.PlanId
+
 	choiceType := uint(questionType.SINGLE_CHOICE)
 	judgeType := uint(questionType.JUDGE)
 	blankType := uint(questionType.SUPPLY_BLANK)
-	//programType := uint(questionType.PROGRAM)
+	//examManage.
+	programType := uint(questionType.PROGRAM)
 	//判断题处理
 	global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
 	global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -149,6 +152,29 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 				if num != 0 {
 					var result examManage.ExamStudentPaper
 					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
+					if err != nil {
+						return err
+					}
+				}
+			}
+		}
+
+		// 编程题的处理
+		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, programType).Find(&examPaperCommit.ProgramCommit)
+		for i := 0; i < len(examPaperCommit.ProgramCommit); i++ {
+			if examPaperCommit.ProgramCommit[i].Answer != "" {
+				answer := examManage.ProgramAnswer{}
+				answer.Decode(examPaperCommit.ProgramCommit[i].Answer)
+				l := languageType.LanguageType(0)
+				l.ToLanguageId(answer.LanguageType)
+				_, score, _, err := ojService.ProgramService.CheckProgram(examPaperCommit.ProgramCommit[i].QuestionId, answer.Code, l)
+				if err != nil {
+					global.GVA_LOG.Error("ReExecPapers:" + err.Error())
+					return err
+				}
+				if score != 0 {
+					var result examManage.ExamStudentPaper
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ? and deleted_at is null", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
