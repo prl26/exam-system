@@ -493,17 +493,16 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 			blankCount++
 		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
 			var Program response.ProgramComponent2
-			var program questionBankBo.ProgramPractice
 			var pr questionBankPo.Program
 			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&pr).Error
 			if err != nil {
 				return
 			}
-			Program.Program.PracticeModel.GVA_MODEL = program.GVA_MODEL
-			Program.Program.PracticeModel.SerNo = program.SerNo
-			Program.Program.PracticeModel.Describe = program.Describe
-			Program.Program.PracticeModel.Title = program.Title
-			Program.Program.PracticeModel.ProblemType = program.ProblemType
+			Program.Program.PracticeModel.GVA_MODEL = pr.GVA_MODEL
+			Program.Program.PracticeModel.SerNo = pr.SerNo
+			Program.Program.PracticeModel.Describe = pr.Describe
+			Program.Program.PracticeModel.Title = pr.Title
+			Program.Program.PracticeModel.ProblemType = int(pr.ProblemType)
 			programOrder++
 			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
 			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
