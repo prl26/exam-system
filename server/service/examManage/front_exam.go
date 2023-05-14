@@ -97,6 +97,7 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 	}
 	return
 }
+
 func (examService *ExamService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
 	var examPlan teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&examPlan)
