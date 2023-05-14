@@ -170,7 +170,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 				_, score, _, err := ojService.ProgramService.CheckProgram(examPaperCommit.ProgramCommit[i].QuestionId, answer.Code, l)
 				if err != nil {
 					global.GVA_LOG.Error("ReExecPapers:" + err.Error())
-					return err
+					continue
 				}
 				if score != 0 {
 					var result examManage.ExamStudentPaper
