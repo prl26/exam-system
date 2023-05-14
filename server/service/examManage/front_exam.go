@@ -59,7 +59,7 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 	for i := 0; i < len(examPlans); i++ {
 		var isReport bool = false
 		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("is_report").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&isReport).Error
-		var score int64
+		var score float64
 		var scoreCount int64
 		err = global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("student_id = ? and plan_id =?", sId, examPlans[i].ID).Scan(&score).Count(&scoreCount).Error
 		if err != nil {

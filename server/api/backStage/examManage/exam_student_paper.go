@@ -148,7 +148,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetExamStudentPaperList(c *gin.C
 	}
 }
 
-//状态监测
+// 状态监测
 func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 	var pageInfo examManageReq.StatusMonitor
 	_ = c.ShouldBindQuery(&pageInfo)
@@ -165,7 +165,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 	}
 }
 
-//恢复学生考试资格
+// 恢复学生考试资格
 func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
 	var plan teachplan.CoverRq
 	_ = c.ShouldBindJSON(&plan)
@@ -181,7 +181,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) RecoverPower(c *gin.Context) {
 	}
 }
 
-//上报学生分数
+// 上报学生分数
 func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 	var st teachplan.CoverRqs
 	_ = c.ShouldBindJSON(&st)
@@ -208,7 +208,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 	}
 }
 
-//试卷批阅
+// 试卷批阅
 func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 	var pageInfo examManageReq.PaperReview
 	_ = c.ShouldBindQuery(&pageInfo)
@@ -225,7 +225,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 	}
 }
 
-//成绩及答案的修正
+// 成绩及答案的修正
 func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
 	var cheating examManageReq.PaperCheating
 	_ = c.ShouldBindJSON(&cheating)
@@ -240,7 +240,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperCheating(c *gin.Context) {
 	}
 }
 
-//单独上报学生分数
+// 单独上报学生分数
 func (examstudentPaperApi *ExamStudentPaperApi) ReportStudentScore(c *gin.Context) {
 	var st teachplan.CoverRq
 	_ = c.ShouldBindJSON(&st)
@@ -259,7 +259,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) ReportStudentScore(c *gin.Contex
 
 }
 
-//单个学生试卷重新批阅
+// 单个学生试卷重新批阅
 func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
 	var sp teachplan.CoverRq
 	_ = c.ShouldBindJSON(&sp)
@@ -269,13 +269,14 @@ func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
 	} else {
 		if err := utils1.ReExecTargetPapers(sp); err != nil {
 			global.GVA_LOG.Error("自动批阅出错啦!", zap.Error(err))
-			response.FailWithMessage("自动批阅出错啦", c)
+			response.FailWithMessage("自动批阅出错啦"+err.Error(), c)
+			return
 		}
 		response.OkWithMessage("批阅成功", c)
 	}
 }
 
-//考试计划下学生试卷重新批阅
+// 考试计划下学生试卷重新批阅
 func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
 	var sp teachplan.CoverRqs
 	_ = c.ShouldBindJSON(&sp)
@@ -297,7 +298,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) AllExecAgain(c *gin.Context) {
 	response.OkWithMessage("批阅成功", c)
 }
 
-//获取考试提交日志
+// 获取考试提交日志
 func (examstudentPaperApi *ExamStudentPaperApi) GetCommitRecord(c *gin.Context) {
 	var recordRq examManageReq.RecordRq
 	_ = c.ShouldBindQuery(&recordRq)
@@ -311,7 +312,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetCommitRecord(c *gin.Context) 
 	}
 }
 
-//通过指定的日志id恢复学生试卷
+// 通过指定的日志id恢复学生试卷
 func (examstudentPaperApi *ExamStudentPaperApi) RecoverByRecord(c *gin.Context) {
 	var recordRq examManageReq.RecordRq1
 	_ = c.ShouldBindQuery(&recordRq)
@@ -323,7 +324,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) RecoverByRecord(c *gin.Context) 
 	}
 }
 
-//删除学生考卷
+// 删除学生考卷
 func (examstudentPaperApi *ExamStudentPaperApi) DeleteStudentAnswer(c *gin.Context) {
 	var recordRq examManageReq.RecordRq
 	_ = c.ShouldBindJSON(&recordRq)
