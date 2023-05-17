@@ -138,13 +138,13 @@ func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, pla
 	}
 	return address, true
 }
-func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool) {
+func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool, error) {
 	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)).Result()
 	if err != nil {
-		global.GVA_LOG.Error(err.Error())
-		return "", false
+
+		return "", false, err
 	}
-	return address, true
+	return address, true, err
 }
 
 func (service *TargetService) QueryHistory(studentId uint, targetId uint) (int, bool) {

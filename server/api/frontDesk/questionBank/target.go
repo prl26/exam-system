@@ -124,7 +124,7 @@ func (*TargetApi) FindTargetDetail(c *gin.Context) {
 		return
 	} else {
 		studentId := utils.GetStudentId(c)
-		address, isGenerateAddress := targetService.QueryPracticeRecord(studentId, targetId)
+		address, isGenerateAddress, _ := targetService.QueryPracticeRecord(studentId, targetId)
 		q := &questionBankResp.TargetDetail{
 			TargetDetail:      detail,
 			IsGenerateAddress: isGenerateAddress,
@@ -177,7 +177,12 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 	}
 	targetId := uint(idInt)
 	studentId := utils.GetStudentId(c)
-	address, isGenerateAddress := targetService.QueryPracticeRecord(studentId, targetId)
+	address, isGenerateAddress, err := targetService.QueryPracticeRecord(studentId, targetId)
+	if err != nil {
+		global.GVA_LOG.Error("获取分数失败：" + err.Error())
+		response.FailWithMessage("Redis 异常请联系管理员修复", c)
+		return
+	}
 	if !isGenerateAddress {
 		questionBankResp.CheckHandle(c, fmt.Errorf("暂未生成实例地址"))
 		return
