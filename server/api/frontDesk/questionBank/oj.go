@@ -8,6 +8,8 @@ import (
 	questionBankResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
+	"strconv"
+	"strings"
 )
 
 type OjApi struct {
@@ -43,8 +45,10 @@ func (*OjApi) CheckJudge(c *gin.Context) {
 		if result {
 			score = 100
 		}
-		practiceService.CreatePracticeItem(questionType.JUDGE, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(questionType.JUDGE, r.Id, lessonId, studentId, score)
+		answer := strconv.FormatBool(r.Answer)
+
+		practiceService.CreatePracticeItem(questionType.JUDGE, r.Id, lessonId, studentId, score, answer)
+		practiceService.UpdatePracticeAnswer(questionType.JUDGE, r.Id, lessonId, studentId, score, answer)
 	}()
 	response.OkWithData(result, c)
 	return
@@ -67,8 +71,8 @@ func (*OjApi) CheckProgram(c *gin.Context) {
 	studentId := utils.GetStudentId(c)
 	go func() {
 		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
-		practiceService.CreatePracticeItem(questionType.PROGRAM, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(questionType.PROGRAM, r.Id, lessonId, studentId, score)
+		practiceService.CreatePracticeItem(questionType.PROGRAM, r.Id, lessonId, studentId, score, r.Code)
+		practiceService.UpdatePracticeAnswer(questionType.PROGRAM, r.Id, lessonId, studentId, score, r.Code)
 	}()
 	if err != nil {
 		questionBankResp.ErrorHandle(c, err)
@@ -97,8 +101,9 @@ func (*OjApi) CheckSupplyBlank(c *gin.Context) {
 	studentId := utils.GetStudentId(c)
 	go func() {
 		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
-		practiceService.CreatePracticeItem(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score))
-		practiceService.UpdatePracticeAnswer(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score))
+		answers := strings.Join(r.Answers, ",")
+		practiceService.CreatePracticeItem(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score), answers)
+		practiceService.UpdatePracticeAnswer(questionType.SUPPLY_BLANK, r.Id, lessonId, studentId, uint(score), answers)
 	}()
 	response.OkWithData(result, c)
 	return
@@ -130,8 +135,9 @@ func (*OjApi) CheckMultipleChoice(c *gin.Context) {
 		if result {
 			score = 100
 		}
-		practiceService.CreatePracticeItem(t, r.Id, lessonId, studentId, score)
-		practiceService.UpdatePracticeAnswer(t, r.Id, lessonId, studentId, score)
+		answers := strings.Join(r.Answers, ",")
+		practiceService.CreatePracticeItem(t, r.Id, lessonId, studentId, score, answers)
+		practiceService.UpdatePracticeAnswer(t, r.Id, lessonId, studentId, score, answers)
 	}()
 	response.OkWithData(result, c)
 	return

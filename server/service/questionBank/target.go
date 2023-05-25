@@ -3,6 +3,7 @@ package questionBank
 import (
 	"context"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
@@ -115,7 +116,8 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 	return &code
 }
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
-	err := global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId), address, 7*24*time.Hour).Err()
+	key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
+	err := global.GVA_REDIS.Set(context.Background(), key, address, 24*time.Hour).Err()
 	if err != nil {
 		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
 	}
@@ -139,11 +141,15 @@ func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, pla
 	return address, true
 }
 func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool, error) {
-	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)).Result()
+	key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
+	address, err := global.GVA_REDIS.Get(context.Background(), key).Result()
 	if err != nil {
-
+		if err == redis.Nil {
+			return "", false, nil
+		}
 		return "", false, err
 	}
+
 	return address, true, err
 }
 

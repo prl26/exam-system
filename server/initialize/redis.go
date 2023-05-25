@@ -15,6 +15,7 @@ func Redis() {
 		Addr:     redisCfg.Addr,
 		Password: redisCfg.Password, // no password set
 		DB:       redisCfg.DB,       // use default DB
+
 	})
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {

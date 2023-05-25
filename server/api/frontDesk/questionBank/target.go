@@ -193,14 +193,11 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 		return
 	}
 	go func() {
-		//t := practiceService.FindTheLatestRecord(lessonId, studentId)
-		practiceService.CreatePracticeItem(questionType.Target, targetId, 25, studentId, uint(score))
-		practiceService.UpdatePracticeAnswer(questionType.Target, targetId, 25, studentId, uint(score))
+		practiceService.CreatePracticeItem(questionType.Target, targetId, 25, studentId, uint(score), address)
+		practiceService.UpdatePracticeAnswer(questionType.Target, targetId, 25, studentId, uint(score), address)
 	}()
 	questionBankResp.OkWithDetailed(score, "获取成功", c)
 }
-
-//select a.student_id,sum(a.score) as totalScore,b.name from tea_practice_answer a left join bas_student  b on a.student_id=b.id where lesson_id=25 GROUP BY student_id ORDER BY totalScore desc limit 5  OFFSET 0
 
 func (api *TargetApi) RankingList(c *gin.Context) {
 	req := questionBankReq.RankingList{}

@@ -12,6 +12,7 @@ type PracticeAnswer struct {
 	QuestionId   uint
 	LessonId     uint
 	Score        uint
+	Answer       string
 }
 
 func (PracticeAnswer) TableName() string {

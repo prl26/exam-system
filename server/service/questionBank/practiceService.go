@@ -49,17 +49,17 @@ func (p PracticeService) UpdatePracticeRecord(lessonId, studentId uint) {
 	return
 }
 
-func (p PracticeService) CreatePracticeItem(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint) {
+func (p PracticeService) CreatePracticeItem(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint, answer string) {
 	record := p.FindTheLatestRecord(lessonId, studentId)
 	if record.ID != 0 {
 		a := 0
-		global.GVA_DB.Raw("INSERT INTO tea_practice_item(student_id,question_type,lesson_id,question_id,record_id,score,commit_time) VALUES (?,?,?,?,?,?,now())\n  ON DUPLICATE KEY UPDATE commit_time=now(),score=?",
-			studentId, uint(questionType), lessonId, questionId, record.ID, score, score).Scan(&a)
+		global.GVA_DB.Raw("INSERT INTO tea_practice_item(student_id,question_type,lesson_id,question_id,record_id,score,answer,commit_time) VALUES (?,?,?,?,?,?,?,now())\n  ON DUPLICATE KEY UPDATE commit_time=now(),score=?",
+			studentId, uint(questionType), lessonId, questionId, record.ID, score, answer, score).Scan(&a)
 	}
 }
 
-func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint) {
-	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score)\nVALUES ( ?, ?, ?,?,?)\nON DUPLICATE KEY UPDATE score = GREATEST(score,?)", studentId, questionType, questionId, lessonId, score, score).Scan(nil)
+func (p PracticeService) UpdatePracticeAnswer(questionType questionType.QuestionType, questionId, lessonId, studentId uint, score uint, answer string) {
+	global.GVA_DB.Raw("INSERT INTO tea_practice_answer(student_id,question_type, question_id, lesson_id,score,answer)\nVALUES ( ?, ?, ?,?,?,?)\nON DUPLICATE KEY UPDATE score = GREATEST(score,?)", studentId, questionType, questionId, lessonId, score, answer, score).Scan(nil)
 	return
 }
 
@@ -69,8 +69,9 @@ func (p PracticeService) FindHistoryAnswer(questionType questionType.QuestionTyp
 	history := teachplanResp.History{History: map[uint]*teachplanResp.HistoryItem{}}
 	for _, t := range histories {
 		item := teachplanResp.HistoryItem{
-			Exist: true,
-			Score: t.Score,
+			Exist:  true,
+			Score:  t.Score,
+			Answer: t.Answer,
 		}
 		history.History[t.QuestionId] = &item
 	}
