@@ -255,3 +255,19 @@ func (*QuestionBankApi) FindHistoryAnswer(c *gin.Context) {
 	response.OkWithData(answer, c)
 	return
 }
+
+func (*QuestionBankApi) FindAnswer(c *gin.Context) {
+	var r request2.Answer
+	_ = c.ShouldBindQuery(&r)
+	verify := utils.Rules{
+		"QuestionType": {utils.NotEmpty()},
+		"Id":           {utils.NotEmpty()},
+	}
+	if err := utils.Verify(r, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	answer := practiceService.FindAnswer(r.QuestionType, r.Id)
+	response.OkWithData(answer, c)
+	return
+}

@@ -134,3 +134,13 @@ func (p PracticeService) GetMyRank(lessonId int, studentId uint) (item questionB
 	err = global.GVA_DB.Raw("select count(total_score)+1 as count from (select DISTINCT sum(score) total_score    from tea_practice_answer  where lesson_id=? GROUP BY student_id having total_score>?) a", lessonId, item.TotalScore).First(&item.Rank).Error
 	return
 }
+
+func (p PracticeService) FindAnswer(questionT questionType.QuestionType, id uint) (answer questionBankVoResp.Answer) {
+	if questionT == questionType.PROGRAM {
+		global.GVA_DB.Raw("select reference_answers from les_questionbank_programm where id=?", id).Scan(&answer.Answer)
+	}
+	if answer.Answer != "" {
+		answer.Answer = "暂无参考答案"
+	}
+	return
+}

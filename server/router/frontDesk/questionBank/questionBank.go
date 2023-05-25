@@ -15,6 +15,7 @@ func (s *QuestionBankRouter) InitQuestionBankRouter(Router *gin.RouterGroup) {
 		questionRouter.GET("findQuestionsByChapterId", questionApi.FindQuestionsByChapterId)
 		questionRouter.POST("beginPractice", questionApi.BeginPractice)
 		questionRouter.POST("findHistory", questionApi.FindHistoryAnswer)
+		questionRouter.POST("findAnswer", questionApi.FindAnswer)
 	}
 	target := Router.Group("target")
 	targetApi := v1.ApiGroupApp.FrontDesk.QuestionBankGroup.TargetApi
