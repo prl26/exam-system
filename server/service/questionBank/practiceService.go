@@ -139,7 +139,7 @@ func (p PracticeService) FindAnswer(questionT questionType.QuestionType, id uint
 	if questionT == questionType.PROGRAM {
 		global.GVA_DB.Raw("select reference_answers from les_questionbank_programm where id=?", id).Scan(&answer.Answer)
 	}
-	if answer.Answer != "" {
+	if answer.Answer == "" || answer.Answer == "{}" {
 		answer.Answer = "暂无参考答案"
 	}
 	return

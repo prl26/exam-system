@@ -258,7 +258,7 @@ func (*QuestionBankApi) FindHistoryAnswer(c *gin.Context) {
 
 func (*QuestionBankApi) FindAnswer(c *gin.Context) {
 	var r request2.Answer
-	_ = c.ShouldBindQuery(&r)
+	_ = c.ShouldBindJSON(&r)
 	verify := utils.Rules{
 		"QuestionType": {utils.NotEmpty()},
 		"Id":           {utils.NotEmpty()},
