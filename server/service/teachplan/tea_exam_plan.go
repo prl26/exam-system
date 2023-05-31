@@ -30,7 +30,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 	for _, v := range teachClassIds {
 		var teachClassdetail basicdata.TeachClass
 		global.GVA_DB.Model(basicdata.TeachClass{}).Where("id = ?", v).Scan(&teachClassdetail)
-		name := examPlan.Name + teachClassdetail.Name
+		name := examPlan.Name + "--" + teachClassdetail.Name
 		if examPlan.IsLimitTime == false {
 			ExamPlan := teachplan.ExamPlan{
 				GVA_MODEL:     global.GVA_MODEL{},
