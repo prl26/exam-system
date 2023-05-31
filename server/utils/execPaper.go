@@ -111,7 +111,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 	programType := uint(questionType.PROGRAM)
 	//判断题处理
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		//global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
+		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
 		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, judgeType).Find(&examPaperCommit.JudgeCommit)
 		for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {
 			if Bool, err := ojService.JudgeService.ExamCheck(examPaperCommit.JudgeCommit[i].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
