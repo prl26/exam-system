@@ -111,7 +111,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 	programType := uint(questionType.PROGRAM)
 	//判断题处理
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
+		//global.GVA_DB.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ?", examPaperCommit.StudentId, examPaperCommit.PlanId).Update("got_score", 0)
 		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, judgeType).Find(&examPaperCommit.JudgeCommit)
 		for i := 0; i < len(examPaperCommit.JudgeCommit); i++ {
 			if Bool, err := ojService.JudgeService.ExamCheck(examPaperCommit.JudgeCommit[i].QuestionId, examPaperCommit.JudgeCommit[i].Answer); err != nil {
@@ -139,6 +139,12 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 					if err != nil {
 						return err
 					}
+				} else {
+					var result examManage.ExamStudentPaper
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = 0  where id = ? and deleted_at is null", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
+					if err != nil {
+						return err
+					}
 				}
 			}
 		}
@@ -146,14 +152,16 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 		tx.Model(examManage.ExamStudentPaper{}).Where("student_id = ? and plan_id = ? and question_type = ?", sp.StudentId, sp.PlanId, blankType).Find(&examPaperCommit.BlankCommit)
 		for i := 0; i < len(examPaperCommit.BlankCommit); i++ {
 			answer := StringToStringArray(examPaperCommit.BlankCommit[i].Answer, ",")
-			if _, num, err := ojService.SupplyBlankService.ExamCheck(examPaperCommit.BlankCommit[i].QuestionId, answer); err != nil {
-				return err
-			} else {
-				if num != 0 {
-					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
-					if err != nil {
-						return err
+			if len(answer) != 0 {
+				if _, num, err := ojService.SupplyBlankService.ExamCheck(examPaperCommit.BlankCommit[i].QuestionId, answer); err != nil {
+					return err
+				} else {
+					if num != 0 {
+						var result examManage.ExamStudentPaper
+						err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
+						if err != nil {
+							return err
+						}
 					}
 				}
 			}

@@ -272,7 +272,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) ExecAgain(c *gin.Context) {
 			response.FailWithMessage("自动批阅出错啦"+err.Error(), c)
 			return
 		}
-		response.OkWithMessage("批阅成功", c)
+		response.OkWithMessage("重新批阅成功", c)
 	}
 }
 
