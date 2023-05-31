@@ -174,7 +174,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 				}
 				if score != 0 {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score  where id = ? and deleted_at is null", examPaperCommit.MultipleChoiceCommit[i].Id).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ? and deleted_at is null\"", examPaperCommit.ProgramCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
@@ -210,7 +210,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 func ExecProgram(program examManage.CommitProgram, score uint) (err error) {
 	var result examManage.ExamStudentPaper
 	if score != 0 {
-		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*100/%d where id = ? and deleted_at is null", score), program.MergeId).Scan(&result).Error
+		err = global.GVA_DB.Raw(fmt.Sprintf("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ? and deleted_at is null"), program.MergeId).Scan(&result).Error
 	}
 	var sum float64
 	global.GVA_DB.Raw("SELECT SUM(got_score) FROM exam_student_paper as e where e.student_id = ? and e.plan_id = ? and deleted_at is null", program.StudentId, program.PlanId).Scan(&sum)
