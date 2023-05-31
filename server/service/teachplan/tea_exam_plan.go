@@ -2,6 +2,7 @@ package teachplan
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/teachplan"
@@ -27,10 +28,13 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 	time1 := int64(endTime.Sub(startTime).Minutes())
 	teachClassIds := examPlan.TeachClassId
 	for _, v := range teachClassIds {
+		var teachClassdetail basicdata.TeachClass
+		global.GVA_DB.Model(basicdata.TeachClass{}).Where("id = ?", v).Scan(&teachClassdetail)
+		name := examPlan.Name + teachClassdetail.Name
 		if examPlan.IsLimitTime == false {
 			ExamPlan := teachplan.ExamPlan{
 				GVA_MODEL:     global.GVA_MODEL{},
-				Name:          examPlan.Name,
+				Name:          name,
 				TeachClassId:  &v,
 				Time:          &time1,
 				StartTime:     &startTime,
@@ -53,7 +57,7 @@ func (examPlanService *ExamPlanService) CreateExamPlan(examPlan teachplanReq.Exa
 		} else {
 			ExamPlan := teachplan.ExamPlan{
 				GVA_MODEL:     global.GVA_MODEL{},
-				Name:          examPlan.Name,
+				Name:          name,
 				TeachClassId:  &v,
 				Time:          &time,
 				StartTime:     &startTime,
