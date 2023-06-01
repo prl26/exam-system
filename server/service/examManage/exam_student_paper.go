@@ -142,7 +142,7 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Order("score desc").Find(&scores).Error
+	err = db.Limit(limit).Offset(offset).Order("score desc,student_id asc").Find(&scores).Error
 	for _, v := range scores {
 		var sName string
 		var status examManage.StudentPaperStatus
