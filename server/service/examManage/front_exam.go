@@ -1194,25 +1194,25 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 				for k, v := range choiceAnswer {
 					detail1 = append(detail1, v)
 					if k == len(choiceAnswer)-1 {
-						detail1 = append(detail1, choiceScore)
+						detail1 = append(detail1, choiceScore.Score)
 					}
 				}
 				for k, v := range judgeAnswer {
 					detail1 = append(detail1, v)
 					if k == len(judgeAnswer)-1 {
-						detail1 = append(detail1, judgeScore)
+						detail1 = append(detail1, judgeScore.Score)
 					}
 				}
 				for k, v := range blankAnswer {
 					detail1 = append(detail1, v)
 					if k == len(blankAnswer)-1 {
-						detail1 = append(detail1, blankScore)
+						detail1 = append(detail1, blankScore.Score)
 					}
 				}
 				for k, v := range programAnswer {
 					detail1 = append(detail1, v)
 					if k == len(programAnswer)-1 {
-						detail1 = append(detail1, programScore)
+						detail1 = append(detail1, programScore.Score)
 					}
 				}
 				for k, v := range TargetAnswer {

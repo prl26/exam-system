@@ -25,7 +25,7 @@ func (s *ExamPaperRouter) InitExamPaperRouter(Router *gin.RouterGroup) {
 		examPaperRouterWithoutRecord.GET("findExamPaper", examPaperApi.FindExamPaper)                  // 根据ID获取ExamPaper
 		examPaperRouterWithoutRecord.GET("getExamPaperList", examPaperApi.GetExamPaperList)            // 获取ExamPaper列表
 		examPaperRouterWithoutRecord.GET("paperDistribution", examPaperApi.PaperDistribution)          //试卷分发
-		examPaperRouterWithoutRecord.POST("exportPaper", examPaperApi.ExportPaper)                     //导出成绩表
+		examPaperRouterWithoutRecord.POST("exportPaper", examPaperApi.ExportPaper)                     //导出成绩表(excel)
 		examPaperRouterWithoutRecord.POST("exportMultiPaper", examPaperApi.ExportMultiPaper)           //导出成绩表(教学计划)
 		examPaperRouterWithoutRecord.POST("exportPaperToHtml", examPaperApi.ExportPaperToHtml)         //导出成绩表
 		examPaperRouterWithoutRecord.POST("setExamPre", examPaperApi.SetExamPre)                       //进入考试准备阶段
