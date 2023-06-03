@@ -158,7 +158,8 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 				} else {
 					if num != 0 {
 						var result examManage.ExamStudentPaper
-						err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(num)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
+						sql := "UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*" + fmt.Sprintf("%f", float64(num)/100.0) + " where id = ? and deleted_at is null"
+						err = tx.Raw(sql, examPaperCommit.BlankCommit[i].Id).Scan(&result).Error
 						if err != nil {
 							return err
 						}
@@ -182,7 +183,7 @@ func ReExecPapers(sp teachplan.CoverRq) (err error) {
 				}
 				if score != 0 {
 					var result examManage.ExamStudentPaper
-					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ? and deleted_at is null\"", examPaperCommit.ProgramCommit[i].Id).Scan(&result).Error
+					err = tx.Raw("UPDATE exam_student_paper SET exam_student_paper.got_score = exam_student_paper.score*"+fmt.Sprintf("%f", float64(score)/100.0)+" where id = ? and deleted_at is null", examPaperCommit.ProgramCommit[i].Id).Scan(&result).Error
 					if err != nil {
 						return err
 					}
