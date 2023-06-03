@@ -122,7 +122,7 @@ func (examApi *ExamApi) GetExamPaper(c *gin.Context) {
 	}
 }
 
-//保存试卷内容
+// 保存试卷内容
 func (examApi *ExamApi) SaveExamPaper(c *gin.Context) {
 	var ExamCommit examManage.CommitExamPaper2
 	_ = c.ShouldBindJSON(&ExamCommit)
@@ -254,7 +254,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 				response.Fail(c)
 				return
 			}
-			response.OkWithData(result.Score, c)
+			response.OkWithData(result, c)
 		}
 	}
 }
