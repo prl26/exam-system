@@ -107,11 +107,11 @@ func (c *baseService) judge(fileId string, limit questionBankBo.LanguageLimit, c
 	var sum uint
 	for i, result := range results {
 		var score uint
-		standardAnswer := strings.ReplaceAll(string(result.Files[STDOUT]), "\r\n", "\n")
-		actualAnswer := strings.ReplaceAll(cases[i].Output, "\r\n", "\n")
+		actualAnswer := strings.ReplaceAll(string(result.Files[STDOUT]), "\r\n", "\n")
+		correctAnswer := strings.ReplaceAll(cases[i].Output, "\r\n", "\n")
 		if result.Status == pb.Response_Result_Accepted {
-			if standardAnswer != actualAnswer {
-				if replacer.Replace(standardAnswer) == replacer.Replace(actualAnswer) {
+			if actualAnswer != correctAnswer {
+				if replacer.Replace(actualAnswer) == replacer.Replace(correctAnswer) {
 					result.Status = pb.Response_Result_PartiallyCorrect
 				} else {
 					result.Status = pb.Response_Result_WrongAnswer
@@ -126,7 +126,7 @@ func (c *baseService) judge(fileId string, limit questionBankBo.LanguageLimit, c
 		}
 		submits[i].ActualOutput = actualAnswer
 		if i == 0 {
-			submits[i].AnswerOutput = standardAnswer
+			submits[i].AnswerOutput = correctAnswer
 		} else {
 			submits[i].AnswerOutput = "标准答案暂不可知"
 		}
