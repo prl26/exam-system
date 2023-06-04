@@ -57,6 +57,13 @@ func (c *MultipleChoiceService) check(question *po.MultipleChoice, answer []stri
 	//	return false
 	//}
 	// 前端需要做好的
+	var realAnswer []string
+	for i := 0; i < len(answer); i++ {
+		thisAnswer := strings.ReplaceAll(answer[i], " ", "")
+		if thisAnswer != "" {
+			realAnswer = append(realAnswer, thisAnswer)
+		}
+	}
 	sort.Slice(answer, func(i, j int) bool {
 		return answer[i] < answer[j]
 	})
