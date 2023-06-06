@@ -943,6 +943,14 @@ func (ExamService *ExamService) GetPlanList(id uint) (infoList []uint, err error
 	err = global.GVA_DB.Model(&teachplan.ExamPlan{}).Select("id").Where("teach_class_id = ?", id).Find(&infoList).Error
 	return
 }
+func (ExamService *ExamService) GetPlanListDetail(id uint) (infoList []teachplan.ExamPlan, err error) {
+	err = global.GVA_DB.Model(&teachplan.ExamPlan{}).Where("teach_class_id = ?", id).Find(&infoList).Error
+	return
+}
+func (ExamService *ExamService) GetStudentListByTeachPlan(id uint) (infoList []int, err error) {
+	err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes WHERE teach_class_id = ?", id).Scan(&infoList).Error
+	return
+}
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
 	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? ORDER BY b.student_id", id).Scan(&infoList).Error
 	return
@@ -1357,49 +1365,61 @@ func (ExamService *ExamService) ExportPaperScore1(infoList []teachplan.Score) (c
 	content = bytes.NewReader(buffer.Bytes())
 	return
 }
-func (ExamService *ExamService) ExportMultiPaperScore(planList []uint, filePath string) (err error) {
+func (ExamService *ExamService) ExportMultiPaperScore(studentList []int, planList []uint, filePath string) (err error) {
 	excel := excelize.NewFile()
+	style, _ := excel.NewStyle(&excelize.Style{
+		Alignment: &excelize.Alignment{Horizontal: "center"},
+	})
+	excel.SetCellStyle("Sheet1", "A1", "Z99", style)
+
 	//构建excel
 	var s1 = []string{"学号", "姓名"}
-	for k, v := range planList {
+	//第一行编辑
+	for _, v := range planList {
 		var plan teachplan.ExamPlan
-		global.GVA_DB.Where("id = ?", v).Find(&plan)
-		if plan.Type == examType.ProceduralExam {
-			s1 = append(s1, fmt.Sprintf("第%d次平时考试成绩", k), fmt.Sprintf("第%d次平时考试占比", k))
-		}
-	}
-	s1 = append(s1, "平时成绩分数", "期末考试分数")
-	// 获取学生列表
-	var studentList []basicdata.Student
-	var plandetail []teachplan.ExamPlan
-	global.GVA_DB.Where("id in (?)", planList).Find(&plandetail)
-	global.GVA_DB.Where("id in (?)", global.GVA_DB.Table("bas_student_teach_classes").Where("teach_class_id = ?", plandetail[0].TeachClassId)).Find(&studentList)
-	//获取学生成绩
-	var scoreList [][]interface{}
-	for i := 0; i < len(studentList); i++ {
-		var list1 = make([]interface{}, 20)
-		list1 = append(list1, studentList[i].ID, studentList[i].Name)
-		var infoList []examManage.ExamScore
-		global.GVA_DB.Where("id in ?", planList).Order("exam_type DESC,start_time").Find(&infoList)
-		var sum float64
-		for j := 0; j < len(infoList); j++ {
-			if *infoList[j].ExamType == examType.ProceduralExam {
-				list1 = append(list1, infoList[j].Score, infoList[j].Weight)
-				temp1 := *infoList[j].Score
-				temp2 := float64(*infoList[j].Weight) / 100.0
-				sum += temp2 * temp1
-			}
-			if *infoList[j].ExamType == examType.FinalExam {
-				list1 = append(list1, fmt.Sprintf("%2.f", sum))
-				list1 = append(list1, infoList[j].Score)
-			}
-		}
-		scoreList = append(scoreList, list1)
+		global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", v).Find(&plan)
+		s1 = append(s1, plan.Name)
 	}
 	excel.SetSheetRow("Sheet1", "A1", &s1)
-	for i := 0; i < len(scoreList); i++ {
+
+	// 获取学生列表
+	var plandetail []teachplan.ExamPlan
+	global.GVA_DB.Where("id in (?)", planList).Find(&plandetail)
+	//获取学生成绩
+	for i := 0; i < len(studentList); i++ {
+		//获取学生信息详情
+		var studentInfo basicdata.Student
+		global.GVA_DB.Model(basicdata.Student{}).Where("id = ?", studentList[i]).Find(&studentInfo)
+		var list1 = make([]interface{}, 0, 10)
+		list1 = append(list1, studentInfo.ID, studentInfo.Name)
+		//获取考试分数
+		//var infoList []examManage.ExamScore
+		//global.GVA_DB.Where("id in ?", planList).Order("exam_type DESC,id").Find(&infoList)
+		for j := 0; j < len(planList); j++ {
+			var sum float64
+			var count int64
+			global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("plan_id = ? and student_id=?", planList[j], studentList[i]).Scan(&sum).Count(&count)
+			if count > 0 {
+				list1 = append(list1, sum)
+			} else {
+				list1 = append(list1, "缺考")
+			}
+		}
 		axis := fmt.Sprintf("A%d", i+2)
-		excel.SetSheetRow("Sheet1", axis, scoreList[i])
+		excel.SetSheetRow("Sheet1", axis, &list1)
+
+		//for j := 0; j < len(infoList); j++ {
+		//	if *infoList[j].ExamType == examType.ProceduralExam {
+		//		list1 = append(list1, infoList[j].Score, infoList[j].Weight)
+		//		temp1 := *infoList[j].Score
+		//		temp2 := float64(*infoList[j].Weight) / 100.0
+		//		sum += temp2 * temp1
+		//	}
+		//	if *infoList[j].ExamType == examType.FinalExam {
+		//		list1 = append(list1, fmt.Sprintf("%2.f", sum))
+		//		list1 = append(list1, infoList[j].Score)
+		//	}
+		//}
 	}
 	err = excel.SaveAs(filePath)
 	return err

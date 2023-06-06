@@ -24,6 +24,7 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.POST("reportStudentScore", examstudentPaperApi.ReportStudentScore)                     //单独上报学生成绩
 		examstudentPaperRouter.POST("paperCheating", examstudentPaperApi.PaperCheating)                               //答案修正
 		examstudentPaperRouter.GET("paperReview", examstudentPaperApi.PaperReview)                                    //分页查看学生成绩-试卷批阅
+		examstudentPaperRouter.GET("PaperMultiReview", examstudentPaperApi.PaperMultiReview)                          //教学计划下,成绩查看
 		examstudentPaperRouter.GET("statusMonitor", examstudentPaperApi.StatusMonitor)                                //状态检测
 		examstudentPaperRouter.POST("execAgain", examstudentPaperApi.ExecAgain)                                       //单学生重新批阅
 		examstudentPaperRouter.POST("allExecAgain", examstudentPaperApi.AllExecAgain)                                 //考试计划下所有学生试卷重批阅

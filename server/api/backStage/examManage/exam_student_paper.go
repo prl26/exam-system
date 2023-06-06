@@ -3,6 +3,7 @@ package examManage
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
+	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/common/response"
 	"github.com/prl26/exam-system/server/model/examManage"
@@ -208,7 +209,36 @@ func (examstudentPaperApi *ExamStudentPaperApi) ReportScore(c *gin.Context) {
 	}
 }
 
-// 试卷批阅
+//所有考试计划
+func (examstudentPaperApi *ExamStudentPaperApi) PaperMultiReview(c *gin.Context) {
+	var pageInfo basicdataReq.TeachClassStudent
+	_ = c.ShouldBindQuery(&pageInfo)
+	planListDetail, _ := examService.GetPlanListDetail(pageInfo.TeachClassId)
+	var planNames []string
+	for _, v := range planListDetail {
+		planNames = append(planNames, v.Name)
+	}
+	planList, _ := examService.GetPlanList(pageInfo.TeachClassId)
+	studentList, total, err := multiTableService.GetTeachClassStudentInfo(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	}
+	if infoList, err := examService.GetMultiPaperScore(studentList, planList); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult1{
+			List:     infoList,
+			PlanList: planNames,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// 试卷批阅  单个考试计划
 func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 	var pageInfo examManageReq.PaperReview
 	_ = c.ShouldBindQuery(&pageInfo)

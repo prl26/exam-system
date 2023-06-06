@@ -161,6 +161,7 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 	}
 	return score, total, err
 }
+
 func (examstudentPaperService *ExamStudentPaperService) StudentPaperStatus(info examManageReq.StatusMonitor) (scores []response.PaperStatus, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -275,5 +276,28 @@ func (examstudentPaperService *ExamStudentPaperService) RecoverByRecord(pid, sid
 }
 func (examstudentPaperService *ExamStudentPaperService) ForceCommitStudent(pid, sid uint) (err error) {
 	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("plan_id = ? and student_id =?", pid, sid).Update("is_commit", 1).Error
+	return
+}
+func (ExamService *ExamService) GetMultiPaperScore(studentList []basicdata.Student, planList []uint) (infoList [][]interface{}, err error) {
+	for i := 0; i < len(studentList); i++ {
+		//获取学生信息详情
+
+		var list1 = make([]interface{}, 0, 10)
+		list1 = append(list1, studentList[i].ID, studentList[i].Name, studentList[i].Sex)
+		//获取考试分数
+		//var infoList []examManage.ExamScore
+		//global.GVA_DB.Where("id in ?", planList).Order("exam_type DESC,id").Find(&infoList)
+		for j := 0; j < len(planList); j++ {
+			var sum float64
+			var count int64
+			global.GVA_DB.Model(examManage.ExamScore{}).Select("score").Where("plan_id = ? and student_id=?", planList[j], studentList[i].ID).Scan(&sum).Count(&count)
+			if count > 0 {
+				list1 = append(list1, sum)
+			} else {
+				list1 = append(list1, "缺考")
+			}
+		}
+		infoList = append(infoList, list1)
+	}
 	return
 }

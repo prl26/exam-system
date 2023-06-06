@@ -17,8 +17,13 @@ type ScoreSearch struct {
 	LessonId *int `json:"lessonId" form:"lessonId" gorm:"column:lesson_id;comment:课程id;size:32;"`
 	TermId   *int `json:"termId" form:"termId" gorm:"column:term_id;comment:学期id"`
 }
+type PaperMultiReview struct {
+	TeachPlanId uint `json:"teachPlanId"`
+	request.PageInfo
+}
 type PaperReview struct {
 	examManage.ExamScore
+	TeachPlanId int `json:"teachPlanId"`
 	request.PageInfo
 }
 type PaperCheating struct {
