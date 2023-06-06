@@ -1,16 +1,13 @@
 package questionBank
 
 import (
-	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	questionBankVoResp "github.com/prl26/exam-system/server/model/questionBank/vo/response"
-	"time"
 )
 
 type TargetService struct {
@@ -116,40 +113,60 @@ func (service *TargetService) GetByteCode(id uint) *questionBankBo.TargetByteCod
 	return &code
 }
 func (service *TargetService) PracticeRecord(studentId uint, targetId uint, address string) {
-	key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
-	err := global.GVA_REDIS.Set(context.Background(), key, address, 24*time.Hour).Err()
-	if err != nil {
-		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
+	//key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
+	//err := global.GVA_REDIS.Set(context.Background(), key, address, 2*time.Hour).Err()
+	//if err != nil {
+	//	global.GVA_LOG.Info(fmt.Sprintf("保存实例地址MYSQL出错了:%s", err))
+	//}
+	//go func() {
+	err2 := global.GVA_DB.Raw("INSERT INTO target_practice(student_id, question_id, question_address) VALUES (?, ?, ?)\nON DUPLICATE KEY UPDATE question_address = VALUES(question_address)", studentId, targetId, address).Scan(nil).Error
+	if err2 != nil {
+		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址MYSQL出错了:%s", err2))
 	}
+	//}()
 }
 func (service *TargetService) ExamRecord(studentId uint, targetId uint, address string, planId uint) {
-	send := studentId % 1000000
-	ddl := send + 22*3600
-	err := global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, time.Duration(ddl)*time.Second).Err()
-	if err != nil {
-		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
+	//send := studentId % 1000000
+	//ddl := send + 22*3600
+	//err := global.GVA_REDIS.Set(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId), address, time.Duration(ddl)*time.Second).Err()
+	//if err != nil {
+	//	global.GVA_LOG.Info(fmt.Sprintf("保存实例地址出错了:%s", err))
+	//}
+	//global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
+	//global.GVA_LOG.Info(fmt.Sprintf("题目实例地址:%s", address))
+	err2 := global.GVA_DB.Raw("INSERT INTO target_exam(student_id, question_id, question_address,plan_id) VALUES (?, ?, ?,?)\nON DUPLICATE KEY UPDATE question_address = VALUES(question_address)", studentId, targetId, address, planId).Scan(nil).Error
+	if err2 != nil {
+		global.GVA_LOG.Info(fmt.Sprintf("保存实例地址MYSQL出错了:%s", err2))
 	}
-	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId))
-	global.GVA_LOG.Info(fmt.Sprintf("题目实例地址:%s", address))
 }
 func (service *TargetService) QueryExamRecord(studentId uint, targetId uint, planId uint) (string, bool) {
-	address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId)).Result()
-	global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d answer:%s", studentId, targetId, planId, address))
-	if err != nil {
-		return "", false
+	//address, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("targetExam:%d:%d:%d", studentId, targetId, planId)).Result()
+	//global.GVA_LOG.Info(fmt.Sprintf("targetExam:%d:%d:%d answer:%s", studentId, targetId, planId, address))
+	//if err != nil {
+	//	return "", false
+	//}
+	//return address, true
+	address := ""
+	err := global.GVA_DB.Raw("SELECT question_address\nFROM target_exam \nWHERE student_id = ? AND question_id = ? and plan_id =?", studentId, targetId, planId).Scan(&address).Error
+	if err != nil || address == "" {
+		return address, false
 	}
 	return address, true
 }
 func (service *TargetService) QueryPracticeRecord(studentId uint, targetId uint) (string, bool, error) {
-	key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
-	address, err := global.GVA_REDIS.Get(context.Background(), key).Result()
-	if err != nil {
-		if err == redis.Nil {
-			return "", false, nil
-		}
-		return "", false, err
+	//key := fmt.Sprintf("targetPractice:%d:%d", studentId, targetId)
+	//address, err := global.GVA_REDIS.Get(context.Background(), key).Result()
+	//if err != nil {
+	//	if err == redis.Nil {
+	//		return "", false, nil
+	//	}
+	//	return "", false, err
+	//}
+	address := ""
+	err := global.GVA_DB.Raw("SELECT question_address\nFROM target_practice\nWHERE student_id = ? AND question_id = ?", studentId, targetId).Scan(&address).Error
+	if err != nil || address == "" {
+		return address, false, err
 	}
-
 	return address, true, err
 }
 

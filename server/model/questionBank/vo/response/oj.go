@@ -16,6 +16,6 @@ type Compile struct {
 }
 
 type SubmitResponse struct {
-	Score  uint
-	Submit []*ojBo.Submit
+	Score  uint           `json:"score"`
+	Submit []*ojBo.Submit `json:"submit"`
 }

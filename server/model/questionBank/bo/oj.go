@@ -8,8 +8,10 @@ type OjHelper struct {
 
 type Submit struct {
 	//ID string `json:"id"`		// 用例ID
-	Name  string `json:"name"`  // 用例名称
-	Score uint   `json:"score"` // 用例得分
+	Name         string `json:"name"`  // 用例名称
+	Score        uint   `json:"score"` // 用例得分
+	ActualOutput string `json:"actualOutput"`
+	AnswerOutput string `json:"answerOutput"`
 	ExecuteSituation
 }
 

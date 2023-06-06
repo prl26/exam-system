@@ -189,7 +189,7 @@ func (*TargetApi) PracticeScore(c *gin.Context) {
 	}
 	score, err := targetOjService.QueryScore(address)
 	if err != nil {
-		questionBankResp.ErrorHandle(c, fmt.Errorf("获取分数错误，请联系管理员或重新生成实例"))
+		questionBankResp.ErrorHandle(c, fmt.Errorf("获取分数错误，合约未部署"))
 		return
 	}
 	go func() {
