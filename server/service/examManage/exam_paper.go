@@ -225,7 +225,7 @@ func (examPaperService *ExamPaperService) GetPaperNum(PlanId uint) (number []int
 }
 func (examPaperService *ExamPaperService) FindLateJoinStd(pid uint) (diffArray []int64, err error) {
 	var students []int64
-	err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes as b\njoin tea_examplan as t on t.teach_class_id = b.teach_class_id and t.id =? ", pid).Scan(&students).Error
+	err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes as b\njoin tea_examplan as t on t.teach_class_id = b.teach_class_id and t.id =?", pid).Scan(&students).Error
 	var nowStds []int64
 	err = global.GVA_DB.Raw("SELECT student_id from exam_student_paper where plan_id = ? group by student_id", pid).Scan(&nowStds).Error
 	diffArray = utils.DiffArray(students, nowStds)

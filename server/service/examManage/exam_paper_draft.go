@@ -162,6 +162,19 @@ func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.Con
 		PaperItem:  items,
 	}
 	global.GVA_DB.Create(&examPaper)
+	var merges []examManage.PaperQuestionMerge
+	for _, v := range items {
+		merge := examManage.PaperQuestionMerge{
+			GVA_MODEL:    global.GVA_MODEL{},
+			PaperId:      v.PaperId,
+			QuestionId:   v.PaperId,
+			Score:        v.Score,
+			QuestionType: v.QuestionType,
+			ProblemType:  v.ProblemType,
+		}
+		merges = append(merges, merge)
+	}
+	global.GVA_DB.Create(merges)
 	return examPaper.ID, err
 }
 func (draftPaperService *DraftPaperService) ConvertDraftCheck(info request.ConvertDraft) (IsOk bool, err error) {
