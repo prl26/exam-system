@@ -277,7 +277,6 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	err := examService.ExportPaperScore(excelInfo.PlanId, studentList, infoList, filePath, quesNum[0].Num)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-		response.FailWithMessage("转换Excel失败", c)
 		return
 	}
 	//else {
@@ -302,7 +301,6 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 	_, err := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
 	if err != nil {
 		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
-		response.FailWithMessage("生成zip失败", c)
 		return
 	}
 	//else {
@@ -333,7 +331,6 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	err := examService.ExportMultiPaperScore(studentList, infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-		response.FailWithMessage("转换Excel失败", c)
 		return
 	}
 	//else {
