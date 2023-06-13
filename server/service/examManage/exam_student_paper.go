@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"context"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/common/request"
@@ -282,7 +283,7 @@ func (examstudentPaperService *ExamStudentPaperService) ForceCommitStudent(pid, 
 	err = global.GVA_DB.Model(examManage.StudentPaperStatus{}).Where("plan_id = ? and student_id =?", pid, sid).Update("is_commit", 1).Error
 	return
 }
-func (ExamService *ExamService) GetMultiPaperScore(studentList []basicdata.Student, planList []uint) (infoList [][]interface{}, err error) {
+func (ExamService *ExamService) GetMultiPaperScore(ctx context.Context, studentList []basicdata.Student, planList []uint) (infoList [][]interface{}, err error) {
 	for i := 0; i < len(studentList); i++ {
 		//获取学生信息详情
 

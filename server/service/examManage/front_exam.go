@@ -952,7 +952,7 @@ func (ExamService *ExamService) GetStudentListByTeachPlan(id uint) (infoList []i
 	return
 }
 func (ExamService *ExamService) GetStudentListDetailByTeachPlan(id uint) (infoList []basicdata.Student, err error) {
-	err = global.GVA_DB.Raw("SELECT * FROM bas_student_teach_classes WHERE teach_class_id = ?", id).Scan(&infoList).Error
+	err = global.GVA_DB.Raw("SELECT * FROM bas_student INNER JOIN bas_student_teach_classes as t on bas_student.id = t.student_id\nWHERE t.teach_class_id = ?", id).Scan(&infoList).Error
 	return
 }
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {

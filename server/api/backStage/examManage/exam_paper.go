@@ -294,21 +294,16 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
-	response.OkWithData(gin.H{
-		"filepath": path,
-	}, c)
 	_, err := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
 	if err != nil {
 		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
 		return
+	} else {
+		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
+		response.OkWithData(gin.H{
+			"filepath": path,
+		}, c)
 	}
-	//else {
-	//	path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
-	//	response.OkWithData(gin.H{
-	//		"filepath": path,
-	//	}, c)
-	//}
 }
 func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	var excelInfo request3.MultiExcel
@@ -323,23 +318,19 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	respath := "/static/excel" + excelInfo.FileName
 	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
 	//c.File(filePath)
-	response.OkWithData(gin.H{
-		"filepath": respath,
-	}, c)
 	infoList, _ := examService.GetPlanList(excelInfo.TeachPlanId)
 	studentList, _ := examService.GetStudentListByTeachPlan(excelInfo.TeachPlanId)
 	err := examService.ExportMultiPaperScore(studentList, infoList, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		return
+	} else {
+		c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
+		//c.File(filePath)
+		response.OkWithData(gin.H{
+			"filepath": respath,
+		}, c)
 	}
-	//else {
-	//	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
-	//	//c.File(filePath)
-	//	response.OkWithData(gin.H{
-	//		"filepath": respath,
-	//	}, c)
-	//}
 }
 
 //进入考试准备阶段

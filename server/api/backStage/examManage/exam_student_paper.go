@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
@@ -220,21 +221,23 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperMultiReview(c *gin.Context)
 	}
 	planList, _ := examService.GetPlanList(pageInfo.TeachClassId)
 	studentList, err := examService.GetStudentListDetailByTeachPlan(pageInfo.TeachClassId)
+	ctx, _ := context.WithTimeout(context.Background(), time.Minute*5)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
-	}
-	if infoList, err := examService.GetMultiPaperScore(studentList, planList); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(response.PageResult1{
-			List:     infoList,
-			PlanList: planNames,
-			//Total:    total,
-			//Page:     pageInfo.Page,
-			//PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		if infoList, err := examService.GetMultiPaperScore(ctx, studentList, planList); err != nil {
+			global.GVA_LOG.Error("获取失败!", zap.Error(err))
+			response.FailWithMessage("获取失败", c)
+		} else {
+			response.OkWithDetailed(response.PageResult1{
+				List:     infoList,
+				PlanList: planNames,
+				Total:    int64(len(studentList)),
+				//Page:     pageInfo.Page,
+				//PageSize: pageInfo.PageSize,
+			}, "获取成功", c)
+		}
 	}
 }
 
