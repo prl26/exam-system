@@ -132,10 +132,10 @@ func (examApi *ExamApi) SaveExamPaper(c *gin.Context) {
 	examScore, _ := statuServie.GetScore(ExamCommit.StudentId, ExamCommit.PlanId)
 	minutes := *PlanDetail.Time
 	unix1 := status.EnterTime.Add(time.Duration(minutes) * time.Minute)
-	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Add(2*time.Minute).Unix() {
 		response.FailWithMessageAndError(704, "超出考试时间", c)
-	} else if time.Now().Unix() > PlanDetail.EndTime.Unix() {
-		response.FailWithMessageAndError(704, "保存失败,考试已经结束了", c)
+	} else if time.Now().Unix() > PlanDetail.EndTime.Add(2*time.Minute).Unix() {
+		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 	} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
 		response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
 	} else if status.IsCommit && PlanDetail.Type == examType.ProceduralExam && *examScore.Score >= *PlanDetail.PassScore {
@@ -187,9 +187,9 @@ func (examApi *ExamApi) CommitExamPaper(c *gin.Context) {
 	if bool, _ := examPlanService.CheckIsExamSt(ExamCommit.PlanId, ExamCommit.StudentId); bool == false {
 		response.FailWithMessage("你不在参与此考试的范围中", c)
 	} else {
-		if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+		if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Add(2*time.Minute).Unix() {
 			response.FailWithMessageAndError(704, "超出考试时间", c)
-		} else if time.Now().Unix() > PlanDetail.EndTime.Add(time.Second*5).Unix() {
+		} else if time.Now().Unix() > PlanDetail.EndTime.Add(2*time.Minute).Unix() {
 			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 		} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
 			response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
@@ -237,7 +237,7 @@ func (examApi *ExamApi) CommitProgram(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage("更新失败", c)
 	} else {
-		if time.Now().Unix() > PlanDetail.EndTime.Unix() {
+		if time.Now().Unix() > PlanDetail.EndTime.Add(1*time.Minute).Unix() {
 			response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 		} else {
 			err = <-errChan
