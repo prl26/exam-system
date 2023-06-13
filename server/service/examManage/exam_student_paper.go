@@ -129,8 +129,8 @@ func (examstudentPaperService *ExamStudentPaperService) ReportStudentScore(pid u
 
 //查看成绩
 func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examManageReq.PaperReview) (score []response.ExamScoreResponse1, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+	//limit := info.PageSize
+	//offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&examManage.ExamScore{})
 	var scores []examManage.ExamScore
@@ -142,7 +142,9 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Order("score desc,student_id asc").Find(&scores).Error
+	//err = db.Limit(limit).Offset(offset).Order("score desc,student_id asc").Find(&scores).Error
+	err = db.Order("score desc,student_id asc").Find(&scores).Error
+
 	for _, v := range scores {
 		var sName string
 		var status examManage.StudentPaperStatus
@@ -163,9 +165,9 @@ func (examstudentPaperService *ExamStudentPaperService) ReviewScore(info examMan
 }
 
 func (examstudentPaperService *ExamStudentPaperService) StudentPaperStatus(info examManageReq.StatusMonitor) (scores []response.PaperStatus, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
-	// 创建db
+	//limit := info.PageSize
+	//offset := info.PageSize * (info.Page - 1)
+	//// 创建db
 	db := global.GVA_DB.Model(&examManage.StudentPaperStatus{})
 	var score []examManage.StudentPaperStatus
 	// 如果有条件搜索 下方会自动创建搜索语句
@@ -176,7 +178,8 @@ func (examstudentPaperService *ExamStudentPaperService) StudentPaperStatus(info 
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&score).Error
+	//err = db.Limit(limit).Offset(offset).Find(&score).Error
+	err = db.Find(&score).Error
 	for _, v := range score {
 		var name string
 		var isReport bool
@@ -195,9 +198,9 @@ func (examstudentPaperService *ExamStudentPaperService) StudentPaperStatus(info 
 // GetExamStudentPaperInfoList 分页获取ExamStudentPaper记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (examstudentPaperService *ExamStudentPaperService) GetExamStudentPaperInfoList(info examManageReq.ExamStudentPaperSearch) (list []examManage.ExamStudentPaper, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
-	// 创建db
+	//limit := info.PageSize
+	//offset := info.PageSize * (info.Page - 1)
+	//// 创建db
 	db := global.GVA_DB.Model(&examManage.ExamStudentPaper{})
 	var examstudentPapers []examManage.ExamStudentPaper
 	// 如果有条件搜索 下方会自动创建搜索语句
@@ -211,7 +214,8 @@ func (examstudentPaperService *ExamStudentPaperService) GetExamStudentPaperInfoL
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&examstudentPapers).Error
+	//err = db.Limit(limit).Offset(offset).Find(&examstudentPapers).Error
+	err = db.Find(&examstudentPapers).Error
 	return examstudentPapers, total, err
 }
 func (examstudentPaperService *ExamStudentPaperService) PaperCheating(info examManageReq.PaperCheating) (err error) {

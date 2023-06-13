@@ -7,7 +7,7 @@ import (
 
 type ExamStudentPaperSearch struct {
 	examManage.ExamStudentPaper
-	request.PageInfo
+	//request.PageInfo
 }
 type ExamStudentScore struct {
 	ScoreSearch
@@ -38,5 +38,5 @@ type AnswerCheating struct {
 }
 type StatusMonitor struct {
 	examManage.StudentPaperStatus
-	request.PageInfo
+	//request.PageInfo
 }

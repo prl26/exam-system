@@ -141,10 +141,10 @@ func (examstudentPaperApi *ExamStudentPaperApi) GetExamStudentPaperList(c *gin.C
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
+			List:  list,
+			Total: total,
+			//Page:     pageInfo.Page,
+			//PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
 }
@@ -158,10 +158,10 @@ func (examstudentPaperApi *ExamStudentPaperApi) StatusMonitor(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
+			List:  list,
+			Total: total,
+			//Page:     pageInfo.Page,
+			//PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
 }
@@ -219,7 +219,7 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperMultiReview(c *gin.Context)
 		planNames = append(planNames, v.Name)
 	}
 	planList, _ := examService.GetPlanList(pageInfo.TeachClassId)
-	studentList, total, err := multiTableService.GetTeachClassStudentInfo(pageInfo)
+	studentList, err := examService.GetStudentListDetailByTeachPlan(pageInfo.TeachClassId)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -231,9 +231,9 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperMultiReview(c *gin.Context)
 		response.OkWithDetailed(response.PageResult1{
 			List:     infoList,
 			PlanList: planNames,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
+			//Total:    total,
+			//Page:     pageInfo.Page,
+			//PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
 }
@@ -247,10 +247,10 @@ func (examstudentPaperApi *ExamStudentPaperApi) PaperReview(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
+			List:  list,
+			Total: total,
+			//Page:     pageInfo.Page,
+			//PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
 }

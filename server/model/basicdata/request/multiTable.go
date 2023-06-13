@@ -28,7 +28,10 @@ type TeachClassStudent struct {
 	TeachClassId uint `json:"teachClassId" form:"teachClassId"`
 	request.PageInfo
 }
-
+type TeachClassStudent1 struct {
+	TeachClassId uint `json:"teachClassId" form:"teachClassId"`
+	//request.PageInfo
+}
 type Association struct {
 	teachClassID uint `gorm:"column:teach_class_id"`
 	studentId    uint `gorm:"column:student_id"`

@@ -951,6 +951,10 @@ func (ExamService *ExamService) GetStudentListByTeachPlan(id uint) (infoList []i
 	err = global.GVA_DB.Raw("SELECT student_id FROM bas_student_teach_classes WHERE teach_class_id = ?", id).Scan(&infoList).Error
 	return
 }
+func (ExamService *ExamService) GetStudentListDetailByTeachPlan(id uint) (infoList []basicdata.Student, err error) {
+	err = global.GVA_DB.Raw("SELECT * FROM bas_student_teach_classes WHERE teach_class_id = ?", id).Scan(&infoList).Error
+	return
+}
 func (ExamService *ExamService) GetStudentList(id uint) (infoList []uint, err error) {
 	err = global.GVA_DB.Raw("SELECT b.student_id FROM bas_student_teach_classes as b,tea_examplan as t WHERE b.teach_class_id = t.teach_class_id and t.id = ? ORDER BY b.student_id", id).Scan(&infoList).Error
 	return
