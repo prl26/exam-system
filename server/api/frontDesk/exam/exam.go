@@ -166,7 +166,6 @@ func (examApi *ExamApi) FindSaveExamPaper(c *gin.Context) {
 		}
 	} else if IsNull == true {
 		response.FailWithMessageAndError(704, "无已保存的试卷", c)
-
 	} else {
 		response.OkWithData(gin.H{
 			"Answer":  SavePaper,

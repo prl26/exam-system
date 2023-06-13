@@ -119,10 +119,14 @@ qiniu:
   access-key: ""
   secret-key: ""
   use-cdn-domains: false
+#redis:
+#  db: 0
+#  addr: 162.14.117.85:6379
+#  password: ""
 redis:
   db: 0
-  addr: 162.14.117.85:6379
-  password: ""
+  addr: cd-crs-hr1symtu.sql.tencentcdb.com:20099
+  password: "admin_@_cuit"
 system:
   env: public
   addr: 8888

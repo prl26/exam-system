@@ -1,6 +1,7 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"github.com/prl26/exam-system/server/model/examManage/request"
@@ -159,15 +160,16 @@ func (draftPaperService *DraftPaperService) ConvertDraftToPaper(info request.Con
 		TermId:     *planDetail.TermId,
 		LessonId:   uint(*planDetail.LessonId),
 		UserId:     &userId,
-		PaperItem:  items,
 	}
 	global.GVA_DB.Create(&examPaper)
 	var merges []examManage.PaperQuestionMerge
-	for _, v := range items {
+	for k, v := range items {
+		fmt.Println("序号:", k)
+		fmt.Println("items:", v)
 		merge := examManage.PaperQuestionMerge{
 			GVA_MODEL:    global.GVA_MODEL{},
-			PaperId:      v.PaperId,
-			QuestionId:   v.PaperId,
+			PaperId:      &examPaper.ID,
+			QuestionId:   v.QuestionId,
 			Score:        v.Score,
 			QuestionType: v.QuestionType,
 			ProblemType:  v.ProblemType,
