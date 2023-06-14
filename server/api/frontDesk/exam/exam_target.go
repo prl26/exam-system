@@ -134,9 +134,9 @@ func (targetExamApi *TargetExamApi) CommitTargetExamPaper(c *gin.Context) {
 	minutes := *PlanDetail.Time
 	unix1 := status.EnterTime.Add(time.Duration(minutes) * time.Minute)
 	examScore, _ := statuServie.GetScore(ExamCommit.StudentId, ExamCommit.PlanId)
-	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Unix() {
+	if PlanDetail.IsLimitTime == true && time.Now().Unix() > unix1.Add(2*time.Minute).Unix() {
 		response.FailWithMessageAndError(704, "超出考试时间", c)
-	} else if time.Now().Unix() > PlanDetail.EndTime.Add(time.Second*5).Unix() {
+	} else if time.Now().Unix() > PlanDetail.EndTime.Add(2*time.Minute).Unix() {
 		response.FailWithMessageAndError(704, "提交失败,考试已经结束了", c)
 	} else if status.IsCommit && PlanDetail.Type == examType.FinalExam {
 		response.FailWithMessageAndError(703, "你已经提交过且通过该考试", c)
@@ -174,7 +174,7 @@ func (targetExamApi *TargetExamApi) GetTargetExamScore(c *gin.Context) {
 	}
 }
 
-//获取考试做题情况
+// 获取考试做题情况
 func (targetExamApi *TargetExamApi) GetTargetExamingScore(c *gin.Context) {
 	var ExamCommit request.CommitTargetExamPaper
 	_ = c.ShouldBindJSON(&ExamCommit)
