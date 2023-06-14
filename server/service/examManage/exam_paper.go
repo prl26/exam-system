@@ -1,12 +1,15 @@
 package examManage
 
 import (
+	"fmt"
 	"github.com/prl26/exam-system/server/global"
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
 	examManageReq "github.com/prl26/exam-system/server/model/examManage/request"
 	"github.com/prl26/exam-system/server/model/examManage/response"
 	questionBankBo "github.com/prl26/exam-system/server/model/questionBank/bo"
+	questionBankPo "github.com/prl26/exam-system/server/model/questionBank/po"
+
 	"github.com/prl26/exam-system/server/model/questionBank/enum/questionType"
 	questionBank "github.com/prl26/exam-system/server/model/questionBank/po"
 	"github.com/prl26/exam-system/server/model/teachplan"
@@ -168,6 +171,135 @@ func (examPaperService *ExamPaperService) GetExamPaper(id uint) (examPaper respo
 			}
 			examPaper.TargetComponent = append(examPaper.TargetComponent, Target)
 			examPaper.TargetComponent[targetCount].MergeId = Paper[i].ID
+			targetCount++
+		}
+	}
+	examPaper.PaperId = id
+	return
+}
+
+func (examPaperService *ExamPaperService) GetExamPaper1(id uint) (examPaper response.ExamPaperResponse2, PaperTitle examManage.ExamPaper, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&PaperTitle).Error
+	examPaper.TargetComponent = make([]response.STargetComponent, 0)
+	examPaper.BlankComponent = make([]response.BlankComponent2, 0)
+	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent2, 0)
+	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent2, 0)
+	examPaper.JudgeComponent = make([]response.JudgeComponent2, 0)
+	examPaper.ProgramComponent = make([]response.ProgramComponent2, 0)
+	var studentPaper []examManage.PaperQuestionMerge
+	err = global.GVA_DB.Table("exam_paper_question_merge").Where("paper_id = ?", id).Find(&studentPaper).Error
+	var singleChoiceCount, MultiChoiceCount, judgeCount, blankCount, programCount, targetCount uint
+	var singleChoiceOrder, MultiChoiceOrder, judgeOrder, blankOrder, programOrder, targetOrder uint
+	for i := 0; i < len(studentPaper); i++ {
+		if *studentPaper[i].QuestionType == questionType.SINGLE_CHOICE {
+			var Choice response.ChoiceComponent2
+			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Where("id = ?", studentPaper[i].QuestionId).Find(&Choice.Choice).Error
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_multiple_choice").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
+			if err != nil {
+				return
+			}
+			//Choice.MergeId = studentPaper[i].ID
+			if Choice.Choice.IsIndefinite == 0 {
+				singleChoiceOrder++
+				examPaper.SingleChoiceComponent = append(examPaper.SingleChoiceComponent, Choice)
+				examPaper.SingleChoiceComponent[singleChoiceCount].MergeId = studentPaper[i].ID
+				examPaper.SingleChoiceComponent[singleChoiceCount].Order = fmt.Sprintf("%d.", singleChoiceOrder)
+				var a float64
+				a = float64(*studentPaper[i].Score)
+				examPaper.SingleChoiceComponent[singleChoiceCount].Score = &a
+				examPaper.SingleChoiceComponent[singleChoiceCount].CorrectAnswer = answer
+				singleChoiceCount++
+			} else {
+				MultiChoiceOrder++
+				examPaper.MultiChoiceComponent = append(examPaper.MultiChoiceComponent, Choice)
+				examPaper.MultiChoiceComponent[MultiChoiceCount].MergeId = studentPaper[i].ID
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Order = fmt.Sprintf("%d.", MultiChoiceOrder)
+				var a float64
+				a = float64(*studentPaper[i].Score)
+				examPaper.MultiChoiceComponent[MultiChoiceCount].Score = &a
+				examPaper.MultiChoiceComponent[MultiChoiceCount].CorrectAnswer = answer
+				MultiChoiceCount++
+			}
+		} else if *studentPaper[i].QuestionType == questionType.JUDGE {
+			var Judge response.JudgeComponent2
+			err = global.GVA_DB.Table("les_questionBank_judge").Where("id = ?", studentPaper[i].QuestionId).Find(&Judge.Judge).Error
+			if err != nil {
+				return
+			}
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_judge").Select("is_right").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
+			if err != nil {
+				return
+			}
+			judgeOrder++
+			examPaper.JudgeComponent = append(examPaper.JudgeComponent, Judge)
+			examPaper.JudgeComponent[judgeCount].MergeId = studentPaper[i].ID
+			examPaper.JudgeComponent[judgeCount].Order = fmt.Sprintf("%d.", judgeOrder)
+			var a float64
+			a = float64(*studentPaper[i].Score)
+			examPaper.JudgeComponent[judgeCount].Score = &a
+			examPaper.JudgeComponent[judgeCount].CorrectAnswer = answer
+			judgeCount++
+		} else if *studentPaper[i].QuestionType == questionType.SUPPLY_BLANK {
+			var Blank response.BlankComponent2
+			err = global.GVA_DB.Table("les_questionBank_supply_blank").Where("id = ?", studentPaper[i].QuestionId).Find(&Blank.Blank).Error
+			if err != nil {
+				return
+			}
+			var answer string
+			err = global.GVA_DB.Table("les_questionBank_supply_blank").Select("answer").Where("id = ?", studentPaper[i].QuestionId).Scan(&answer).Error
+			if err != nil {
+				return
+			}
+			blankOrder++
+			examPaper.BlankComponent = append(examPaper.BlankComponent, Blank)
+			examPaper.BlankComponent[blankCount].MergeId = studentPaper[i].ID
+			examPaper.BlankComponent[blankCount].Order = fmt.Sprintf("%d.", blankOrder)
+			var a float64
+			a = float64(*studentPaper[i].Score)
+			examPaper.BlankComponent[blankCount].Score = &a
+			examPaper.BlankComponent[blankCount].CorrectAnswer = answer
+			blankCount++
+		} else if *studentPaper[i].QuestionType == questionType.PROGRAM {
+			var Program response.ProgramComponent2
+			var pr questionBankPo.Program
+			err = global.GVA_DB.Table("les_questionBank_programm").Where("id = ?", studentPaper[i].QuestionId).Find(&pr).Error
+			if err != nil {
+				return
+			}
+			Program.Program.PracticeModel.GVA_MODEL = pr.GVA_MODEL
+			Program.Program.PracticeModel.SerNo = pr.SerNo
+			Program.Program.PracticeModel.Describe = pr.Describe
+			Program.Program.PracticeModel.Title = pr.Title
+			Program.Program.PracticeModel.ProblemType = int(pr.ProblemType)
+			programOrder++
+			examPaper.ProgramComponent = append(examPaper.ProgramComponent, Program)
+			examPaper.ProgramComponent[programCount].MergeId = studentPaper[i].ID
+			examPaper.ProgramComponent[programCount].Order = fmt.Sprintf("%d.", programOrder)
+			var a float64
+			a = float64(*studentPaper[i].Score)
+			examPaper.ProgramComponent[programCount].Score = &a
+			if pr.ReferenceAnswers != nil {
+				examPaper.ProgramComponent[programCount].CorrectAnswer = *pr.ReferenceAnswers
+			}
+			programCount++
+		} else if *studentPaper[i].QuestionType == questionType.Target {
+			var target response.STargetComponent
+			err = global.GVA_DB.Table("les_questionBank_target").Where("id = ?", studentPaper[i].QuestionId).Find(&target.Target).Error
+			if err != nil {
+				return
+			}
+			if err != nil {
+				return
+			}
+			targetOrder++
+			examPaper.TargetComponent = append(examPaper.TargetComponent, target)
+			examPaper.TargetComponent[targetCount].MergeId = studentPaper[i].ID
+			examPaper.TargetComponent[targetCount].Order = fmt.Sprintf("%d.", targetOrder)
+			var a float64
+			a = float64(*studentPaper[i].Score)
+			examPaper.TargetComponent[targetCount].Score = &a
 			targetCount++
 		}
 	}

@@ -305,6 +305,56 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		}, c)
 	}
 }
+func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
+	var excelInfo request3.Excel
+	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
+	var paper []examManage.ExamPaper
+	global.GVA_DB.Model(examManage.ExamPaper{}).Where("plan_id = ?", excelInfo.PlanId).Find(&paper)
+	if len(paper) == 1 {
+		reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[0].ID)
+		if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, excelInfo.FileName, reexamPaper, examPaperTitle); err != nil {
+			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+			return
+		} else {
+			path := "/static/html/" + excelInfo.FileName
+			response.OkWithData(gin.H{
+				"filepath": path,
+			}, c)
+		}
+	} else {
+		response.FailWithMessage("暂时不支持有多份试卷", c)
+	}
+
+}
+func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.Context) {
+	var excelInfo request3.Excel
+	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
+	var paper []examManage.ExamPaper
+	global.GVA_DB.Model(examManage.ExamPaper{}).Where("plan_id = ?", excelInfo.PlanId).Find(&paper)
+	if len(paper) == 1 {
+		reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[0].ID)
+		if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, excelInfo.FileName, reexamPaper, examPaperTitle); err != nil {
+			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+			return
+		} else {
+			path := "/static/html/" + excelInfo.FileName
+			response.OkWithData(gin.H{
+				"filepath": path,
+			}, c)
+		}
+	} else {
+		response.FailWithMessage("暂时不支持有多份试卷", c)
+	}
+
+}
 func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	var excelInfo request3.MultiExcel
 	_ = c.ShouldBindJSON(&excelInfo)
@@ -315,7 +365,7 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
-	respath := "/static/excel" + excelInfo.FileName
+	respath := "/static/excel/" + excelInfo.FileName
 	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
 	//c.File(filePath)
 	infoList, _ := examService.GetPlanList(excelInfo.TeachPlanId)

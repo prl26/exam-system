@@ -32,6 +32,7 @@ func (s *ExamStudentPaperRouter) InitExamStudentPaperRouter(Router *gin.RouterGr
 		examstudentPaperRouter.POST("recoverByRecord", examstudentPaperApi.RecoverByRecord)                           //恢复学生答卷
 		examstudentPaperRouter.POST("deleteStudentAnswer", examstudentPaperApi.DeleteStudentAnswer)                   //删除学生答卷
 		examstudentPaperRouter.POST("forceCommitStudent", examstudentPaperApi.ForceCommitStudent)                     //强制提交
+		examstudentPaperRouter.POST("getDistribution", examstudentPaperApi.GetDistribution)                           // 查看分发情况
 
 	}
 	{
