@@ -307,6 +307,6 @@ func (ExamService *ExamService) GetMultiPaperScore(ctx context.Context, studentL
 	return
 }
 func (examstudentPaperService *ExamStudentPaperService) GetDistribution(pid uint) (count int64, err error) {
-	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT count(DISTINCT  student_id) FROM `exam_student_paper` where plan_id = ?", pid).Scan(count).Error
+	err = global.GVA_DB.Model(examManage.ExamStudentPaper{}).Raw("SELECT count(DISTINCT student_id) FROM `exam_student_paper` where plan_id = ?", pid).Count(&count).Error
 	return
 }
