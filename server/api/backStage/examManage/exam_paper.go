@@ -274,11 +274,11 @@ func (examPaperApi *ExamPaperApi) ExportPaper(c *gin.Context) {
 	quesNum, _ := examService.GetPaperQuesNum(excelInfo.PlanId)
 	infoList, _ := examService.GetExamScoreToExcel(excelInfo.PlanId)
 	studentList, _ := examService.GetStudentList(excelInfo.PlanId)
-	err := examService.ExportPaperScore(excelInfo.PlanId, studentList, infoList, filePath, quesNum[0].Num)
-	if err != nil {
-		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-		return
-	}
+	go examService.ExportPaperScore(excelInfo.PlanId, studentList, infoList, filePath, quesNum[0].Num)
+	//if err != nil {
+	//	global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+	//	return
+	//}
 	//else {
 	//	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
 	//	//c.File(filePath)
@@ -294,16 +294,17 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	_, err := examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
-	if err != nil {
-		global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
-		return
-	} else {
-		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
-		response.OkWithData(gin.H{
-			"filepath": path,
-		}, c)
-	}
+	path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
+	response.OkWithData(gin.H{
+		"filepath": path,
+	}, c)
+	go examService.ExportPaperToHtml(excelInfo.PlanId, excelInfo.FileName)
+	//if err != nil {
+	//	global.GVA_LOG.Error("生成zip失败!", zap.Error(err))
+	//	return
+	//} else {
+	//
+	//}
 }
 func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 	var excelInfo request3.Excel
@@ -370,17 +371,18 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 	//c.File(filePath)
 	infoList, _ := examService.GetPlanList(excelInfo.TeachPlanId)
 	studentList, _ := examService.GetStudentListByTeachPlan(excelInfo.TeachPlanId)
-	err := examService.ExportMultiPaperScore(studentList, infoList, filePath)
-	if err != nil {
-		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
-		return
-	} else {
-		c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
-		//c.File(filePath)
-		response.OkWithData(gin.H{
-			"filepath": respath,
-		}, c)
-	}
+	c.Writer.Header().Add("Content-Disposition", "attachment; filepath="+filePath)
+	//c.File(filePath)
+	response.OkWithData(gin.H{
+		"filepath": respath,
+	}, c)
+	go examService.ExportMultiPaperScore(studentList, infoList, filePath)
+	//if err != nil {
+	//	global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
+	//	return
+	//} else {
+	//
+	//}
 }
 
 //进入考试准备阶段
