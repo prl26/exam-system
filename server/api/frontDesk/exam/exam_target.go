@@ -180,11 +180,11 @@ func (targetExamApi *TargetExamApi) GetTargetExamingScore(c *gin.Context) {
 	_ = c.ShouldBindJSON(&ExamCommit)
 	ExamCommit.StudentId = utils.GetStudentId(c)
 	var scoreList []examManage.TargetExamingScore
-	for _, v := range ExamCommit.TargetComponent {
-		address, _ := targetService.QueryExamRecord(ExamCommit.StudentId, v.QuestionId, ExamCommit.PlanId)
+	for i := 0; i < len(ExamCommit.TargetComponent); i++ {
+		address, _ := targetService.QueryExamRecord(ExamCommit.StudentId, ExamCommit.TargetComponent[i].QuestionId, ExamCommit.PlanId)
 		score, _ := targetOjService.QueryScore(address)
 		list := examManage.TargetExamingScore{
-			MergeId: v.MergeId,
+			MergeId: ExamCommit.TargetComponent[i].MergeId,
 			Answer:  address,
 			Score:   score,
 		}
