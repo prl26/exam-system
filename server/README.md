@@ -44,7 +44,7 @@
 | `--excel` | excel导入导出默认路径 | excel导入导出默认路径                                                                                                                             |
 | `--page` | 表单生成器 | 表单生成器 打包后的dist                                                                                                                            |
 | `--template` | 模板 | 模板文件夹,存放的是代码生成器的模板                                                                                                                        |
-| `router`     | 路由层                  | 路由层                                                                                                                                       |
+| `router`     | 路由层                  | 路由层 ,层级结构大致同api层                                                                                                                                       |
 | `service`    | service层               | 存放业务逻辑问题,层级结构大致同api层                                                                                                                      |
 | `source` | source层 | 存放初始化数据的函数                                                                                                                                |
 | `utils`      | 工具包                  | 工具函数封装                                                                                                                                    |
