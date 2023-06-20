@@ -1250,6 +1250,7 @@ func (ExamService *ExamService) ExportPaperScore(pid uint, studentList []uint, i
 			excel.SetSheetRow("Sheet1", axis, &detail1)
 		}
 	}
+
 	err = excel.SaveAs(filePath)
 	return err
 }

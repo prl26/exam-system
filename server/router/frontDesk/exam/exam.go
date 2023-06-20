@@ -21,5 +21,6 @@ func (c *ExamRouter) InitFrontExamRouter(Router *gin.RouterGroup) {
 		FrontExamRouterWithoutRecord.POST("commitProgram", frontExamApi.CommitProgram)
 		FrontExamRouterWithoutRecord.POST("saveExamPaper", frontExamApi.SaveExamPaper)
 		FrontExamRouterWithoutRecord.GET("findSaveExamPaper", frontExamApi.FindSaveExamPaper)
+		FrontExamRouterWithoutRecord.POST("uploadExamPicture", frontExamApi.UploadExamPicture)
 	}
 }

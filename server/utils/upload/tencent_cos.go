@@ -18,7 +18,7 @@ import (
 type TencentCOS struct{}
 
 // UploadFile upload file to COS
-func (*TencentCOS) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*TencentCOS) UploadMultipartFile(file *multipart.FileHeader) (string, string, error) {
 	client := NewClient()
 	f, openError := file.Open()
 	if openError != nil {

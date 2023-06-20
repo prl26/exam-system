@@ -61,9 +61,10 @@ func (systemConfigService *SystemConfigService) GetServerInfo() (server *utils.S
 
 	return &s, nil
 }
+
 func (systemConfigService *SystemConfigService) UploadFile(header *multipart.FileHeader, noSave string) (file system.ExaFileUploadAndDownload, err error) {
 	oss := upload.NewOss()
-	filePath, key, uploadErr := oss.UploadFile(header)
+	filePath, key, uploadErr := oss.UploadMultipartFile(header)
 	if uploadErr != nil {
 		panic(err)
 	}

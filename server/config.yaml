@@ -131,7 +131,7 @@ system:
   env: public
   addr: 8888
   db-type: mysql
-  oss-type: local
+  oss-type: minio
   use-multipoint: false
   use-redis: true
   iplimit-count: 15000
@@ -164,6 +164,12 @@ zap:
   max-age: 30
   show-line: true
   log-in-console: true
+minio:
+  endpoint: 162.14.117.85:8891
+  access-key-id: GvyXDdQ9GrpgKbj2lCun
+  secret-access-key: gagnXZu4cNebDnb6dLdpdODwiZ3beudfRmTC42Da
+  secure:
+  bucket: default
 goJudge:
   enable: true
   address: localhost:5050

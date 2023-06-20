@@ -20,12 +20,12 @@ type AwsS3 struct{}
 
 //@author: [WqyJh](https://github.com/WqyJh)
 //@object: *AwsS3
-//@function: UploadFile
+//@function: UploadMultipartFile
 //@description: Upload file to Aws S3 using aws-sdk-go. See https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/s3-example-basic-bucket-operations.html#s3-examples-bucket-ops-upload-file-to-bucket
 //@param: file *multipart.FileHeader
 //@return: string, string, error
 
-func (*AwsS3) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*AwsS3) UploadMultipartFile(file *multipart.FileHeader) (string, string, error) {
 	session := newSession()
 	uploader := s3manager.NewUploader(session)
 
