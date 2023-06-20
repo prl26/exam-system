@@ -1432,6 +1432,54 @@ func (ExamService *ExamService) ExportMultiPaperScore(studentList []int, planLis
 func (ExamService *ExamService) ExportPaperToHtmlToCheck(pid uint, dirName string, examPaper response.ExamPaperResponse2, PaperTitle examManage.ExamPaper) (content io.ReadSeeker, err error) {
 	templatePath := global.GVA_CONFIG.HTML.Template
 	htmlOut := global.GVA_CONFIG.HTML.Dir
+	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index1.html"))
+	htmlOutPath := filepath.Join(htmlOut, dirName)
+	if err != nil {
+		fmt.Println("获取模版文件失败")
+	}
+	//var fileList []string
+	//先生成文件夹
+	//if err = utils.CreateDir(htmlOutPath); err != nil {
+	//	return
+	//}
+	//examScoresList, err := ExamService.GetExamScoreToHtml(pid)
+	//if err != nil {
+	//	return content, err
+	//}
+	var planDetail teachplan.ExamPlan
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
+	//outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", dirName))
+
+	//for k, v := range examScoresList {
+	//2.获取html生成路径
+	//var studentInfo basicdata.Student
+	//global.GVA_DB.Model(basicdata.Student{}).Select("id,name").Where("id = ?", v.StudentId).Find(&studentInfo)
+	//file := fmt.Sprintf("%d-%s.html", studentInfo.ID, studentInfo.Name)
+	fileName := htmlOutPath
+	//4.生成静态文件
+	////Paper, status, err := ExamService.GetExamPapersAndScores(examComing, "")
+	//if err != nil {
+	//	return content, err
+	//}
+	ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{
+		"planDetail":   planDetail,
+		"singleChoice": examPaper.SingleChoiceComponent,
+		"multiChoice":  examPaper.MultiChoiceComponent,
+		"judge":        examPaper.JudgeComponent,
+		"blank":        examPaper.BlankComponent,
+		"program":      examPaper.ProgramComponent,
+		"target":       examPaper.TargetComponent,
+	})
+	//fileList = append(fileList, fileName)
+
+	//if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
+	//	return content, err
+	//}
+	return
+}
+func (ExamService *ExamService) ExportPaperToHtmlToCheck1(pid uint, dirName string, examPaper response.ExamPaperResponse2, PaperTitle examManage.ExamPaper) (content io.ReadSeeker, err error) {
+	templatePath := global.GVA_CONFIG.HTML.Template
+	htmlOut := global.GVA_CONFIG.HTML.Dir
 	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index2.html"))
 	htmlOutPath := filepath.Join(htmlOut, dirName)
 	if err != nil {
