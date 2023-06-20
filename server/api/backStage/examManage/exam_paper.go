@@ -294,7 +294,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
+	path := "/static/html/zip/" + excelInfo.FileName
 	response.OkWithData(gin.H{
 		"filepath": path,
 	}, c)
@@ -363,7 +363,6 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/excel/" + excelInfo.FileName
