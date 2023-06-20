@@ -294,7 +294,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtml(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-	path := "/static/html/zip/" + excelInfo.FileName
+	path := "/static/html/zip/" + fmt.Sprintf("%s.zip", excelInfo.FileName)
 	response.OkWithData(gin.H{
 		"filepath": path,
 	}, c)
