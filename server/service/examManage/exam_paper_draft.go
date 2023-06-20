@@ -125,7 +125,9 @@ func (draftPaperService *DraftPaperService) GetPaperDraftInfoList(info request.D
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&examManage.ExamPaperDraft1{})
-	db = db.Where("user_id = ?", userId)
+	if authorityID != 888 {
+		db = db.Where("user_id = ?", userId)
+	}
 	var examPapers []examManage.ExamPaperDraft1
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Name != "" {

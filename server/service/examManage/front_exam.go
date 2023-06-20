@@ -33,7 +33,7 @@ import (
 type ExamService struct {
 }
 
-func (examService *ExamService) FindExamPlans(teachClassId uint, sid uint) (examPlans []response2.PlanRp, err error) {
+func (ExamService *ExamService) FindExamPlans(teachClassId uint, sid uint) (examPlans []response2.PlanRp, err error) {
 	var examPlan []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlan).Error
 	for _, v := range examPlan {
@@ -53,7 +53,7 @@ func (examService *ExamService) FindExamPlans(teachClassId uint, sid uint) (exam
 	}
 	return
 }
-func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
+func (ExamService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint) (planAndStatus []response2.ExamPlanRp1, err error) {
 	var examPlans []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlans).Error
 	for i := 0; i < len(examPlans); i++ {
@@ -74,14 +74,14 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 		} else {
 			plan.Status.IsBegin = 1
 		}
-		if commit, err := examService.GetPlanStatus(examPlans[i].ID, sId); err != nil {
+		if commit, err := ExamService.GetPlanStatus(examPlans[i].ID, sId); err != nil {
 			return nil, err
 		} else if commit == true {
 			plan.Status.IsCommit = 1
 		} else {
 			plan.Status.IsCommit = 0
 		}
-		if isFinishPreExam, err, _ := examService.IsFinishPreExam(examPlans[i].ID, sId); err != nil {
+		if isFinishPreExam, err, _ := ExamService.IsFinishPreExam(examPlans[i].ID, sId); err != nil {
 			return nil, err
 		} else if isFinishPreExam == true {
 			plan.Status.IsFinishPreExams = 1
@@ -98,7 +98,7 @@ func (examService *ExamService) FindTargetExamPlans(teachClassId uint, sId uint)
 	return
 }
 
-func (examService *ExamService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
+func (ExamService *ExamService) IsFinishPreExam(planId uint, studentId uint) (result bool, err error, preExamIds []string) {
 	var examPlan teachplan.ExamPlan
 	global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", planId).Find(&examPlan)
 	preExamIds = strings.Split(examPlan.PrePlanId, ",")
@@ -120,7 +120,7 @@ func (examService *ExamService) IsFinishPreExam(planId uint, studentId uint) (re
 	return true, err, preExamIds
 }
 
-func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit bool, err error) {
+func (ExamService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit bool, err error) {
 	var status examManage.StudentPaperStatus
 	var num int64
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", sId, planId).Find(&status).Count(&num).Error
@@ -131,11 +131,11 @@ func (examService *ExamService) GetPlanStatus(planId uint, sId uint) (isCommit b
 	}
 	return true, nil
 }
-func (examService *ExamService) CheckIsReady(pid uint) (isReady bool, err error) {
+func (ExamService *ExamService) CheckIsReady(pid uint) (isReady bool, err error) {
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Select("is_ready").Where("id = ?", pid).Scan(&isReady).Error
 	return
 }
-func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
+func (ExamService *ExamService) GetExamPapersBySql(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
 	examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -200,11 +200,11 @@ func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing
 	if err != nil {
 		return
 	}
-	status, err = examService.CreateStatus(examComing, IP)
+	status, err = ExamService.CreateStatus(examComing, IP)
 	if err != nil {
 		return
 	}
-	_, err = examService.CreateStatusRecord(examComing, IP)
+	_, err = ExamService.CreateStatusRecord(examComing, IP)
 	if err != nil {
 		return
 	}
@@ -216,7 +216,7 @@ func (examService *ExamService) GetExamPapersBySql(examComing request.ExamComing
 	}
 	return
 }
-func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (PaperId int64, sChoice []*response.ChoiceComponent, mChoice []*response.ChoiceComponent, judge []*response.JudgeComponent, blank []*response.BlankComponent, program []*response.ProgramComponent, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
+func (ExamService *ExamService) GetExamPapers(examComing request.ExamComing, IP string) (PaperId int64, sChoice []*response.ChoiceComponent, mChoice []*response.ChoiceComponent, judge []*response.JudgeComponent, blank []*response.BlankComponent, program []*response.ProgramComponent, status examManage.StudentPaperStatus, examScore examManage.ExamScore, err error) {
 	//examPaper.BlankComponent = make([]response.BlankComponent, 0)
 	//examPaper.SingleChoiceComponent = make([]response.ChoiceComponent, 0)
 	//examPaper.MultiChoiceComponent = make([]response.ChoiceComponent, 0)
@@ -292,11 +292,11 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP 
 	if err != nil {
 		return
 	}
-	status, err = examService.CreateStatus(examComing, IP)
+	status, err = ExamService.CreateStatus(examComing, IP)
 	if err != nil {
 		return
 	}
-	_, err = examService.CreateStatusRecord(examComing, IP)
+	_, err = ExamService.CreateStatusRecord(examComing, IP)
 	if err != nil {
 		return
 	}
@@ -308,18 +308,18 @@ func (examService *ExamService) GetExamPapers(examComing request.ExamComing, IP 
 	}
 	return
 }
-func (examService *ExamService) CheckIsDistributed(pid uint) (isDistributed bool, err error) {
+func (ExamService *ExamService) CheckIsDistributed(pid uint) (isDistributed bool, err error) {
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Select("is_distributed").Where("id = ?", pid).Scan(&isDistributed).Error
 	return
 }
-func (examService *ExamService) GetPlanDetail(pid uint) (plan teachplan.ExamPlan, err error) {
+func (ExamService *ExamService) GetPlanDetail(pid uint) (plan teachplan.ExamPlan, err error) {
 	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Scan(&plan).Error
 	return
 }
 
 // 进入考试准备阶段
-func (examService *ExamService) SetExamPre(pid uint) (err error) {
-	studentList, _ := examService.GetStudentList(pid)
+func (ExamService *ExamService) SetExamPre(pid uint) (err error) {
+	studentList, _ := ExamService.GetStudentList(pid)
 	for _, v := range studentList {
 		var examPaper response.ExamPaperResponse
 		examPaper.BlankComponent = make([]response.BlankComponent, 0)
@@ -410,7 +410,7 @@ func (examService *ExamService) SetExamPre(pid uint) (err error) {
 	}
 	return
 }
-func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse2, status examManage.StudentPaperStatus, err error) {
+func (ExamService *ExamService) GetExamPapersAndScores(examComing request.ExamComing, IP string) (examPaper response.ExamPaperResponse2, status examManage.StudentPaperStatus, err error) {
 	examPaper.BlankComponent = make([]response.BlankComponent2, 0)
 	examPaper.SingleChoiceComponent = make([]response.ChoiceComponent2, 0)
 	examPaper.MultiChoiceComponent = make([]response.ChoiceComponent2, 0)
@@ -541,7 +541,7 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 		return
 	}
 	examPaper.PaperId = uint(PaperId)
-	status, err = examService.CreateStatus(examComing, IP)
+	status, err = ExamService.CreateStatus(examComing, IP)
 	fmt.Println(status)
 	if err != nil {
 		return
@@ -549,12 +549,12 @@ func (examService *ExamService) GetExamPapersAndScores(examComing request.ExamCo
 	return
 }
 
-func (examService *ExamService) GetStudentPaperId(examComing request.ExamComing) (Id int64, err error) {
+func (ExamService *ExamService) GetStudentPaperId(examComing request.ExamComing) (Id int64, err error) {
 	err = global.GVA_DB.Table("exam_student_paper").Select("paper_id").Where("student_id = ? and plan_id =?", examComing.StudentId, examComing.PlanId).First(&Id).Error
 	return
 }
 
-func (examService *ExamService) CreateStatus(examComing request.ExamComing, IP string) (status examManage.StudentPaperStatus, err error) {
+func (ExamService *ExamService) CreateStatus(examComing request.ExamComing, IP string) (status examManage.StudentPaperStatus, err error) {
 	var num int64
 	err = global.GVA_DB.Table("student_paper_status").Where("student_id = ? and plan_id = ?", examComing.StudentId, examComing.PlanId).Find(&status).Count(&num).Error
 	if err != nil {
@@ -573,7 +573,7 @@ func (examService *ExamService) CreateStatus(examComing request.ExamComing, IP s
 	}
 	return
 }
-func (examService *ExamService) CreateStatusRecord(examComing request.ExamComing, IP string) (status examManage.ExamRecord, err error) {
+func (ExamService *ExamService) CreateStatusRecord(examComing request.ExamComing, IP string) (status examManage.ExamRecord, err error) {
 	status = examManage.ExamRecord{
 		GVA_MODEL: global.GVA_MODEL{},
 		StudentId: examComing.StudentId,
@@ -589,7 +589,7 @@ func (examService *ExamService) CreateStatusRecord(examComing request.ExamComing
 //保存试卷
 
 // 提交试卷
-func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
+func (ExamService *ExamService) CommitExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
@@ -614,26 +614,26 @@ func (examService *ExamService) CommitExamPapers(examPaperCommit examManage.Comm
 	return
 }
 
-func (examService *ExamService) QueryExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
+func (ExamService *ExamService) QueryExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
 	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d", studentId, planId, mergeId)).Result()
 	if err != nil {
 		return "", false
 	}
 	return answer, true
 }
-func (examService *ExamService) QuerySaveExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
+func (ExamService *ExamService) QuerySaveExamPapers(studentId uint, planId uint, mergeId uint) (string, bool) {
 	answer, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, studentId, planId, mergeId)).Result()
 	if err != nil {
 		return "", false
 	}
 	return answer, true
 }
-func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
+func (ExamService *ExamService) UpdateExamPapers(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
 	for j := 0; j < len(optionCommit); j++ {
-		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId)
+		answers, isCommit := ExamService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, optionCommit[j].MergeId)
 		if isCommit == false {
 			return errors.New("找不到答题记录")
 		} else {
@@ -647,7 +647,7 @@ func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.Comm
 		}
 	}
 	for j := 0; j < len(JudgeCommit); j++ {
-		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId)
+		answers, isCommit := ExamService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, JudgeCommit[j].MergeId)
 		if isCommit == false {
 			return errors.New("找不到答题记录")
 		} else {
@@ -661,7 +661,7 @@ func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.Comm
 		}
 	}
 	for j := 0; j < len(BlankCommit); j++ {
-		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId)
+		answers, isCommit := ExamService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, BlankCommit[j].MergeId)
 		if isCommit == false {
 			return errors.New("找不到答题记录")
 		} else {
@@ -676,10 +676,10 @@ func (examService *ExamService) UpdateExamPapers(examPaperCommit examManage.Comm
 	}
 	return
 }
-func (examService *ExamService) UpdateTargetExamPapers(examPaperCommit request.CommitTargetExamPaper) (err error) {
+func (ExamService *ExamService) UpdateTargetExamPapers(examPaperCommit request.CommitTargetExamPaper) (err error) {
 	var targetCommit = examPaperCommit.TargetComponent
 	for j := 0; j < len(targetCommit); j++ {
-		answers, isCommit := examService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, targetCommit[j].MergeId)
+		answers, isCommit := ExamService.QueryExamPapers(examPaperCommit.StudentId, examPaperCommit.PlanId, targetCommit[j].MergeId)
 		if isCommit == false {
 			return errors.New("找不到答题记录")
 		} else {
@@ -769,7 +769,7 @@ func (examService *ExamService) UpdateTargetExamPapers(examPaperCommit request.C
 //}
 
 // 已废弃
-func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.CommitExamPaper) (err error) {
+func (ExamService *ExamService) CommitExamPapers1(examPaperCommit examManage.CommitExamPaper) (err error) {
 	var optionCommit = examPaperCommit.MultipleChoiceCommit
 	var JudgeCommit = examPaperCommit.JudgeCommit
 	var BlankCommit = examPaperCommit.BlankCommit
@@ -809,7 +809,7 @@ func (examService *ExamService) CommitExamPapers1(examPaperCommit examManage.Com
 	}
 	return
 }
-func (examService *ExamService) CommitProgram(program examManage.CommitProgram) (err error) {
+func (ExamService *ExamService) CommitProgram(program examManage.CommitProgram) (err error) {
 	name, _ := program.LanguageId.GetLanguageName()
 	answer := examManage.ProgramAnswer{
 		Code:         program.Code,
@@ -821,7 +821,7 @@ func (examService *ExamService) CommitProgram(program examManage.CommitProgram) 
 		Error
 	return
 }
-func (examService *ExamService) GetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []response.ExamScoreResponse, total int64, err error) {
+func (ExamService *ExamService) GetExamScore(info request.ExamStudentScore, studentId uint) (studentScore []response.ExamScoreResponse, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -840,7 +840,7 @@ func (examService *ExamService) GetExamScore(info request.ExamStudentScore, stud
 	err = db.Where("student_id = ? and is_report = 1", studentId).Order("created_at desc,updated_at desc ").Limit(limit).Offset(offset).Find(&studentScore).Error
 	return studentScore, total, err
 }
-func (examService *ExamService) SaveExamPapers(examPaperCommit examManage.CommitExamPaper2) (err error) {
+func (ExamService *ExamService) SaveExamPapers(examPaperCommit examManage.CommitExamPaper2) (err error) {
 	optionCommit, err := json.Marshal(examPaperCommit.SingleChoiceCommit)
 	multiOptionCommit, err := json.Marshal(examPaperCommit.MultipleChoiceCommit)
 	JudgeCommit, err := json.Marshal(examPaperCommit.JudgeCommit)
@@ -860,7 +860,7 @@ func (ExamService *ExamService) GetAllQues(id uint, sId uint) (infoList []uint, 
 	}
 	return
 }
-func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperCommit examManage.CommitExamPaper2, IsNull bool, err error) {
+func (ExamService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperCommit examManage.CommitExamPaper2, IsNull bool, err error) {
 	IsNull = true
 	sChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.SINGLE_CHOICE))).Result()
 	mChoice1, err := global.GVA_REDIS.Get(context.Background(), fmt.Sprintf("examRecord:%d:%d:%d:%d", 01, sId, pId, uint(questionType.MULTIPLE_CHOICE))).Result()
@@ -918,7 +918,7 @@ func (examService *ExamService) GetAllQuesAnswer(pId uint, sId uint) (examPaperC
 	examPaperCommit.PlanId = pId
 	return
 }
-func (examService *ExamService) SaveAnswer(ans string, isCommit bool, v uint) (list response.SaveExamPaper) {
+func (ExamService *ExamService) SaveAnswer(ans string, isCommit bool, v uint) (list response.SaveExamPaper) {
 	if isCommit == false {
 		temp := response.SaveExamPaper{
 			Id:     v,
@@ -1427,4 +1427,53 @@ func (ExamService *ExamService) ExportMultiPaperScore(studentList []int, planLis
 	}
 	err = excel.SaveAs(filePath)
 	return err
+}
+
+func (ExamService *ExamService) ExportPaperToHtmlToCheck(pid uint, dirName string, examPaper response.ExamPaperResponse2, PaperTitle examManage.ExamPaper) (content io.ReadSeeker, err error) {
+	templatePath := global.GVA_CONFIG.HTML.Template
+	htmlOut := global.GVA_CONFIG.HTML.Dir
+	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index2.html"))
+	htmlOutPath := filepath.Join(htmlOut, dirName)
+	if err != nil {
+		fmt.Println("获取模版文件失败")
+	}
+	//var fileList []string
+	//先生成文件夹
+	//if err = utils.CreateDir(htmlOutPath); err != nil {
+	//	return
+	//}
+	//examScoresList, err := ExamService.GetExamScoreToHtml(pid)
+	//if err != nil {
+	//	return content, err
+	//}
+	var planDetail teachplan.ExamPlan
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
+	//outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", dirName))
+
+	//for k, v := range examScoresList {
+	//2.获取html生成路径
+	//var studentInfo basicdata.Student
+	//global.GVA_DB.Model(basicdata.Student{}).Select("id,name").Where("id = ?", v.StudentId).Find(&studentInfo)
+	//file := fmt.Sprintf("%d-%s.html", studentInfo.ID, studentInfo.Name)
+	fileName := htmlOutPath
+	//4.生成静态文件
+	////Paper, status, err := ExamService.GetExamPapersAndScores(examComing, "")
+	//if err != nil {
+	//	return content, err
+	//}
+	ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{
+		"planDetail":   planDetail,
+		"singleChoice": examPaper.SingleChoiceComponent,
+		"multiChoice":  examPaper.MultiChoiceComponent,
+		"judge":        examPaper.JudgeComponent,
+		"blank":        examPaper.BlankComponent,
+		"program":      examPaper.ProgramComponent,
+		"target":       examPaper.TargetComponent,
+	})
+	//fileList = append(fileList, fileName)
+
+	//if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
+	//	return content, err
+	//}
+	return
 }

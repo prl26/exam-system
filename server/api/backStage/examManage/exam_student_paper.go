@@ -2,6 +2,7 @@ package examManage
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/prl26/exam-system/server/global"
 	basicdataReq "github.com/prl26/exam-system/server/model/basicdata/request"
@@ -376,5 +377,20 @@ func (examstudentPaperApi *ExamStudentPaperApi) ForceCommitStudent(c *gin.Contex
 		response.FailWithMessage("强制提交失败", c)
 	} else {
 		response.OkWithMessage("强制提交成功", c)
+	}
+}
+
+//查看学生分发情况
+func (examstudentPaperApi *ExamStudentPaperApi) GetDistribution(c *gin.Context) {
+	var sp teachplan.CoverRq1
+	_ = c.ShouldBindQuery(&sp)
+	fmt.Println(sp.PlanId)
+	if count, err := examstudentPaperService.GetDistribution(sp.PlanId); err != nil {
+		response.FailWithMessage("查看失败", c)
+	} else {
+		response.OkWithData(gin.H{
+			"count":   count,
+			"message": "获取成功",
+		}, c)
 	}
 }
