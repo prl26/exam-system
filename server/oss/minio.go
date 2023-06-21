@@ -2,9 +2,10 @@ package oss
 
 import (
 	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/prl26/exam-system/server/utils"
 	"io"
 	"mime/multipart"
 	"path"
@@ -50,7 +51,7 @@ func (m *Minio) UploadFileWithPrefix(fileName string, file io.Reader, fileSize i
 	ext := path.Ext(fileName)
 	// 读取文件名并加密
 	name := strings.TrimSuffix(fileName, ext)
-	name = utils.MD5V([]byte(name))
+	name = MD5V([]byte(name))
 	// 拼接新文件名
 	filename := prefix + "/" + name + "_" + time.Now().Format("20060102150405") + ext
 	f, err := m.PutObject(context.Background(), m.defaultBucketName, filename, file, fileSize, minio.PutObjectOptions{})
@@ -60,4 +61,10 @@ func (m *Minio) UploadFileWithPrefix(fileName string, file io.Reader, fileSize i
 func (*Minio) DeleteFile(key string) error {
 	// TODO  删除文件
 	return nil
+}
+
+func MD5V(str []byte, b ...byte) string {
+	h := md5.New()
+	h.Write(str)
+	return hex.EncodeToString(h.Sum(b))
 }

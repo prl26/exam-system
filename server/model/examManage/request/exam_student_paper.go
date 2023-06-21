@@ -3,6 +3,7 @@ package request
 import (
 	"github.com/prl26/exam-system/server/model/common/request"
 	"github.com/prl26/exam-system/server/model/examManage"
+	"mime/multipart"
 )
 
 type ExamStudentPaperSearch struct {
@@ -43,5 +44,6 @@ type StatusMonitor struct {
 }
 
 type UploadExamPicture struct {
-	PlanId uint
+	PlanId uint                  `json:"planId" form:"planId"`
+	File   *multipart.FileHeader `form:"file"`
 }

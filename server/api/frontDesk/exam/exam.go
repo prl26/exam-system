@@ -280,20 +280,24 @@ func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 func (ExamApi *ExamApi) UploadExamPicture(c *gin.Context) {
 	var uploadExamPicture request.UploadExamPicture
 	_ = c.ShouldBindQuery(&uploadExamPicture)
+
 	file, err := c.FormFile("file")
+
 	if err != nil {
 		global.GVA_LOG.Error("考试中接受上传文件失败：" + err.Error())
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
 	StudentId := utils.GetStudentId(c)
-	filename, fullPath, err := global.OSS.UploadMultipartFileWithPrefix(file, fmt.Sprintf("exam/info/%d/%d/", uploadExamPicture.PlanId, StudentId))
+	filename, fullPath, err := global.OSS.UploadMultipartFileWithPrefix(file, fmt.Sprintf("exam/info/%d/%d", uploadExamPicture.PlanId, StudentId))
 	if err != nil {
 		global.GVA_LOG.Error("考试中保存文件失败：" + err.Error())
 		return
 	} else {
 		global.GVA_LOG.Info(fmt.Sprintf("考试中保存文件成功：filename %s fullPath %s", filename, fullPath))
-		return
+
 	}
 	//TODO 保存入数据库
+	response.OkWithMessage("保存成功", c)
+	return
 }
