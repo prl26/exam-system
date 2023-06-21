@@ -342,7 +342,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 	global.GVA_DB.Model(examManage.ExamPaper{}).Where("plan_id = ?", excelInfo.PlanId).Find(&paper)
 	if len(paper) == 1 {
 		reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[0].ID)
-		if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, excelInfo.FileName, reexamPaper, examPaperTitle); err != nil {
+		if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, excelInfo.FileName, reexamPaper, examPaperTitle); err != nil {
 			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 			return
 		} else {
@@ -363,7 +363,6 @@ func (examPaperApi *ExamPaperApi) ExportMultiPaper(c *gin.Context) {
 		response.FailWithMessage("包含非法字符", c)
 		return
 	}
-
 	//todaystr1 := time.Now().Format("2006-01-02-f15:04:05")
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	respath := "/static/excel/" + excelInfo.FileName

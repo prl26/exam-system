@@ -2,6 +2,7 @@ package response
 
 import (
 	"github.com/prl26/exam-system/server/global"
+	"github.com/prl26/exam-system/server/model/basicdata"
 	"github.com/prl26/exam-system/server/model/examManage"
 	"time"
 )
@@ -21,4 +22,11 @@ type ExamScoreResponse1 struct {
 	StudentName                   string `json:"studentName"`
 	examManage.ReviewScore        `json:"examScore"`
 	examManage.StudentPaperStatus `json:"status"`
+}
+
+type ExamScoreResponse2 struct {
+	StudentName   string                          `json:"studentName"`
+	StudentDetail basicdata.Student               `json:"studentDetail"`
+	ExamScore     []examManage.ReviewScore        `json:"examScore"`
+	Status        []examManage.StudentPaperStatus `json:"status"`
 }
