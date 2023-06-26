@@ -13,6 +13,7 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -327,7 +328,33 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 			}, c)
 		}
 	} else {
-		response.FailWithMessage("暂时不支持有多份试卷", c)
+		outPut := global.GVA_CONFIG.HTML.OutPut
+		fileName := strings.TrimSuffix(excelInfo.FileName, ".html")
+		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
+		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
+		var fileList []string
+		for k, v := range paper {
+			dirName := fmt.Sprintf("%v-%v.html", fileName, v.ID)
+			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
+			if err != nil {
+				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+				return
+			}
+			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, dirName, reexamPaper, examPaperTitle); err != nil {
+				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+				return
+			}
+			fileList = append(fileList)
+		}
+		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
+		if err != nil {
+			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+			return
+		} else {
+			response.OkWithData(gin.H{
+				"filepath": path,
+			}, c)
+		}
 	}
 
 }
@@ -352,7 +379,33 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 			}, c)
 		}
 	} else {
-		response.FailWithMessage("暂时不支持有多份试卷", c)
+		outPut := global.GVA_CONFIG.HTML.OutPut
+		fileName := strings.TrimSuffix(excelInfo.FileName, ".html")
+		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
+		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
+		var fileList []string
+		for k, v := range paper {
+			dirName := fmt.Sprintf("%v-%v.html", fileName, v.ID)
+			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
+			if err != nil {
+				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+				return
+			}
+			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, dirName, reexamPaper, examPaperTitle); err != nil {
+				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+				return
+			}
+			fileList = append(fileList)
+		}
+		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
+		if err != nil {
+			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+			return
+		} else {
+			response.OkWithData(gin.H{
+				"filepath": path,
+			}, c)
+		}
 	}
 
 }
