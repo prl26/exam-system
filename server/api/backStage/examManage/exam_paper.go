@@ -328,13 +328,14 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 			}, c)
 		}
 	} else {
+		htmlOut := global.GVA_CONFIG.HTML.Dir
 		outPut := global.GVA_CONFIG.HTML.OutPut
 		fileName := strings.TrimSuffix(excelInfo.FileName, ".html")
 		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
 		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
 		var fileList []string
 		for k, v := range paper {
-			dirName := fmt.Sprintf("%v-%v.html", fileName, v.ID)
+			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
@@ -344,11 +345,11 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			fileList = append(fileList)
+			fileList = append(fileList, dirName)
 		}
 		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
 		if err != nil {
-			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
+			global.GVA_LOG.Error("压缩出问题了", zap.Error(err))
 			return
 		} else {
 			response.OkWithData(gin.H{
@@ -379,13 +380,14 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 			}, c)
 		}
 	} else {
+		htmlOut := global.GVA_CONFIG.HTML.Dir
 		outPut := global.GVA_CONFIG.HTML.OutPut
 		fileName := strings.TrimSuffix(excelInfo.FileName, ".html")
 		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
 		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
 		var fileList []string
 		for k, v := range paper {
-			dirName := fmt.Sprintf("%v-%v.html", fileName, v.ID)
+			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
@@ -395,7 +397,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			fileList = append(fileList)
+			fileList = append(fileList, dirName)
 		}
 		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
 		if err != nil {
