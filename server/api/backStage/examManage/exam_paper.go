@@ -334,20 +334,27 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
 		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
 		var fileList []string
+		htmlOutPath := filepath.Join(htmlOut, fileName)
+		//先生成文件夹
+		if err := utils.CreateDir(htmlOutPath); err != nil {
+			return
+		}
 		for k, v := range paper {
-			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			dirName := filepath.Join(htmlOutPath, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			fmt.Println(dirName)
 			file := fmt.Sprintf("%v-%v.html", fileName, v.ID)
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, file, reexamPaper, examPaperTitle); err != nil {
+			if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, fmt.Sprintf("%v/%v", fileName, file), reexamPaper, examPaperTitle); err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
 			fileList = append(fileList, dirName)
 		}
+		fmt.Println(fileList)
 		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
 		if err != nil {
 			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
@@ -387,20 +394,27 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 		path := "/static/html/zip/" + fmt.Sprintf("%s.zip", fileName)
 		outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", fileName))
 		var fileList []string
+		htmlOutPath := filepath.Join(htmlOut, fileName)
+		//先生成文件夹
+		if err := utils.CreateDir(htmlOutPath); err != nil {
+			return
+		}
 		for k, v := range paper {
-			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			dirName := filepath.Join(htmlOutPath, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			fmt.Println(dirName)
 			file := fmt.Sprintf("%v-%v.html", fileName, v.ID)
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, file, reexamPaper, examPaperTitle); err != nil {
+			if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, fmt.Sprintf("%v/%v", fileName, file), reexamPaper, examPaperTitle); err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
 			fileList = append(fileList, dirName)
 		}
+		fmt.Println(fileList)
 		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
 		if err != nil {
 			global.GVA_LOG.Error("生成html失败!", zap.Error(err))

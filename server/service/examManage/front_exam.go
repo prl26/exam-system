@@ -1304,7 +1304,61 @@ func (ExamService *ExamService) ExportPaperToHtml(pid uint, dirName string) (con
 		})
 		fileList = append(fileList, fileName)
 	}
-
+	if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
+		return content, err
+	}
+	return
+}
+func (ExamService *ExamService) ExportPaperToHtml1(pid uint, dirName string) (content io.ReadSeeker, err error) {
+	templatePath := global.GVA_CONFIG.HTML.Template
+	htmlOut := global.GVA_CONFIG.HTML.Dir
+	outPut := global.GVA_CONFIG.HTML.OutPut
+	contenstTmp, err := template.ParseFiles(filepath.Join(templatePath, "index.html"))
+	htmlOutPath := filepath.Join(htmlOut, dirName)
+	if err != nil {
+		fmt.Println("获取模版文件失败")
+	}
+	var fileList []string
+	//先生成文件夹
+	if err = utils.CreateDir(htmlOutPath); err != nil {
+		return
+	}
+	examScoresList, err := ExamService.GetExamScoreToHtml(pid)
+	if err != nil {
+		return content, err
+	}
+	var planDetail teachplan.ExamPlan
+	err = global.GVA_DB.Model(teachplan.ExamPlan{}).Where("id = ?", pid).Find(&planDetail).Error
+	outPutPath := filepath.Join(outPut, fmt.Sprintf("%s.zip", dirName))
+	for k, v := range examScoresList {
+		//2.获取html生成路径
+		var studentInfo basicdata.Student
+		global.GVA_DB.Model(basicdata.Student{}).Select("id,name").Where("id = ?", v.StudentId).Find(&studentInfo)
+		file := fmt.Sprintf("%d-%s.html", studentInfo.ID, studentInfo.Name)
+		fileName := filepath.Join(htmlOutPath, file)
+		//4.生成静态文件
+		examComing := request.ExamComing{
+			StudentId: *v.StudentId,
+			PlanId:    pid,
+		}
+		studentPaper, status, err := ExamService.GetExamPapersAndScores(examComing, "")
+		if err != nil {
+			return content, err
+		}
+		ExamService.generateStaticHtml(contenstTmp, fileName, gin.H{
+			"examScoresList": examScoresList[k],
+			"studentInfo":    studentInfo,
+			"planDetail":     planDetail,
+			"singleChoice":   studentPaper.SingleChoiceComponent,
+			"multiChoice":    studentPaper.MultiChoiceComponent,
+			"judge":          studentPaper.JudgeComponent,
+			"blank":          studentPaper.BlankComponent,
+			"program":        studentPaper.ProgramComponent,
+			"target":         studentPaper.TargetComponent,
+			"status":         status,
+		})
+		fileList = append(fileList, fileName)
+	}
 	if err := utils.ZipFiles(outPutPath, fileList, ".", "."); err != nil {
 		return content, err
 	}
