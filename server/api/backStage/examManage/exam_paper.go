@@ -388,12 +388,13 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheckWithOutAnswer(c *gin.C
 		var fileList []string
 		for k, v := range paper {
 			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			file := fmt.Sprintf("%v-%v.html", fileName, v.ID)
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, dirName, reexamPaper, examPaperTitle); err != nil {
+			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, file, reexamPaper, examPaperTitle); err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
