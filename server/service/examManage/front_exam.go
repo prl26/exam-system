@@ -1526,3 +1526,21 @@ func (ExamService *ExamService) ExportPaperToHtmlToCheck1(pid uint, dirName stri
 	//}
 	return
 }
+
+func (ExamService *ExamService) UploadExamPicture(planId uint, fullPath string, studentId uint, studentName string, ipAddress string) error {
+	sql := `
+	INSERT INTO exam_info (exam_plan_id, teach_class_id, student_id, student_name, screenshot, ip_address)
+		SELECT
+		  ?,
+		  t.teach_class_id,
+		  ?,
+		  ?,
+		  ?,
+		  ?
+		FROM tea_examplan t
+	WHERE t.id = ?
+	and start_time <= NOW() AND end_time >= NOW()
+`
+	err := global.GVA_DB.Raw(sql, planId, studentId, studentName, fullPath, ipAddress, planId).Create(nil).Error
+	return err
+}

@@ -14,6 +14,7 @@ import (
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
 	"go.uber.org/zap"
+	"path"
 	"sync"
 	"time"
 )
@@ -280,7 +281,7 @@ func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 func (ExamApi *ExamApi) UploadExamPicture(c *gin.Context) {
 	var uploadExamPicture request.UploadExamPicture
 	_ = c.ShouldBindQuery(&uploadExamPicture)
-
+	//fmt.Println(c.Request.Header)
 	file, err := c.FormFile("file")
 
 	if err != nil {
@@ -288,16 +289,29 @@ func (ExamApi *ExamApi) UploadExamPicture(c *gin.Context) {
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
+	if path.Ext(file.Filename) != ".png" {
+		response.FailWithMessage("错误只支持上传图片", c)
+		return
+	}
+
 	StudentId := utils.GetStudentId(c)
+	studentName := utils.GetStudentName(c)
 	filename, fullPath, err := global.OSS.UploadMultipartFileWithPrefix(file, fmt.Sprintf("exam/info/%d/%d", uploadExamPicture.PlanId, StudentId))
+
 	if err != nil {
 		global.GVA_LOG.Error("考试中保存文件失败：" + err.Error())
+		response.FailWithMessage("报错文件失败", c)
 		return
 	} else {
 		global.GVA_LOG.Info(fmt.Sprintf("考试中保存文件成功：filename %s fullPath %s", filename, fullPath))
-
 	}
 	//TODO 保存入数据库
+	err = examService.UploadExamPicture(uploadExamPicture.PlanId, fullPath, StudentId, studentName, c.ClientIP())
+	if err != nil {
+		global.GVA_LOG.Error("保存数据库失败" + err.Error())
+		global.OSS.DeleteFile(fullPath)
+		return
+	}
 	response.OkWithMessage("保存成功", c)
 	return
 }

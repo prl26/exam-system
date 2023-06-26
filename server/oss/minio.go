@@ -58,8 +58,9 @@ func (m *Minio) UploadFileWithPrefix(fileName string, file io.Reader, fileSize i
 	return filename, f.Bucket + "/" + f.Key, err
 }
 
-func (*Minio) DeleteFile(key string) error {
+func (m *Minio) DeleteFile(key string) error {
 	// TODO  删除文件
+	m.RemoveObject(context.Background(), m.defaultBucketName, key, minio.RemoveObjectOptions{})
 	return nil
 }
 

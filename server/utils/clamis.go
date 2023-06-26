@@ -64,7 +64,20 @@ func GetStudentId(c *gin.Context) uint {
 	}
 }
 
-//GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
+func GetStudentName(c *gin.Context) string {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetStudentClaims(c); err != nil {
+			return ""
+		} else {
+			return cl.Name
+		}
+	} else {
+		waitUse := claims.(*systemReq.StudentCustomClaims)
+		return waitUse.Name
+	}
+}
+
+// GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
 func GetUserUuid(c *gin.Context) uuid.UUID {
 	if claims, exists := c.Get("claims"); !exists {
 		if cl, err := GetClaims(c); err != nil {

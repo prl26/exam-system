@@ -6,7 +6,6 @@ type ExamInfo struct {
 	Id           int
 	ExamPlanID   int
 	TeachClassID int
-	ClassName    string
 	StudentID    int
 	StudentName  string
 	TeacherID    int
