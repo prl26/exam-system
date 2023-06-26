@@ -336,12 +336,13 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 		var fileList []string
 		for k, v := range paper {
 			dirName := filepath.Join(htmlOut, fmt.Sprintf("%v-%v.html", fileName, v.ID))
+			file := fmt.Sprintf("%v-%v.html", fileName, v.ID)
 			reexamPaper, examPaperTitle, err := examPaperService.GetExamPaper1(paper[k].ID)
 			if err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
-			if _, err = examService.ExportPaperToHtmlToCheck1(excelInfo.PlanId, dirName, reexamPaper, examPaperTitle); err != nil {
+			if _, err = examService.ExportPaperToHtmlToCheck(excelInfo.PlanId, file, reexamPaper, examPaperTitle); err != nil {
 				global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 				return
 			}
@@ -349,7 +350,7 @@ func (examPaperApi *ExamPaperApi) ExportPaperToHtmlToCheck(c *gin.Context) {
 		}
 		err := utils.ZipFiles(outPutPath, fileList, ".", ".")
 		if err != nil {
-			global.GVA_LOG.Error("压缩出问题了", zap.Error(err))
+			global.GVA_LOG.Error("生成html失败!", zap.Error(err))
 			return
 		} else {
 			response.OkWithData(gin.H{
