@@ -1,7 +1,11 @@
 package response
 
 import (
+	"fmt"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -60,4 +64,21 @@ func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 }
 func FailWithDetailedAndError(code int, data interface{}, message string, c *gin.Context) {
 	Result(code, data, message, c)
+}
+
+func FileByReader(c *gin.Context, filename string, reader io.Reader) error {
+	data, err := ioutil.ReadAll(reader)
+	if err != nil {
+		return err
+	}
+	FileByBytes(c, filename, data)
+	return nil
+}
+
+func FileByBytes(c *gin.Context, filename string, data []byte) {
+	// 设置响应头
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	c.Header("Content-Type", "application/octet-stream")
+	c.Header("Content-Length", strconv.Itoa(len(data)))
+	c.Writer.Write(data)
 }

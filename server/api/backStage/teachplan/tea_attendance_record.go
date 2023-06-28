@@ -15,6 +15,7 @@ type TeachAttendanceRecordApi struct {
 }
 
 var teachAttendanceRecordService = service.ServiceGroupApp.TeachplanServiceGroup.TeachAttendanceRecordService
+var teachClassService = service.ServiceGroupApp.BasicdataApiGroup.TeachClassService
 
 // CreateTeachAttendanceRecord 创建TeachAttendanceRecord
 // @Tags TeachAttendanceRecord

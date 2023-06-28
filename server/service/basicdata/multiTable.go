@@ -70,19 +70,6 @@ func (multiTableService *MultiTableService) GetTeachClassStudentInfo(info reques
 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	//var limit, offset int
-	//
-	//if info.PageSize <= 0 {
-	//	limit = 10
-	//} else {
-	//	limit = info.PageSize
-	//}
-	//
-	//if info.Page <= 0 {
-	//	offset = 0
-	//} else {
-	//	offset = info.PageSize * (info.Page - 1)
-	//}
 
 	var teachClass basicdata.TeachClass
 	teachClass.ID = info.TeachClassId
@@ -157,5 +144,12 @@ func (multiTableService *MultiTableService) FindStudentsByClassId(classId uint) 
 
 func (MultiTableService *MultiTableService) FindStudentByStudentClassId(classId uint) (res []uint, err error) {
 	err = global.GVA_DB.Select("student_id").Where("teach_class_id=?", classId).Model(&basicdata.StudentAndTeachClass{}).Find(&res).Error
+	return
+}
+
+func (multiTableService *MultiTableService) GetAllTeachClassStudentSimple(teachClassId int) (list []basicdata.Student, err error) {
+	db := global.GVA_DB
+	err = db.Where("id in (?)", db.Table("bas_student_teach_classes").
+		Select("student_id").Where("teach_class_id = ?", teachClassId)).Select("id,name").Order("id").Find(&list).Error
 	return
 }

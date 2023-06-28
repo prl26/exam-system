@@ -11,7 +11,9 @@ import (
 	teachplanResp "github.com/prl26/exam-system/server/model/teachplan/response"
 	"github.com/prl26/exam-system/server/service"
 	"github.com/prl26/exam-system/server/utils"
+	"github.com/xuri/excelize/v2"
 	"go.uber.org/zap"
+	"strconv"
 	"time"
 )
 
@@ -199,4 +201,91 @@ func (TeachAttendanceApi *TeachAttendanceApi) GenerateQRCode(c *gin.Context) {
 		ExpireTime: timeStr,
 		Minute:     req.Minute,
 	}, c)
+}
+
+func (a *TeachAttendanceApi) GetAttendanceExcel(c *gin.Context) {
+	teachClassId, _ := strconv.Atoi(c.Query("teachClassId"))
+	attendance, err := teachAttendanceService.GetAllTeachAttendances(uint(teachClassId))
+	if err != nil {
+		global.GVA_LOG.Error("获取全部的考勤情况失败" + err.Error())
+		return
+	}
+	simple, err := MultiTableService.GetAllTeachClassStudentSimple(teachClassId)
+	if err != nil {
+		global.GVA_LOG.Error("导出考勤记录: 获取教学计划的所以学生失败" + err.Error())
+		return
+	}
+
+	zongtiqingkuang := "总体情况"
+	xiangxiqingkuang := "详细情况"
+	excel := a.attendanceExcelBase(zongtiqingkuang, xiangxiqingkuang)
+
+	for i := 0; i < len(simple); i++ {
+		studentId := simple[i].ID
+		studentName := simple[i].Name
+		excel.SetCellInt(xiangxiqingkuang, fmt.Sprintf("A%d", i+2), int(studentId))
+		excel.SetCellStr(xiangxiqingkuang, fmt.Sprintf("B%d", i+2), studentName)
+	}
+
+	for i := 0; i < len(attendance); i++ {
+		attendanceId := uint(attendance[i].ID)
+		detail, err := teachAttendanceService.GetAllTeachAttendanceDetail(uint(attendanceId))
+		if err != nil {
+			return
+		}
+		attendanceTime := attendance[i].CreatedAt.Format("2006-01-02")
+		thisRecordAccount := len(detail)
+		thisAttendanceAccount := 0
+		thisAbsenceAccount := 0
+		table := make(map[uint]uint) // studentId -> status
+		for j := 0; j < len(detail); j++ {
+			this := detail[j]
+			studentId := this.StudentId
+			table[studentId] = this.Status
+			if this.Status != 0 {
+				thisAttendanceAccount++
+			} else {
+				thisAbsenceAccount++
+			}
+		}
+		excel.SetCellStr(xiangxiqingkuang, fmt.Sprintf("%c1", 'C'+i), attendanceTime)
+		for j := 0; j < len(simple); j++ {
+			value := -1
+			if v, ok := table[simple[j].ID]; !ok {
+				value = -1
+			} else {
+				value = int(v)
+			}
+			excel.SetCellInt(xiangxiqingkuang, fmt.Sprintf("%c%d", 'C'+i, 2+j), value)
+		}
+
+		excel.SetCellStr(zongtiqingkuang, fmt.Sprintf("A%d", i+2), attendanceTime)
+		excel.SetCellInt(zongtiqingkuang, fmt.Sprintf("B%d", i+2), thisAttendanceAccount)
+		excel.SetCellInt(zongtiqingkuang, fmt.Sprintf("C%d", i+2), thisAbsenceAccount)
+		excel.SetCellInt(zongtiqingkuang, fmt.Sprintf("D%d", i+2), thisRecordAccount)
+	}
+
+	buffer, err := excel.WriteToBuffer()
+	if err != nil {
+		global.GVA_LOG.Error("将表格写入buffer错误" + err.Error())
+		return
+	}
+	response.FileByReader(c, "报告.xlsx", buffer)
+	return
+}
+
+func (a *TeachAttendanceApi) attendanceExcelBase(overallSituationSheet string, specificSituationSheet string) *excelize.File {
+	excel := excelize.NewFile()
+
+	excel.NewSheet(overallSituationSheet)
+	excel.SetCellStr(overallSituationSheet, "A1", "考勤时间")
+	excel.SetCellStr(overallSituationSheet, "B1", "考勤人数")
+	excel.SetCellStr(overallSituationSheet, "C1", "缺勤人数")
+	excel.SetCellStr(overallSituationSheet, "D1", "记录数量")
+	xiangxiqingkuang := "详细情况"
+	excel.NewSheet(xiangxiqingkuang)
+	excel.SetCellStr(xiangxiqingkuang, "A1", "学生学号")
+	excel.SetCellStr(xiangxiqingkuang, "B1", "学生姓名")
+	excel.DeleteSheet("Sheet1")
+	return excel
 }

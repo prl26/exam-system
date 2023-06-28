@@ -25,5 +25,6 @@ func (s *TeachAttendanceRouter) InitTeachAttendanceRouter(Router *gin.RouterGrou
 		teachAttendanceRouterWithoutRecord.GET("findTeachAttendance", teachAttendanceApi.FindTeachAttendance)       // 根据ID获取TeachAttendance
 		teachAttendanceRouterWithoutRecord.GET("getTeachAttendanceList", teachAttendanceApi.GetTeachAttendanceList) // 获取TeachAttendance列表
 		teachAttendanceRouterWithoutRecord.POST("generateQRCode", teachAttendanceApi.GenerateQRCode)                // 获取TeachAttendance列表
+		teachAttendanceRouterWithoutRecord.GET("getAttendanceExcel", teachAttendanceApi.GetAttendanceExcel)         // 获取TeachAttendance列表
 	}
 }

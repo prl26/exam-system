@@ -3,10 +3,12 @@ package teachplan
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/prl26/exam-system/server/utils"
+
 	"github.com/prl26/exam-system/server/model/common/response"
 	teachplanReq "github.com/prl26/exam-system/server/model/teachplan/request"
 	"github.com/prl26/exam-system/server/service"
-	"github.com/prl26/exam-system/server/utils"
+
 	"strings"
 	"time"
 )

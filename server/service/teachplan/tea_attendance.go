@@ -120,3 +120,19 @@ func (t TeachAttendanceService) Attendance(studentId uint, ip string, attendance
 
 	return r.RowsAffected, nil
 }
+
+// GetTeachAttendance 根据id获取TeachAttendance记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (teachAttendanceService *TeachAttendanceService) GetAllTeachAttendanceDetail(id uint) (list []teachplanResp.AttendanceDetail, err error) {
+	err = global.GVA_DB.Raw("select a.*,b.name from tea_attendance_record a left join bas_student b on a.student_id=b.id where a.attendance_id=? ", id).Find(&list).Error
+	return
+}
+
+func (teachAttendanceService *TeachAttendanceService) GetAllTeachAttendances(id uint) (list []teachplan.TeachAttendance, err error) {
+	db := global.GVA_DB.Model(&teachplan.TeachAttendance{})
+	db = db.Where("teach_class_id", id)
+	db = db.Where("deleted_at is null")
+	db = db.Order("created_at")
+	err = db.Find(&list).Error
+	return
+}
