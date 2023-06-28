@@ -270,7 +270,7 @@ func (a *TeachAttendanceApi) GetAttendanceExcel(c *gin.Context) {
 		global.GVA_LOG.Error("将表格写入buffer错误" + err.Error())
 		return
 	}
-	response.FileByReader(c, "报告.xlsx", buffer)
+	response.FileByReader(c, "考勤情况.xlsx", buffer)
 	return
 }
 
