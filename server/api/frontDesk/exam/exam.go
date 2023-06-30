@@ -281,7 +281,7 @@ func (ExamApi *ExamApi) GetExamScore(c *gin.Context) {
 func (ExamApi *ExamApi) UploadExamPicture(c *gin.Context) {
 	var uploadExamPicture request.UploadExamPicture
 	_ = c.ShouldBindQuery(&uploadExamPicture)
-	//fmt.Println(c.Request.Header)
+
 	file, err := c.FormFile("file")
 
 	if err != nil {
@@ -289,13 +289,20 @@ func (ExamApi *ExamApi) UploadExamPicture(c *gin.Context) {
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
-	if path.Ext(file.Filename) != ".png" {
+	if path.Ext(file.Filename) != ".png" && path.Ext(file.Filename) != ".jpg" {
 		response.FailWithMessage("错误只支持上传图片", c)
 		return
 	}
 
 	StudentId := utils.GetStudentId(c)
+
 	studentName := utils.GetStudentName(c)
+	plan := examService.FindExamPlan(uploadExamPicture.PlanId)
+	now := time.Now()
+	if !plan.StartTime.After(now) || !plan.EndTime.Before(now) {
+		response.FailWithMessage("不在考试范围内", c)
+		return
+	}
 	filename, fullPath, err := global.OSS.UploadMultipartFileWithPrefix(file, fmt.Sprintf("exam/info/%d/%d", uploadExamPicture.PlanId, StudentId))
 
 	if err != nil {

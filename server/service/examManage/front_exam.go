@@ -33,6 +33,11 @@ import (
 type ExamService struct {
 }
 
+func (ExamService *ExamService) FindExamPlan(planId uint) teachplan.ExamPlan {
+	var examPlan teachplan.ExamPlan
+	global.GVA_DB.Where("id", planId).Find(&examPlan)
+	return examPlan
+}
 func (ExamService *ExamService) FindExamPlans(teachClassId uint, sid uint) (examPlans []response2.PlanRp, err error) {
 	var examPlan []teachplan.ExamPlan
 	err = global.GVA_DB.Where("teach_class_id = ? and state = 2 and audit =2", teachClassId).Order("created_at desc,updated_at desc").Find(&examPlan).Error
@@ -1592,8 +1597,6 @@ func (ExamService *ExamService) UploadExamPicture(planId uint, fullPath string, 
 		  ?,
 		  ?
 		FROM tea_examplan t
-	WHERE t.id = ?
-	and start_time <= NOW() AND end_time >= NOW()
 `
 	err := global.GVA_DB.Raw(sql, planId, studentId, studentName, fullPath, ipAddress, planId).Create(nil).Error
 	return err
