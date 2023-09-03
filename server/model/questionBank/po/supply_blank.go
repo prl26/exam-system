@@ -10,14 +10,14 @@ type SupplyBlank struct {
 	global.GVA_MODEL
 	SupplyBlankModel
 	CourseSupport
-	Answer     string `json:"answer" form:"answer" gorm:"column:answer;comment:答案"`
-	Proportion string `json:"proportion"`
 }
 
 type SupplyBlankModel struct {
 	BasicModel
-	IsOrder *int `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
-	Num     *int `json:"num" form:"num" gorm:"column:num;comment:可填项;"`
+	Answer     string `json:"answer" form:"answer" gorm:"column:answer;comment:答案"`
+	Proportion string `json:"proportion"`
+	Num        *int   `json:"num" form:"num" gorm:"column:num;comment:可填项;"`
+	IsOrder    *int   `json:"isOrder" form:"isOrder" gorm:"column:is_order;comment:是否要求有序;"`
 }
 
 // TableName QuestionBankSupplyBlank 表名
